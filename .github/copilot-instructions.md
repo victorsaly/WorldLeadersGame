@@ -581,6 +581,80 @@ When generating commit messages, always:
 6. **Keep subject line under 72 characters**
 7. **Include body for complex changes** explaining educational rationale
 
+### **Git Workflow Standards**
+
+#### **Rebase-Only Policy**
+
+This project follows a **rebase-only workflow** to maintain a clean, linear git history:
+
+```bash
+# ✅ ALWAYS use rebase instead of merge
+git pull --rebase origin main
+git rebase main
+
+# 🚫 NEVER use merge commits
+git pull origin main  # creates merge commits
+git merge main        # creates merge commits
+```
+
+#### **Branch Management**
+
+```bash
+# Creating feature branches
+git checkout -b docs/feature-name
+git checkout -b feat/feature-name  
+git checkout -b fix/bug-description
+
+# Updating feature branch with latest main
+git checkout main
+git pull --rebase origin main
+git checkout feature-branch
+git rebase main
+
+# Before creating PR - clean up commits
+git rebase -i HEAD~n  # squash/reword commits as needed
+```
+
+#### **Pull Request Workflow**
+
+1. **Create feature branch** with descriptive name following conventional patterns
+2. **Make commits** following Conventional Commits specification
+3. **Rebase onto main** before creating PR to ensure linear history
+4. **Squash related commits** using interactive rebase if needed
+5. **Create PR** with clear description and educational context
+6. **Rebase and merge** (not merge commit) when PR is approved
+
+#### **GitHub Repository Settings**
+
+Configure repository to enforce rebase-only workflow:
+
+```json
+{
+  "merge_commit_allowed": false,
+  "squash_merge_allowed": true,
+  "rebase_merge_allowed": true,
+  "default_merge_method": "rebase"
+}
+```
+
+#### **Pre-commit Hooks Configuration**
+
+```bash
+# Install commitlint for automated commit message validation
+npm install --save-dev @commitlint/cli @commitlint/config-conventional
+
+# .commitlintrc.json
+{
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "type-enum": [2, "always", [
+      "feat", "fix", "docs", "style", "refactor", "test", "chore",
+      "game", "ai", "safety", "data", "speech", "ui"
+    ]]
+  }
+}
+```
+
 ### **Examples for AI-Generated Commits**
 
 ```bash
