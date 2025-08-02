@@ -1,8 +1,8 @@
-# GitHub Copilot Instructions for Conquer the World Game
+# GitHub Copilot Instructions for World Leaders Game
 
 ## 🎯 Project Overview
 
-This is an educational strategy game called "Conquer the World" designed for 12-year-old players. The game combines strategic thinking, language learning, and real-world geography/economics education. Players progress from peasant to world leader by managing resources, acquiring territories, and learning languages with AI assistance.
+This is an educational strategy game called "World Leaders Game" designed for 12-year-old players. The game combines strategic thinking, language learning, and real-world geography/economics education. Players progress from peasant to world leader by managing resources, acquiring territories, and learning languages with AI assistance.
 
 ## 🏗️ Architecture & Technology Stack
 
@@ -24,8 +24,8 @@ This is an educational strategy game called "Conquer the World" designed for 12-
 ### Project Structure
 ```
 src/
-├── ConquerTheWorld.AppHost/           # .NET Aspire orchestration
-├── ConquerTheWorld.Web/               # Blazor Server application
+├── WorldLeaders.AppHost/           # .NET Aspire orchestration
+├── WorldLeaders.Web/               # Blazor Server application
 │   ├── Components/                    # Blazor components
 │   │   ├── Game/                      # Game-specific components
 │   │   ├── Shared/                    # Shared UI components
@@ -33,16 +33,16 @@ src/
 │   ├── Pages/                         # Blazor pages
 │   ├── Services/                      # Client-side services
 │   └── wwwroot/                       # Static assets
-├── ConquerTheWorld.API/               # Game API services
+├── WorldLeaders.API/               # Game API services
 │   ├── Controllers/                   # API controllers
 │   ├── Hubs/                         # SignalR hubs
 │   └── Services/                     # Business logic services
-├── ConquerTheWorld.Shared/            # Shared models and contracts
+├── WorldLeaders.Shared/            # Shared models and contracts
 │   ├── Models/                       # Domain models
 │   ├── DTOs/                         # Data transfer objects
 │   ├── Enums/                        # Shared enumerations
 │   └── Constants/                    # Application constants
-└── ConquerTheWorld.Infrastructure/    # Data access and external services
+└── WorldLeaders.Infrastructure/    # Data access and external services
     ├── Data/                         # Entity Framework context
     ├── Entities/                     # Database entities
     ├── Services/                     # External service integrations
@@ -310,8 +310,8 @@ Educational Goal: [Specific learning objective]
 Child-UX: Large buttons, clear feedback, encouraging messages
 *@
 
-@using ConquerTheWorld.Shared.Models
-@using ConquerTheWorld.Shared.Enums
+@using WorldLeaders.Shared.Models
+@using WorldLeaders.Shared.Enums
 @inherits ComponentBase
 @inject IJSRuntime JSRuntime
 @inject ILogger<ComponentName> Logger
@@ -356,15 +356,15 @@ When creating the initial solution structure:
 
 1. **Create .NET Aspire Solution**:
    ```bash
-   dotnet new aspire -n ConquerTheWorld
+   dotnet new aspire -n WorldLeaders
    ```
 
 2. **Add Project References**:
-   - ConquerTheWorld.AppHost (Aspire orchestrator)
-   - ConquerTheWorld.Web (Blazor Server)
-   - ConquerTheWorld.API (Web API)
-   - ConquerTheWorld.Shared (Shared models)
-   - ConquerTheWorld.Infrastructure (Data & external services)
+   - WorldLeaders.AppHost (Aspire orchestrator)
+   - WorldLeaders.Web (Blazor Server)
+   - WorldLeaders.API (Web API)
+   - WorldLeaders.Shared (Shared models)
+   - WorldLeaders.Infrastructure (Data & external services)
 
 3. **Install Required Packages**:
    - Entity Framework Core with PostgreSQL provider

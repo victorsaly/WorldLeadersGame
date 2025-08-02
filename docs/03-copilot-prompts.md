@@ -1,10 +1,10 @@
-# GitHub Copilot Chat Prompts for Conquer the World Game
+# GitHub Copilot Chat Prompts for World Leaders Game
 
 ## 🚀 Project Setup Prompts
 
 ### Initial Setup
 ```
-Create a .NET Aspire solution structure for a Blazor Server game called "ConquerTheWorld" with the following projects: AppHost for orchestration, Web for Blazor UI, API for game services, Shared for models, and Tests for testing. Include proper project references and basic folder structure.
+Create a .NET Aspire solution structure for a Blazor Server game called "WorldLeaders" with the following projects: AppHost for orchestration, Web for Blazor UI, API for game services, Shared for models, and Tests for testing. Include proper project references and basic folder structure.
 ```
 
 ```

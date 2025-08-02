@@ -1,4 +1,4 @@
-# Conquer the World: AI-Powered Educational Strategy Game
+# World Leaders Game: AI-Powered Educational Strategy Game
 
 *From a 12-year-old's voice memo to a full-featured educational game built with AI assistance*
 
@@ -6,7 +6,7 @@
 
 ## 🎯 Project Overview
 
-**Conquer the World** is an educational strategy game where players progress from peasant to world leader by managing resources, learning languages, and acquiring territories based on real-world GDP data. The game combines strategic thinking with educational content about global economics, geography, and language learning.
+**World Leaders Game** is an educational strategy game where players progress from peasant to world leader by managing resources, learning languages, and acquiring territories based on real-world GDP data. The game combines strategic thinking with educational content about global economics, geography, and language learning.
 
 ### **🌟 What Makes This Special**
 - **Real-World Data**: Territory pricing based on actual GDP from World Bank API
@@ -64,7 +64,7 @@ This project showcases **AI-first development methodology** using:
 ## 📁 Project Structure
 
 ```
-ConquerTheWorldGame/
+WorldLeadersGame/
 ├── docs/                              # 📚 All project documentation
 │   ├── 01-development-blog.md         # Public development journey blog
 │   ├── 02-development-plan.md         # 18-week roadmap and milestones

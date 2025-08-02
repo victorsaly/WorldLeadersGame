@@ -1,6 +1,6 @@
 # Game Assets
 
-This folder contains visual assets for the "Conquer the World" game documentation and development.
+This folder contains visual assets for the "World Leaders Game" game documentation and development.
 
 ## Original Concept Art
 

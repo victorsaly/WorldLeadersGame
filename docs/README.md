@@ -1,6 +1,6 @@
 # Documentation Index
 
-This folder contains all project documentation for the "Conquer the World" educational game development journey.
+This folder contains all project documentation for the "World Leaders Game" educational game development journey.
 
 ## 📋 Document Structure
 

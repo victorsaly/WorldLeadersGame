@@ -1,8 +1,8 @@
-# From Voice Memo to Video Game: Building "Conquer the World" with AI in 18 Weeks
+# From Voice Memo to Video Game: Building "World Leaders Game" with AI in 18 Weeks
 
 *How a 12-year-old's dream game became reality through AI-powered development — where AI creates everything and humans only intervene when logic fails*
 
-![Game concept art showing a young player progressing from peasant to world leader](https://via.placeholder.com/800x400/4F46E5/FFFFFF?text=Conquer+the+World+Game)
+![Game concept art showing a young player progressing from peasant to world leader](https://via.placeholder.com/800x400/4F46E5/FFFFFF?text=World+Leaders+Game)
 
 ---
 
@@ -35,7 +35,7 @@ It all began with my 12-year-old son excitedly describing his dream video game d
 
 > *"Dad, imagine a game where you start as a peasant and work your way up to world leader, but you have to keep everyone happy and learn about real countries. You could buy Canada when you get 25% reputation!"*
 
-That voice memo became the foundation for "Conquer the World" — an ambitious educational game built almost entirely through AI autonomy, with human intervention only when absolutely necessary.
+That voice memo became the foundation for "World Leaders Game" — an ambitious educational game built almost entirely through AI autonomy, with human intervention only when absolutely necessary.
 
 But the story doesn't end with just audio. My son took it upon himself to sketch out his vision, creating hand-drawn mockups that would make any UX designer proud. These sketches became our visual roadmap, showing exactly how he imagined each game phase would look and feel.
 
@@ -168,7 +168,7 @@ This project operates under **guided AI autonomy** — meaning AI agents make ar
 The entire project success stems from a comprehensive `.github/copilot-instructions.md` file that provides AI with complete context:
 
 ```markdown
-# GitHub Copilot Instructions for Conquer the World Game
+# GitHub Copilot Instructions for World Leaders Game Game
 
 ## 🎯 Project Overview
 Educational strategy game for 12-year-olds combining strategic thinking, 
@@ -459,7 +459,7 @@ The breakthrough came when we created a detailed `.github/copilot-instructions.m
 
 **Our Copilot Instruction Structure:**
 ```markdown
-# GitHub Copilot Instructions for Conquer the World Game
+# GitHub Copilot Instructions for World Leaders Game Game
 
 ## 🎯 Project Overview
 Educational strategy game for 12-year-olds combining strategic thinking, 
@@ -550,7 +550,7 @@ Context Building Process:
 ```csharp
 // This structured comment approach guides Copilot to generate exactly what we need:
 
-// Context: Educational dice rolling component for "Conquer the World" game
+// Context: Educational dice rolling component for "World Leaders Game" game
 // Target Audience: 12-year-old players learning about career progression
 // Educational Objective: Teach probability concepts and job hierarchy
 // Visual Requirements: 
@@ -898,7 +898,7 @@ Our success with AI-assisted development came from structured, context-rich prom
 ```
 Role: You are an expert software architect and educational game designer
 Context: Building an educational strategy game for 12-year-old players
-Project: "Conquer the World" - progression from peasant to world leader
+Project: "World Leaders Game" - progression from peasant to world leader
 Technology Stack: .NET 8, Blazor Server, TailwindCSS, Azure OpenAI
 Constraints: 
 - Child-safe content (COPPA compliant)
@@ -1142,7 +1142,7 @@ In demonstrating that sophisticated, educational applications can be built almos
 
 ---
 
-*Follow our development journey at [GitHub Repository](https://github.com/your-repo/ConquerTheWorldGame) for complete source code, documentation, and AI prompt templates.*
+*Follow our development journey at [GitHub Repository](https://github.com/your-repo/WorldLeadersGame) for complete source code, documentation, and AI prompt templates.*
 
 **Development Tools Used:**
 - **Claude Sonnet 3.5**: Via VS Code extension for strategic planning and architecture

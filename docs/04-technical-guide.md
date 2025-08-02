@@ -1,19 +1,19 @@
-# Technical Implementation Guide
+# World Leaders Game - Technical Implementation Guide
 
 ## 🏗️ Project Architecture
 
 ### Solution Structure
 ```
-ConquerTheWorldGame.sln
+WorldLeadersGame.sln
 ├── src/
-│   ├── ConquerTheWorld.AppHost/           # .NET Aspire Orchestration
-│   ├── ConquerTheWorld.Web/               # Blazor Server Application
-│   ├── ConquerTheWorld.API/               # Game API Services
-│   ├── ConquerTheWorld.Shared/            # Shared Models & Contracts
-│   └── ConquerTheWorld.Infrastructure/    # Data Access & External Services
+│   ├── WorldLeaders.AppHost/           # .NET Aspire Orchestration
+│   ├── WorldLeaders.Web/               # Blazor Server Application
+│   ├── WorldLeaders.API/               # Game API Services
+│   ├── WorldLeaders.Shared/            # Shared Models & Contracts
+│   └── WorldLeaders.Infrastructure/    # Data Access & External Services
 ├── tests/
-│   ├── ConquerTheWorld.Tests.Unit/
-│   └── ConquerTheWorld.Tests.Integration/
+│   ├── WorldLeaders.Tests.Unit/
+│   └── WorldLeaders.Tests.Integration/
 └── docs/
     ├── api/
     └── deployment/
@@ -543,7 +543,7 @@ var openai = builder.AddConnectionString("openai");
 var speech = builder.AddConnectionString("speech");
 
 // Add the main web application
-var web = builder.AddProject<Projects.ConquerTheWorld_Web>("web")
+var web = builder.AddProject<Projects.WorldLeaders_Web>("web")
                 .WithReference(gameDb)
                 .WithReference(redis)
                 .WithReference(openai)
@@ -551,7 +551,7 @@ var web = builder.AddProject<Projects.ConquerTheWorld_Web>("web")
                 .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development");
 
 // Add API service
-var api = builder.AddProject<Projects.ConquerTheWorld_API>("api")
+var api = builder.AddProject<Projects.WorldLeaders_API>("api")
                 .WithReference(gameDb)
                 .WithReference(redis)
                 .WithReference(openai)
@@ -568,7 +568,7 @@ builder.Build().Run();
 ```bash
 # Clone and setup
 git clone <repository-url>
-cd ConquerTheWorldGame
+cd WorldLeadersGame
 
 # Install .NET Aspire workload
 dotnet workload install aspire
@@ -577,15 +577,15 @@ dotnet workload install aspire
 dotnet restore
 
 # Set up local secrets
-dotnet user-secrets init --project src/ConquerTheWorld.Web
-dotnet user-secrets set "OpenAI:ApiKey" "your-api-key" --project src/ConquerTheWorld.Web
-dotnet user-secrets set "Speech:ApiKey" "your-speech-key" --project src/ConquerTheWorld.Web
+dotnet user-secrets init --project src/WorldLeaders.Web
+dotnet user-secrets set "OpenAI:ApiKey" "your-api-key" --project src/WorldLeaders.Web
+dotnet user-secrets set "Speech:ApiKey" "your-speech-key" --project src/WorldLeaders.Web
 ```
 
 ### 2. Run with Aspire
 ```bash
 # Start all services
-dotnet run --project src/ConquerTheWorld.AppHost
+dotnet run --project src/WorldLeaders.AppHost
 
 # Access Aspire dashboard
 # Open browser to: https://localhost:15888
@@ -594,10 +594,10 @@ dotnet run --project src/ConquerTheWorld.AppHost
 ### 3. Database Migration
 ```bash
 # Add migration
-dotnet ef migrations add InitialCreate --project src/ConquerTheWorld.Infrastructure
+dotnet ef migrations add InitialCreate --project src/WorldLeaders.Infrastructure
 
 # Update database
-dotnet ef database update --project src/ConquerTheWorld.Infrastructure
+dotnet ef database update --project src/WorldLeaders.Infrastructure
 ```
 
 This technical implementation guide provides the foundation for building a robust, scalable, and engaging educational game that combines modern .NET technologies with AI-powered learning experiences.
@@ -837,7 +837,7 @@ public class TerritoryPricing
 @inject IJSRuntime JSRuntime
 
 <div class="world-map-container bg-blue-900 min-h-screen p-8">
-    <h1 class="text-4xl font-bold text-white text-center mb-8">🌍 Conquer the World</h1>
+    <h1 class="text-4xl font-bold text-white text-center mb-8">🌍 World Leaders Game</h1>
     
     <div class="filters mb-6 flex justify-center space-x-4">
         <select @onchange="FilterByRegion" class="bg-white rounded px-4 py-2">

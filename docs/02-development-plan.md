@@ -1,4 +1,4 @@
-# Conquer the World Game - Development Plan
+# World Leaders Game - Development Plan
 
 ## 🎯 Project Overview
 Building an educational strategy game for a 12-year-old using .NET Aspire, Blazor Server, TailwindCSS, and AI agents. Each game phase will be supported by specialized AI agents to guide and enhance the learning experience.
@@ -185,9 +185,9 @@ Capabilities:
 ## 🗂️ Project Structure
 
 ```
-ConquerTheWorldGame/
-├── ConquerTheWorld.AppHost/          # Aspire orchestration
-├── ConquerTheWorld.Web/              # Blazor Server app
+WorldLeadersGame/
+├── WorldLeaders.AppHost/          # Aspire orchestration
+├── WorldLeaders.Web/              # Blazor Server app
 │   ├── Components/
 │   │   ├── Game/
 │   │   ├── UI/
@@ -199,9 +199,9 @@ ConquerTheWorldGame/
 │   ├── Models/
 │   ├── Data/
 │   └── wwwroot/
-├── ConquerTheWorld.Shared/           # Shared models and contracts
-├── ConquerTheWorld.API/              # Game API services
-├── ConquerTheWorld.Tests/            # Test projects
+├── WorldLeaders.Shared/           # Shared models and contracts
+├── WorldLeaders.API/              # Game API services
+├── WorldLeaders.Tests/            # Test projects
 └── docs/                             # Documentation
 ```
 
