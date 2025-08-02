@@ -1617,7 +1617,7 @@ During the automated code generation, AI selected these package versions:
 <!-- AI's Natural Choice: Latest Versions -->
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.7" />
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
-<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
 ```
 
 **Why AI chooses latest**: AI training data includes documentation emphasizing "newest features" and "latest releases," leading to automatic selection of cutting-edge versions.
@@ -1637,7 +1637,7 @@ During the automated code generation, AI selected these package versions:
 <!-- Production-Ready: LTS Versions -->
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
 ```
 
 ### **Updated AI Instruction Pattern**

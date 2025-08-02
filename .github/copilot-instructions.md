@@ -132,13 +132,13 @@ src/
 <TargetFramework>net8.0</TargetFramework>
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
-<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
 
 <!-- INCORRECT: Latest versions that may conflict with target framework -->
 <TargetFramework>net8.0</TargetFramework>
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
 <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.7" />
-<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
 ```
 
 #### Why LTS Versions Matter
