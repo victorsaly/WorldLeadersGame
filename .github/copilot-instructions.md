@@ -401,3 +401,203 @@ Before generating any code, ensure:
 - [ ] Security and privacy considerations
 - [ ] Performance optimization
 - [ ] Accessibility features included
+
+## 📝 **Git Commit Standards**
+
+### **Conventional Commits Specification**
+
+All commits **MUST** follow the [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) specification for automated changelog generation and semantic versioning.
+
+### **Commit Message Format**
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+### **Commit Types for Educational Game Development**
+
+#### **Primary Types**
+- **feat**: New educational feature (child-facing functionality)
+- **fix**: Bug fix affecting game mechanics or user experience
+- **docs**: Documentation updates (journey logs, technical guides)
+- **style**: UI/UX improvements (TailwindCSS, child-friendly design)
+- **refactor**: Code restructuring without changing functionality
+- **test**: Adding or updating tests (educational content validation)
+- **chore**: Maintenance tasks (dependencies, build configuration)
+
+#### **Educational Game Specific Types**
+- **game**: Core game mechanics and educational content
+- **ai**: AI agent personalities and educational AI features
+- **safety**: Child safety, privacy, and content moderation
+- **data**: Real-world data integration (GDP, countries, languages)
+- **speech**: Language learning and pronunciation features
+- **ui**: Child-friendly interface and accessibility improvements
+
+### **Scope Examples**
+
+#### **Technical Scopes**
+- `(api)`: Backend API changes
+- `(web)`: Blazor Server frontend changes
+- `(db)`: Database schema or Entity Framework changes
+- `(infra)`: Infrastructure and deployment changes
+- `(aspire)`: .NET Aspire orchestration changes
+
+#### **Educational Scopes**
+- `(game-engine)`: Core game mechanics and progression
+- `(dice)`: Dice rolling and career progression systems
+- `(territories)`: Country acquisition and GDP integration
+- `(agents)`: AI agent personalities and conversations
+- `(speech)`: Language learning and pronunciation assessment
+- `(happiness)`: Population satisfaction and decision systems
+- `(safety)`: Child protection and content validation
+
+#### **Documentation Scopes**
+- `(journey)`: Weekly development logs and milestone tracking
+- `(blog)`: Development blog and external content
+- `(prompts)`: AI prompt engineering and Copilot instructions
+- `(guide)`: Technical guides and implementation documentation
+
+### **Commit Message Examples**
+
+#### **Feature Development**
+```bash
+feat(dice): implement animated dice rolling with job progression
+
+- Add DiceRollComponent with smooth CSS animations
+- Create job hierarchy mapping (1-6 to career levels)  
+- Include encouraging feedback for all dice outcomes
+- Integrate with SignalR for real-time updates
+
+Closes #14
+```
+
+#### **Educational Content**
+```bash
+game(agents): add Career Guide AI personality with encouraging messages
+
+- Implement encouraging mentor persona for job progression
+- Create age-appropriate career guidance responses
+- Add positive reinforcement for all job outcomes
+- Ensure COPPA-compliant educational messaging
+
+Educational-Objective: Teach career progression and probability concepts
+```
+
+#### **Child Safety**
+```bash
+safety(content): implement AI content moderation for child protection
+
+- Add Azure Content Moderator integration
+- Create content validation pipeline for AI responses
+- Implement fallback responses for inappropriate content
+- Add parental oversight and reporting features
+
+COPPA-Compliant: Ensures all AI content appropriate for 12-year-olds
+```
+
+#### **Documentation**
+```bash
+docs(journey): restructure blog into multi-article Medium series
+
+- Create Part 1: Foundation article ready for publication
+- Organize journey documentation into focused, manageable files
+- Fix image paths for VS Code preview compatibility
+- Update navigation between journey documents
+
+Related: Preparing for Week 3+ development phases
+```
+
+#### **UI/UX Improvements**
+```bash
+ui(child-friendly): enhance button sizes and visual feedback
+
+- Increase button sizes for 12-year-old interaction
+- Add immediate visual feedback for all actions
+- Improve color contrast for accessibility
+- Implement encouraging micro-animations
+
+Accessibility: WCAG 2.1 AA compliance for children
+```
+
+### **Breaking Changes**
+
+For breaking changes, use the `BREAKING CHANGE:` footer:
+
+```bash
+feat(api)!: restructure game state management for real-time updates
+
+BREAKING CHANGE: GameState API endpoints now require authentication
+and return different response format for enhanced security.
+
+Migration guide available in docs/migration/v2.0.0.md
+```
+
+### **Automated Tooling Integration**
+
+#### **Semantic Release Configuration**
+```json
+{
+  "branches": ["main"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    "@semantic-release/github"
+  ]
+}
+```
+
+#### **Commitlint Configuration**
+```json
+{
+  "extends": ["@commitlint/config-conventional"],
+  "rules": {
+    "type-enum": [2, "always", [
+      "feat", "fix", "docs", "style", "refactor", "test", "chore",
+      "game", "ai", "safety", "data", "speech", "ui"
+    ]],
+    "scope-enum": [2, "always", [
+      "api", "web", "db", "infra", "aspire",
+      "game-engine", "dice", "territories", "agents", "speech", "happiness", "safety",
+      "journey", "blog", "prompts", "guide"
+    ]]
+  }
+}
+```
+
+### **GitHub Copilot Commit Generation**
+
+When generating commit messages, always:
+
+1. **Start with appropriate type and scope**
+2. **Use imperative mood** ("add feature" not "added feature")
+3. **Include educational context** for game-related commits
+4. **Reference issues** when closing or addressing them
+5. **Add breaking change notes** when applicable
+6. **Keep subject line under 72 characters**
+7. **Include body for complex changes** explaining educational rationale
+
+### **Examples for AI-Generated Commits**
+
+```bash
+# When AI generates new educational content
+feat(agents): implement Fortune Teller AI with mystical educational guidance
+
+# When AI fixes child safety issues  
+safety(validation): resolve content moderation for inappropriate responses
+
+# When AI creates new game mechanics
+game(progression): add reputation-based territory unlock system
+
+# When AI updates documentation
+docs(prompts): enhance AI instruction patterns for educational content
+
+# When AI improves child-friendly UI
+ui(accessibility): improve screen reader support for dice component
+```
+
+This ensures all AI-generated commits maintain consistency and provide clear context for the educational game development journey.
