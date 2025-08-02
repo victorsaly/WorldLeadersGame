@@ -40,6 +40,12 @@ This folder contains all project documentation for the "World Leaders Game" educ
 - **Content**: Issue specifications, Copilot prompts, workflow procedures
 - **Updates**: New issues and AI development patterns
 
+### **07-command-line-guide.md**
+- **Purpose**: Comprehensive command-line reference for running the application
+- **Audience**: Developers, DevOps, and technical users
+- **Content**: Setup, build, run, debug, and troubleshooting commands
+- **Updates**: New commands and deployment options as they're added
+
 ## 🔄 Document Maintenance
 
 ### **Naming Convention**
@@ -68,8 +74,9 @@ Documents are designed to work together:
 | Development Plan | ~2,500 | 95% | 5% | Aug 2, 2025 |
 | Copilot Prompts | ~2,000 | 85% | 15% | Aug 2, 2025 |
 | Technical Guide | ~4,000 | 90% | 10% | Aug 2, 2025 |
+| Command Line Guide | ~3,500 | 95% | 5% | Aug 2, 2025 |
 
-**Total Documentation**: ~11,500 words generated in 1 day with AI assistance
+**Total Documentation**: ~15,000 words generated in 1 day with AI assistance
 
 ## 🎯 Future Documentation
 
