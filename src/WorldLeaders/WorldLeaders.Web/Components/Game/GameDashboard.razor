@@ -1,0 +1,305 @@
+@page "/game"
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Enums
+@using Microsoft.AspNetCore.SignalR.Client
+@inject IHttpClientFactory HttpClientFactory
+@inject HubConnection HubConnection
+@implements IAsyncDisposable
+
+<PageTitle>World Leaders Game - Dashboard</PageTitle>
+
+<div class="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-green-400 p-4">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">🌍 World Leaders Game</h1>
+                    <p class="text-gray-600">Educational game for young leaders (Age 12+)</p>
+                </div>
+                <div class="text-right">
+                    @if (playerDashboard != null)
+                    {
+                        <h2 class="text-2xl font-bold text-blue-600">Welcome, @playerDashboard.Username!</h2>
+                        <p class="text-gray-500">@playerDashboard.CurrentGameState</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (playerDashboard != null)
+        {
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <!-- Income Card -->
+                <div class="bg-green-100 rounded-lg p-4 border-l-4 border-green-500">
+                    <div class="flex items-center">
+                        <span class="text-2xl">💰</span>
+                        <div class="ml-3">
+                            <p class="text-sm text-green-600 font-medium">Monthly Income</p>
+                            <p class="text-2xl font-bold text-green-800">${playerDashboard.Income:N0}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reputation Card -->
+                <div class="bg-blue-100 rounded-lg p-4 border-l-4 border-blue-500">
+                    <div class="flex items-center">
+                        <span class="text-2xl">⭐</span>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-600 font-medium">Reputation</p>
+                            <p class="text-2xl font-bold text-blue-800">@playerDashboard.Reputation%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Happiness Card -->
+                <div class="bg-yellow-100 rounded-lg p-4 border-l-4 border-yellow-500">
+                    <div class="flex items-center">
+                        <span class="text-2xl">😊</span>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-600 font-medium">Happiness</p>
+                            <p class="text-2xl font-bold text-yellow-800">@playerDashboard.Happiness%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Territories Card -->
+                <div class="bg-purple-100 rounded-lg p-4 border-l-4 border-purple-500">
+                    <div class="flex items-center">
+                        <span class="text-2xl">🗺️</span>
+                        <div class="ml-3">
+                            <p class="text-sm text-purple-600 font-medium">Territories</p>
+                            <p class="text-2xl font-bold text-purple-800">@playerDashboard.TerritoriesOwned</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Job Card -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Current Job: @playerDashboard.CurrentJob</h3>
+                <div class="flex items-center space-x-4">
+                    <button @onclick="RollForNewJob" 
+                            class="bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-green-500 hover:to-blue-600 transition-all duration-300 transform hover:scale-105">
+                        🎲 Roll for New Job!
+                    </button>
+                    @if (isRolling)
+                    {
+                        <div class="flex items-center">
+                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                            <span class="ml-2 text-blue-600">Rolling...</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Game Events Section -->
+            @if (gameEvents.Any())
+            {
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">📰 Recent Events</h3>
+                    <div class="space-y-4">
+                        @foreach (var gameEvent in gameEvents.Take(3))
+                        {
+                            <div class="@GetEventCardClass(gameEvent.IsPositive) rounded-lg p-4">
+                                <div class="flex items-start">
+                                    <span class="text-2xl mr-3">@gameEvent.IconEmoji</span>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800">@gameEvent.Title</h4>
+                                        <p class="text-gray-600 text-sm mb-2">@gameEvent.Description</p>
+                                        <div class="flex space-x-4 text-xs">
+                                            @if (gameEvent.IncomeEffect != 0)
+                                            {
+                                                <span class="@GetEffectClass(gameEvent.IncomeEffect)">
+                                                    💰 @FormatEffect(gameEvent.IncomeEffect)
+                                                </span>
+                                            }
+                                            @if (gameEvent.ReputationEffect != 0)
+                                            {
+                                                <span class="@GetEffectClass(gameEvent.ReputationEffect)">
+                                                    ⭐ @FormatEffect(gameEvent.ReputationEffect)
+                                                </span>
+                                            }
+                                            @if (gameEvent.HappinessEffect != 0)
+                                            {
+                                                <span class="@GetEffectClass(gameEvent.HappinessEffect)">
+                                                    😊 @FormatEffect(gameEvent.HappinessEffect)
+                                                </span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <!-- Message Display -->
+            @if (!string.IsNullOrEmpty(gameMessage))
+            {
+                <div class="bg-blue-100 border-l-4 border-blue-500 p-4 mb-6 rounded-lg">
+                    <p class="text-blue-800 font-medium">@gameMessage</p>
+                </div>
+            }
+        }
+        else if (isLoading)
+        {
+            <div class="flex justify-center items-center h-64">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                <span class="ml-4 text-xl text-gray-600">Loading your game...</span>
+            </div>
+        }
+        else
+        {
+            <!-- Create Player Section -->
+            <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">🎮 Start Your Journey to Leadership!</h2>
+                <p class="text-gray-600 mb-6">Begin your educational adventure and learn about world leadership, geography, and languages!</p>
+                
+                <div class="max-w-md mx-auto">
+                    <input @bind="newPlayerName" @onkeypress="@((e) => { if (e.Key == "Enter") CreatePlayer(); })"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Enter your name" maxlength="20" />
+                    <button @onclick="CreatePlayer" 
+                            disabled="@(string.IsNullOrWhiteSpace(newPlayerName))"
+                            class="w-full mt-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        🚀 Start Game
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private PlayerDashboardDto? playerDashboard;
+    private List<GameEventDto> gameEvents = new();
+    private string newPlayerName = "";
+    private string gameMessage = "";
+    private bool isLoading = false;
+    private bool isRolling = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadGameEvents();
+        
+        // Set up SignalR connection
+        HubConnection.On<GameStateUpdate>("GameStateUpdated", (update) =>
+        {
+            InvokeAsync(() =>
+            {
+                gameMessage = update.Message;
+                StateHasChanged();
+            });
+        });
+
+        await HubConnection.StartAsync();
+    }
+
+    private async Task CreatePlayer()
+    {
+        if (string.IsNullOrWhiteSpace(newPlayerName)) return;
+
+        isLoading = true;
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("GameAPI");
+            var request = new CreatePlayerRequest(newPlayerName.Trim());
+            
+            var response = await httpClient.PostAsJsonAsync("api/game/players", request);
+            if (response.IsSuccessStatusCode)
+            {
+                playerDashboard = await response.Content.ReadFromJsonAsync<PlayerDashboardDto>();
+                if (playerDashboard != null)
+                {
+                    await HubConnection.SendAsync("JoinGameSession", playerDashboard.Id.ToString());
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            gameMessage = "Failed to create player. Please try again.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task RollForNewJob()
+    {
+        if (playerDashboard == null) return;
+
+        isRolling = true;
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("GameAPI");
+            var response = await httpClient.PostAsync($"api/game/players/{playerDashboard.Id}/roll-job", null);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var update = await response.Content.ReadFromJsonAsync<GameStateUpdate>();
+                if (update != null)
+                {
+                    gameMessage = update.Message;
+                    // In a real implementation, we would update the dashboard from the server
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            gameMessage = "Failed to roll for new job. Please try again.";
+        }
+        finally
+        {
+            isRolling = false;
+        }
+    }
+
+    private async Task LoadGameEvents()
+    {
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("GameAPI");
+            var response = await httpClient.GetAsync("api/game/events");
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var events = await response.Content.ReadFromJsonAsync<List<GameEventDto>>();
+                if (events != null)
+                {
+                    gameEvents = events;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle silently for now
+        }
+    }
+
+    private string GetEventCardClass(bool isPositive)
+    {
+        return isPositive ? "bg-green-50 border-l-4 border-green-400" : "bg-red-50 border-l-4 border-red-400";
+    }
+
+    private string GetEffectClass(int effect)
+    {
+        return effect > 0 ? "text-green-600 font-medium" : "text-red-600 font-medium";
+    }
+
+    private string FormatEffect(int effect)
+    {
+        return effect > 0 ? $"+{effect}" : effect.ToString();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (HubConnection != null)
+        {
+            await HubConnection.DisposeAsync();
+        }
+    }
+}
