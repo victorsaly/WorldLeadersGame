@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("EducationalGamePolicy", policy =>
     {
-        policy.WithOrigins("https://localhost:7154", "http://localhost:5154") // Blazor app URLs
+        policy.WithOrigins("https://localhost:7060", "http://localhost:5122") // Blazor app URLs
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // Required for SignalR

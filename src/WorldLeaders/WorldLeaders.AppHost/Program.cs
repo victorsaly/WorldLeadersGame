@@ -7,11 +7,11 @@ var postgres = builder.AddPostgres("postgres")
 var database = postgres.AddDatabase("worldleadersdb");
 
 // Add the Game API service
-var apiService = builder.AddProject<Projects.WorldLeaders_API>("worldleaders-api")
+var apiService = builder.AddProject("worldleaders-api", "../WorldLeaders.API/WorldLeaders.API.csproj")
     .WithReference(database);
 
-// Add the Blazor Web application
-var webApp = builder.AddProject<Projects.WorldLeaders_Web>("worldleaders-web")
+// Add the Blazor Web application  
+var webApp = builder.AddProject("worldleaders-web", "../WorldLeaders.Web/WorldLeaders.Web.csproj")
     .WithReference(apiService);
 
 builder.Build().Run();

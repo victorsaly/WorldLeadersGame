@@ -10,14 +10,14 @@ builder.Services.AddRazorComponents()
 // Add HttpClient for API communication
 builder.Services.AddHttpClient("GameAPI", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7155/"); // API URL
+    client.BaseAddress = new Uri("http://localhost:5203/"); // API URL
 });
 
 // Add SignalR client for real-time updates
 builder.Services.AddSingleton<HubConnection>(provider =>
 {
     return new HubConnectionBuilder()
-        .WithUrl("https://localhost:7155/gamehub") // SignalR hub URL
+        .WithUrl("http://localhost:5203/gamehub") // SignalR hub URL
         .Build();
 });
 
