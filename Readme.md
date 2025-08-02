@@ -72,11 +72,11 @@ WorldLeadersGame/
 │   ├── 04-technical-guide.md         # Implementation details and architecture
 │   └── README.md                      # Documentation index
 ├── src/                               # 💻 Source code (coming in Week 2)
-│   ├── ConquerTheWorld.AppHost/       # .NET Aspire orchestration
-│   ├── ConquerTheWorld.Web/           # Blazor Server application
-│   ├── ConquerTheWorld.API/           # Game API services
-│   ├── ConquerTheWorld.Shared/        # Shared models and contracts
-│   └── ConquerTheWorld.Infrastructure/ # Data access and external services
+│   ├── WorldLeaders.AppHost/       # .NET Aspire orchestration
+│   ├── WorldLeaders.Web/           # Blazor Server application
+│   ├── WorldLeaders.API/           # Game API services
+│   ├── WorldLeaders.Shared/        # Shared models and contracts
+│   └── WorldLeaders.Infrastructure/ # Data access and external services
 ├── .github/
 │   └── copilot-instructions.md        # GitHub Copilot context configuration
 └── README.md                          # This file
