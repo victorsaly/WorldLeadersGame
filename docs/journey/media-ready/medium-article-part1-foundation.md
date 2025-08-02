@@ -1,24 +1,18 @@
-# From Voice M## The*This is the story of an experiment in AI autonomy and father-son collaboration. What if we let AI agents build an entire educational video game with minimal human intervention whilst a parent and child work together as creative directors? The results might surprise you.*Spark That Started Everything
-
-Picture this: You're at home in London when your 12-year-old comes back from school, buzzing with excitement about a game concept that emerged from his geography and economics lessons. Most parents would nod politely and say "that sounds brilliant, mate." Instead, I reached for my phone and hit record.
-
-What followed was a passionate 5-minute description of an educational strategy game where players progress from peasant to world leader whilst learning real economics, geography, and languages. He wanted dice rolls to determine career progression, AI characters to guide players, and the ability to "buy Canada when you get 25% reputation!"
-
-> _"Dad, imagine starting as a farmer and rolling dice to become a shopkeeper, then using real country prices based on how wealthy they actually are!"_
-
-Instead of filing this away as a "brilliant kid idea," my son and I decided to try something radical together: **Let AI build his entire vision with virtually no human coding whilst we collaborate as a father-son development team.**deo Game: # From Voice Memo to Video Game: How AI Built My Son's Dream Through Father-Son Collaboration
+# From Voice Memo to Video Game: How AI Built My Son's Dream Through Father-Son Collaboration
 
 ## When my 12-year-old described his perfect educational game after school in London, I hit record. What happened next changed everything I thought I knew about AI-assisted development - and became an incredible father-son collaboration.
 
 <div align="center">
-<img src="../assets/world-leaders-logo.svg" alt="World Leaders Game Logo - Designed by a 12-year-old using Figma" width="200" height="300">
+<img src="../../assets/world-leaders-logo.svg" alt="World Leaders Game Logo - Designed by a 12-year-old using Figma" width="200" height="300">
 <br>
 <em>🎨 My son's game logo, designed independently in Figma</em>
 </div>
 
 ---
 
-_This is the story of an experiment in AI autonomy. What if we let AI agents build an entire educational video game with minimal human intervention? The results might surprise you._
+_This is the story of an experiment in AI autonomy and father-son collaboration. What if we let AI agents build an entire educational video game with minimal human intervention whilst a parent and child work together as creative directors? The results might surprise you._
+
+**📝 Note**: _Due to the complexity and scope of this 18-week journey, we've decided to divide this story into multiple articles. This first piece covers the initial breakthrough - Weeks 1-2 where we established the foundation. Future articles will follow as we progress through each major milestone of our AI-assisted development adventure._
 
 ## The Spark That Started Everything
 
@@ -116,7 +110,14 @@ src/WorldLeaders/
 
 ### The Magic of Visual-Driven Development
 
-My son didn't stop at the voice memo. He created hand-drawn mockups showing exactly how he envisioned each game phase. These sketches became AI prompts:
+My son didn't stop at the initial discussion. He created hand-drawn mockups showing exactly how he envisioned each game phase. These sketches became AI prompts:
+
+<div align="center">
+<img src="../../assets/game-mockup-1.png" alt="Game interface mockup 1 - Hand-drawn by 12-year-old designer" width="400">
+<img src="../../assets/game-mockup-2.png" alt="Game interface mockup 2 - Hand-drawn by 12-year-old designer" width="400">
+<br>
+<em>🎨 Original game design sketches - our visual blueprint for development</em>
+</div>
 
 ```csharp
 // Based on 12-year-old's sketch: Large green "Roll" button,
@@ -205,7 +206,7 @@ Iteration 3: [Complete specification with context] → Perfect
 
 The key was learning to front-load comprehensive specifications rather than iterating toward quality.
 
-## The Bigger Picture: AI is Democratizing Creation
+## The Bigger Picture: AI is Democratising Creation
 
 ### What This Means for Parents and Educators
 
@@ -228,7 +229,7 @@ We're not being replaced—we're being elevated. Instead of spending weeks on bo
 - Child safety and privacy protection
 - Strategic technical guidance
 
-## Lessons Learned
+## Lessons Learnt
 
 ### Where AI Excels
 
@@ -253,25 +254,56 @@ We're not being replaced—we're being elevated. Instead of spending weeks on bo
 - Accessibility features integrated from the beginning
 - Educational effectiveness patterns proven in child development research
 
-## What's Next: The 18-Week Journey
+## What's Next: The Journey Continues
 
-We're only 2 weeks into an 18-week journey to complete production. Here's what's coming:
+**This is just the beginning!** We're only 2 weeks into an 18-week journey to complete production. The complexity and scope of this project means we'll be sharing our progress through a series of articles:
 
-- **Week 3-4**: AI agent personalities and interactive guidance
-- **Week 5-8**: Speech recognition for language learning
-- **Week 9-12**: Mobile optimization and accessibility
-- **Week 13-16**: Beta testing with children and educational validation
-- **Week 17-18**: Production deployment and community sharing
+### 🗓️ **The Article Series Roadmap**
 
-### Join the Experiment
+**📖 Part 1: Foundation (This Article)** - _Weeks 1-2_
 
-This isn't just about building a game—it's about proving that AI can democratize educational content creation. We're documenting everything and open-sourcing the methodology.
+- AI-led architecture design and implementation
+- Father-son collaboration methodology
+- Initial breakthrough and production-ready foundation
 
-**Follow along**: [GitHub Repository](https://github.com/victorsaly/ConquerTheWorldGame)  
-**Weekly Updates**: [Development Blog](link-to-weekly-updates)  
-**Community**: [Educational AI Developers](link-to-community)
+**📖 Part 2: AI Personalities & Game Engine** - _Weeks 3-6_ (Coming Soon)
 
-## The Real Victory
+- Implementing the 6 educational AI agent personalities
+- Complete game flow and interactive mechanics
+- Real-world data integration with World Bank API
+
+**📖 Part 3: Speech Recognition & Language Learning** - _Weeks 7-10_ (Future)
+
+- Azure Speech Services integration
+- Multi-language pronunciation assessment
+- Cultural learning and accessibility features
+
+**📖 Part 4: Testing & Production Deployment** - _Weeks 11-18_ (Future)
+
+- Beta testing with children and educational validation
+- Mobile optimisation and performance tuning
+- Production deployment and community impact
+
+### Why This Journey Approach?
+
+Originally, we thought we could capture the entire 18-week development story in one comprehensive article. However, as we progressed, it became clear that:
+
+1. **Each phase deserves detailed coverage** - The prompt engineering patterns, AI collaboration insights, and educational methodology discoveries are too valuable to compress
+2. **Real-time documentation is more authentic** - Rather than retrospective storytelling, we're sharing lessons as we learn them
+3. **Community engagement benefits from regular updates** - Readers can follow along and apply techniques as we discover them
+4. **Educational impact requires thorough analysis** - Each milestone needs proper evaluation of learning outcomes and child development benefits
+
+### Join the Live Experiment
+
+This isn't just about building a game—it's about proving that AI can democratise educational content creation whilst maintaining the highest standards of child safety and educational effectiveness.
+
+**Follow along in real-time:**
+
+- **[GitHub Repository](https://github.com/victorsaly/ConquerTheWorldGame)** - Complete source code and documentation
+- **[Weekly Development Logs](../../week-by-week/)** - Detailed technical progress and AI collaboration insights
+- **[Educational AI Community](link-to-community)** - Connect with other parent-child development teams
+
+## The Real Victory (So Far)
 
 The biggest success isn't the technology—it's watching my son understand that his creative ideas can become reality through our collaboration. When he sees his hand-drawn mockups turn into working software, when his voice memo becomes an interactive experience, when his Figma logo appears in a real application...
 
@@ -283,14 +315,16 @@ _Want to try this approach with your own child's creative projects? My son and I
 
 **What would your child create if they knew AI could help build their wildest educational dreams, with you as their development partner?**
 
+**📧 Next Article**: _Part 2 will dive deep into implementing AI agent personalities and building the complete game engine. Subscribe or follow our GitHub repository to be notified when it's published!_
+
 ---
 
-### About This Experiment
+### About This Series
 
-This article is part of an 18-week documentation project tracking AI-led educational software development through father-son collaboration. Follow the complete journey from voice memo to production game, including:
+This article is Part 1 of a multi-part series documenting an 18-week AI-led educational software development journey through father-son collaboration. Each article covers a specific phase of development, including:
 
 - **Detailed prompt engineering patterns** that consistently generate production-ready code
-- **Child-centered design methodologies** for educational technology
+- **Child-centred design methodologies** for educational technology
 - **AI collaboration frameworks** for rapid educational innovation
 - **Open-source documentation** enabling others to replicate this approach
 
