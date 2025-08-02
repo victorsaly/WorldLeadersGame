@@ -105,6 +105,34 @@ WorldLeadersGame/
 
 ---
 
+## 🚀 Quick Start
+
+### Running the Application
+```bash
+# Clone the repository
+git clone https://github.com/victorsaly/WorldLeadersGame.git
+cd WorldLeadersGame/src/WorldLeaders
+
+# Install Aspire workload (required for orchestration)
+dotnet workload install aspire
+
+# Install dependencies
+dotnet restore
+
+# Run the complete application stack (.NET Aspire)
+cd WorldLeaders.AppHost
+dotnet run
+```
+
+**Access Points:**
+- **Game Web App**: `https://localhost:7154`
+- **Game API**: `https://localhost:7155`  
+- **API Documentation**: `https://localhost:7155/swagger`
+
+📖 **For detailed command-line instructions**: See [Command Line Guide](docs/07-command-line-guide.md)
+
+---
+
 ## 🚀 Development Timeline
 
 | Phase | Duration | Status | AI Contribution | Focus Area |
@@ -125,6 +153,7 @@ WorldLeadersGame/
 ### **For Developers**
 - **[Development Plan](docs/02-development-plan.md)**: Complete 18-week roadmap
 - **[Technical Guide](docs/04-technical-guide.md)**: Architecture and implementation details
+- **[Command Line Guide](docs/07-command-line-guide.md)**: Complete guide for running and managing the application
 - **[Copilot Prompts](docs/03-copilot-prompts.md)**: AI-assisted development prompts
 
 ### **For Community**

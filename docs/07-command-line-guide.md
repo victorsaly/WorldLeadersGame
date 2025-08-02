@@ -1,0 +1,609 @@
+# 🚀 Command Line Guide - World Leaders Game
+
+*Comprehensive guide for running, building, and managing the World Leaders Game from the command line*
+
+---
+
+## 📋 Prerequisites
+
+Before running the application, ensure you have the following installed:
+
+### Required Software
+```bash
+# Check .NET version (requires .NET 8 SDK)
+dotnet --version
+
+# Check Docker version (for PostgreSQL)
+docker --version
+
+# Check Node.js version (for TailwindCSS, optional)
+node --version
+```
+
+### Required Versions
+- **.NET 8 SDK** or later
+- **Docker Desktop** (for PostgreSQL database)
+- **.NET Aspire workload** (required for orchestration)
+- **Git** for version control
+- **Visual Studio Code** or **Visual Studio 2022** (recommended for development)
+
+### Install .NET Aspire Workload
+```bash
+# Install the Aspire workload (REQUIRED)
+dotnet workload install aspire
+
+# Verify Aspire workload is installed
+dotnet workload list
+
+# Update Aspire workload if needed
+dotnet workload update aspire
+```
+
+---
+
+## 🏗️ Project Setup Commands
+
+### 1. Clone and Navigate
+```bash
+# Clone the repository
+git clone https://github.com/victorsaly/WorldLeadersGame.git
+cd WorldLeadersGame
+
+# Navigate to source directory
+cd src/WorldLeaders
+
+# Verify project structure
+ls -la
+```
+
+### 2. Restore Dependencies
+```bash
+# Install Aspire workload (if not already done)
+dotnet workload install aspire
+
+# Restore all project dependencies
+dotnet restore
+
+# Verify all projects can build
+dotnet build
+
+# Check for any build issues
+dotnet build --verbosity normal
+```
+
+---
+
+## 🚀 Running the Application
+
+### Option 1: .NET Aspire Orchestration (Recommended)
+
+The easiest way to run the entire application with all services:
+
+```bash
+# Navigate to the AppHost project
+cd WorldLeaders.AppHost
+
+# Run the complete application stack
+dotnet run
+
+# Alternative: Run with specific environment
+dotnet run --environment Development
+
+# Run with verbose logging
+dotnet run --verbosity detailed
+```
+
+**What this does:**
+- Starts PostgreSQL in Docker container
+- Launches the Game API on `https://localhost:7155`
+- Launches the Blazor Web app on `https://localhost:7154`
+- Opens Aspire Dashboard at `https://localhost:15000` (when available)
+
+### Option 2: Individual Service Commands
+
+For debugging or development of specific services:
+
+#### Start Database Only
+```bash
+# Start PostgreSQL using Docker
+docker run --name worldleaders-postgres \
+  -e POSTGRES_DB=worldleaders \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -p 5432:5432 \
+  -d postgres:15
+
+# Verify database is running
+docker ps | grep worldleaders-postgres
+```
+
+#### Run API Service
+```bash
+# Navigate to API project
+cd WorldLeaders.API
+
+# Set connection string (if not using Aspire)
+export ConnectionStrings__DefaultConnection="Server=localhost;Database=worldleaders;User Id=postgres;Password=postgres;"
+
+# Run the API
+dotnet run
+
+# Alternative: Run with specific port
+dotnet run --urls "https://localhost:7155"
+```
+
+#### Run Web Application
+```bash
+# Navigate to Web project
+cd WorldLeaders.Web
+
+# Run the Blazor Server app
+dotnet run
+
+# Alternative: Run with specific port
+dotnet run --urls "https://localhost:7154"
+```
+
+---
+
+## 🛠️ Development Commands
+
+### Build Operations
+```bash
+# Build entire solution
+dotnet build
+
+# Build specific project
+dotnet build WorldLeaders.Web/WorldLeaders.Web.csproj
+
+# Build in Release mode
+dotnet build --configuration Release
+
+# Clean and rebuild
+dotnet clean
+dotnet build
+```
+
+### Testing Commands
+```bash
+# Run all tests (when test projects are added)
+dotnet test
+
+# Run tests with coverage
+dotnet test --collect:"XPlat Code Coverage"
+
+# Run specific test project
+dotnet test WorldLeaders.Tests/WorldLeaders.Tests.csproj
+```
+
+### Database Management
+```bash
+# Add new migration (from Infrastructure project)
+cd WorldLeaders.Infrastructure
+dotnet ef migrations add InitialCreate --startup-project ../WorldLeaders.API
+
+# Update database
+dotnet ef database update --startup-project ../WorldLeaders.API
+
+# Drop database (destructive!)
+dotnet ef database drop --startup-project ../WorldLeaders.API
+
+# Generate SQL scripts
+dotnet ef migrations script --startup-project ../WorldLeaders.API
+```
+
+---
+
+## 🔧 Package Management
+
+### Adding NuGet Packages
+```bash
+# Add package to specific project
+dotnet add WorldLeaders.Web package Microsoft.AspNetCore.SignalR
+
+# Add package with specific version
+dotnet add WorldLeaders.API package Microsoft.EntityFrameworkCore --version 8.0.0
+
+# Add project reference
+dotnet add WorldLeaders.Web reference WorldLeaders.Shared/WorldLeaders.Shared.csproj
+```
+
+### Package Updates
+```bash
+# List outdated packages
+dotnet list package --outdated
+
+# Update all packages
+dotnet restore --force
+
+# Update specific package
+dotnet add package Microsoft.EntityFrameworkCore --version 8.0.1
+```
+
+---
+
+## 🐳 Docker Commands
+
+### Database Management
+```bash
+# Start PostgreSQL container
+docker run --name worldleaders-postgres \
+  -e POSTGRES_DB=worldleaders \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -p 5432:5432 \
+  -d postgres:15
+
+# Stop database
+docker stop worldleaders-postgres
+
+# Remove database container
+docker rm worldleaders-postgres
+
+# View database logs
+docker logs worldleaders-postgres
+
+# Access database shell
+docker exec -it worldleaders-postgres psql -U postgres -d worldleaders
+```
+
+### Application Containerization (Future)
+```bash
+# Build Docker image for API
+docker build -t worldleaders-api -f WorldLeaders.API/Dockerfile .
+
+# Build Docker image for Web
+docker build -t worldleaders-web -f WorldLeaders.Web/Dockerfile .
+
+# Run containerized application
+docker-compose up -d
+```
+
+---
+
+## 🔍 Monitoring & Debugging
+
+### Application Logs
+```bash
+# Run with detailed logging
+dotnet run --verbosity detailed
+
+# Enable specific log levels
+export DOTNET_ENVIRONMENT=Development
+export Logging__LogLevel__Default=Information
+dotnet run
+```
+
+### Health Checks
+```bash
+# Check API health
+curl https://localhost:7155/health
+
+# Check API status
+curl https://localhost:7155/api/health
+
+# Test API endpoints
+curl https://localhost:7155/api/game/territories
+```
+
+### Performance Monitoring
+```bash
+# Run with performance counters
+dotnet run --property:EnableEventPipe=true
+
+# Profile application startup
+dotnet run --property:COMPlus_PerfMapEnabled=1
+```
+
+---
+
+## 🎯 Game-Specific Commands
+
+### Database Seeding
+```bash
+# Navigate to API project
+cd WorldLeaders.API
+
+# Run database seeder (when implemented)
+dotnet run --seed-data
+
+# Reset game data
+dotnet run --reset-game-data
+```
+
+### Development Utilities
+```bash
+# Generate test player data
+dotnet run --project WorldLeaders.API --generate-test-data
+
+# Export game configuration
+dotnet run --project WorldLeaders.API --export-config
+
+# Validate AI agent configurations
+dotnet run --project WorldLeaders.API --validate-agents
+```
+
+---
+
+## 🌐 Environment Configuration
+
+### Development Environment
+```bash
+# Set development environment
+export ASPNETCORE_ENVIRONMENT=Development
+
+# Set custom configuration
+export GameSettings__MaxPlayers=100
+export GameSettings__EnableAI=true
+
+# Run with custom settings
+dotnet run
+```
+
+### Production Environment
+```bash
+# Set production environment
+export ASPNETCORE_ENVIRONMENT=Production
+
+# Set production database connection
+export ConnectionStrings__DefaultConnection="Server=prod-server;Database=worldleaders;..."
+
+# Run in production mode
+dotnet run --configuration Release
+```
+
+---
+
+## 🚨 Troubleshooting Commands
+
+### Common Issues
+
+#### .NET Aspire Missing Workload (Most Common)
+```bash
+# Error: "Property CliPath: The path to the DCP executable used for Aspire orchestration is required"
+# This error occurs when the Aspire workload is not installed
+
+# Step 1: Install Aspire workload
+dotnet workload install aspire
+
+# Step 2: Verify installation
+dotnet workload list
+
+# Step 3: If still failing, repair the installation
+dotnet workload repair
+
+# Step 4: Update all workloads
+dotnet workload update
+
+# Step 5: Clean and rebuild
+dotnet clean
+dotnet build
+
+# Step 6: Try running again
+cd WorldLeaders.AppHost
+dotnet run
+```
+
+#### Port Already in Use
+```bash
+# Find process using port 7154
+lsof -i :7154
+
+# Kill process on port
+kill -9 $(lsof -t -i:7154)
+
+# Run on different port
+dotnet run --urls "https://localhost:7156"
+```
+
+#### Database Connection Issues
+```bash
+# Verify PostgreSQL is running
+docker ps | grep postgres
+
+# Check connection
+pg_isready -h localhost -p 5432
+
+# Reset database container
+docker stop worldleaders-postgres
+docker rm worldleaders-postgres
+# Then restart with run command above
+```
+
+#### Build Errors
+```bash
+# Clean solution
+dotnet clean
+
+# Clear NuGet cache
+dotnet nuget locals all --clear
+
+# Restore packages
+dotnet restore --force
+
+# Rebuild solution
+dotnet build
+```
+
+#### SSL/HTTPS Issues
+```bash
+# Trust development certificates
+dotnet dev-certs https --trust
+
+# Clean and regenerate certificates
+dotnet dev-certs https --clean
+dotnet dev-certs https --trust
+```
+
+#### .NET Aspire Issues
+```bash
+# Missing Aspire workload error
+# Error: "Property CliPath: The path to the DCP executable used for Aspire orchestration is required"
+dotnet workload install aspire
+
+# Repair Aspire installation
+dotnet workload repair
+
+# Check installed workloads
+dotnet workload list
+
+# Update all workloads
+dotnet workload update
+
+# If still having issues, restart Docker Desktop and try again
+docker restart $(docker ps -q)
+```
+
+---
+
+## 📊 Performance & Testing
+
+### Load Testing
+```bash
+# Install tools
+dotnet tool install -g Microsoft.dotnet-httprepl
+
+# Test API endpoints
+httprepl https://localhost:7155
+
+# Stress test (when implemented)
+dotnet run --project WorldLeaders.LoadTests
+```
+
+### Code Quality
+```bash
+# Run code analysis
+dotnet build --verbosity normal
+
+# Format code
+dotnet format
+
+# Security scan (future)
+dotnet list package --vulnerable
+```
+
+---
+
+## 🎓 Educational Development
+
+### AI Agent Testing
+```bash
+# Test AI agent responses (when implemented)
+dotnet run --project WorldLeaders.API --test-agents
+
+# Validate educational content
+dotnet run --project WorldLeaders.API --validate-content
+
+# Check child safety filters
+dotnet run --project WorldLeaders.API --test-safety
+```
+
+### Content Management
+```bash
+# Export educational content
+dotnet run --project WorldLeaders.API --export-content
+
+# Validate territory data
+dotnet run --project WorldLeaders.API --validate-territories
+
+# Update GDP data from World Bank API
+dotnet run --project WorldLeaders.API --update-gdp-data
+```
+
+---
+
+## 📚 Quick Reference
+
+### Essential Commands
+```bash
+# Start everything (recommended)
+cd WorldLeaders.AppHost && dotnet run
+
+# Start just the web app
+cd WorldLeaders.Web && dotnet run
+
+# Start just the API
+cd WorldLeaders.API && dotnet run
+
+# Build everything
+dotnet build
+
+# Clean everything
+dotnet clean
+```
+
+### URLs After Starting
+- **Game Web App**: `https://localhost:7154`
+- **Game API**: `https://localhost:7155`
+- **API Documentation**: `https://localhost:7155/swagger`
+- **Aspire Dashboard**: `https://localhost:15000` (when available)
+
+### Environment Variables
+```bash
+export ASPNETCORE_ENVIRONMENT=Development
+export ConnectionStrings__DefaultConnection="Server=localhost;Database=worldleaders;User Id=postgres;Password=postgres;"
+export GameSettings__EnableAI=true
+export Logging__LogLevel__Default=Information
+```
+
+---
+
+## 🎮 Game Testing Commands
+
+### Quick Game Tests
+```bash
+# Create test player
+curl -X POST https://localhost:7155/api/game/players \
+  -H "Content-Type: application/json" \
+  -d '{"username": "TestPlayer"}'
+
+# Get territories
+curl https://localhost:7155/api/game/territories
+
+# Roll career dice
+curl -X POST https://localhost:7155/api/game/players/{playerId}/career-roll
+
+# Get random event
+curl -X POST https://localhost:7155/api/game/players/{playerId}/random-event
+```
+
+---
+
+## 💡 Tips for Developers
+
+### Best Practices
+1. **Always use .NET Aspire** (`dotnet run --project WorldLeaders.AppHost`) for full stack
+2. **Check Docker first** if database connection fails
+3. **Use `dotnet clean` followed by `dotnet build`** for build issues
+4. **Trust HTTPS certificates** with `dotnet dev-certs https --trust`
+5. **Monitor Aspire Dashboard** for service health and logs
+
+### Development Workflow
+```bash
+# Daily development routine
+git pull origin main
+cd src/WorldLeaders
+
+# Ensure Aspire workload is installed
+dotnet workload install aspire
+
+dotnet restore
+dotnet build
+cd WorldLeaders.AppHost
+dotnet run
+```
+
+### First-Time Setup Checklist
+1. ✅ Install .NET 8 SDK
+2. ✅ Install Docker Desktop and start it
+3. ✅ Install Aspire workload: `dotnet workload install aspire`
+4. ✅ Clone repository and navigate to `src/WorldLeaders`
+5. ✅ Run `dotnet restore` and `dotnet build`
+6. ✅ Trust HTTPS certificates: `dotnet dev-certs https --trust`
+7. ✅ Start application: `cd WorldLeaders.AppHost && dotnet run`
+
+This workflow ensures you have the latest code, dependencies are updated, everything builds successfully, and the full application stack starts correctly.
+
+---
+
+*This guide will be updated as new features and deployment options are added to the World Leaders Game project.*
