@@ -28,6 +28,18 @@ This folder contains all project documentation for the "World Leaders Game" educ
 - **Content**: Architecture, code examples, best practices
 - **Updates**: Technical decisions and implementation details
 
+### **05-phase1-implementation.md**
+- **Purpose**: Complete Phase 1 task breakdown and requirements
+- **Audience**: Developers implementing foundation features
+- **Content**: Detailed specifications for .NET Aspire solution setup
+- **Updates**: Task completion status and technical notes
+
+### **06-issues-driven-development.md**
+- **Purpose**: GitHub Issues-based AI development methodology
+- **Audience**: Teams using AI-first development approach
+- **Content**: Issue specifications, Copilot prompts, workflow procedures
+- **Updates**: New issues and AI development patterns
+
 ## 🔄 Document Maintenance
 
 ### **Naming Convention**
