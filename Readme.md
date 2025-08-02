@@ -108,19 +108,41 @@ WorldLeadersGame/
 ## 🚀 Quick Start
 
 ### Running the Application
+
+#### Option A: With .NET Aspire (Recommended)
 ```bash
 # Clone the repository
 git clone https://github.com/victorsaly/WorldLeadersGame.git
 cd WorldLeadersGame/src/WorldLeaders
 
-# Install Aspire workload (required for orchestration)
+# Install Aspire workload (requires admin permissions)
 dotnet workload install aspire
+
+# Install dependencies and run
+dotnet restore
+cd WorldLeaders.AppHost
+dotnet run
+```
+
+#### Option B: Manual Setup (No Aspire Required)
+```bash
+# Clone the repository  
+git clone https://github.com/victorsaly/WorldLeadersGame.git
+cd WorldLeadersGame/src/WorldLeaders
 
 # Install dependencies
 dotnet restore
 
-# Run the complete application stack (.NET Aspire)
-cd WorldLeaders.AppHost
+# Start database (Terminal 1)
+docker run --name worldleaders-postgres -e POSTGRES_DB=worldleaders -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:15
+
+# Start API (Terminal 2)
+cd WorldLeaders.API
+export ConnectionStrings__DefaultConnection="Server=localhost;Database=worldleaders;User Id=postgres;Password=postgres;"
+dotnet run
+
+# Start Web App (Terminal 3)  
+cd WorldLeaders.Web
 dotnet run
 ```
 
