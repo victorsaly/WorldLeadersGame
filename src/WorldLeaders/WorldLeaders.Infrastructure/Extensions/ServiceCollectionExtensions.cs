@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WorldLeaders.Infrastructure.Data;
+using WorldLeaders.Infrastructure.Services;
+using WorldLeaders.Shared.Services;
 
 namespace WorldLeaders.Infrastructure.Extensions;
 
@@ -50,6 +52,11 @@ public static class ServiceCollectionExtensions
                 options.EnableDetailedErrors();
             }
         });
+
+        // Add game engine services
+        services.AddScoped<IGameEngine, GameEngine>();
+        services.AddScoped<IDiceService, DiceService>();
+        services.AddScoped<IPlayerService, PlayerService>();
 
         return services;
     }

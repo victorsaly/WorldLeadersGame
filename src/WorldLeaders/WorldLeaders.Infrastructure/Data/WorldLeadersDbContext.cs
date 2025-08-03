@@ -22,6 +22,9 @@ public class WorldLeadersDbContext : DbContext
     public DbSet<GameEventEntity> GameEvents { get; set; } = null!;
     public DbSet<AIInteractionEntity> AIInteractions { get; set; } = null!;
     public DbSet<LanguageProgressEntity> LanguageProgress { get; set; } = null!;
+    public DbSet<GameSessionEntity> GameSessions { get; set; } = null!;
+    public DbSet<DiceRollHistoryEntity> DiceRollHistory { get; set; } = null!;
+    public DbSet<PlayerAchievementEntity> PlayerAchievements { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

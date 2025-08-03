@@ -1,4 +1,5 @@
 using WorldLeaders.Web.Components;
+using WorldLeaders.Infrastructure.Extensions;
 using Microsoft.AspNetCore.SignalR.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Add Infrastructure services (EF Core + Game Services)
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add HttpClient for API communication
 builder.Services.AddHttpClient("GameAPI", client =>

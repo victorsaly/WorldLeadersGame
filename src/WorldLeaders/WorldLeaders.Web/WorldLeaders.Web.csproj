@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WorldLeaders.Shared\WorldLeaders.Shared.csproj" />
+    <ProjectReference Include="..\WorldLeaders.Infrastructure\WorldLeaders.Infrastructure.csproj" />
     <ProjectReference Include="..\WorldLeaders.ServiceDefaults\WorldLeaders.ServiceDefaults.csproj" />
   </ItemGroup>
 
