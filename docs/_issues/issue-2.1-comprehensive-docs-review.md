@@ -286,7 +286,9 @@ _This post is part of our 18-week AI-led educational game development series. Fo
 #### **Special Educational Markers**
 
 ```markdown
-> **🎓 Learning Objective**: [Specific skill or knowledge gained] > **🌍 Real-World Application**: [How this applies to real life] > **👶 Age Appropriateness**: Verified for 12-year-old understanding
+> **🎓 Learning Objective**: [Specific skill or knowledge gained]
+> **🌍 Real-World Application**: [How this applies to real life]
+> **👶 Age Appropriateness**: Verified for 12-year-old understanding
 > **🛡️ Safety Check**: Content reviewed for child safety
 ```
 
