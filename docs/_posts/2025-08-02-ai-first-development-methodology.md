@@ -3,7 +3,7 @@ layout: post
 title: "AI-First Development Methodology"
 subtitle: "How We Achieved 95% Autonomous Code Generation for Educational Software"
 date: 2025-08-02
-categories: ["development", "ai", "methodology"] 
+categories: ["development", "ai", "methodology"]
 tags: ["artificial-intelligence", "github-copilot", "software-development", "educational-technology", "prompt-engineering"]
 author: "Victor Saly"
 excerpt: "Two weeks into our AI-first development experiment, we've discovered the specific methodologies that enable true autonomous software creation. Here's how we transformed a child's voice memo into production-ready code using structured AI collaboration."
