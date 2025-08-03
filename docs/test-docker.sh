@@ -79,7 +79,7 @@ echo ""
 
 # Run Jekyll in Docker
 docker run --rm \
-  --volume="$PWD:/srv/jekyll:Z" \
+  --volume="$REAL_PWD:/srv/jekyll:Z" \
   --publish 4000:4000 \
   jekyll/jekyll:3.9 \
   jekyll serve --watch --force_polling --host 0.0.0.0
