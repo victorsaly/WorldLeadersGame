@@ -4,7 +4,7 @@ description: "A father-son experiment in AI autonomy for educational software de
 
 # Site settings
 url: "https://victorsaly.github.io"
-baseurl: "/ConquerTheWorldGame"
+baseurl: "/WorldLeadersGame"
 author: "Victor & Oliver Saly"
 email: "info@victorsaly.com"
 
@@ -77,6 +77,7 @@ exclude:
   - Gemfile.lock
   - node_modules
   - vendor
+  - vendor/bundle
   - src/
   - .vscode/
   - start-game.sh
