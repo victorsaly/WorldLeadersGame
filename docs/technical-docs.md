@@ -1,13 +1,8 @@
 ---
 layout: page
 title: "Technical Documentation"
+subtitle: "Comprehensive Implementation Guides & Architecture Documentation"
 permalink: /technical-docs/
----
-
-# 🔧 Technical Documentation
-
-**Comprehensive technical guides and implementation documentation** for the World Leaders Game educational platform.
-
 ---
 
 ## 🏗️ **Architecture & Design**

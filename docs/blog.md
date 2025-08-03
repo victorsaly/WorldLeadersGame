@@ -1,13 +1,9 @@
 ---
 layout: page
 title: "Development Blog"
+subtitle: "Real-Time AI-Led Game Creation Journey Documentation"
 permalink: /blog/
 ---
-
-<div class="hero-section">
-  <h1>📰 Development Blog</h1>
-  <p>Follow our real-time AI-led game creation journey - documenting every step of our 18-week father-son experiment in educational software development.</p>
-</div>
 
 ## 🎯 Blog Categories
 
@@ -29,9 +25,11 @@ permalink: /blog/
 </div>
 
 ### 🎮 **Game Development Progress**
+
 Technical milestones, architecture decisions, and educational game mechanics implementation.
 
 ### 👨‍👦 **Father-Son Collaboration**
+
 Personal insights into collaborative creative direction and educational validation processes.
 
 ---
@@ -61,23 +59,27 @@ Personal insights into collaborative creative direction and educational validati
 ## 🗂️ **Archive by Category**
 
 ### 🤖 AI Development
+
 - [AI Prompt Engineering Patterns](/journey/technical-deep-dives/ai-prompt-engineering/)
 - [GitHub Copilot Instruction Development](/technical/copilot-instructions/)
 - [Autonomous Code Generation Examples](/technical/ai-code-examples/)
 
-### 🎮 Game Development  
+### 🎮 Game Development
+
 - [Educational Game Architecture](/journey/milestones/milestone-01-architecture/)
 - [Real-World Data Integration](/technical/data-integration/)
 - [Child-Friendly UI/UX Patterns](/technical/child-ui-patterns/)
 
 ### 📊 Weekly Progress
+
 - [Week 1: Planning & Architecture](/journey/week-by-week/week-01-planning/)
 - [Week 2: Foundation Implementation](/journey/week-by-week/week-02-foundation/)
 - [Week 3: Game Engine Development](/journey/week-by-week/week-03-game-engine/)
 
 ### 🏆 Major Milestones
+
 - [Milestone 1: Complete Architecture Built](/journey/milestones/milestone-01-architecture/)
-- [Milestone 2: First Playable Version](/journey/milestones/milestone-02-mvp/) *(Coming Soon)*
+- [Milestone 2: First Playable Version](/journey/milestones/milestone-02-mvp/) _(Coming Soon)_
 
 ---
 
