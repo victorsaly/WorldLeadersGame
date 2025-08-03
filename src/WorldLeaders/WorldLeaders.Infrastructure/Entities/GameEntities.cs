@@ -27,14 +27,17 @@ public class PlayerEntity
 public class TerritoryEntity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
-    public string Name { get; set; } = string.Empty;
+    public string CountryName { get; set; } = string.Empty;
     public string CountryCode { get; set; } = string.Empty;
-    public string PrimaryLanguage { get; set; } = string.Empty;
+    public decimal GdpInBillions { get; set; }
+    public int Cost { get; set; }
+    public int ReputationRequired { get; set; }
+    public string OfficialLanguagesJson { get; set; } = string.Empty; // JSON serialized List<string>
+    
+    // Additional properties for enhanced gameplay
     public TerritoryTier Tier { get; set; }
     public long RealGDP { get; set; }
     public int GDPRank { get; set; }
-    public int PurchaseCost { get; set; }
-    public int ReputationRequired { get; set; }
     public int MonthlyIncome { get; set; }
     public bool IsAvailable { get; set; } = true;
     public Guid? OwnedByPlayerId { get; set; }

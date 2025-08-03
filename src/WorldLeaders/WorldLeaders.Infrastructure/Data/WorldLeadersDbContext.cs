@@ -51,15 +51,17 @@ public class WorldLeadersDbContext : DbContext
         modelBuilder.Entity<TerritoryEntity>(entity =>
         {
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Name)
+            entity.Property(e => e.CountryName)
                 .IsRequired()
                 .HasMaxLength(100);
             entity.Property(e => e.CountryCode)
                 .IsRequired()
                 .HasMaxLength(2);
-            entity.Property(e => e.PrimaryLanguage)
-                .IsRequired()
-                .HasMaxLength(50);
+            entity.Property(e => e.GdpInBillions)
+                .HasColumnType("decimal(18,2)");
+            entity.Property(e => e.OfficialLanguagesJson)
+                .HasColumnName("OfficialLanguages")
+                .HasMaxLength(500);
             entity.Property(e => e.Tier)
                 .HasConversion<string>();
 

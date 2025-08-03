@@ -27,11 +27,12 @@ public record PlayerDashboardDto(
 /// </summary>
 public record TerritoryDto(
     Guid Id,
-    string Name,
+    string CountryName,
     string CountryCode,
-    string PrimaryLanguage,
+    List<string> OfficialLanguages,
+    decimal GdpInBillions,
     TerritoryTier Tier,
-    int PurchaseCost,
+    int Cost,
     int ReputationRequired,
     int MonthlyIncome,
     bool IsAvailable,

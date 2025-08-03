@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using WorldLeaders.Shared.Enums;
 
 namespace WorldLeaders.Shared.Models;
@@ -7,13 +8,47 @@ namespace WorldLeaders.Shared.Models;
 /// </summary>
 public class Player
 {
+    /// <summary>
+    /// Unique identifier for the player
+    /// </summary>
     public Guid Id { get; set; } = Guid.NewGuid();
+    
+    /// <summary>
+    /// Player's chosen username for the game
+    /// </summary>
+    [Required]
+    [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
     public string Username { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Current monthly income from job and territories
+    /// </summary>
+    [Range(0, int.MaxValue, ErrorMessage = "Income cannot be negative")]
     public int Income { get; set; }
-    public int Reputation { get; set; } // 0-100%
+    
+    /// <summary>
+    /// Reputation percentage (0-100) affecting territory acquisition ability
+    /// </summary>
+    [Range(0, 100, ErrorMessage = "Reputation must be between 0 and 100")]
+    public int Reputation { get; set; }
+    
+    /// <summary>
+    /// Population happiness percentage (0-100) - game over if reaches 0
+    /// </summary>
+    [Range(0, 100, ErrorMessage = "Happiness must be between 0 and 100")]
     public int Happiness { get; set; } = 50; // Start at neutral happiness
+    
+    /// <summary>
+    /// Current job level determined by dice roll
+    /// </summary>
     public JobLevel CurrentJob { get; set; } = JobLevel.Farmer;
+    
+    /// <summary>
+    /// List of territories owned by the player
+    /// </summary>
     public List<Territory> OwnedTerritories { get; set; } = new();
+    
+    // Additional game state properties
     public GameState CurrentGameState { get; set; } = GameState.NotStarted;
     public DateTime GameStartedAt { get; set; }
     public DateTime LastActiveAt { get; set; } = DateTime.UtcNow;
@@ -27,15 +62,52 @@ public class Player
 /// </summary>
 public class Territory
 {
+    /// <summary>
+    /// Unique identifier for the territory
+    /// </summary>
     public Guid Id { get; set; } = Guid.NewGuid();
-    public string Name { get; set; } = string.Empty;
-    public string CountryCode { get; set; } = string.Empty; // ISO 3166-1 alpha-2
-    public string PrimaryLanguage { get; set; } = string.Empty;
-    public TerritoryTier Tier { get; set; }
-    public long RealGDP { get; set; } // Real GDP in USD
-    public int GDPRank { get; set; } // World ranking
-    public int PurchaseCost { get; set; }
+    
+    /// <summary>
+    /// Name of the country (e.g., "United States", "Nepal", "Canada")
+    /// </summary>
+    [Required]
+    [StringLength(100, ErrorMessage = "Country name cannot exceed 100 characters")]
+    public string CountryName { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// ISO 3166-1 alpha-2 country code (e.g., "US", "NP", "CA")
+    /// </summary>
+    [Required]
+    [StringLength(2, MinimumLength = 2, ErrorMessage = "Country code must be exactly 2 characters")]
+    public string CountryCode { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// GDP in billions of USD for educational economics learning
+    /// </summary>
+    [Range(0, double.MaxValue, ErrorMessage = "GDP must be positive")]
+    public decimal GdpInBillions { get; set; }
+    
+    /// <summary>
+    /// Cost to purchase this territory in game currency
+    /// </summary>
+    [Range(1, int.MaxValue, ErrorMessage = "Cost must be positive")]
+    public int Cost { get; set; }
+    
+    /// <summary>
+    /// Minimum reputation percentage (0-100) required to acquire this territory
+    /// </summary>
+    [Range(0, 100, ErrorMessage = "Reputation required must be between 0 and 100")]
     public int ReputationRequired { get; set; }
+    
+    /// <summary>
+    /// Official languages spoken in this territory for language learning challenges
+    /// </summary>
+    public List<string> OfficialLanguages { get; set; } = new();
+    
+    // Additional properties for enhanced gameplay
+    public TerritoryTier Tier { get; set; }
+    public long RealGDP { get; set; } // Real GDP in USD (for detailed data)
+    public int GDPRank { get; set; } // World ranking
     public int MonthlyIncome { get; set; } // Income generated when owned
     public bool IsAvailable { get; set; } = true;
     public Guid? OwnedByPlayerId { get; set; }
