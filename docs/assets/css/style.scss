@@ -90,9 +90,9 @@
   --warning-text: #e0e0e0;
   
   /* Enhanced shadows for dark mode */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.9);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.9);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.9);
 }
 
 /* Base styles and typography */
@@ -633,7 +633,7 @@ body {
 .btn:hover {
   background: var(--primary-blue);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
   text-decoration: none;
   color: white;
 }
@@ -678,7 +678,7 @@ body {
 
 /* Progress bars for educational content */
 .progress-bar {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 1rem;
   height: 1rem;
   overflow: hidden;
@@ -2050,7 +2050,7 @@ img.lazy.loaded {
 }
 
 [data-theme="dark"] .phase-header {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.9);
   border-bottom-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -2106,7 +2106,7 @@ img.lazy.loaded {
 }
 
 [data-theme="dark"] .phase-content {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.9);
   color: var(--text-color);
 }
 
@@ -2128,25 +2128,33 @@ img.lazy.loaded {
 .timeline-week {
   display: flex;
   align-items: flex-start;
-  padding: 2.5rem 2rem;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 2rem;
+  border-bottom: none;
   position: relative;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.95);
-}
-
-.timeline-week:hover {
-  background: rgba(255,255,255,1);
-  transform: translateX(0.5rem);
+  background: #ffffff;
+  border: 2px solid #dee2e6;
+  margin-bottom: 1rem;
+  border-bottom-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+.timeline-week:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  border-color: #007bff;
+}
+
 [data-theme="dark"] .timeline-week {
-  background: rgba(0, 0, 0, 0.2);
+  background: #333;
+  border-color: #34495e;
 }
 
 [data-theme="dark"] .timeline-week:hover {
-  background: rgba(255,255,255,0.1);
+  background: #34495e;
+  border-color: #3498db;
 }
 
 .timeline-week:last-child {
@@ -2169,17 +2177,17 @@ img.lazy.loaded {
   font-size: 1.1rem;
   color: white;
   background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
-  box-shadow: 0 4px 12px rgba(73, 80, 87, 0.3);
+  box-shadow: 0 4px 12px rgba(73, 80, 87, 0.9);
 }
 
 .timeline-week.completed .week-number {
   background: linear-gradient(135deg, #343a40 0%, #495057 100%);
-  box-shadow: 0 4px 12px rgba(52, 58, 64, 0.3);
+  box-shadow: 0 4px 12px rgba(52, 58, 64, 0.9);
 }
 
 .timeline-week.active .week-number {
   background: linear-gradient(135deg, #6c757d 0%, #adb5bd 100%);
-  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.9);
   animation: pulse 2s infinite;
 }
 
@@ -2195,25 +2203,27 @@ img.lazy.loaded {
 
 .week-content h4 {
   margin: 0 0 1rem 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #000000;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #212529;
   line-height: 1.3;
+  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1);
 }
 
 [data-theme="dark"] .week-content h4 {
-  color: var(--text-color);
+  color: #ecf0f1;
 }
 
 .week-content p {
   margin: 0.75rem 0;
-  color: #000000;
+  color: #495057;
   font-weight: 600;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-size: 1.05rem;
 }
 
 [data-theme="dark"] .week-content p {
-  color: var(--text-secondary);
+  color: #bdc3c7;
 }
 
 .week-content ul {
@@ -2223,13 +2233,13 @@ img.lazy.loaded {
 
 .week-content li {
   margin: 0.5rem 0;
-  color: #000000;
+  color: #495057;
   line-height: 1.6;
   font-weight: 600;
 }
 
 [data-theme="dark"] .week-content li {
-  color: var(--text-secondary);
+  color: #bdc3c7;
 }
 
 /* AI Autonomy Progress */
@@ -2276,7 +2286,7 @@ img.lazy.loaded {
 .metric-card {
   background: rgba(255,255,255,0.1);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.8);
   border-radius: 0.75rem;
   padding: 2rem;
   text-align: center;
@@ -2285,7 +2295,7 @@ img.lazy.loaded {
 
 .metric-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.9);
   border-color: rgba(255,255,255,0.4);
 }
 
