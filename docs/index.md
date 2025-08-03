@@ -47,6 +47,12 @@ title: "World Leaders Game"
   </div>
   
   <div class="nav-card shadcn-card">
+    <h3>🎯 AI-Generated Issues</h3>
+    <p>Systematic problem-solving and structured development planning.</p>
+    <a href="{{ '/issues/' | relative_url }}" class="btn">View Issues</a>
+  </div>
+  
+  <div class="nav-card shadcn-card">
     <h3>📰 Latest Blog Posts</h3>
     <p>Real-time updates on our AI-led development experiment.</p>
     <a href="{{ '/blog/' | relative_url }}" class="btn">View Blog</a>
