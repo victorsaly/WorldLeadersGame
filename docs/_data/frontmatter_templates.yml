@@ -1,0 +1,89 @@
+# Unified Frontmatter Schema for World Leaders Game Documentation
+# All dates in YYYY-MM-DD format for consistency
+
+posts:
+  required:
+    - layout: "post"
+    - title: "String - descriptive title"
+    - date: "YYYY-MM-DD"
+    - categories: ["development", "ai", "education"] # max 3 categories
+    - tags: ["specific", "descriptive", "tags"] # max 5 tags
+    - author: "Victor Saly"
+  optional:
+    - subtitle: "String - explanatory subtitle"
+    - image: "path: /assets/image-name.jpg"
+    - educational_objective: "String - what this teaches"
+    - child_safety_verified: true
+
+journey:
+  required:
+    - layout: "page"
+    - title: "Week X: Description"
+    - date: "YYYY-MM-DD"
+    - week: X # integer
+    - status: "completed|in-progress|planned"
+    - ai_autonomy: "XX%" # percentage as string
+  optional:
+    - educational_objectives: ["list", "of", "learning", "goals"]
+    - milestone_connections: ["milestone-01-name", "milestone-02-name"]
+    - child_safety_verified: true
+    - reading_time: "X minutes"
+
+technical:
+  required:
+    - layout: "page"
+    - title: "Descriptive Technical Guide Title"
+    - date: "YYYY-MM-DD"
+    - category: "technical-guide|deep-dive|pattern|methodology"
+    - tags: ["technology", "framework", "specific-feature"] # max 5 tags
+    - author: "AI-Generated with Human Oversight"
+  optional:
+    - educational_objective: "String - what developers learn"
+    - difficulty_level: "beginner|intermediate|advanced"
+    - prerequisites: ["list", "of", "required", "knowledge"]
+    - child_safety_notes: "String - if applicable to educational content"
+    - estimated_reading_time: "X minutes"
+
+milestones:
+  required:
+    - layout: "page"
+    - title: "Milestone X: Title"
+    - date: "YYYY-MM-DD"
+    - milestone: X # integer
+    - status: "completed|in-progress|planned"
+    - completion_percentage: XX # integer 0-100
+  optional:
+    - next_milestone: "milestone-##-title"
+    - educational_impact: "String - learning outcomes achieved"
+    - ai_autonomy_demonstrated: "XX%"
+    - child_safety_verified: true
+    - achievements: ["list", "of", "specific", "accomplishments"]
+
+issues:
+  required:
+    - layout: "page"
+    - title: "Issue X.X: Descriptive Title"
+    - date: "YYYY-MM-DD"
+    - category: "issue"
+    - priority: "critical|high|medium|low"
+    - milestone: "String - associated milestone"
+    - estimated_effort: "X-Y hours"
+    - ai_autonomy: "XX%"
+    - tags: ["feature-type", "technical-area", "specific-focus"]
+    - author: "AI-Generated with Human Oversight"
+  optional:
+    - dependencies: ["issue-1.1", "issue-2.3"]
+    - educational_impact: "String - how this affects learning outcomes"
+    - child_safety_considerations: "String - if applicable"
+    - completion_status: "pending|in-progress|completed"
+
+# Root pages (index, about, etc.)
+root_pages:
+  required:
+    - layout: "home|page"
+    - title: "Page Title"
+  optional:
+    - subtitle: "String - page description"
+    - date: "YYYY-MM-DD" # for pages that need dating
+    - educational_context: "String - how this supports learning"
+    - child_friendly: true

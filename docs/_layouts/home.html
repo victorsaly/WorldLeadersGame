@@ -3,16 +3,19 @@ layout: default
 refactor: true
 ---
 
+<!-- Reading progress indicator -->
+<div class="reading-progress" id="reading-progress"></div>
+
 <div id="post-wrapper" class="d-flex justify-content-center">
   <div class="col-12 col-lg-11 col-xl-8">
     <div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4 px-xl-0">
       
-      <!-- Hero Section -->
+      <!-- Hero Section with enhanced mobile support -->
       <div class="text-center mb-5">
         {{ content }}
       </div>
 
-      <!-- Recent Posts Section -->
+      <!-- Recent Posts Section with mobile optimization -->
       <div class="row">
         <div class="col-12">
           <h2 class="mb-4">🚀 Latest Updates</h2>
@@ -22,23 +25,31 @@ refactor: true
             {% assign posts = pinned | concat: default %}
             
             {% for post in posts limit: 5 %}
-              <div class="list-group-item">
-                <div class="d-flex w-100 justify-content-between">
+              <div class="list-group-item nav-card">
+                <div class="d-flex w-100 justify-content-between align-items-start">
                   <h5 class="mb-1">
                     <a href="{{ post.url | relative_url }}" class="text-decoration-none">
                       {{ post.title }}
                     </a>
+                    {% if post.pin %}
+                      <span class="status-indicator status-completed ml-2">Pinned</span>
+                    {% endif %}
                   </h5>
                   <small class="text-muted">{{ post.date | date: "%b %-d, %Y" }}</small>
                 </div>
                 {% if post.excerpt %}
                   <p class="mb-1">{{ post.excerpt | strip_html | truncate: 150 }}</p>
                 {% endif %}
-                <small class="text-muted">
-                  {% for tag in post.tags limit: 3 %}
-                    <span class="badge badge-pill badge-secondary mr-1">{{ tag }}</span>
-                  {% endfor %}
-                </small>
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="text-muted">
+                    {% for tag in post.tags limit: 3 %}
+                      <span class="badge badge-pill badge-secondary mr-1">{{ tag }}</span>
+                    {% endfor %}
+                  </small>
+                  {% if post.educational_objective %}
+                    <small class="educational-tag">🎯 Educational</small>
+                  {% endif %}
+                </div>
               </div>
             {% endfor %}
           </div>
@@ -51,32 +62,32 @@ refactor: true
         </div>
       </div>
 
-      <!-- Quick Navigation -->
+      <!-- Enhanced Quick Navigation with child-friendly design -->
       <div class="row mt-5">
         <div class="col-md-4 mb-3">
-          <div class="card h-100">
+          <div class="card h-100 nav-card shadcn-card">
             <div class="card-body text-center">
               <h5 class="card-title">📝 Development Journey</h5>
               <p class="card-text">Follow our week-by-week progress from concept to production.</p>
-              <a href="{{ '/journey/' | relative_url }}" class="btn btn-primary">Explore Journey</a>
+              <a href="{{ '/journey/' | relative_url }}" class="btn">Explore Journey</a>
             </div>
           </div>
         </div>
         <div class="col-md-4 mb-3">
-          <div class="card h-100">
+          <div class="card h-100 nav-card shadcn-card">
             <div class="card-body text-center">
               <h5 class="card-title">🛠️ Technical Deep-Dives</h5>
               <p class="card-text">In-depth technical documentation and implementation guides.</p>
-              <a href="{{ '/technical-docs/' | relative_url }}" class="btn btn-primary">Read Docs</a>
+              <a href="{{ '/technical-docs/' | relative_url }}" class="btn">Read Docs</a>
             </div>
           </div>
         </div>
         <div class="col-md-4 mb-3">
-          <div class="card h-100">
+          <div class="card h-100 nav-card shadcn-card">
             <div class="card-body text-center">
               <h5 class="card-title">🎮 About the Game</h5>
               <p class="card-text">Learn more about the educational game and our experiment.</p>
-              <a href="{{ '/about/' | relative_url }}" class="btn btn-primary">Learn More</a>
+              <a href="{{ '/about/' | relative_url }}" class="btn">Learn More</a>
             </div>
           </div>
         </div>
@@ -85,3 +96,208 @@ refactor: true
     </div>
   </div>
 </div>
+
+<!-- Enhanced JavaScript for mobile optimization and educational features -->
+<script>
+// Reading progress indicator
+window.addEventListener('scroll', function() {
+  const progress = document.getElementById('reading-progress');
+  const scrollTop = window.pageYOffset;
+  const docHeight = document.body.scrollHeight - window.innerHeight;
+  const scrollPercent = (scrollTop / docHeight) * 100;
+  
+  if (progress) {
+    progress.style.transform = `scaleX(${scrollPercent / 100})`;
+  }
+});
+
+// Enhanced mobile navigation and touch interactions
+document.addEventListener('DOMContentLoaded', function() {
+  // Add touch-friendly improvements
+  const interactiveElements = document.querySelectorAll('a, .btn, .nav-card');
+  interactiveElements.forEach(element => {
+    // Ensure minimum touch target size
+    const rect = element.getBoundingClientRect();
+    if (rect.width < 44 || rect.height < 44) {
+      element.style.minWidth = '44px';
+      element.style.minHeight = '44px';
+      element.style.display = 'inline-flex';
+      element.style.alignItems = 'center';
+      element.style.justifyContent = 'center';
+    }
+    
+    // Enhanced touch feedback
+    element.addEventListener('touchstart', function() {
+      this.style.transform = 'scale(0.98)';
+      this.style.transition = 'transform 0.1s ease';
+    });
+    
+    element.addEventListener('touchend', function() {
+      setTimeout(() => {
+        this.style.transform = '';
+      }, 100);
+    });
+  });
+  
+  // Dark mode detection and optimization
+  function applyDarkMode() {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.classList.add('dark');
+      
+      // Adjust images for dark mode
+      const images = document.querySelectorAll('img');
+      images.forEach(img => {
+        img.style.opacity = '0.9';
+        img.style.borderRadius = 'var(--radius)';
+      });
+    }
+  }
+  
+  applyDarkMode();
+  
+  // Listen for dark mode changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+    if (e.matches) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+    applyDarkMode();
+  });
+});
+
+// Educational interaction enhancements
+function enhanceEducationalElements() {
+  // Add educational indicators to content
+  const educationalCards = document.querySelectorAll('[data-educational], .educational-tag');
+  educationalCards.forEach(card => {
+    if (!card.querySelector('.educational-indicator')) {
+      const indicator = document.createElement('div');
+      indicator.className = 'educational-indicator';
+      indicator.innerHTML = '🎓';
+      indicator.style.cssText = `
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: var(--educational-green);
+        color: white;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.875rem;
+      `;
+      
+      card.style.position = 'relative';
+      card.appendChild(indicator);
+    }
+  });
+  
+  // Add reading time indicators
+  const cards = document.querySelectorAll('.nav-card, .list-group-item');
+  cards.forEach(card => {
+    if (!card.querySelector('.reading-time')) {
+      const wordCount = card.textContent.split(' ').length;
+      const readingTime = Math.ceil(wordCount / 200);
+      
+      if (readingTime > 0) {
+        const indicator = document.createElement('span');
+        indicator.className = 'reading-time';
+        indicator.textContent = `${readingTime} min read`;
+        indicator.style.cssText = `
+          font-size: 0.75rem;
+          color: var(--muted-foreground);
+          background: var(--subtle-gray);
+          padding: 0.25rem 0.5rem;
+          border-radius: 1rem;
+          margin-left: 0.5rem;
+          display: inline-block;
+        `;
+        
+        const title = card.querySelector('h5, h3, h4');
+        if (title) {
+          title.appendChild(indicator);
+        }
+      }
+    }
+  });
+}
+
+// Initialize educational enhancements
+document.addEventListener('DOMContentLoaded', enhanceEducationalElements);
+
+// Accessibility improvements
+document.addEventListener('DOMContentLoaded', function() {
+  // Add aria labels to interactive elements
+  const buttons = document.querySelectorAll('.btn');
+  buttons.forEach(btn => {
+    if (!btn.getAttribute('aria-label')) {
+      btn.setAttribute('aria-label', btn.textContent.trim());
+    }
+  });
+  
+  // Add keyboard navigation improvements
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      document.body.classList.add('keyboard-navigation');
+    }
+  });
+  
+  document.addEventListener('mousedown', function() {
+    document.body.classList.remove('keyboard-navigation');
+  });
+});
+</script>
+
+<!-- Home page specific styles -->
+<style>
+.educational-tag {
+  background: var(--educational-green);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.keyboard-navigation *:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Enhanced mobile list items */
+@media (max-width: 768px) {
+  .list-group-item {
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 0.5rem;
+  }
+  
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 0.5rem;
+  }
+  
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Print-friendly styles */
+@media print {
+  .reading-progress,
+  .btn,
+  .badge {
+    display: none;
+  }
+  
+  .nav-card {
+    break-inside: avoid;
+    border: 1px solid #ccc;
+  }
+}
+</style>
