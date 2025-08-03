@@ -1,3 +1,12 @@
+---
+layout: page
+title: "AI Prompt Engineering Mastery: Educational Game Development"
+date: 2025-08-01
+category: "technical-deep-dive"
+tags: ["ai", "prompt-engineering", "education", "development-methodology"]
+author: "Victor Saly"
+---
+
 # AI Prompt Engineering Mastery: Educational Game Development 🎯
 
 **Focus**: Proven AI guidance patterns that transform child creativity into production-ready educational software  

@@ -1,3 +1,12 @@
+---
+layout: page
+title: "Command Line Guide - World Leaders Game"
+date: 2025-08-03
+category: "technical-guide"
+tags: ["command-line", "development", "setup", "troubleshooting"]
+author: "Victor Saly"
+---
+
 # 🚀 Command Line Guide - World Leaders Game
 
 _Comprehensive guide for running, building, and managing the World Leaders Game from the command line_

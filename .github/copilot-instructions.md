@@ -52,6 +52,228 @@ src/
     └── Migrations/                   # Database migrations
 ```
 
+### Documentation Structure
+
+All documentation is consolidated in the `/docs` directory with Jekyll collections:
+
+```
+docs/
+├── _config.yml                 # Jekyll configuration for GitHub Pages
+├── _posts/                     # Weekly development blog posts
+├── _journey/                   # Week-by-week development logs
+├── _technical/                 # Implementation guides and patterns
+├── _milestones/                # Project milestone documentation
+├── assets/                     # Images, CSS, JavaScript
+├── index.md                    # Project homepage
+├── blog.md                     # Blog index page
+├── journey.md                  # Development journey index
+├── technical-docs.md           # Technical documentation index
+├── about.md                    # Project information and team
+└── LOCAL-TESTING.md            # Local development and testing guide
+```
+
+### Documentation Maintenance Guidelines (CRITICAL)
+
+#### **File Naming Conventions**
+
+- **Collections**: Use lowercase with hyphens (`week-01-planning.md`, `ai-prompt-engineering.md`)
+- **Root pages**: Use lowercase with hyphens (`index.md`, `technical-docs.md`)
+- **Special files**: Use UPPERCASE for important guides (`LOCAL-TESTING.md`, `README.md`)
+- **Scripts**: Use lowercase with hyphens (`simple-test.sh`, `test-docker.sh`)
+
+#### **Mandatory Documentation Triggers**
+
+When AI generates ANY of the following, documentation MUST be created/updated:
+
+1. **New Features** → Update relevant `_technical/` guide + create blog post
+2. **Weekly Progress** → Create `_journey/week-##-title.md` + blog post
+3. **Major Milestones** → Create `_milestones/milestone-##-title.md`
+4. **Architecture Changes** → Update `_technical/` guides
+5. **Development Workflow Changes** → Update `LOCAL-TESTING.md`
+
+#### **Frontmatter Standards**
+
+All markdown files MUST include proper frontmatter:
+
+**Blog Posts**:
+
+```yaml
+---
+layout: post
+title: "Post Title"
+date: YYYY-MM-DD
+categories: ["development", "ai", "education"]
+tags: ["specific", "tags"]
+author: "Victor Saly"
+---
+```
+
+**Journey Entries**:
+
+```yaml
+---
+layout: page
+title: "Week X: Description"
+date: YYYY-MM-DD
+week: X
+status: "completed|in-progress|planned"
+ai_autonomy: "XX%"
+---
+```
+
+**Technical Guides**:
+
+```yaml
+---
+layout: page
+title: "Technical Guide Title"
+date: YYYY-MM-DD
+category: "technical-guide|deep-dive|pattern"
+tags: ["technology", "framework", "methodology"]
+author: "AI-Generated with Human Oversight"
+---
+```
+
+**Milestones**:
+
+```yaml
+---
+layout: page
+title: "Milestone X: Title"
+date: YYYY-MM-DD
+milestone: X
+status: "completed|in-progress|planned"
+completion_percentage: XX
+next_milestone: "milestone-##-title"
+---
+```
+
+#### **Quality Standards**
+
+- **Educational Value**: Every document must teach something specific
+- **Child-Friendly Language**: Age-appropriate for 12-year-olds where relevant
+- **Technical Accuracy**: All code examples must be tested and functional
+- **Professional Presentation**: Use proper markdown formatting and structure
+- **Cross-Linking**: Include relevant internal links between documents
+
+#### **File Organization Rules**
+
+- **Never create duplicate files** with similar names (e.g., `testing.md` vs `LOCAL-TESTING.md`)
+- **Use collections for series content** (`_posts/`, `_journey/`, `_technical/`, `_milestones/`)
+- **Keep root directory clean** - only essential navigation files
+- **Assets in `/assets/`** - all images, CSS, JS files
+- **Scripts have clear purposes** - no duplicate functionality
+
+#### **Update Triggers**
+
+AI must update documentation when:
+
+- New code patterns are established
+- Game mechanics are implemented
+- Educational content is added
+- Development workflow changes
+- Testing procedures are modified
+- Architecture decisions are made
+
+#### **Current Clean Structure (DO NOT MODIFY)**
+
+The documentation structure has been carefully organized. DO NOT create duplicate files or change this structure:
+
+```
+docs/
+├── _posts/                     # Blog posts: YYYY-MM-DD-title.md
+├── _journey/                   # Journey logs: week-##-title.md
+├── _technical/                 # Technical guides: lowercase-with-hyphens.md
+├── _milestones/                # Milestones: milestone-##-title.md
+├── assets/                     # Static assets only
+├── index.md                    # Homepage (DO NOT DUPLICATE)
+├── blog.md                     # Blog index
+├── journey.md                  # Journey index
+├── technical-docs.md           # Technical index
+├── about.md                    # Project info
+├── LOCAL-TESTING.md            # Testing guide (UPPERCASE - special file)
+├── simple-test.sh              # Auto-detect test script
+├── test-docker.sh              # Docker-based testing
+├── verify-structure.sh         # Documentation structure verification
+├── Gemfile                     # Jekyll dependencies
+└── _config.yml                 # Jekyll configuration
+```
+
+**NEVER CREATE**:
+
+- Duplicate README files
+- Summary files (use collections instead)
+- Mixed case files (except special UPPERCASE guides)
+- Additional test scripts
+- Files outside this structure
+
+**STRUCTURE VERIFICATION**:
+Run `./verify-structure.sh` to ensure documentation compliance.
+
+#### **Documentation Workflow for AI**
+
+When AI needs to create or update documentation:
+
+1. **Identify the content type**:
+
+   - Weekly progress → `_journey/week-##-title.md`
+   - Technical implementation → `_technical/lowercase-with-hyphens.md`
+   - Blog post → `_posts/YYYY-MM-DD-title.md`
+   - Milestone → `_milestones/milestone-##-title.md`
+
+2. **Use correct frontmatter** (see templates above)
+
+3. **Follow naming conventions strictly**:
+
+   - Collections: `lowercase-with-hyphens.md`
+   - Dates: `YYYY-MM-DD-` prefix for posts
+   - Numbers: `week-01`, `milestone-02` (zero-padded)
+
+4. **Update existing files instead of creating new ones** when content belongs to existing documents
+
+5. **Cross-link appropriately** between related documents
+
+6. **Never duplicate functionality** - use existing files and update them
+
+#### **AI Content Creation Rules**
+
+- **Blog posts**: Weekly updates, methodology insights, major announcements
+- **Journey entries**: Detailed week-by-week progress with lessons learned
+- **Technical guides**: Reusable implementation patterns and deep-dives
+- **Milestones**: Major project achievements and completion tracking
+- **Root pages**: Navigation and overview only - keep minimal and stable
+
+#### **Self-Maintenance of Copilot Instructions (CRITICAL)**
+
+This instruction file must be kept current as the project evolves:
+
+**Update Triggers for Instructions**:
+
+- New development patterns established → Update coding guidelines
+- Architecture changes → Update project structure documentation
+- New tools or frameworks added → Update technology stack
+- Documentation workflow changes → Update maintenance guidelines
+- AI autonomy improvements → Update prompt engineering patterns
+- Educational objectives evolve → Update child-safety and learning guidelines
+
+**Evolution Documentation**:
+
+- Document WHY changes were made to instructions
+- Keep examples current with actual project state
+- Update version management guidelines as dependencies change
+- Maintain accurate file structure representations
+- Record lessons learned from AI-human collaboration
+
+**Instruction Quality Standards**:
+
+- All code examples must reflect current project architecture
+- Technology versions must match actual project dependencies
+- File paths and naming conventions must be accurate
+- Educational objectives must align with current game design
+- Safety guidelines must evolve with new AI capabilities
+
+**This ensures the AI guidance remains effective and current throughout the 18-week development journey.**
+
 ## 🎮 Game Mechanics & Rules
 
 ### Core Game Flow
@@ -491,6 +713,7 @@ All commits **MUST** follow the [Conventional Commits v1.0.0](https://www.conven
 ### **Commit Types for Educational Game Development**
 
 #### **Primary Types**
+
 - **feat**: New educational feature (child-facing functionality)
 - **fix**: Bug fix affecting game mechanics or user experience
 - **docs**: Documentation updates (journey logs, technical guides)
@@ -500,6 +723,7 @@ All commits **MUST** follow the [Conventional Commits v1.0.0](https://www.conven
 - **chore**: Maintenance tasks (dependencies, build configuration)
 
 #### **Educational Game Specific Types**
+
 - **game**: Core game mechanics and educational content
 - **ai**: AI agent personalities and educational AI features
 - **safety**: Child safety, privacy, and content moderation
@@ -510,6 +734,7 @@ All commits **MUST** follow the [Conventional Commits v1.0.0](https://www.conven
 ### **Scope Examples**
 
 #### **Technical Scopes**
+
 - `(api)`: Backend API changes
 - `(web)`: Blazor Server frontend changes
 - `(db)`: Database schema or Entity Framework changes
@@ -517,6 +742,7 @@ All commits **MUST** follow the [Conventional Commits v1.0.0](https://www.conven
 - `(aspire)`: .NET Aspire orchestration changes
 
 #### **Educational Scopes**
+
 - `(game-engine)`: Core game mechanics and progression
 - `(dice)`: Dice rolling and career progression systems
 - `(territories)`: Country acquisition and GDP integration
@@ -526,6 +752,7 @@ All commits **MUST** follow the [Conventional Commits v1.0.0](https://www.conven
 - `(safety)`: Child protection and content validation
 
 #### **Documentation Scopes**
+
 - `(journey)`: Weekly development logs and milestone tracking
 - `(blog)`: Development blog and external content
 - `(prompts)`: AI prompt engineering and Copilot instructions
@@ -534,11 +761,12 @@ All commits **MUST** follow the [Conventional Commits v1.0.0](https://www.conven
 ### **Commit Message Examples**
 
 #### **Feature Development**
+
 ```bash
 feat(dice): implement animated dice rolling with job progression
 
 - Add DiceRollComponent with smooth CSS animations
-- Create job hierarchy mapping (1-6 to career levels)  
+- Create job hierarchy mapping (1-6 to career levels)
 - Include encouraging feedback for all dice outcomes
 - Integrate with SignalR for real-time updates
 
@@ -546,6 +774,7 @@ Closes #14
 ```
 
 #### **Educational Content**
+
 ```bash
 game(agents): add Career Guide AI personality with encouraging messages
 
@@ -558,6 +787,7 @@ Educational-Objective: Teach career progression and probability concepts
 ```
 
 #### **Child Safety**
+
 ```bash
 safety(content): implement AI content moderation for child protection
 
@@ -570,6 +800,7 @@ COPPA-Compliant: Ensures all AI content appropriate for 12-year-olds
 ```
 
 #### **Documentation**
+
 ```bash
 docs(journey): restructure blog into multi-article Medium series
 
@@ -582,6 +813,7 @@ Related: Preparing for Week 3+ development phases
 ```
 
 #### **UI/UX Improvements**
+
 ```bash
 ui(child-friendly): enhance button sizes and visual feedback
 
@@ -609,6 +841,7 @@ Migration guide available in docs/migration/v2.0.0.md
 ### **Automated Tooling Integration**
 
 #### **Semantic Release Configuration**
+
 ```json
 {
   "branches": ["main"],
@@ -622,19 +855,52 @@ Migration guide available in docs/migration/v2.0.0.md
 ```
 
 #### **Commitlint Configuration**
+
 ```json
 {
   "extends": ["@commitlint/config-conventional"],
   "rules": {
-    "type-enum": [2, "always", [
-      "feat", "fix", "docs", "style", "refactor", "test", "chore",
-      "game", "ai", "safety", "data", "speech", "ui"
-    ]],
-    "scope-enum": [2, "always", [
-      "api", "web", "db", "infra", "aspire",
-      "game-engine", "dice", "territories", "agents", "speech", "happiness", "safety",
-      "journey", "blog", "prompts", "guide"
-    ]]
+    "type-enum": [
+      2,
+      "always",
+      [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "test",
+        "chore",
+        "game",
+        "ai",
+        "safety",
+        "data",
+        "speech",
+        "ui"
+      ]
+    ],
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "api",
+        "web",
+        "db",
+        "infra",
+        "aspire",
+        "game-engine",
+        "dice",
+        "territories",
+        "agents",
+        "speech",
+        "happiness",
+        "safety",
+        "journey",
+        "blog",
+        "prompts",
+        "guide"
+      ]
+    ]
   }
 }
 ```
@@ -672,7 +938,7 @@ git merge main        # creates merge commits
 ```bash
 # Creating feature branches
 git checkout -b docs/feature-name
-git checkout -b feat/feature-name  
+git checkout -b feat/feature-name
 git checkout -b fix/bug-description
 
 # Updating feature branch with latest main
@@ -731,7 +997,7 @@ npm install --save-dev @commitlint/cli @commitlint/config-conventional
 # When AI generates new educational content
 feat(agents): implement Fortune Teller AI with mystical educational guidance
 
-# When AI fixes child safety issues  
+# When AI fixes child safety issues
 safety(validation): resolve content moderation for inappropriate responses
 
 # When AI creates new game mechanics

@@ -1,3 +1,12 @@
+---
+layout: page
+title: "Week 1: Planning & Architecture"
+date: 2025-08-01
+week: 1
+status: "completed"
+ai_autonomy: "98%"
+---
+
 # Week 1: Planning & Architecture 🏗️
 
 **Date Range**: [Week 1 of 18-week journey]  

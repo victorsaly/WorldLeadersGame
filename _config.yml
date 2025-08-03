@@ -1,0 +1,83 @@
+# GitHub Pages Configuration for World Leaders Game Documentation
+title: "World Leaders Game: AI-Led Educational Development"
+description: "A father-son experiment in AI autonomy for educational software development - transforming a 12-year-old's voice memo into a production-ready game using 95% AI guidance."
+
+# Site settings
+url: "https://victorsaly.github.io"
+baseurl: "/WorldLeadersGame"
+author: "Victor & Oliver Saly"
+email: "info@victorsaly.com"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Navigation
+header_pages:
+  - index.md
+  - blog.md
+  - technical-docs.md
+  - journey.md
+  - about.md
+
+# Collections for better organization
+collections:
+  posts:
+    output: true
+    permalink: /blog/:year/:month/:day/:title/
+  journey:
+    output: true
+    permalink: /journey/:name/
+  technical:
+    output: true
+    permalink: /technical/:name/
+  milestones:
+    output: true
+    permalink: /milestones/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Victor Saly"
+  - scope:
+      path: ""
+      type: "journey"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "technical"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "milestones"
+    values:
+      layout: "page"
+
+# Social links
+github_username: victorsaly
+linkedin_username: victorsaly
+
+# Google Analytics (optional)
+# google_analytics: YOUR_GA_TRACKING_ID
+
+# Exclude files from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - src/
+  - .vscode/
+  - start-game.sh
+  - README.md
