@@ -12,7 +12,7 @@ featured_image: "/assets/game-block-ai-image3.jpg"
 medium_style: true
 code_review_ready: true
 educational_objective: "Demonstrate AI-driven project management for systematic problem-solving in educational software development"
-target_audience: "developers, project-managers, and-educators"
+target_audience: "developers, project-managers, and educators"
 child_safety: "verified"
 cultural_sensitivity: "reviewed"
 ---
