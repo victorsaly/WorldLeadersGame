@@ -43,14 +43,20 @@ Personal insights into collaborative creative direction and educational validati
     <p class="post-meta">
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %d, %Y" }}</time>
       {% if post.category %} • <span class="category">{{ post.category }}</span>{% endif %}
-      {% if post.tags %} • Tags: {{ post.tags | join: ", " }}{% endif %}
     </p>
+    {% if post.tags %}
+    <div class="tags">
+      {% for tag in post.tags %}
+        <span class="tag">{{ tag }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
     <div class="post-excerpt">
       {{ post.excerpt }}
     </div>
     <a href="{{ post.url | relative_url }}" class="read-more">Read More →</a>
   </article>
-  <hr>
+  {% unless forloop.last %}<hr>{% endunless %}
   {% endfor %}
 </div>
 
