@@ -9,11 +9,6 @@ educational_objectives: ["AI-led project planning", "Educational software archit
 milestone_connections: ["milestone-01-architecture"]
 child_safety_verified: true
 reading_time: "12 minutes"
-educational_objective: "Demonstrate AI-first architecture design transforming child creativity into technical specifications"
-real_world_application: "Scalable methodology for educational software development using AI collaboration"
-age_appropriateness: "verified-12-year-olds"
-cultural_sensitivity: "reviewed"
-child_safety: "coppa-compliant"
 ---
 
 > **🎓 Learning Objective**: Learn how AI can autonomously design sophisticated educational software architectures when provided with clear creative vision and structured guidance

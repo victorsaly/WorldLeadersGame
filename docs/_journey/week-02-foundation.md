@@ -9,11 +9,6 @@ educational_objectives: ["AI-led architecture implementation", "Educational game
 milestone_connections: ["milestone-01-architecture"]
 child_safety_verified: true
 reading_time: "8 minutes"
-educational_objective: "Build production-ready .NET Aspire foundation for educational game with AI-led implementation"
-real_world_application: "Demonstrates how AI can autonomously implement complex software infrastructure while maintaining educational focus"
-age_appropriateness: "verified-12-year-olds"
-cultural_sensitivity: "reviewed"
-child_safety: "coppa-compliant"
 ---
 
 > **🎓 Learning Objective**: Master AI-led implementation of complex .NET Aspire solutions with educational game focus and child-friendly infrastructure

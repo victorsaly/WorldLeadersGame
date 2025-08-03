@@ -3,21 +3,13 @@ layout: post
 title: "AI-First Development Methodology"
 subtitle: "How We Achieved 95% Autonomous Code Generation for Educational Software"
 date: 2025-08-02
-categories: ["development", "ai", "methodology"]
-tags: ["artificial-intelligence", "github-copilot", "software-development", "educational-technology", "prompt-engineering"]
+categories: ["development", "ai", "education"]
+tags: ["artificial-intelligence", "github-copilot", "software-development", "methodology", "educational-software"]
 author: "Victor Saly"
 image:
   path: /assets/game-block-ai-image2.jpg
   alt: AI-generated game blocks showing autonomous development results
-excerpt: "Two weeks into our AI-first development experiment, we've discovered the specific methodologies that enable true autonomous software creation. Here's how we transformed a child's voice memo into production-ready code using structured AI collaboration."
-reading_time: "7 min read"
-featured_image: "/assets/game-block-ai-image2.jpg"
-medium_style: true
-code_review_ready: true
-educational_objective: "Teach developers how to achieve high AI autonomy in educational software development"
-target_audience: "software developers, engineering teams, and technical leads"
-child_safety: "verified"
-cultural_sensitivity: "reviewed"
+educational_objective: "Demonstrates systematic approach to AI-led educational software development with high autonomy"
 child_safety_verified: true
 ---
 

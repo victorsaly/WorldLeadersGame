@@ -6,12 +6,8 @@ category: "technical-deep-dive"
 tags: ["ai", "copilot", "instructions", "educational-software", "methodology"]
 author: "AI-Generated with Human Oversight"
 permalink: /technical/copilot-instructions/
-educational_objective: "Master comprehensive AI instruction frameworks that enable 95% development autonomy"
-target_audience: "developers-and-ai-practitioners"
-difficulty_level: "advanced"
-code_review_ready: true
-child_safety: "verified"
-cultural_sensitivity: "reviewed"
+educational_objective: "Demonstrates systematic AI instruction design for educational software development"
+difficulty_level: "intermediate"
 prerequisites: ["github-copilot-access", "educational-software-basics", "ai-collaboration-concepts"]
 child_safety_notes: "All instruction patterns designed to generate age-appropriate educational content"
 estimated_reading_time: "15 minutes"

@@ -4,21 +4,13 @@ title: "From Voice Memo to Production"
 subtitle: "An AI-First Development Experiment That's Changing How We Build Educational Software"
 date: 2025-08-01
 categories: ["development", "ai", "education"]
-tags: ["artificial-intelligence", "educational-technology", "software-development", "collaboration", "child-led-design"]
+tags: ["artificial-intelligence", "educational-technology", "software-development", "collaboration", "child-design"]
 author: "Victor Saly"
 pin: true
 image:
   path: /assets/game-block-ai-image.png
   alt: AI-generated game foundation architecture
-excerpt: "Everything started with a five-minute voice memo from my son describing his dream educational game. Instead of filing it away as a 'someday' project, we decided to attempt something unprecedented: let AI build it with 95% autonomy while we serve as creative directors."
-reading_time: "8 min read"
-featured_image: "/assets/game-block-ai-image.png"
-medium_style: true
-code_review_ready: true
-educational_objective: "Demonstrate AI-first development methodology for educational software"
-target_audience: "developers, educators, and parents interested in AI-assisted learning"
-child_safety: "verified"
-cultural_sensitivity: "reviewed"
+educational_objective: "Demonstrates how AI can transform child creativity into production-ready educational software"
 child_safety_verified: true
 ---
 
