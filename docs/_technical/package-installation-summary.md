@@ -54,7 +54,7 @@ Successfully installed all required NuGet packages across the 5 projects for edu
 
 ### WorldLeaders.Infrastructure (Data & External Services)
 ```xml
-<PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.17" />
+<PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
 <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.40.0" />
 <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
 <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
