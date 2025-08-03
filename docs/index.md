@@ -1,32 +1,54 @@
 ---
 layout: home
-title: "World Leaders Game: AI-Led Educational Development"
+title: "World Leaders Game"
 ---
 
-# 🎮 World Leaders Game: The AI-First Father-Son Experiment
+<div class="hero-section">
+  <h1>🎮 World Leaders Game</h1>
+  <p>An AI-first father-son experiment transforming a 12-year-old's voice memo into a production-ready educational game with 95% AI autonomy</p>
+</div>
 
-<div align="center">
-  <img src="docs/assets/world-leaders-logo.svg" alt="World Leaders Game Logo" width="200" height="300">
+<div style="text-align: center; margin: 2rem 0;">
+  <img src="/assets/world-leaders-logo.svg" alt="World Leaders Game Logo" width="200" height="300" style="border-radius: 12px;">
   <br>
   <em>🎨 Game logo designed independently by a 12-year-old using Figma</em>
 </div>
 
----
+## 🚀 The Experiment
 
-## 🎯 **Welcome to Our Journey**
+<div class="educational-highlight">
+  <h3>📊 Current Status: Week 3</h3>
+  <div class="ai-progress" data-progress="95% AI Autonomy"></div>
+  <p><strong>AI Autonomy:</strong> Architecture, code generation, design, documentation</p>
+  <p><strong>Human Guidance:</strong> Educational validation, creative direction, safety oversight</p>
+</div>
 
-**This is our story of AI autonomy in educational software development** — a comprehensive 18-week experiment where a father and son give AI complete creative control whilst collaborating as directors and educational consultants.
+### Key Highlights
 
-### **🚀 The Experiment**
+- **📈 95% AI Autonomy**: Architecture, code generation, design, documentation
+- **👨‍👦 5% Human Intervention**: Educational validation, creative guidance, safety oversight  
+- **⏱️ 18-Week Timeline**: From voice memo to production-ready educational platform
+- **🎯 Real Educational Impact**: Measured learning outcomes for 12-year-old players
 
-- **95% AI Autonomy**: Architecture, code generation, design, documentation
-- **5% Human Intervention**: Educational validation, creative guidance, safety oversight
-- **18-Week Timeline**: From voice memo to production-ready educational platform
-- **Real Educational Impact**: Measured learning outcomes for 12-year-old players
-
----
-
-## 📊 **Current Status: Week 3**
+<div class="quick-nav">
+  <div class="nav-card">
+    <h3>📝 Development Journey</h3>
+    <p>Follow our week-by-week progress from concept to production.</p>
+    <a href="/journey/" class="btn">Explore Journey</a>
+  </div>
+  
+  <div class="nav-card">
+    <h3>�️ Technical Deep-Dives</h3>
+    <p>In-depth technical documentation and implementation guides.</p>
+    <a href="/technical-docs/" class="btn">Read Docs</a>
+  </div>
+  
+  <div class="nav-card">
+    <h3>📰 Latest Blog Posts</h3>
+    <p>Real-time updates on our AI-led development experiment.</p>
+    <a href="/blog/" class="btn">View Blog</a>
+  </div>
+</div>
 
 **🎯 Latest Milestone: ✅ Complete .NET Aspire Foundation Built!**
 

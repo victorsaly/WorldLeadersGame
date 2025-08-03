@@ -1,0 +1,17 @@
+# Main navigation tabs
+# Order matters for the layout
+-
+  name: Home
+  path: /
+-
+  name: Blog
+  path: /blog/
+-
+  name: Journey
+  path: /journey/
+-
+  name: Technical Docs
+  path: /technical-docs/
+-
+  name: About
+  path: /about/

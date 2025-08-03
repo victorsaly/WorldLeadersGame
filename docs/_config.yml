@@ -1,21 +1,59 @@
 # GitHub Pages Configuration for World Leaders Game Documentation
-title: "World Leaders Game: AI-Led Educational Development"
+title: "World Leaders Game"
+tagline: "AI-Led Educational Development"
 description: "A father-son experiment in AI autonomy for educational software development - transforming a 12-year-old's voice memo into a production-ready game using 95% AI guidance."
 
 # Site settings
 url: "https://victorsaly.github.io"
 baseurl: "/WorldLeadersGame"
-author: "Victor & Oliver Saly"
-email: "info@victorsaly.com"
+
+# Author information
+author:
+  name: "Victor & Oliver Saly"
+  email: "info@victorsaly.com"
+  twitter_username: victorsaly
+  github_username: victorsaly
 
 # Build settings
 markdown: kramdown
 highlighter: rouge
 theme: minima
+
+# Override minima theme to create Chirpy-inspired design
+minima:
+  skin: dark
+
+# Site logo/avatar
+logo: '/assets/world-leaders-logo.svg'
+
+# Theme settings inspired by Chirpy
+chirpy_inspired:
+  theme_mode: auto  # [light|dark|auto]
+  sidebar:
+    avatar: '/assets/world-leaders-logo.svg'
+
+# Essential plugins compatible with GitHub Pages
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-paginate
+  - jekyll-redirect-from
+
+# Pagination
+paginate: 10
+paginate_path: "/blog/page:num/"
+
+# Social links
+social:
+  name: "Victor & Oliver Saly"
+  email: "info@victorsaly.com"
+  links:
+    - https://github.com/victorsaly
+    - https://twitter.com/victorsaly
+
+# Google Analytics (you can add your GA ID later)
+google_analytics: ''
 
 # Navigation
 header_pages:

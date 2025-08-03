@@ -1,0 +1,133 @@
+/* Custom styles for World Leaders Game documentation */
+
+/* Brand colors for the educational game theme */
+:root {
+  --brand-primary: #667eea;
+  --brand-secondary: #764ba2;
+  --brand-accent: #f093fb;
+  --educational-green: #4caf50;
+  --learning-blue: #2196f3;
+}
+
+/* Custom styling for educational content */
+.educational-highlight {
+  background: linear-gradient(135deg, var(--educational-green), var(--learning-blue));
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Game mockup styling */
+.game-mockup {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  margin: 2rem 0;
+  max-width: 100%;
+  height: auto;
+}
+
+/* AI Autonomy progress bars */
+.ai-progress {
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+  height: 6px;
+  border-radius: 3px;
+  margin: 0.5rem 0;
+}
+
+/* Week status badges */
+.week-status {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.week-status.completed {
+  background: var(--educational-green);
+  color: white;
+}
+
+.week-status.in-progress {
+  background: var(--learning-blue);
+  color: white;
+}
+
+.week-status.planned {
+  background: #f0f0f0;
+  color: #666;
+}
+
+/* Father-son collaboration styling */
+.collaboration-note {
+  border-left: 4px solid var(--brand-accent);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #666;
+}
+
+/* Technical documentation callouts */
+.tech-callout {
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+  color: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin: 2rem 0;
+}
+
+.tech-callout h3 {
+  margin-top: 0;
+  color: white;
+}
+
+/* Educational objectives styling */
+.learning-objective {
+  background: #f8f9ff;
+  border: 2px solid var(--learning-blue);
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.learning-objective::before {
+  content: "🎯 Learning Objective: ";
+  font-weight: bold;
+  color: var(--learning-blue);
+}
+
+/* Journey timeline styling */
+.journey-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.journey-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--brand-primary), var(--brand-secondary));
+}
+
+.journey-milestone {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.journey-milestone::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 0.5rem;
+  width: 12px;
+  height: 12px;
+  background: var(--brand-primary);
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 0 0 2px var(--brand-primary);
+}
