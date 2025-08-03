@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function() {
       searchResults.innerHTML = `
         <div class="search-result-item">
           <div class="search-result-title">No results found</div>
-          <div class="search-result-excerpt">Try different keywords or browse our <a href="{{ '/journey/' | relative_url }}">development journey</a> or <a href="{{ '/technical-docs/' | relative_url }}">technical documentation</a>.</div>
+          <div class="search-result-excerpt">Try different keywords or browse our <a href="{{ site.journey_url | relative_url }}">development journey</a> or <a href="{{ site.technical_docs_url | relative_url }}">technical documentation</a>.</div>
         </div>
       `;
     } else {
