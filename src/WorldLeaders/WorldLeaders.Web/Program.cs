@@ -1,4 +1,5 @@
 using WorldLeaders.Web.Components;
+using WorldLeaders.Web.Services;
 using WorldLeaders.Infrastructure.Extensions;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -14,16 +15,15 @@ builder.Services.AddInfrastructure(builder.Configuration);
 // Add HttpClient for API communication
 builder.Services.AddHttpClient("GameAPI", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5203/"); // API URL
+    client.BaseAddress = new Uri("https://localhost:7155/"); // API HTTPS URL
+    // Allow self-signed certificates for development
+}).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
+{
+    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
 });
 
-// Add SignalR client for real-time updates
-builder.Services.AddSingleton<HubConnection>(provider =>
-{
-    return new HubConnectionBuilder()
-        .WithUrl("http://localhost:5203/gamehub") // SignalR hub URL
-        .Build();
-});
+// Add SignalR client factory for real-time updates
+builder.Services.AddSingleton<IHubConnectionFactory, HubConnectionFactory>();
 
 // Add service defaults (Aspire)
 builder.AddServiceDefaults();

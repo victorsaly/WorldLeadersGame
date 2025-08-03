@@ -2,9 +2,10 @@
 @using WorldLeaders.Shared.DTOs
 @using WorldLeaders.Shared.Enums
 @using WorldLeaders.Shared.Services
+@using WorldLeaders.Web.Services
 @using Microsoft.AspNetCore.SignalR.Client
 @inject IHttpClientFactory HttpClientFactory
-@inject HubConnection HubConnection
+@inject IHubConnectionFactory HubConnectionFactory
 @implements IAsyncDisposable
 
 <PageTitle>World Leaders Game - Dashboard</PageTitle>
@@ -107,12 +108,30 @@
                 <div class="max-w-md mx-auto">
                     <input @bind="newPlayerName" @onkeypress="@((e) => { if (e.Key == "Enter") CreatePlayer(); })"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           placeholder="Enter your name" maxlength="20" />
+                           placeholder="Enter your name (2-20 characters)" maxlength="20" />
+                    
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="mt-2 text-red-600 text-sm">@errorMessage</div>
+                    }
+                    
                     <button @onclick="CreatePlayer" 
-                            disabled="@(string.IsNullOrWhiteSpace(newPlayerName))"
-                            class="w-full mt-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-                        🚀 Start Game
+                            disabled="@(string.IsNullOrWhiteSpace(newPlayerName) || newPlayerName.Trim().Length < 2 || isLoading)"
+                            class="w-full mt-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                        @if (isLoading)
+                        {
+                            <span class="flex items-center justify-center">
+                                <span class="animate-spin mr-2">⭐</span>
+                                Creating your character...
+                            </span>
+                        }
+                        else
+                        {
+                            <span>🚀 Start Game</span>
+                        }
                     </button>
+                    
+                    <p class="mt-3 text-xs text-gray-500">Enter a name between 2-20 characters to begin your leadership journey!</p>
                 </div>
             </div>
         }
@@ -125,53 +144,112 @@
     private List<ResourceChangeRecord> recentResourceChanges = new();
     private string newPlayerName = "";
     private string gameMessage = "";
+    private string errorMessage = "";
     private bool isLoading = false;
     private bool isRolling = false;
+    private HubConnection? hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadGameEvents();
         
         // Set up SignalR connection
-        HubConnection.On<GameStateUpdate>("GameStateUpdated", (update) =>
+        try
         {
-            InvokeAsync(() =>
+            hubConnection = HubConnectionFactory.CreateConnection();
+            
+            hubConnection.On<GameStateUpdate>("GameStateUpdated", (update) =>
             {
-                gameMessage = update.Message;
-                StateHasChanged();
+                InvokeAsync(() =>
+                {
+                    gameMessage = update.Message;
+                    StateHasChanged();
+                });
             });
-        });
 
-        await HubConnection.StartAsync();
+            await hubConnection.StartAsync();
+        }
+        catch (Exception ex)
+        {
+            // SignalR connection failed - continue without real-time updates
+            Console.WriteLine($"SignalR connection failed: {ex.Message}");
+        }
     }
 
     private async Task CreatePlayer()
     {
-        if (string.IsNullOrWhiteSpace(newPlayerName)) return;
+        // Clear previous errors
+        errorMessage = "";
+        
+        // Validate input
+        if (string.IsNullOrWhiteSpace(newPlayerName))
+        {
+            errorMessage = "Please enter your name to start the game.";
+            return;
+        }
+
+        var trimmedName = newPlayerName.Trim();
+        if (trimmedName.Length < 2)
+        {
+            errorMessage = "Name must be at least 2 characters long.";
+            return;
+        }
+
+        if (trimmedName.Length > 20)
+        {
+            errorMessage = "Name must be 20 characters or less.";
+            return;
+        }
 
         isLoading = true;
         try
         {
             var httpClient = HttpClientFactory.CreateClient("GameAPI");
-            var request = new CreatePlayerRequest(newPlayerName.Trim());
+            var request = new CreatePlayerRequest(trimmedName);
             
-            var response = await httpClient.PostAsJsonAsync("api/game/players", request);
+            var response = await httpClient.PostAsJsonAsync("api/Game/players", request);
             if (response.IsSuccessStatusCode)
             {
                 playerDashboard = await response.Content.ReadFromJsonAsync<PlayerDashboardDto>();
                 if (playerDashboard != null)
                 {
-                    await HubConnection.SendAsync("JoinGameSession", playerDashboard.Id.ToString());
+                    gameMessage = $"Welcome, {playerDashboard.Username}! Your leadership journey begins now! 🎉";
+                    try
+                    {
+                        if (hubConnection != null)
+                        {
+                            await hubConnection.SendAsync("JoinGameSession", playerDashboard.Id.ToString());
+                        }
+                    }
+                    catch
+                    {
+                        // SignalR connection failed, but player creation succeeded
+                        // Continue without real-time updates
+                    }
+                }
+                else
+                {
+                    errorMessage = "Failed to create your character. Please try again.";
                 }
             }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                errorMessage = $"Failed to create player: {response.StatusCode}";
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Cannot connect to the game server. Please make sure the game is running.";
         }
         catch (Exception ex)
         {
-            gameMessage = "Failed to create player. Please try again.";
+            errorMessage = "An unexpected error occurred. Please try again.";
         }
         finally
         {
             isLoading = false;
+            StateHasChanged();
         }
     }
 
@@ -288,9 +366,9 @@
 
     public async ValueTask DisposeAsync()
     {
-        if (HubConnection != null)
+        if (hubConnection != null)
         {
-            await HubConnection.DisposeAsync();
+            await hubConnection.DisposeAsync();
         }
     }
 }
