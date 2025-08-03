@@ -1,5 +1,6 @@
 using WorldLeaders.API.Hubs;
 using WorldLeaders.Infrastructure.Data;
+using WorldLeaders.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,9 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-// Add Entity Framework with PostgreSQL
-builder.Services.AddDbContext<WorldLeadersDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Add Infrastructure services (EF Core + Game Services)
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add SignalR for real-time updates
 builder.Services.AddSignalR();

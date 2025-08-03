@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WorldLeaders.Shared.DTOs;
 using WorldLeaders.Shared.Enums;
+using WorldLeaders.Shared.Services;
 
 namespace WorldLeaders.API.Controllers;
 
@@ -12,10 +13,20 @@ namespace WorldLeaders.API.Controllers;
 public class GameController : ControllerBase
 {
     private readonly ILogger<GameController> _logger;
+    private readonly IGameEngine _gameEngine;
+    private readonly IPlayerService _playerService;
+    private readonly IDiceService _diceService;
 
-    public GameController(ILogger<GameController> logger)
+    public GameController(
+        ILogger<GameController> logger,
+        IGameEngine gameEngine,
+        IPlayerService playerService,
+        IDiceService diceService)
     {
         _logger = logger;
+        _gameEngine = gameEngine;
+        _playerService = playerService;
+        _diceService = diceService;
     }
 
     /// <summary>
@@ -28,23 +39,11 @@ public class GameController : ControllerBase
     {
         try
         {
-            // TODO: Implement player creation logic with service layer
-            var playerId = Guid.NewGuid();
-            
-            var playerDashboard = new PlayerDashboardDto(
-                Id: playerId,
-                Username: request.Username,
-                Income: 1000, // Start with farmer income
-                Reputation: 0,
-                Happiness: 50, // Start with neutral happiness
-                CurrentJob: JobLevel.Farmer,
-                TerritoriesOwned: 0,
-                CurrentGameState: GameState.NotStarted,
-                LastActiveAt: DateTime.UtcNow
-            );
+            var player = await _playerService.CreatePlayerAsync(request);
+            var dashboard = await _playerService.GetPlayerDashboardAsync(player.Id);
 
-            _logger.LogInformation("Created new player: {Username} with ID: {PlayerId}", request.Username, playerId);
-            return Ok(playerDashboard);
+            _logger.LogInformation("Created new player: {Username} with ID: {PlayerId}", request.Username, player.Id);
+            return Ok(dashboard);
         }
         catch (Exception ex)
         {
@@ -63,19 +62,7 @@ public class GameController : ControllerBase
     {
         try
         {
-            // TODO: Implement dashboard data retrieval from service layer
-            var dashboard = new PlayerDashboardDto(
-                Id: playerId,
-                Username: "SamplePlayer",
-                Income: 2500,
-                Reputation: 25,
-                Happiness: 65,
-                CurrentJob: JobLevel.Artisan,
-                TerritoriesOwned: 2,
-                CurrentGameState: GameState.InProgress,
-                LastActiveAt: DateTime.UtcNow
-            );
-
+            var dashboard = await _playerService.GetPlayerDashboardAsync(playerId);
             return Ok(dashboard);
         }
         catch (Exception ex)
@@ -185,47 +172,67 @@ public class GameController : ControllerBase
     /// <param name="playerId">The player identifier</param>
     /// <returns>New job level based on dice roll</returns>
     [HttpPost("players/{playerId}/roll-job")]
-    public async Task<ActionResult<GameStateUpdate>> RollForJob(Guid playerId)
+    public async Task<ActionResult<DiceRollResult>> RollForJob(Guid playerId)
     {
         try
         {
-            var random = new Random();
-            var diceRoll = random.Next(1, 7); // 1-6 dice roll
+            var result = await _diceService.RollForJobAsync(playerId);
             
-            JobLevel newJob = diceRoll switch
-            {
-                1 or 2 => diceRoll == 1 ? JobLevel.Farmer : JobLevel.Gardener,
-                3 or 4 => diceRoll == 3 ? JobLevel.Shopkeeper : JobLevel.Artisan,
-                5 or 6 => diceRoll == 5 ? JobLevel.Politician : JobLevel.BusinessLeader,
-                _ => JobLevel.Farmer
-            };
-
-            int incomeChange = newJob switch
-            {
-                JobLevel.Farmer => 1000,
-                JobLevel.Gardener => 1200,
-                JobLevel.Shopkeeper => 2000,
-                JobLevel.Artisan => 2500,
-                JobLevel.Politician => 4000,
-                JobLevel.BusinessLeader => 5000,
-                _ => 1000
-            };
-
-            var update = new GameStateUpdate(
-                IncomeChange: incomeChange,
-                ReputationChange: 0,
-                HappinessChange: 5, // Players are happy with new jobs
-                Message: $"🎲 You rolled a {diceRoll}! Your new job is {newJob}. Monthly income: ${incomeChange:N0}",
-                EventType: EventType.Career
-            );
-
-            _logger.LogInformation("Player {PlayerId} rolled {DiceRoll} and got job {Job}", playerId, diceRoll, newJob);
-            return Ok(update);
+            _logger.LogInformation("Player {PlayerId} rolled {DiceValue} and got job {Job}", 
+                playerId, result.DiceValue, result.NewJob);
+            
+            return Ok(result);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error rolling for job for player: {PlayerId}", playerId);
             return StatusCode(500, "An error occurred while rolling for job");
+        }
+    }
+
+    /// <summary>
+    /// Start a new game session
+    /// </summary>
+    /// <param name="playerId">The player identifier</param>
+    /// <returns>Game session information</returns>
+    [HttpPost("players/{playerId}/start-game")]
+    public async Task<ActionResult<GameSession>> StartGame(Guid playerId)
+    {
+        try
+        {
+            var session = await _gameEngine.StartNewGameAsync(playerId);
+            
+            _logger.LogInformation("Started new game session for player {PlayerId}", playerId);
+            
+            return Ok(session);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error starting game for player: {PlayerId}", playerId);
+            return StatusCode(500, "An error occurred while starting the game");
+        }
+    }
+
+    /// <summary>
+    /// Advance to next turn
+    /// </summary>
+    /// <param name="playerId">The player identifier</param>
+    /// <returns>Game state update</returns>
+    [HttpPost("players/{playerId}/advance-turn")]
+    public async Task<ActionResult<GameStateUpdate>> AdvanceTurn(Guid playerId)
+    {
+        try
+        {
+            var update = await _gameEngine.AdvanceTurnAsync(playerId);
+            
+            _logger.LogInformation("Advanced turn for player {PlayerId}", playerId);
+            
+            return Ok(update);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error advancing turn for player: {PlayerId}", playerId);
+            return StatusCode(500, "An error occurred while advancing the turn");
         }
     }
 }

@@ -1,0 +1,279 @@
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Enums
+@using WorldLeaders.Shared.Services
+
+<div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+    <h3 class="text-2xl font-bold text-purple-600 mb-4 text-center">🎲 Roll for Your Next Job!</h3>
+    
+    <!-- Educational Context -->
+    <div class="bg-purple-50 rounded-lg p-4 mb-6">
+        <p class="text-purple-700 text-center">
+            🌟 Every job teaches valuable skills! Roll the dice to discover your next career adventure.
+            All outcomes are positive - there are no wrong choices, only learning opportunities!
+        </p>
+    </div>
+
+    <!-- Dice Container -->
+    <div class="flex flex-col items-center mb-6">
+        <!-- Animated Dice -->
+        <div class="@GetDiceClass() w-24 h-24 bg-white border-4 border-purple-400 rounded-lg shadow-lg flex items-center justify-center text-4xl font-bold cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105"
+             @onclick="RollDice"
+             disabled="@isRolling">
+            @if (isRolling)
+            {
+                <span class="animate-spin">🎲</span>
+            }
+            else if (lastDiceValue.HasValue)
+            {
+                <span>@lastDiceValue</span>
+            }
+            else
+            {
+                <span>🎲</span>
+            }
+        </div>
+
+        <!-- Roll Button -->
+        <button class="@GetRollButtonClass() mt-4 px-8 py-4 rounded-lg font-bold text-white text-lg transition-all duration-200 transform hover:scale-105 disabled:transform-none disabled:opacity-50"
+                @onclick="RollDice"
+                disabled="@isRolling">
+            @if (isRolling)
+            {
+                <span class="flex items-center">
+                    <span class="animate-spin mr-2">⭐</span>
+                    Rolling...
+                </span>
+            }
+            else
+            {
+                <span>🎯 Roll for Career!</span>
+            }
+        </button>
+    </div>
+
+    <!-- Results Display -->
+    @if (lastRollResult != null)
+    {
+        <div class="bg-gradient-to-r from-green-100 to-blue-100 rounded-lg p-6 mb-4 border-2 border-green-400">
+            <div class="text-center mb-4">
+                <h4 class="text-2xl font-bold text-green-800 mb-2">🎉 Awesome Roll!</h4>
+                <p class="text-green-700 text-lg font-medium">@lastRollResult.EncouragingMessage</p>
+            </div>
+
+            <!-- Job Information -->
+            <div class="bg-white rounded-lg p-4 mb-4">
+                <div class="flex items-center justify-center mb-3">
+                    <span class="text-3xl mr-3">@GetJobEmoji(lastRollResult.NewJob)</span>
+                    <div class="text-center">
+                        <h5 class="text-xl font-bold text-gray-800">@lastRollResult.NewJob</h5>
+                        <p class="text-green-600 font-bold text-lg">${lastRollResult.IncomeChange:N0}/month</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-sm text-center">@lastRollResult.JobDescription</p>
+            </div>
+
+            <!-- Stat Changes -->
+            <div class="grid grid-cols-3 gap-4">
+                <div class="text-center bg-green-50 rounded-lg p-3">
+                    <div class="text-2xl">💰</div>
+                    <div class="text-green-600 font-bold">+${lastRollResult.IncomeChange:N0}</div>
+                    <div class="text-xs text-gray-600">Monthly Income</div>
+                </div>
+                <div class="text-center bg-blue-50 rounded-lg p-3">
+                    <div class="text-2xl">⭐</div>
+                    <div class="text-blue-600 font-bold">+@lastRollResult.ReputationChange</div>
+                    <div class="text-xs text-gray-600">Reputation</div>
+                </div>
+                <div class="text-center bg-yellow-50 rounded-lg p-3">
+                    <div class="text-2xl">😊</div>
+                    <div class="text-yellow-600 font-bold">+@lastRollResult.HappinessChange</div>
+                    <div class="text-xs text-gray-600">Happiness</div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Job Progression Guide -->
+    <div class="bg-gray-50 rounded-lg p-4">
+        <h4 class="text-lg font-bold text-gray-800 mb-3 text-center">🎯 Career Path Guide</h4>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+            <div class="bg-green-100 rounded p-2 text-center">
+                <div class="font-bold text-green-700">Roll 1-2</div>
+                <div class="text-green-600">🌱 Basic Jobs</div>
+                <div class="text-xs text-gray-600">Farmer, Gardener</div>
+            </div>
+            <div class="bg-blue-100 rounded p-2 text-center">
+                <div class="font-bold text-blue-700">Roll 3-4</div>
+                <div class="text-blue-600">🛠️ Skilled Jobs</div>
+                <div class="text-xs text-gray-600">Shopkeeper, Artisan</div>
+            </div>
+            <div class="bg-purple-100 rounded p-2 text-center md:col-span-1 col-span-2">
+                <div class="font-bold text-purple-700">Roll 5-6</div>
+                <div class="text-purple-600">👑 Leadership</div>
+                <div class="text-xs text-gray-600">Politician, Business Leader</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dice History (Recent Rolls) -->
+    @if (diceHistory.Any())
+    {
+        <div class="mt-6 bg-gray-50 rounded-lg p-4">
+            <h4 class="text-lg font-bold text-gray-800 mb-3">📊 Your Recent Rolls</h4>
+            <div class="flex flex-wrap gap-2">
+                @foreach (var roll in diceHistory.Take(10))
+                {
+                    <div class="bg-white rounded px-3 py-1 text-sm border">
+                        <span class="font-bold">@roll.DiceValue</span>
+                        <span class="text-gray-600">→ @GetJobEmoji(roll.ResultingJob)</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public Guid PlayerId { get; set; }
+    [Parameter] public EventCallback<DiceRollResult> OnDiceRolled { get; set; }
+
+    private bool isRolling = false;
+    private int? lastDiceValue;
+    private DiceRollResult? lastRollResult;
+    private List<DiceRollHistory> diceHistory = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDiceHistory();
+    }
+
+    private async Task RollDice()
+    {
+        if (isRolling) return;
+
+        isRolling = true;
+        lastDiceValue = null;
+
+        try
+        {
+            // Animate the dice roll for child engagement
+            await AnimateDiceRoll();
+
+            // Simulate API call - in real implementation, call IDiceService
+            var random = new Random();
+            var diceValue = random.Next(1, 7);
+            var newJob = JobProgressionMapping.GetJobFromDiceRoll(diceValue);
+
+            lastRollResult = new DiceRollResult(
+                diceValue,
+                newJob,
+                JobProgressionMapping.GetJobIncome(newJob),
+                JobProgressionMapping.GetJobReputationBonus(newJob),
+                5, // Happiness bonus
+                GetEncouragingMessage(diceValue, newJob),
+                GetJobDescription(newJob)
+            );
+
+            lastDiceValue = diceValue;
+
+            // Add to history
+            var historyEntry = new DiceRollHistory(
+                Guid.NewGuid(),
+                PlayerId,
+                diceValue,
+                newJob,
+                lastRollResult.IncomeChange,
+                DateTime.UtcNow,
+                "excited"
+            );
+            
+            diceHistory.Insert(0, historyEntry);
+
+            // Notify parent component
+            await OnDiceRolled.InvokeAsync(lastRollResult);
+        }
+        catch (Exception ex)
+        {
+            // Error handling with child-friendly message
+            Console.WriteLine($"Error rolling dice: {ex.Message}");
+        }
+        finally
+        {
+            isRolling = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task AnimateDiceRoll()
+    {
+        // Create engaging animation for children
+        var random = new Random();
+        for (int i = 0; i < 8; i++)
+        {
+            lastDiceValue = random.Next(1, 7);
+            StateHasChanged();
+            await Task.Delay(100 + (i * 50)); // Gradually slow down
+        }
+    }
+
+    private async Task LoadDiceHistory()
+    {
+        try
+        {
+            // In real implementation, load from IDiceService
+            // For now, initialize empty
+            diceHistory = new List<DiceRollHistory>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading dice history: {ex.Message}");
+        }
+    }
+
+    private string GetDiceClass()
+    {
+        if (isRolling)
+            return "animate-bounce border-purple-600 bg-purple-50";
+        return "hover:border-purple-600";
+    }
+
+    private string GetRollButtonClass()
+    {
+        if (isRolling)
+            return "bg-purple-400";
+        return "bg-purple-600 hover:bg-purple-700 active:bg-purple-800";
+    }
+
+    private string GetJobEmoji(JobLevel job) => job switch
+    {
+        JobLevel.Farmer => "🌱",
+        JobLevel.Gardener => "🌸",
+        JobLevel.Shopkeeper => "🏪",
+        JobLevel.Artisan => "🎨",
+        JobLevel.Politician => "🏛️",
+        JobLevel.BusinessLeader => "💼",
+        _ => "🎲"
+    };
+
+    private string GetEncouragingMessage(int diceValue, JobLevel newJob) => diceValue switch
+    {
+        1 => "🌱 Amazing! You rolled a 1 and became a Farmer! You're helping feed the world - that's incredibly important work!",
+        2 => "🌸 Fantastic! You rolled a 2 and became a Gardener! You're making the world more beautiful and helping the environment!",
+        3 => "🏪 Wonderful! You rolled a 3 and became a Shopkeeper! You're learning business skills and helping your community!",
+        4 => "🎨 Excellent! You rolled a 4 and became an Artisan! Your creativity and skills are making unique and valuable things!",
+        5 => "🏛️ Outstanding! You rolled a 5 and became a Politician! You're learning to lead and help make important decisions!",
+        6 => "💼 Incredible! You rolled a 6 and became a Business Leader! You're developing leadership skills and creating opportunities!",
+        _ => "🎲 Great roll! Every job teaches you valuable skills for your journey to becoming a world leader!"
+    };
+
+    private string GetJobDescription(JobLevel job) => job switch
+    {
+        JobLevel.Farmer => "Farmers grow food that feeds everyone! They understand nature, weather, and sustainable practices.",
+        JobLevel.Gardener => "Gardeners create beautiful spaces and help the environment! They learn about plants and design.",
+        JobLevel.Shopkeeper => "Shopkeepers run local businesses and serve their communities! They learn about money and customers.",
+        JobLevel.Artisan => "Artisans create unique products with their hands and creativity! They develop specialized skills.",
+        JobLevel.Politician => "Politicians help make decisions that affect everyone! They learn about government and public service.",
+        JobLevel.BusinessLeader => "Business Leaders create companies and jobs for others! They understand economics and management.",
+        _ => "Every job is valuable and teaches important life skills!"
+    };
+}

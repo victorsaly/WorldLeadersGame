@@ -95,3 +95,51 @@ public class LanguageProgressEntity
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }
+
+/// <summary>
+/// Database entity for GameSession - tracks active game state
+/// </summary>
+public class GameSessionEntity
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid PlayerId { get; set; }
+    public GameState State { get; set; }
+    public int CurrentTurn { get; set; }
+    public DateTime StartedAt { get; set; } = DateTime.UtcNow;
+    public DateTime LastSavedAt { get; set; } = DateTime.UtcNow;
+    public string GameDataJson { get; set; } = string.Empty; // Serialized game state
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsDeleted { get; set; } = false;
+}
+
+/// <summary>
+/// Database entity for DiceRollHistory - tracks educational dice interactions
+/// </summary>
+public class DiceRollHistoryEntity
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid PlayerId { get; set; }
+    public int DiceValue { get; set; }
+    public JobLevel ResultingJob { get; set; }
+    public int IncomeChange { get; set; }
+    public int ReputationChange { get; set; }
+    public int HappinessChange { get; set; }
+    public string PlayerReaction { get; set; } = string.Empty;
+    public DateTime RolledAt { get; set; } = DateTime.UtcNow;
+}
+
+/// <summary>
+/// Database entity for PlayerAchievement - tracks educational milestones
+/// </summary>
+public class PlayerAchievementEntity
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid PlayerId { get; set; }
+    public string AchievementId { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string IconEmoji { get; set; } = string.Empty;
+    public int PointsReward { get; set; }
+    public DateTime UnlockedAt { get; set; } = DateTime.UtcNow;
+}
