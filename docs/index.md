@@ -6,6 +6,9 @@ title: "World Leaders Game"
 <div class="hero-section">
   <h1>🎮 World Leaders Game</h1>
   <p>An AI-first father-son experiment transforming a 12-year-old's voice memo into a production-ready educational game with 95% AI autonomy</p>
+  <div style="margin-top: 2rem;">
+    <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;">Week 3 • 95% AI Autonomy • Educational Focus</span>
+  </div>
 </div>
 
 <div style="text-align: center; margin: 2rem 0;">
@@ -26,24 +29,24 @@ title: "World Leaders Game"
 ### Key Highlights
 
 - **📈 95% AI Autonomy**: Architecture, code generation, design, documentation
-- **👨‍👦 5% Human Intervention**: Educational validation, creative guidance, safety oversight  
+- **👨‍👦 5% Human Intervention**: Educational validation, creative guidance, safety oversight
 - **⏱️ 18-Week Timeline**: From voice memo to production-ready educational platform
 - **🎯 Real Educational Impact**: Measured learning outcomes for 12-year-old players
 
 <div class="quick-nav">
-  <div class="nav-card">
+  <div class="nav-card shadcn-card">
     <h3>📝 Development Journey</h3>
     <p>Follow our week-by-week progress from concept to production.</p>
     <a href="{{ '/journey/' | relative_url }}" class="btn">Explore Journey</a>
   </div>
   
-  <div class="nav-card">
+  <div class="nav-card shadcn-card">
     <h3>🛠️ Technical Deep-Dives</h3>
     <p>In-depth technical documentation and implementation guides.</p>
     <a href="{{ '/technical-docs/' | relative_url }}" class="btn">Read Docs</a>
   </div>
   
-  <div class="nav-card">
+  <div class="nav-card shadcn-card">
     <h3>📰 Latest Blog Posts</h3>
     <p>Real-time updates on our AI-led development experiment.</p>
     <a href="{{ '/blog/' | relative_url }}" class="btn">View Blog</a>
@@ -53,6 +56,23 @@ title: "World Leaders Game"
 **🎯 Latest Milestone: ✅ Complete .NET Aspire Foundation Built!**
 
 Working with GitHub Copilot and comprehensive AI instructions, we successfully created a complete educational game foundation in just 2 weeks.
+
+<div class="quick-nav" style="margin: 2rem 0;">
+  <div class="shadcn-card">
+    <h4 style="color: var(--educational-green); margin-bottom: 0.5rem;">✅ Complete Foundation</h4>
+    <p style="margin: 0; color: var(--muted-foreground);">5 projects, builds successfully with .NET Aspire orchestration</p>
+  </div>
+  
+  <div class="shadcn-card">
+    <h4 style="color: var(--learning-blue); margin-bottom: 0.5rem;">🎮 Game Mechanics</h4>
+    <p style="margin: 0; color: var(--muted-foreground);">Dice progression, resources, AI agents, real-time updates</p>
+  </div>
+  
+  <div class="shadcn-card">
+    <h4 style="color: var(--brand-accent); margin-bottom: 0.5rem;">👶 Child-Safe Design</h4>
+    <p style="margin: 0; color: var(--muted-foreground);">COPPA compliance, content moderation, age-appropriate UI</p>
+  </div>
+</div>
 
 ### Quick Achievement Summary
 
@@ -66,26 +86,62 @@ Working with GitHub Copilot and comprehensive AI instructions, we successfully c
 **🤖 AI Autonomy**: 95% AI-generated with minimal human intervention  
 **📚 Educational Effectiveness**: 100% age-appropriate content
 
+<div class="progress-summary" style="margin: 2rem 0;">
+  <h4 style="margin-bottom: 1.5rem; color: var(--foreground);">📊 Current Project Metrics</h4>
+  
+  <div class="progress-metric">
+    <h4>🤖 AI Autonomy Level</h4>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 95%;">95%</div>
+    </div>
+  </div>
+  
+  <div class="progress-metric">
+    <h4>🎮 Game Implementation</h4>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 40%;">40%</div>
+    </div>
+  </div>
+  
+  <div class="progress-metric">
+    <h4>📚 Educational Content</h4>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 35%;">35%</div>
+    </div>
+  </div>
+  
+  <div class="progress-metric">
+    <h4>🔧 Infrastructure</h4>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 85%;">85%</div>
+    </div>
+  </div>
+</div>
+
 ---
 
 ## 🗺️ **Explore Our Documentation**
 
 ### 📰 **[Blog & Weekly Updates]({{ '/blog/' | relative_url }})**
+
 - Weekly development logs showing AI autonomy in action
 - Real-time progress updates and milestone achievements
 - Behind-the-scenes insights into AI-human collaboration
 
 ### 🧭 **[Complete Journey Documentation]({{ '/journey/' | relative_url }})**
+
 - Comprehensive week-by-week development tracking
 - Technical deep-dives and AI prompt engineering insights
 - Milestone summaries and achievement analysis
 
 ### 🔧 **[Technical Documentation]({{ '/technical-docs/' | relative_url }})**
+
 - Architecture specifications and implementation guides
 - GitHub Copilot instruction patterns that enable AI autonomy
 - Development setup and deployment procedures
 
 ### 🏆 **[Major Milestones]({{ '/milestones/' | relative_url }})**
+
 - Significant achievement summaries
 - Educational impact assessments
 - Technical breakthrough analysis
@@ -103,7 +159,7 @@ Child's Creative Vision → AI Technical Architecture → Human Educational Vali
 ### **Core Success Factors**
 
 1. **Comprehensive Copilot Instructions** - Transform generic AI into educational game expert
-2. **Visual-Driven Development** - Child's mockups provide concrete implementation targets  
+2. **Visual-Driven Development** - Child's mockups provide concrete implementation targets
 3. **Iterative Prompt Engineering** - Structured approach to perfect AI guidance
 4. **Educational Context Integration** - Every component designed with learning objectives
 

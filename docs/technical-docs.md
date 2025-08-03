@@ -13,9 +13,11 @@ permalink: /technical-docs/
 ## 🏗️ **Architecture & Design**
 
 ### Core System Architecture
+
 - [**.NET Aspire Orchestration Setup**]({{ '/technical/dotnet-aspire-integration/' | relative_url }}) - Complete setup and configuration guide
 
 ### Development Environment
+
 - [**Command Line Development Guide**]({{ '/technical/command-line-guide/' | relative_url }}) - Essential CLI commands and workflows
 
 ---
@@ -23,6 +25,7 @@ permalink: /technical-docs/
 ## 🤖 **AI Integration Guides**
 
 ### GitHub Copilot Development
+
 - [**Comprehensive Copilot Instructions**]({{ '/technical/copilot-instructions/' | relative_url }}) - Transform generic AI into educational game expert
 - [**AI Prompt Engineering Patterns**]({{ '/technical/ai-prompt-engineering/' | relative_url }}) - Advanced prompt patterns for educational content
 
@@ -31,12 +34,14 @@ permalink: /technical-docs/
 ## 🎮 **Game Development Guides**
 
 ### Educational Game Mechanics
+
 - 🚧 Dice-Based Career Progression System (Coming Soon)
 - 🚧 Resource Management (Income, Reputation, Happiness) (Coming Soon)
 - 🚧 Territory Acquisition & Real GDP Data (Coming Soon)
 - 🚧 Random Event Card System (Coming Soon)
 
 ### Real-World Data Integration
+
 - [World Bank API Integration](/technical/world-bank-api/)
 - [REST Countries API Usage](/technical/countries-api/)
 - [Speech Recognition Implementation](/technical/speech-recognition/)
@@ -46,14 +51,18 @@ permalink: /technical-docs/
 ## 👶 **Child-Friendly Development**
 
 ### UI/UX for 12-Year-Olds
+
 - [Child-Friendly Design Patterns](/technical/child-ui-patterns/)
 - [TailwindCSS Educational Game Styling](/technical/tailwind-educational/)
+
 ### UI/UX Guidelines
+
 - 🚧 Child-Friendly Design Patterns (Coming Soon)
 - 🚧 Accessibility for Young Users (Coming Soon)
 - 🚧 Mobile-Responsive Educational Interfaces (Coming Soon)
 
 ### Safety & Privacy
+
 - 🚧 COPPA Compliance Implementation (Coming Soon)
 - 🚧 Content Validation & Moderation (Coming Soon)
 - 🚧 Privacy-First Architecture (Coming Soon)
@@ -63,16 +72,19 @@ permalink: /technical-docs/
 ## 🚀 **Development & Deployment**
 
 ### Local Development Setup
+
 - 🚧 Complete Development Environment Setup (Coming Soon)
 - 🚧 Docker & PostgreSQL Configuration (Coming Soon)
 - 🚧 VS Code Extensions & AI Tools (Coming Soon)
 
 ### Testing & Quality Assurance
+
 - 🚧 Educational Content Testing Strategies (Coming Soon)
 - 🚧 AI Response Validation Patterns (Coming Soon)
 - 🚧 Child User Experience Testing (Coming Soon)
 
 ### Production Deployment
+
 - 🚧 Azure Deployment with .NET Aspire (Coming Soon)
 - 🚧 CI/CD Pipeline Setup (Coming Soon)
 - 🚧 Performance Optimization for Educational Games (Coming Soon)
@@ -82,12 +94,14 @@ permalink: /technical-docs/
 ## 📚 **API Documentation**
 
 ### Game API Endpoints
+
 - 🚧 Player Management API (Coming Soon)
 - 🚧 Game State Management (Coming Soon)
 - 🚧 Territory & Country Data (Coming Soon)
 - 🚧 AI Agent Interaction (Coming Soon)
 
 ### External Service Integration
+
 - 🚧 World Bank GDP Data API (Coming Soon)
 - 🚧 Azure Speech Services API (Coming Soon)
 - 🚧 Azure OpenAI Service Integration (Coming Soon)
@@ -97,12 +111,14 @@ permalink: /technical-docs/
 ## 🔍 **Implementation Examples**
 
 ### Code Samples
+
 - 🚧 Blazor Educational Components (Coming Soon)
 - 🚧 Entity Framework Educational Models (Coming Soon)
 - 🚧 SignalR Educational Game Hubs (Coming Soon)
 - [AI Prompt Templates](/technical/prompt-templates/)
 
 ### Configuration Examples
+
 - [appsettings.json Configuration](/technical/configuration-examples/)
 - [.NET Aspire AppHost Setup](/technical/aspire-examples/)
 - [TailwindCSS Educational Themes](/technical/tailwind-examples/)
@@ -112,11 +128,13 @@ permalink: /technical-docs/
 ## 🛠️ **Troubleshooting & FAQ**
 
 ### Common Development Issues
+
 - [Build Errors & Solutions](/technical/troubleshooting-build/)
 - [AI Service Integration Problems](/technical/troubleshooting-ai/)
 - [Database Migration Issues](/technical/troubleshooting-database/)
 
 ### Performance & Optimization
+
 - [Blazor Server Performance Tuning](/technical/blazor-performance/)
 - [Database Query Optimization](/technical/database-performance/)
 - [AI Response Caching Strategies](/technical/ai-caching/)
