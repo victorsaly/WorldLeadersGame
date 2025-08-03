@@ -2,20 +2,19 @@
 layout: post
 title: "From Voice Memo to Production: The Father-Son AI Experiment Begins"
 date: 2025-08-01
-category: "Project Launch"
-tags: ["Project Launch", "Father-Son Collaboration", "Educational Games", "AI Autonomy"]
-excerpt: "Everything started with a 5-minute voice memo from a 12-year-old describing his dream educational game. Here's how we decided to let AI build it with 95% autonomy while we collaborate as creative directors."
+categories: [Development, AI Autonomy]
+tags: [project-launch, father-son-collaboration, educational-games, ai-autonomy]
+pin: true
+image:
+  path: /assets/game-mockup-1.png
+  alt: World Leaders Game mockup showing AI-designed interface
 ---
 
-# 🎮 The Beginning: A Voice Memo That Changed Everything
+Everything started with a 5-minute voice memo from a 12-year-old describing his dream educational game. Here's how we decided to let AI build it with 95% autonomy while we collaborate as creative directors.
 
-**What happens when you take a 12-year-old's passionate game idea seriously and decide to build it using 95% AI autonomy?** This is the story of how a simple car ride conversation became an 18-week experiment in AI-led educational software development.
+## 🚀 How It All Started
 
----
-
-## 🚀 **How It All Started**
-
-### **The Car Ride That Started Everything**
+### The Car Ride That Started Everything
 It all began with my 12-year-old son excitedly describing his dream video game during a car ride home from school in London. Instead of the usual "that sounds cool, maybe someday," I hit record on my phone.
 
 What followed was a passionate 5-minute description of an educational strategy game that would teach players about world economics, geography, and languages while having fun.

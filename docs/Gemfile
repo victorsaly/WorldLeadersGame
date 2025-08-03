@@ -1,8 +1,17 @@
-# Gemfile for GitHub Pages compatibility
+# Gemfile for GitHub Pages with Chirpy-inspired theme
 source "https://rubygems.org"
 
 # GitHub Pages gem (includes Jekyll 3.9.3 and compatible plugins)
 gem "github-pages", "~> 228", group: :jekyll_plugins
+
+# Additional plugins compatible with GitHub Pages
+group :jekyll_plugins do
+  gem "jekyll-paginate"
+  gem "jekyll-redirect-from"
+  gem "jekyll-seo-tag"
+  gem "jekyll-sitemap"
+  gem "jekyll-feed"
+end
 
 # Windows and JRuby compatibility
 platforms :mingw, :x64_mingw, :mswin, :jruby do

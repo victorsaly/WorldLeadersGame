@@ -2,16 +2,18 @@
 layout: post
 title: "AI-First Development Methodology: How We Achieved 95% Autonomous Code Generation"
 date: 2025-08-02
-category: "AI Development"
-tags: ["AI Autonomy", "GitHub Copilot", "Prompt Engineering", "Development Methodology"]
-excerpt: "Deep dive into our revolutionary AI-first development approach: comprehensive Copilot instructions, iterative prompt engineering, and structured AI guidance that enables 95% autonomous educational game development."
+categories: [Development, AI Methodology]
+tags: [ai-autonomy, github-copilot, prompt-engineering, development-methodology]
+image:
+  path: /assets/OpenIssuesAzureAgentCopilot.png
+  alt: GitHub Copilot and Azure agents working together
 ---
 
-# 🤖 Mastering AI Autonomy: Our Revolutionary Development Methodology
+Deep dive into our revolutionary AI-first development approach: comprehensive Copilot instructions, iterative prompt engineering, and structured AI guidance that enables 95% autonomous educational game development.
+
+## 🤖 Mastering AI Autonomy: Our Revolutionary Development Methodology
 
 **How do you transform a 5-minute voice memo into production-ready software using 95% AI autonomy?** After 2 weeks of AI-first development, we've discovered the key patterns and methodologies that enable true AI-led software creation.
-
----
 
 ## 🎯 **The AI-First Development Principles**
 

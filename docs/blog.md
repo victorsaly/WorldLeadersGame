@@ -4,19 +4,29 @@ title: "Development Blog"
 permalink: /blog/
 ---
 
-# 📰 Development Blog: AI-Led Game Creation Journey
+<div class="hero-section">
+  <h1>📰 Development Blog</h1>
+  <p>Follow our real-time AI-led game creation journey - documenting every step of our 18-week father-son experiment in educational software development.</p>
+</div>
 
-**Welcome to our real-time development blog!** Follow along as we document every step of our 18-week AI-first father-son experiment in educational software development.
+## 🎯 Blog Categories
 
----
-
-## 🎯 **Blog Categories**
-
-### 📅 **Weekly Development Logs**
-Real-time updates showing AI autonomy levels, collaboration patterns, and technical breakthroughs.
-
-### 🤖 **AI Autonomy Insights** 
-Deep dives into prompt engineering, Copilot instruction development, and AI-human collaboration methodologies.
+<div class="quick-nav">
+  <div class="nav-card">
+    <h3>📅 Weekly Development Logs</h3>
+    <p>Real-time updates showing AI autonomy levels, collaboration patterns, and technical breakthroughs.</p>
+  </div>
+  
+  <div class="nav-card">
+    <h3>🤖 AI Autonomy Insights</h3>
+    <p>Deep dives into prompt engineering, Copilot instruction development, and AI-human collaboration methodologies.</p>
+  </div>
+  
+  <div class="nav-card">
+    <h3>🎮 Game Development</h3>
+    <p>Technical documentation, architecture decisions, and development milestones.</p>
+  </div>
+</div>
 
 ### 🎮 **Game Development Progress**
 Technical milestones, architecture decisions, and educational game mechanics implementation.
