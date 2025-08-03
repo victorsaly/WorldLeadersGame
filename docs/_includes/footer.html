@@ -1,0 +1,41 @@
+<footer class="site-footer">
+  <div class="wrapper">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>{{ site.title }}</h3>
+        <p>{{ site.description }}</p>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Connect</h4>
+        <ul class="social-links">
+          {% if site.author.email %}
+            <li><a href="mailto:{{ site.author.email }}">Email</a></li>
+          {% endif %}
+          {% if site.github_username %}
+            <li><a href="https://github.com/{{ site.github_username }}">GitHub</a></li>
+          {% endif %}
+          {% if site.linkedin_username %}
+            <li><a href="https://linkedin.com/in/{{ site.linkedin_username }}">LinkedIn</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Documentation</h4>
+        <ul class="footer-links">
+          <li><a href="{{ '/blog/' | relative_url }}">Development Blog</a></li>
+          <li><a href="{{ '/journey/' | relative_url }}">Weekly Journey</a></li>
+          <li><a href="{{ '/technical-docs/' | relative_url }}">Technical Docs</a></li>
+          <li><a href="{{ '/about/' | relative_url }}">About Project</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: "%Y" }} {{ site.author.name | default: site.title }}. 
+         AI-First Educational Development Experiment.</p>
+      <p>Built with Jekyll, enhanced by AI collaboration.</p>
+    </div>
+  </div>
+</footer>
