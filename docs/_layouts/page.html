@@ -2,33 +2,36 @@
 layout: default
 ---
 
+<!-- Reading progress indicator -->
+<div class="reading-progress" id="reading-progress"></div>
+
 <div class="page-content">
   <div class="wrapper">
     <div class="main-content">
-      <!-- Breadcrumb navigation -->
+      
+      <!-- Breadcrumb navigation for better orientation -->
       {% if page.collection %}
-      <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="{{ '/' | relative_url }}">Home</a>
-        <span class="breadcrumb-separator">›</span>
-        
-        {% case page.collection %}
-          {% when 'journey' %}
-            <a href="{{ '/journey/' | relative_url }}">Development Journey</a>
-          {% when 'technical' %}
-            <a href="{{ '/technical-docs/' | relative_url }}">Technical Documentation</a>
-          {% when 'milestones' %}
-            <a href="{{ '/milestones/' | relative_url }}">Project Milestones</a>
-          {% when 'issues' %}
-            <a href="{{ '/issues/' | relative_url }}">Development Issues</a>
-          {% when 'posts' %}
-            <a href="{{ '/blog/' | relative_url }}">Blog</a>
-        {% endcase %}
-        
-        <span class="breadcrumb-separator">›</span>
-        <span aria-current="page">{{ page.title }}</span>
-      </nav>
+        <nav class="breadcrumb" aria-label="Breadcrumb navigation">
+          <a href="{{ '/' | relative_url }}">🏠 Home</a>
+          <span class="breadcrumb-separator">→</span>
+          {% case page.collection %}
+            {% when 'journey' %}
+              <a href="{{ '/journey/' | relative_url }}">📝 Journey</a>
+            {% when 'technical' %}
+              <a href="{{ '/technical-docs/' | relative_url }}">🛠️ Technical</a>
+            {% when 'milestones' %}
+              <a href="{{ '/milestones/' | relative_url }}">🏆 Milestones</a>
+            {% when 'issues' %}
+              <a href="{{ '/issues/' | relative_url }}">🎯 Issues</a>
+            {% when 'posts' %}
+              <a href="{{ '/blog/' | relative_url }}">📰 Blog</a>
+          {% endcase %}
+          <span class="breadcrumb-separator">→</span>
+          <span class="current-page">{{ page.title }}</span>
+        </nav>
       {% endif %}
-
+      
+      <!-- Page header with enhanced metadata -->
       {% if page.title %}
         <header class="page-header">
           <h1>{{ page.title }}</h1>
@@ -36,17 +39,18 @@ layout: default
             <p class="page-subtitle">{{ page.subtitle }}</p>
           {% endif %}
           
+          <!-- Enhanced page metadata -->
           <div class="page-meta">
             {% if page.date %}
               <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
             {% endif %}
             
             {% if page.category %}
-              <span class="category">{{ page.category }}</span>
+              <span class="category-tag">{{ page.category }}</span>
             {% endif %}
             
             {% if page.status %}
-              <span class="status-{{ page.status }}">{{ page.status | capitalize }}</span>
+              <span class="status-indicator status-{{ page.status }}">{{ page.status | capitalize }}</span>
             {% endif %}
             
             {% if page.week %}
@@ -54,276 +58,129 @@ layout: default
             {% endif %}
             
             {% if page.ai_autonomy %}
-              <span class="ai-autonomy">{{ page.ai_autonomy }} AI Autonomy</span>
+              <span class="ai-indicator">🤖 {{ page.ai_autonomy }}% AI</span>
             {% endif %}
             
             {% if page.completion_percentage %}
-              <span class="completion">{{ page.completion_percentage }}% Complete</span>
+              <span class="completion-indicator">📊 {{ page.completion_percentage }}% Complete</span>
             {% endif %}
           </div>
           
-          {% if page.tags %}
-            <div class="tags">
+          <!-- Tags for better discoverability -->
+          {% if page.tags and page.tags.size > 0 %}
+            <div class="page-tags">
               {% for tag in page.tags %}
-                <span class="tag">{{ tag }}</span>
+                <span class="tag-badge">{{ tag }}</span>
               {% endfor %}
             </div>
           {% endif %}
         </header>
       {% endif %}
 
-      <article>
+      <!-- Main content -->
+      <main class="content">
         {{ content }}
-      </article>
+      </main>
 
-      <!-- Collection navigation (prev/next) -->
+      <!-- Collection navigation (previous/next) -->
       {% if page.collection %}
-        {% assign collection = site[page.collection] %}
-        {% assign sorted_collection = collection | sort: 'date' %}
+        {% capture collection_name %}{{ page.collection }}{% endcapture %}
+        {% assign collection_docs = site[collection_name] | sort: 'date' %}
+        {% assign current_index = 0 %}
         
-        {% for item in sorted_collection %}
-          {% if item.url == page.url %}
+        {% for doc in collection_docs %}
+          {% if doc.url == page.url %}
             {% assign current_index = forloop.index0 %}
             {% break %}
           {% endif %}
         {% endfor %}
         
-        {% assign prev_item = nil %}
-        {% assign next_item = nil %}
+        {% assign prev_index = current_index | minus: 1 %}
+        {% assign next_index = current_index | plus: 1 %}
+        {% assign prev_doc = collection_docs[prev_index] %}
+        {% assign next_doc = collection_docs[next_index] %}
         
-        {% if current_index > 0 %}
-          {% assign prev_index = current_index | minus: 1 %}
-          {% assign prev_item = sorted_collection[prev_index] %}
-        {% endif %}
-        
-        {% if current_index < sorted_collection.size | minus: 1 %}
-          {% assign next_index = current_index | plus: 1 %}
-          {% assign next_item = sorted_collection[next_index] %}
-        {% endif %}
-        
-        {% if prev_item or next_item %}
+        {% if prev_doc or next_doc %}
           <nav class="collection-nav" aria-label="Collection navigation">
-            {% if prev_item %}
-              <a href="{{ prev_item.url | relative_url }}" class="nav-previous" rel="prev">
-                <span class="nav-label">Previous</span>
-                <span class="nav-title">{{ prev_item.title | truncate: 50 }}</span>
+            {% if prev_doc %}
+              <a href="{{ prev_doc.url | relative_url }}" class="nav-prev">
+                ← {{ prev_doc.title }}
               </a>
             {% else %}
               <div></div>
             {% endif %}
             
-            {% if next_item %}
-              <a href="{{ next_item.url | relative_url }}" class="nav-next" rel="next">
-                <span class="nav-label">Next</span>
-                <span class="nav-title">{{ next_item.title | truncate: 50 }}</span>
+            {% if next_doc %}
+              <a href="{{ next_doc.url | relative_url }}" class="nav-next">
+                {{ next_doc.title }} →
               </a>
+            {% else %}
+              <div></div>
             {% endif %}
           </nav>
         {% endif %}
       {% endif %}
-      
+
       <!-- Related content suggestions -->
       {% if page.collection and page.tags %}
-        {% assign related_pages = site[page.collection] | where_exp: "item", "item.url != page.url" %}
-        {% assign matching_pages = '' | split: '' %}
+        {% assign related_posts = site[page.collection] | where_exp: "post", "post.url != page.url" %}
+        {% assign scored_posts = "" | split: "," %}
         
-        {% for item in related_pages %}
-          {% assign match_count = 0 %}
-          {% for tag in page.tags %}
-            {% if item.tags contains tag %}
-              {% assign match_count = match_count | plus: 1 %}
+        {% for post in related_posts %}
+          {% assign common_tags = 0 %}
+          {% for tag in post.tags %}
+            {% if page.tags contains tag %}
+              {% assign common_tags = common_tags | plus: 1 %}
             {% endif %}
           {% endfor %}
-          {% if match_count > 0 %}
-            {% assign matching_pages = matching_pages | push: item %}
+          
+          {% if common_tags > 0 %}
+            {% assign scored_post = post | append: "|" | append: common_tags %}
+            {% assign scored_posts = scored_posts | push: scored_post %}
           {% endif %}
         {% endfor %}
         
-        {% if matching_pages.size > 0 %}
-          <section class="related-content">
+        {% if scored_posts.size > 0 %}
+          <aside class="related-content">
             <h3>Related Content</h3>
-            <div class="related-grid">
-              {% for item in matching_pages limit: 3 %}
-                <article class="related-item">
-                  <h4><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h4>
-                  {% if item.excerpt %}
-                    <p>{{ item.excerpt | strip_html | truncate: 100 }}</p>
+            <div class="related-list">
+              {% for scored_post in scored_posts limit: 3 %}
+                {% assign post_data = scored_post | split: "|" %}
+                {% assign post = site[page.collection] | where: "url", post_data[0] | first %}
+                <div class="related-item">
+                  <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+                  {% if post.excerpt %}
+                    <p>{{ post.excerpt | strip_html | truncatewords: 15 }}</p>
                   {% endif %}
-                </article>
+                </div>
               {% endfor %}
             </div>
-          </section>
+          </aside>
         {% endif %}
       {% endif %}
+      
     </div>
   </div>
 </div>
 
-<style>
-.page-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.page-subtitle {
-  font-size: 1.25rem;
-  font-weight: 300;
-  color: var(--text-secondary);
-  font-style: italic;
-  margin-bottom: 1rem;
-}
-
-@media (min-width: 768px) {
-  .page-subtitle {
-    font-size: 1.5rem;
+<script>
+// Reading progress indicator
+window.addEventListener('scroll', function() {
+  const indicator = document.getElementById('reading-progress');
+  if (indicator) {
+    const winHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.pageYOffset;
+    const progress = (scrollTop / (docHeight - winHeight)) * 100;
+    indicator.style.transform = `scaleX(${Math.min(progress, 100) / 100})`;
   }
-}
+});
 
-.page-meta {
-  font-size: 0.875rem;
-  color: var(--text-muted);
-  font-weight: 500;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.page-meta > * {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  background: var(--bg-tertiary);
-  border-radius: 1rem;
-  min-height: 32px;
-}
-
-.category,
-.week-indicator,
-.ai-autonomy,
-.completion {
-  background: var(--primary-blue);
-  color: white;
-  font-weight: 600;
-}
-
-.nav-label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-muted);
-  margin-bottom: 0.25rem;
-  display: block;
-}
-
-.nav-title {
-  font-weight: 600;
-  color: var(--text-color);
-  display: block;
-}
-
-.nav-previous .nav-title,
-.nav-next .nav-title {
-  transition: color 0.3s ease;
-}
-
-.nav-previous:hover .nav-title,
-.nav-next:hover .nav-title {
-  color: var(--link-color);
-}
-
-.related-content {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
-}
-
-.related-content h3 {
-  margin-bottom: 1.5rem;
-  color: var(--text-color);
-  text-align: center;
-}
-
-.related-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-@media (min-width: 640px) {
-  .related-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .related-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.related-item {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.5rem;
-  padding: 1rem;
-  transition: all 0.3s ease;
-}
-
-.related-item:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.related-item h4 {
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-}
-
-.related-item h4 a {
-  color: var(--text-color);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.related-item h4 a:hover {
-  color: var(--link-color);
-}
-
-.related-item p {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
-
-@media (max-width: 640px) {
-  .page-meta {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .breadcrumb {
-    font-size: 0.75rem;
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .collection-nav {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-  
-  .nav-previous,
-  .nav-next {
-    max-width: 100%;
-    justify-content: center;
-    text-align: center;
-  }
-}
-</style>
+// Smooth scroll for collection navigation
+document.querySelectorAll('.collection-nav a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    // Allow normal navigation for collection links
+    return true;
+  });
+});
+</script>

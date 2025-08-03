@@ -1,7 +1,16 @@
 ---
 layout: page
 title: "GitHub Copilot Instructions Framework"
+date: 2025-08-03
+category: "technical-deep-dive"
+tags: ["ai", "copilot", "instructions", "educational-software", "methodology"]
+author: "AI-Generated with Human Oversight"
 permalink: /technical/copilot-instructions/
+educational_objective: "Demonstrates systematic AI instruction design for educational software development"
+difficulty_level: "intermediate"
+prerequisites: ["github-copilot-access", "educational-software-basics", "ai-collaboration-concepts"]
+child_safety_notes: "All instruction patterns designed to generate age-appropriate educational content"
+estimated_reading_time: "15 minutes"
 ---
 
 # 🤖 Comprehensive GitHub Copilot Instructions Framework

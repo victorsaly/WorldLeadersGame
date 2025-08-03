@@ -3,11 +3,14 @@ layout: default
 refactor: true
 ---
 
+<!-- Reading progress indicator -->
+<div class="reading-progress" id="reading-progress"></div>
+
 <div id="post-wrapper" class="d-flex justify-content-center">
   <div class="col-12 col-lg-11 col-xl-8">
     <div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4 px-xl-0">
       
-      <!-- Hero Section -->
+      <!-- Hero Section with enhanced mobile support -->
       <div class="text-center mb-5">
         {{ content }}
       </div>
@@ -17,142 +20,103 @@ refactor: true
         {% include search.html %}
       </div>
 
-      <!-- Recent Posts Section -->
+      <!-- Recent Posts Section with mobile optimization -->
       <div class="row">
         <div class="col-12">
           <h2 class="mb-4">🚀 Latest Updates</h2>
-          <div class="post-list">
+          <div class="list-group list-group-flush">
             {% assign pinned = site.posts | where: "pin", true %}
             {% assign default = site.posts | where_exp: "item", "item.pin != true" %}
             {% assign posts = pinned | concat: default %}
             
             {% for post in posts limit: 5 %}
-              <article class="post-item">
-                <div class="post-header">
-                  <h3>
-                    <a href="{{ post.url | relative_url }}">
+              <div class="list-group-item nav-card">
+                <div class="d-flex w-100 justify-content-between align-items-start">
+                  <h5 class="mb-1">
+                    <a href="{{ post.url | relative_url }}" class="text-decoration-none">
                       {{ post.title }}
                     </a>
-                  </h3>
-                  <div class="post-meta">
-                    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
-                    {% if post.category %}
-                      <span class="category">{{ post.category }}</span>
+                    {% if post.pin %}
+                      <span class="status-indicator status-completed ml-2">Pinned</span>
                     {% endif %}
-                  </div>
+                  </h5>
+                  <small class="text-muted">{{ post.date | date: "%b %-d, %Y" }}</small>
                 </div>
-                
                 {% if post.excerpt %}
-                  <div class="post-excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</div>
+                  <p class="mb-1 text-muted">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
                 {% endif %}
-                
-                {% if post.tags and post.tags.size > 0 %}
-                  <div class="tags">
-                    {% for tag in post.tags limit: 3 %}
-                      <span class="tag">{{ tag }}</span>
+                {% if post.categories %}
+                  <div class="mt-2">
+                    {% for category in post.categories limit: 3 %}
+                      <span class="badge badge-primary badge-sm mr-1">{{ category }}</span>
                     {% endfor %}
                   </div>
                 {% endif %}
-                
-                <a href="{{ post.url | relative_url }}" class="read-more">
-                  Read more
-                </a>
-              </article>
+              </div>
             {% endfor %}
           </div>
           
+          <!-- View all posts link -->
           <div class="text-center mt-4">
-            <a href="{{ '/blog/' | relative_url }}" class="cta-button">
-              View All Posts
+            <a href="{{ '/blog/' | relative_url }}" class="btn btn-outline-primary">
+              View All Posts →
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Quick Navigation -->
-      <div class="quick-nav mt-5">
-        <div class="nav-card">
-          <div class="card-body text-center">
-            <h4>📝 Development Journey</h4>
-            <p>Follow our week-by-week progress from concept to production.</p>
-            <a href="{{ '/journey/' | relative_url }}" class="btn">Explore Journey</a>
-          </div>
-        </div>
-        
-        <div class="nav-card">
-          <div class="card-body text-center">
-            <h4>🛠️ Technical Deep-Dives</h4>
-            <p>In-depth technical documentation and implementation guides.</p>
-            <a href="{{ '/technical-docs/' | relative_url }}" class="btn">Read Docs</a>
-          </div>
-        </div>
-        
-        <div class="nav-card">
-          <div class="card-body text-center">
-            <h4>🎯 Development Issues</h4>
-            <p>Systematic problem-solving and structured development planning.</p>
-            <a href="{{ '/issues/' | relative_url }}" class="btn">View Issues</a>
-          </div>
-        </div>
-        
-        <div class="nav-card">
-          <div class="card-body text-center">
-            <h4>🎮 About the Game</h4>
-            <p>Learn more about the educational game and our experiment.</p>
-            <a href="{{ '/about/' | relative_url }}" class="btn">Learn More</a>
+      <!-- Quick Navigation Section -->
+      <div class="row mt-5">
+        <div class="col-12">
+          <h2 class="mb-4">📚 Explore Documentation</h2>
+          <div class="row">
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="nav-card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">🛤️ Development Journey</h5>
+                  <p class="card-text">Follow our week-by-week progress building an educational strategy game with AI-first development.</p>
+                  <a href="{{ '/journey/' | relative_url }}" class="btn btn-primary">Explore Journey</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="nav-card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">⚙️ Technical Docs</h5>
+                  <p class="card-text">Implementation guides, architecture decisions, and coding patterns for educational game development.</p>
+                  <a href="{{ '/technical-docs/' | relative_url }}" class="btn btn-primary">View Docs</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="nav-card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">🎯 Milestones</h5>
+                  <p class="card-text">Track major achievements and completion status throughout the 18-week development process.</p>
+                  <a href="{{ '/milestones/' | relative_url }}" class="btn btn-primary">Check Progress</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
+      
     </div>
   </div>
 </div>
 
-<style>
-.search-section {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.post-header {
-  margin-bottom: 1rem;
-}
-
-.post-header h3 {
-  margin-bottom: 0.5rem;
-}
-
-.post-header h3 a {
-  color: var(--text-color);
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.post-header h3 a:hover {
-  color: var(--link-color);
-}
-
-.card-body {
-  padding: 1.5rem;
-}
-
-.card-body h4 {
-  margin-bottom: 1rem;
-  color: var(--text-color);
-}
-
-.card-body p {
-  margin-bottom: 1.5rem;
-  color: var(--text-secondary);
-}
-
-@media (max-width: 768px) {
-  .quick-nav {
-    grid-template-columns: 1fr;
+<script>
+// Reading progress indicator
+window.addEventListener('scroll', function() {
+  const indicator = document.getElementById('reading-progress');
+  if (indicator) {
+    const winHeight = window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.pageYOffset;
+    const progress = (scrollTop / (docHeight - winHeight)) * 100;
+    indicator.style.transform = `scaleX(${Math.min(progress, 100) / 100})`;
   }
-  
-  .card-body {
-    padding: 1rem;
-  }
-}
-</style>
+});
+</script>
