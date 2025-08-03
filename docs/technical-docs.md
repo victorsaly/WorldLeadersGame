@@ -13,41 +13,28 @@ permalink: /technical-docs/
 ## 🏗️ **Architecture & Design**
 
 ### Core System Architecture
-- [Complete System Architecture Overview](/technical/system-architecture/)
-- [.NET Aspire Orchestration Setup](/technical/aspire-setup/)
-- [Database Design & Entity Framework](/technical/database-design/)
-- [SignalR Real-Time Communication](/technical/signalr-implementation/)
+- [**.NET Aspire Orchestration Setup**]({{ '/technical/dotnet-aspire-integration/' | relative_url }}) - Complete setup and configuration guide
 
-### Technology Stack
-- **.NET 8** with ASP.NET Core and .NET Aspire orchestration
-- **Blazor Server** for interactive educational UI with TailwindCSS  
-- **PostgreSQL** with Entity Framework Core for data persistence
-- **Azure OpenAI Service** (GPT-4) for 6 specialized AI agent personalities
-- **Azure Speech Services** for pronunciation assessment and language learning
+### Development Environment
+- [**Command Line Development Guide**]({{ '/technical/command-line-guide/' | relative_url }}) - Essential CLI commands and workflows
 
 ---
 
 ## 🤖 **AI Integration Guides**
 
 ### GitHub Copilot Development
-- [**Comprehensive Copilot Instructions**](/technical/copilot-instructions/) - Transform generic AI into educational game expert
-- [Comment-Driven Development Patterns](/technical/comment-driven-development/)
-- [AI Code Generation Best Practices](/technical/ai-code-patterns/)
-
-### AI Agent Implementation
-- [Educational AI Agent Personalities](/technical/ai-agent-personalities/)
-- [Content Moderation & Child Safety](/technical/child-safety-implementation/)
-- [Azure OpenAI Integration Patterns](/technical/azure-openai-integration/)
+- [**Comprehensive Copilot Instructions**]({{ '/technical/copilot-instructions/' | relative_url }}) - Transform generic AI into educational game expert
+- [**AI Prompt Engineering Patterns**]({{ '/technical/ai-prompt-engineering/' | relative_url }}) - Advanced prompt patterns for educational content
 
 ---
 
 ## 🎮 **Game Development Guides**
 
 ### Educational Game Mechanics
-- [Dice-Based Career Progression System](/technical/dice-career-system/)
-- [Resource Management (Income, Reputation, Happiness)](/technical/resource-management/)
-- [Territory Acquisition & Real GDP Data](/technical/territory-system/)
-- [Random Event Card System](/technical/event-system/)
+- 🚧 Dice-Based Career Progression System (Coming Soon)
+- 🚧 Resource Management (Income, Reputation, Happiness) (Coming Soon)
+- 🚧 Territory Acquisition & Real GDP Data (Coming Soon)
+- 🚧 Random Event Card System (Coming Soon)
 
 ### Real-World Data Integration
 - [World Bank API Integration](/technical/world-bank-api/)
@@ -61,56 +48,58 @@ permalink: /technical-docs/
 ### UI/UX for 12-Year-Olds
 - [Child-Friendly Design Patterns](/technical/child-ui-patterns/)
 - [TailwindCSS Educational Game Styling](/technical/tailwind-educational/)
-- [Accessibility for Young Users](/technical/child-accessibility/)
-- [Mobile-Responsive Educational Interfaces](/technical/mobile-educational/)
+### UI/UX Guidelines
+- 🚧 Child-Friendly Design Patterns (Coming Soon)
+- 🚧 Accessibility for Young Users (Coming Soon)
+- 🚧 Mobile-Responsive Educational Interfaces (Coming Soon)
 
 ### Safety & Privacy
-- [COPPA Compliance Implementation](/technical/coppa-compliance/)
-- [Content Validation & Moderation](/technical/content-moderation/)
-- [Privacy-First Architecture](/technical/privacy-architecture/)
+- 🚧 COPPA Compliance Implementation (Coming Soon)
+- 🚧 Content Validation & Moderation (Coming Soon)
+- 🚧 Privacy-First Architecture (Coming Soon)
 
 ---
 
 ## 🚀 **Development & Deployment**
 
 ### Local Development Setup
-- [Complete Development Environment Setup](/technical/development-setup/)
-- [Docker & PostgreSQL Configuration](/technical/docker-setup/)
-- [VS Code Extensions & AI Tools](/technical/vscode-setup/)
+- 🚧 Complete Development Environment Setup (Coming Soon)
+- 🚧 Docker & PostgreSQL Configuration (Coming Soon)
+- 🚧 VS Code Extensions & AI Tools (Coming Soon)
 
 ### Testing & Quality Assurance
-- [Educational Content Testing Strategies](/technical/educational-testing/)
-- [AI Response Validation Patterns](/technical/ai-testing/)
-- [Child User Experience Testing](/technical/child-ux-testing/)
+- 🚧 Educational Content Testing Strategies (Coming Soon)
+- 🚧 AI Response Validation Patterns (Coming Soon)
+- 🚧 Child User Experience Testing (Coming Soon)
 
 ### Production Deployment
-- [Azure Deployment with .NET Aspire](/technical/azure-deployment/)
-- [CI/CD Pipeline Setup](/technical/cicd-pipeline/)
-- [Performance Optimization for Educational Games](/technical/performance-optimization/)
+- 🚧 Azure Deployment with .NET Aspire (Coming Soon)
+- 🚧 CI/CD Pipeline Setup (Coming Soon)
+- 🚧 Performance Optimization for Educational Games (Coming Soon)
 
 ---
 
 ## 📚 **API Documentation**
 
 ### Game API Endpoints
-- [Player Management API](/technical/api-player/)
-- [Game State Management](/technical/api-gamestate/)
-- [Territory & Country Data](/technical/api-territories/)
-- [AI Agent Interaction](/technical/api-ai-agents/)
+- 🚧 Player Management API (Coming Soon)
+- 🚧 Game State Management (Coming Soon)
+- 🚧 Territory & Country Data (Coming Soon)
+- 🚧 AI Agent Interaction (Coming Soon)
 
 ### External Service Integration
-- [World Bank GDP Data API](/technical/external-worldbank/)
-- [Azure Speech Services API](/technical/external-speech/)
-- [Azure OpenAI Service Integration](/technical/external-openai/)
+- 🚧 World Bank GDP Data API (Coming Soon)
+- 🚧 Azure Speech Services API (Coming Soon)
+- 🚧 Azure OpenAI Service Integration (Coming Soon)
 
 ---
 
 ## 🔍 **Implementation Examples**
 
 ### Code Samples
-- [Blazor Educational Components](/technical/blazor-examples/)
-- [Entity Framework Educational Models](/technical/ef-examples/)
-- [SignalR Educational Game Hubs](/technical/signalr-examples/)
+- 🚧 Blazor Educational Components (Coming Soon)
+- 🚧 Entity Framework Educational Models (Coming Soon)
+- 🚧 SignalR Educational Game Hubs (Coming Soon)
 - [AI Prompt Templates](/technical/prompt-templates/)
 
 ### Configuration Examples

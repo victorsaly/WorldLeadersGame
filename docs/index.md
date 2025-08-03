@@ -9,7 +9,7 @@ title: "World Leaders Game"
 </div>
 
 <div style="text-align: center; margin: 2rem 0;">
-  <img src="/assets/world-leaders-logo.svg" alt="World Leaders Game Logo" width="200" height="300" style="border-radius: 12px;">
+  <img src="{{ '/assets/world-leaders-logo.svg' | relative_url }}" alt="World Leaders Game Logo" width="200" height="300" style="border-radius: 12px;">
   <br>
   <em>🎨 Game logo designed independently by a 12-year-old using Figma</em>
 </div>
@@ -34,19 +34,19 @@ title: "World Leaders Game"
   <div class="nav-card">
     <h3>📝 Development Journey</h3>
     <p>Follow our week-by-week progress from concept to production.</p>
-    <a href="/journey/" class="btn">Explore Journey</a>
+    <a href="{{ '/journey/' | relative_url }}" class="btn">Explore Journey</a>
   </div>
   
   <div class="nav-card">
-    <h3>�️ Technical Deep-Dives</h3>
+    <h3>🛠️ Technical Deep-Dives</h3>
     <p>In-depth technical documentation and implementation guides.</p>
-    <a href="/technical-docs/" class="btn">Read Docs</a>
+    <a href="{{ '/technical-docs/' | relative_url }}" class="btn">Read Docs</a>
   </div>
   
   <div class="nav-card">
     <h3>📰 Latest Blog Posts</h3>
     <p>Real-time updates on our AI-led development experiment.</p>
-    <a href="/blog/" class="btn">View Blog</a>
+    <a href="{{ '/blog/' | relative_url }}" class="btn">View Blog</a>
   </div>
 </div>
 
@@ -70,22 +70,22 @@ Working with GitHub Copilot and comprehensive AI instructions, we successfully c
 
 ## 🗺️ **Explore Our Documentation**
 
-### 📰 **[Blog & Weekly Updates](/blog/)**
+### 📰 **[Blog & Weekly Updates]({{ '/blog/' | relative_url }})**
 - Weekly development logs showing AI autonomy in action
 - Real-time progress updates and milestone achievements
 - Behind-the-scenes insights into AI-human collaboration
 
-### 🧭 **[Complete Journey Documentation](/journey/)**
+### 🧭 **[Complete Journey Documentation]({{ '/journey/' | relative_url }})**
 - Comprehensive week-by-week development tracking
 - Technical deep-dives and AI prompt engineering insights
 - Milestone summaries and achievement analysis
 
-### 🔧 **[Technical Documentation](/technical-docs/)**
+### 🔧 **[Technical Documentation]({{ '/technical-docs/' | relative_url }})**
 - Architecture specifications and implementation guides
 - GitHub Copilot instruction patterns that enable AI autonomy
 - Development setup and deployment procedures
 
-### 🏆 **[Major Milestones](/milestones/)**
+### 🏆 **[Major Milestones]({{ '/milestones/' | relative_url }})**
 - Significant achievement summaries
 - Educational impact assessments
 - Technical breakthrough analysis
@@ -114,8 +114,8 @@ Child's Creative Vision → AI Technical Architecture → Human Educational Vali
 Everything started with a 5-minute voice memo from a 12-year-old describing his dream educational strategy game, combined with hand-drawn mockups that became our visual blueprint.
 
 <div align="center">
-  <img src="docs/assets/game-mockup-1.png" alt="Game interface mockup 1" width="400">
-  <img src="docs/assets/game-mockup-2.png" alt="Game interface mockup 2" width="400">
+  <img src="{{ '/assets/game-mockup-1.png' | relative_url }}" alt="Game interface mockup 1" width="400">
+  <img src="{{ '/assets/game-mockup-2.png' | relative_url }}" alt="Game interface mockup 2" width="400">
   <br>
   <em>🎨 Original game design sketches - our visual development roadmap</em>
 </div>
@@ -134,7 +134,7 @@ Everything started with a 5-minute voice memo from a 12-year-old describing his 
   {% endfor %}
 </div>
 
-[**View All Blog Posts →**](/blog/)
+[**View All Blog Posts →**]({{ '/blog/' | relative_url }})
 
 ---
 
@@ -149,5 +149,5 @@ Everything started with a 5-minute voice memo from a 12-year-old describing his 
 
 <div class="highlight-box">
   <h3>🎯 Ready to Follow Our Journey?</h3>
-  <p>Explore our <strong><a href="/journey/">complete documentation</a></strong> to see how AI autonomy is transforming educational software development, or dive into our <strong><a href="/blog/">weekly blog updates</a></strong> for real-time progress insights.</p>
+  <p>Explore our <strong><a href="{{ '/journey/' | relative_url }}">complete documentation</a></strong> to see how AI autonomy is transforming educational software development, or dive into our <strong><a href="{{ '/blog/' | relative_url }}">weekly blog updates</a></strong> for real-time progress insights.</p>
 </div>
