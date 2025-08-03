@@ -3,18 +3,15 @@ layout: post
 title: "From Voice Memo to Production"
 subtitle: "An AI-First Development Experiment"
 date: 2025-08-01
-categories: [Development, AI]
-tags:
-  [
-    artificial-intelligence,
-    educational-technology,
-    software-development,
-    collaboration,
-  ]
+categories: ["development", "ai", "education"]
+tags: ["artificial-intelligence", "educational-technology", "software-development", "collaboration", "child-design"]
+author: "Victor Saly"
 pin: true
 image:
   path: /assets/game-block-ai-image.png
   alt: AI-generated game foundation architecture
+educational_objective: "Demonstrates how AI can transform child creativity into production-ready educational software"
+child_safety_verified: true
 ---
 
 ## alt: AI-generated game foundation architecture
