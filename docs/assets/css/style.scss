@@ -387,9 +387,7 @@ body {
 .hero-section h1 {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: bold;
->>>>>>> f30055079b83ada0a0142d8944039b4f9123387f
   margin-bottom: 1rem;
-  font-size: 2rem;
 }
 
 @media (min-width: 768px) {
@@ -866,11 +864,6 @@ body.dark img {
     break-inside: avoid;
   }
 }
-  list-style: none;
-  margin: 0;
-  padding: 1rem;
-  justify-content: center;
-}
 
 .main-nav li {
   margin: 0 1rem;
@@ -882,7 +875,6 @@ body.dark img {
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
->>>>>>> f30055079b83ada0a0142d8944039b4f9123387f
   transition: all 0.3s ease;
 }
 
