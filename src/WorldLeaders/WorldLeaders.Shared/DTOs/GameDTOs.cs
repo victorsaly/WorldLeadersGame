@@ -106,3 +106,15 @@ public record GameStateUpdate(
     string Message,
     EventType? EventType = null
 );
+
+/// <summary>
+/// Record for tracking resource changes for educational feedback
+/// </summary>
+public record ResourceChangeRecord(
+    int IncomeChange,
+    int ReputationChange,
+    int HappinessChange,
+    string Message,
+    EventType? EventType,
+    DateTime Timestamp
+);
