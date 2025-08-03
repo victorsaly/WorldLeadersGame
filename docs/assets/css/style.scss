@@ -9,44 +9,32 @@
 /* Font imports */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* Color scheme with dark mode support */
+/* Clean monochrome color scheme */
 :root {
-  /* Light mode colors */
-  --primary-blue: #3b82f6;
-  --primary-purple: #8b5cf6;
-  --primary-green: #10b981;
-  --accent-yellow: #f59e0b;
-  --accent-pink: #ec4899;
-  
-  /* Educational game theme colors */
-  --educational-primary: #667eea;
-  --educational-secondary: #764ba2;
-  --learning-accent: #f093fb;
-  
-  /* Light theme colors */
-  --text-color: #1f2937;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
+  /* Monochrome theme - light mode */
+  --text-color: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted: #8a8a8a;
   --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --border-color: #e5e7eb;
-  --hover-bg: #f3f4f6;
+  --bg-secondary: #f8f8f8;
+  --bg-tertiary: #f0f0f0;
+  --border-color: #e0e0e0;
+  --hover-bg: #f5f5f5;
   --header-bg: #ffffff;
   
-  /* Interactive elements */
-  --link-color: #3b82f6;
-  --link-hover: #2563eb;
-  --button-bg: #3b82f6;
-  --button-hover: #2563eb;
+  /* Interactive elements - monochrome */
+  --link-color: #2a2a2a;
+  --link-hover: #000000;
+  --button-bg: #2a2a2a;
+  --button-hover: #000000;
   --button-text: #ffffff;
   
-  /* Educational components */
-  --success-bg: #ecfdf5;
-  --success-border: #10b981;
-  --success-text: #065f46;
-  --warning-bg: #fef3c7;
-  --warning-border: #f59e0b;
+  /* Status indicators - minimal color */
+  --success-bg: #f8f8f8;
+  --success-border: #d0d0d0;
+  --success-text: #2a2a2a;
+  --warning-bg: #f8f8f8;
+  --warning-border: #d0d0d0;
   --warning-text: #92400e;
   --info-bg: #eff6ff;
   --info-border: #3b82f6;
@@ -73,35 +61,32 @@
   --border: #e5e7eb;
   --subtle-gray: #f3f4f6;
 
-/* Dark theme color scheme */
+/* Dark theme - monochrome */
 [data-theme="dark"] {
-  /* Dark theme colors */
-  --text-color: #f9fafb;
-  --text-secondary: #d1d5db;
-  --text-muted: #9ca3af;
-  --bg-primary: #111827;
-  --bg-secondary: #1f2937;
-  --bg-tertiary: #374151;
-  --border-color: #374151;
-  --hover-bg: #374151;
-  --header-bg: #1f2937;
+  /* Dark monochrome colors */
+  --text-color: #f0f0f0;
+  --text-secondary: #d0d0d0;
+  --text-muted: #a0a0a0;
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --bg-tertiary: #3a3a3a;
+  --border-color: #4a4a4a;
+  --hover-bg: #3a3a3a;
+  --header-bg: #2a2a2a;
   
-  /* Interactive elements in dark mode */
-  --link-color: #60a5fa;
-  --link-hover: #93c5fd;
-  --button-bg: #3b82f6;
-  --button-hover: #60a5fa;
+  /* Interactive elements - dark monochrome */
+  --link-color: #e0e0e0;
+  --link-hover: #ffffff;
+  --button-bg: #4a4a4a;
+  --button-hover: #6a6a6a;
   
-  /* Educational components in dark mode */
-  --success-bg: #064e3b;
-  --success-border: #10b981;
-  --success-text: #6ee7b7;
-  --warning-bg: #78350f;
-  --warning-border: #f59e0b;
-  --warning-text: #fcd34d;
-  --info-bg: #1e3a8a;
-  --info-border: #3b82f6;
-  --info-text: #93c5fd;
+  /* Status indicators - dark minimal */
+  --success-bg: #2a2a2a;
+  --success-border: #4a4a4a;
+  --success-text: #e0e0e0;
+  --warning-bg: #2a2a2a;
+  --warning-border: #4a4a4a;
+  --warning-text: #e0e0e0;
   
   /* Enhanced shadows for dark mode */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
@@ -153,6 +138,135 @@ body {
 
 .skip-link:focus {
   top: 6px;
+}
+
+/* Clean monochrome header navigation */
+.site-header {
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.site-header .wrapper {
+  padding: 0 1rem;
+}
+
+.main-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+}
+
+.nav-brand .site-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.nav-brand .site-title:hover {
+  color: var(--link-color);
+}
+
+/* Mobile menu toggle - hidden by default */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 32px;
+  height: 32px;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.hamburger-line {
+  width: 100%;
+  height: 2px;
+  background: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+/* Desktop navigation */
+.nav-menu {
+  display: flex;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  min-height: 44px;
+  line-height: 1.5;
+}
+
+.nav-link:hover {
+  background: var(--border-color);
+  color: var(--text-color);
+}
+
+.nav-link.active {
+  background: var(--border-color);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* Mobile responsive navigation */
+@media (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-menu.active {
+    display: block;
+  }
+  
+  .nav-links {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .nav-link {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .nav-item:last-child .nav-link {
+    border-bottom: none;
+  }
 }
 
 /* Main content wrapper */
