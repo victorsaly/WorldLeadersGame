@@ -1,0 +1,370 @@
+<!-- Site-wide search functionality -->
+<div class="search-container">
+  <div class="search-input-wrapper">
+    <span class="search-icon">🔍</span>
+    <input 
+      type="text" 
+      id="site-search" 
+      class="search-input" 
+      placeholder="Search documentation, journey, technical guides..."
+      autocomplete="off"
+      aria-label="Search site content"
+    >
+  </div>
+  
+  <div id="search-results" class="search-results" aria-live="polite">
+    <!-- Search results will be populated here -->
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('site-search');
+  const searchResults = document.getElementById('search-results');
+  
+  // Search data - will be populated from Jekyll collections
+  const searchData = [
+    {% for post in site.posts %}
+    {
+      title: {{ post.title | jsonify }},
+      url: {{ post.url | relative_url | jsonify }},
+      excerpt: {{ post.excerpt | strip_html | truncate: 150 | jsonify }},
+      date: {{ post.date | date: "%B %d, %Y" | jsonify }},
+      type: "Blog Post",
+      tags: {{ post.tags | jsonify }},
+      content: {{ post.content | strip_html | strip_newlines | truncate: 500 | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    {% if site.posts.size > 0 %},{% endif %}
+    
+    {% for page in site.journey %}
+    {
+      title: {{ page.title | jsonify }},
+      url: {{ page.url | relative_url | jsonify }},
+      excerpt: {{ page.excerpt | strip_html | truncate: 150 | jsonify }},
+      date: {% if page.date %}{{ page.date | date: "%B %d, %Y" | jsonify }}{% else %}""{% endif %},
+      type: "Journey",
+      tags: {% if page.tags %}{{ page.tags | jsonify }}{% else %}[]{% endif %},
+      content: {{ page.content | strip_html | strip_newlines | truncate: 500 | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    {% if site.journey.size > 0 %},{% endif %}
+    
+    {% for page in site.technical %}
+    {
+      title: {{ page.title | jsonify }},
+      url: {{ page.url | relative_url | jsonify }},
+      excerpt: {{ page.excerpt | strip_html | truncate: 150 | jsonify }},
+      date: {% if page.date %}{{ page.date | date: "%B %d, %Y" | jsonify }}{% else %}""{% endif %},
+      type: "Technical",
+      tags: {% if page.tags %}{{ page.tags | jsonify }}{% else %}[]{% endif %},
+      content: {{ page.content | strip_html | strip_newlines | truncate: 500 | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    {% if site.technical.size > 0 %},{% endif %}
+    
+    {% for page in site.milestones %}
+    {
+      title: {{ page.title | jsonify }},
+      url: {{ page.url | relative_url | jsonify }},
+      excerpt: {{ page.excerpt | strip_html | truncate: 150 | jsonify }},
+      date: {% if page.date %}{{ page.date | date: "%B %d, %Y" | jsonify }}{% else %}""{% endif %},
+      type: "Milestone",
+      tags: {% if page.tags %}{{ page.tags | jsonify }}{% else %}[]{% endif %},
+      content: {{ page.content | strip_html | strip_newlines | truncate: 500 | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    {% if site.milestones.size > 0 %},{% endif %}
+    
+    {% for page in site.issues %}
+    {
+      title: {{ page.title | jsonify }},
+      url: {{ page.url | relative_url | jsonify }},
+      excerpt: {{ page.excerpt | strip_html | truncate: 150 | jsonify }},
+      date: {% if page.date %}{{ page.date | date: "%B %d, %Y" | jsonify }}{% else %}""{% endif %},
+      type: "Issue",
+      tags: {% if page.tags %}{{ page.tags | jsonify }}{% else %}[]{% endif %},
+      content: {{ page.content | strip_html | strip_newlines | truncate: 500 | jsonify }}
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ];
+  
+  let searchTimeout;
+  let currentResults = [];
+  
+  function normalizeText(text) {
+    return text.toLowerCase().trim();
+  }
+  
+  function highlightSearchTerm(text, term) {
+    if (!term) return text;
+    const regex = new RegExp(`(${term})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+  }
+  
+  function performSearch(query) {
+    if (!query || query.length < 2) {
+      return [];
+    }
+    
+    const normalizedQuery = normalizeText(query);
+    const queryTerms = normalizedQuery.split(/\s+/);
+    
+    return searchData.map(item => {
+      let score = 0;
+      const normalizedTitle = normalizeText(item.title);
+      const normalizedContent = normalizeText(item.content);
+      const normalizedExcerpt = normalizeText(item.excerpt);
+      
+      // Title matches (highest priority)
+      queryTerms.forEach(term => {
+        if (normalizedTitle.includes(term)) {
+          score += normalizedTitle === term ? 50 : 20;
+        }
+      });
+      
+      // Exact title match bonus
+      if (normalizedTitle.includes(normalizedQuery)) {
+        score += 30;
+      }
+      
+      // Content matches
+      queryTerms.forEach(term => {
+        const contentMatches = (normalizedContent.match(new RegExp(term, 'g')) || []).length;
+        score += contentMatches * 3;
+      });
+      
+      // Excerpt matches
+      queryTerms.forEach(term => {
+        if (normalizedExcerpt.includes(term)) {
+          score += 5;
+        }
+      });
+      
+      // Tag matches
+      if (item.tags && item.tags.length > 0) {
+        item.tags.forEach(tag => {
+          const normalizedTag = normalizeText(tag);
+          queryTerms.forEach(term => {
+            if (normalizedTag.includes(term)) {
+              score += 10;
+            }
+          });
+        });
+      }
+      
+      // Type preference (educational content first)
+      if (item.type === 'Journey') score += 2;
+      if (item.type === 'Technical') score += 2;
+      if (item.type === 'Milestone') score += 1;
+      
+      return { ...item, score };
+    })
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8); // Limit to top 8 results
+  }
+  
+  function displayResults(results, query) {
+    if (results.length === 0) {
+      searchResults.innerHTML = `
+        <div class="search-result-item">
+          <div class="search-result-title">No results found</div>
+          <div class="search-result-excerpt">Try different keywords or browse our <a href="{{ '/journey/' | relative_url }}">development journey</a> or <a href="{{ '/technical-docs/' | relative_url }}">technical documentation</a>.</div>
+        </div>
+      `;
+    } else {
+      searchResults.innerHTML = results.map(item => `
+        <a href="${item.url}" class="search-result-item">
+          <div class="search-result-title">${highlightSearchTerm(item.title, query)}</div>
+          <div class="search-result-meta">
+            <span class="result-type">${item.type}</span>
+            ${item.date ? `<span class="result-date">${item.date}</span>` : ''}
+          </div>
+          <div class="search-result-excerpt">${highlightSearchTerm(item.excerpt || item.content.substring(0, 150) + '...', query)}</div>
+        </a>
+      `).join('');
+    }
+    
+    searchResults.classList.add('active');
+    currentResults = results;
+  }
+  
+  function hideResults() {
+    searchResults.classList.remove('active');
+    currentResults = [];
+  }
+  
+  // Search input event handling
+  searchInput.addEventListener('input', function(e) {
+    const query = e.target.value.trim();
+    
+    clearTimeout(searchTimeout);
+    
+    if (query.length < 2) {
+      hideResults();
+      return;
+    }
+    
+    searchTimeout = setTimeout(() => {
+      const results = performSearch(query);
+      displayResults(results, query);
+    }, 150); // Debounce search
+  });
+  
+  // Keyboard navigation
+  let selectedIndex = -1;
+  
+  searchInput.addEventListener('keydown', function(e) {
+    const resultItems = searchResults.querySelectorAll('.search-result-item');
+    
+    switch(e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, resultItems.length - 1);
+        updateSelection(resultItems);
+        break;
+        
+      case 'ArrowUp':
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, -1);
+        updateSelection(resultItems);
+        break;
+        
+      case 'Enter':
+        e.preventDefault();
+        if (selectedIndex >= 0 && resultItems[selectedIndex]) {
+          resultItems[selectedIndex].click();
+        } else if (currentResults.length > 0) {
+          window.location.href = currentResults[0].url;
+        }
+        break;
+        
+      case 'Escape':
+        hideResults();
+        searchInput.blur();
+        break;
+    }
+  });
+  
+  function updateSelection(items) {
+    items.forEach((item, index) => {
+      item.classList.toggle('selected', index === selectedIndex);
+    });
+  }
+  
+  // Click outside to close
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      hideResults();
+    }
+  });
+  
+  // Reset selection when mouse is used
+  searchResults.addEventListener('mousemove', function() {
+    selectedIndex = -1;
+    const items = searchResults.querySelectorAll('.search-result-item');
+    items.forEach(item => item.classList.remove('selected'));
+  });
+});
+</script>
+
+<style>
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-input {
+  padding-left: 3rem;
+}
+
+.search-result-meta {
+  display: flex;
+  gap: 1rem;
+  margin: 0.25rem 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.result-type {
+  background: var(--primary-blue);
+  color: white;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.result-date {
+  font-weight: 500;
+}
+
+.search-result-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.search-result-item:hover,
+.search-result-item.selected {
+  background: var(--primary-blue);
+  color: white;
+}
+
+.search-result-item:hover .search-result-title,
+.search-result-item.selected .search-result-title {
+  color: white;
+}
+
+.search-result-item:hover .search-result-excerpt,
+.search-result-item.selected .search-result-excerpt {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.search-result-item:hover .result-type,
+.search-result-item.selected .result-type {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.search-result-item:hover .result-date,
+.search-result-item.selected .result-date {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+mark {
+  background: var(--accent-yellow);
+  color: var(--text-color);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+}
+
+.search-result-item:hover mark,
+.search-result-item.selected mark {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .search-container {
+    margin: 1rem 0;
+  }
+  
+  .search-input {
+    font-size: 1rem; /* Prevent zoom on iOS */
+  }
+  
+  .search-results {
+    max-height: 60vh;
+  }
+  
+  .search-result-meta {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+</style>

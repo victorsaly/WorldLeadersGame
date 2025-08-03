@@ -5,17 +5,68 @@ layout: default
 <div class="page-content">
   <div class="wrapper">
     <div class="main-content">
+      <!-- Breadcrumb navigation -->
+      {% if page.collection %}
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <span class="breadcrumb-separator">›</span>
+        
+        {% case page.collection %}
+          {% when 'journey' %}
+            <a href="{{ '/journey/' | relative_url }}">Development Journey</a>
+          {% when 'technical' %}
+            <a href="{{ '/technical-docs/' | relative_url }}">Technical Documentation</a>
+          {% when 'milestones' %}
+            <a href="{{ '/milestones/' | relative_url }}">Project Milestones</a>
+          {% when 'issues' %}
+            <a href="{{ '/issues/' | relative_url }}">Development Issues</a>
+          {% when 'posts' %}
+            <a href="{{ '/blog/' | relative_url }}">Blog</a>
+        {% endcase %}
+        
+        <span class="breadcrumb-separator">›</span>
+        <span aria-current="page">{{ page.title }}</span>
+      </nav>
+      {% endif %}
+
       {% if page.title %}
         <header class="page-header">
           <h1>{{ page.title }}</h1>
           {% if page.subtitle %}
             <p class="page-subtitle">{{ page.subtitle }}</p>
           {% endif %}
-          {% if page.date %}
-            <div class="page-meta">
+          
+          <div class="page-meta">
+            {% if page.date %}
               <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
-              {% if page.category %} • <span class="category">{{ page.category }}</span>{% endif %}
-              {% if page.tags %} • Tags: {{ page.tags | join: ", " }}{% endif %}
+            {% endif %}
+            
+            {% if page.category %}
+              <span class="category">{{ page.category }}</span>
+            {% endif %}
+            
+            {% if page.status %}
+              <span class="status-{{ page.status }}">{{ page.status | capitalize }}</span>
+            {% endif %}
+            
+            {% if page.week %}
+              <span class="week-indicator">Week {{ page.week }}</span>
+            {% endif %}
+            
+            {% if page.ai_autonomy %}
+              <span class="ai-autonomy">{{ page.ai_autonomy }} AI Autonomy</span>
+            {% endif %}
+            
+            {% if page.completion_percentage %}
+              <span class="completion">{{ page.completion_percentage }}% Complete</span>
+            {% endif %}
+          </div>
+          
+          {% if page.tags %}
+            <div class="tags">
+              {% for tag in page.tags %}
+                <span class="tag">{{ tag }}</span>
+              {% endfor %}
             </div>
           {% endif %}
         </header>
@@ -25,19 +76,84 @@ layout: default
         {{ content }}
       </article>
 
-      {% if page.collection == 'journey' or page.collection == 'technical' or page.collection == 'milestones' %}
-        <nav class="page-navigation">
-          {% if page.previous %}
-            <a href="{{ page.previous.url | relative_url }}" class="nav-previous">
-              ← {{ page.previous.title }}
-            </a>
+      <!-- Collection navigation (prev/next) -->
+      {% if page.collection %}
+        {% assign collection = site[page.collection] %}
+        {% assign sorted_collection = collection | sort: 'date' %}
+        
+        {% for item in sorted_collection %}
+          {% if item.url == page.url %}
+            {% assign current_index = forloop.index0 %}
+            {% break %}
           {% endif %}
-          {% if page.next %}
-            <a href="{{ page.next.url | relative_url }}" class="nav-next">
-              {{ page.next.title }} →
-            </a>
+        {% endfor %}
+        
+        {% assign prev_item = nil %}
+        {% assign next_item = nil %}
+        
+        {% if current_index > 0 %}
+          {% assign prev_index = current_index | minus: 1 %}
+          {% assign prev_item = sorted_collection[prev_index] %}
+        {% endif %}
+        
+        {% if current_index < sorted_collection.size | minus: 1 %}
+          {% assign next_index = current_index | plus: 1 %}
+          {% assign next_item = sorted_collection[next_index] %}
+        {% endif %}
+        
+        {% if prev_item or next_item %}
+          <nav class="collection-nav" aria-label="Collection navigation">
+            {% if prev_item %}
+              <a href="{{ prev_item.url | relative_url }}" class="nav-previous" rel="prev">
+                <span class="nav-label">Previous</span>
+                <span class="nav-title">{{ prev_item.title | truncate: 50 }}</span>
+              </a>
+            {% else %}
+              <div></div>
+            {% endif %}
+            
+            {% if next_item %}
+              <a href="{{ next_item.url | relative_url }}" class="nav-next" rel="next">
+                <span class="nav-label">Next</span>
+                <span class="nav-title">{{ next_item.title | truncate: 50 }}</span>
+              </a>
+            {% endif %}
+          </nav>
+        {% endif %}
+      {% endif %}
+      
+      <!-- Related content suggestions -->
+      {% if page.collection and page.tags %}
+        {% assign related_pages = site[page.collection] | where_exp: "item", "item.url != page.url" %}
+        {% assign matching_pages = '' | split: '' %}
+        
+        {% for item in related_pages %}
+          {% assign match_count = 0 %}
+          {% for tag in page.tags %}
+            {% if item.tags contains tag %}
+              {% assign match_count = match_count | plus: 1 %}
+            {% endif %}
+          {% endfor %}
+          {% if match_count > 0 %}
+            {% assign matching_pages = matching_pages | push: item %}
           {% endif %}
-        </nav>
+        {% endfor %}
+        
+        {% if matching_pages.size > 0 %}
+          <section class="related-content">
+            <h3>Related Content</h3>
+            <div class="related-grid">
+              {% for item in matching_pages limit: 3 %}
+                <article class="related-item">
+                  <h4><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h4>
+                  {% if item.excerpt %}
+                    <p>{{ item.excerpt | strip_html | truncate: 100 }}</p>
+                  {% endif %}
+                </article>
+              {% endfor %}
+            </div>
+          </section>
+        {% endif %}
       {% endif %}
     </div>
   </div>
@@ -48,61 +164,166 @@ layout: default
   text-align: center;
   margin-bottom: 3rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .page-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 300;
-  color: var(--muted-foreground);
+  color: var(--text-secondary);
   font-style: italic;
   margin-bottom: 1rem;
 }
 
+@media (min-width: 768px) {
+  .page-subtitle {
+    font-size: 1.5rem;
+  }
+}
+
 .page-meta {
   font-size: 0.875rem;
-  color: var(--medium-gray);
+  color: var(--text-muted);
   font-weight: 500;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.page-meta > * {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  background: var(--bg-tertiary);
+  border-radius: 1rem;
+  min-height: 32px;
+}
+
+.category,
+.week-indicator,
+.ai-autonomy,
+.completion {
+  background: var(--primary-blue);
+  color: white;
+  font-weight: 600;
+}
+
+.nav-label {
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+  display: block;
 }
 
-.page-navigation {
-  display: flex;
-  justify-content: space-between;
+.nav-title {
+  font-weight: 600;
+  color: var(--text-color);
+  display: block;
+}
+
+.nav-previous .nav-title,
+.nav-next .nav-title {
+  transition: color 0.3s ease;
+}
+
+.nav-previous:hover .nav-title,
+.nav-next:hover .nav-title {
+  color: var(--link-color);
+}
+
+.related-content {
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--border-color);
 }
 
-.nav-previous,
-.nav-next {
-  background: var(--subtle-gray);
-  padding: 1rem 1.5rem;
-  border-radius: var(--radius);
-  text-decoration: none;
-  color: var(--foreground);
-  border: 1px solid var(--border);
-  transition: all 0.2s ease;
-  font-weight: 500;
+.related-content h3 {
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+  text-align: center;
 }
 
-.nav-previous:hover,
-.nav-next:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
-  text-decoration: none;
+.related-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .related-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .related-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.related-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.related-item:hover {
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-@media (max-width: 768px) {
-  .page-navigation {
+.related-item h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.related-item h4 a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.related-item h4 a:hover {
+  color: var(--link-color);
+}
+
+.related-item p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .page-meta {
     flex-direction: column;
+    align-items: center;
+  }
+  
+  .breadcrumb {
+    font-size: 0.75rem;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .collection-nav {
+    flex-direction: column;
+    text-align: center;
     gap: 1rem;
   }
   
-  .page-subtitle {
-    font-size: 1.25rem;
+  .nav-previous,
+  .nav-next {
+    max-width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 }
 </style>
