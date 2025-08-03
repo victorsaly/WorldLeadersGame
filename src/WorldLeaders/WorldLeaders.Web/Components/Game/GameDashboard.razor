@@ -1,6 +1,7 @@
 @page "/game"
 @using WorldLeaders.Shared.DTOs
 @using WorldLeaders.Shared.Enums
+@using WorldLeaders.Shared.Services
 @using Microsoft.AspNetCore.SignalR.Client
 @inject IHttpClientFactory HttpClientFactory
 @inject HubConnection HubConnection
@@ -29,70 +30,15 @@
 
         @if (playerDashboard != null)
         {
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <!-- Income Card -->
-                <div class="bg-green-100 rounded-lg p-4 border-l-4 border-green-500">
-                    <div class="flex items-center">
-                        <span class="text-2xl">💰</span>
-                        <div class="ml-3">
-                            <p class="text-sm text-green-600 font-medium">Monthly Income</p>
-                            <p class="text-2xl font-bold text-green-800">${playerDashboard.Income:N0}</p>
-                        </div>
-                    </div>
-                </div>
+            <!-- Resource Management Framework -->
+            <ResourceManager Income="@playerDashboard.Income" 
+                           Reputation="@playerDashboard.Reputation" 
+                           Happiness="@playerDashboard.Happiness"
+                           RecentChanges="@recentResourceChanges" />
 
-                <!-- Reputation Card -->
-                <div class="bg-blue-100 rounded-lg p-4 border-l-4 border-blue-500">
-                    <div class="flex items-center">
-                        <span class="text-2xl">⭐</span>
-                        <div class="ml-3">
-                            <p class="text-sm text-blue-600 font-medium">Reputation</p>
-                            <p class="text-2xl font-bold text-blue-800">@playerDashboard.Reputation%</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Happiness Card -->
-                <div class="bg-yellow-100 rounded-lg p-4 border-l-4 border-yellow-500">
-                    <div class="flex items-center">
-                        <span class="text-2xl">😊</span>
-                        <div class="ml-3">
-                            <p class="text-sm text-yellow-600 font-medium">Happiness</p>
-                            <p class="text-2xl font-bold text-yellow-800">@playerDashboard.Happiness%</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Territories Card -->
-                <div class="bg-purple-100 rounded-lg p-4 border-l-4 border-purple-500">
-                    <div class="flex items-center">
-                        <span class="text-2xl">🗺️</span>
-                        <div class="ml-3">
-                            <p class="text-sm text-purple-600 font-medium">Territories</p>
-                            <p class="text-2xl font-bold text-purple-800">@playerDashboard.TerritoriesOwned</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Current Job Card -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Current Job: @playerDashboard.CurrentJob</h3>
-                <div class="flex items-center space-x-4">
-                    <button @onclick="RollForNewJob" 
-                            class="bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-green-500 hover:to-blue-600 transition-all duration-300 transform hover:scale-105">
-                        🎲 Roll for New Job!
-                    </button>
-                    @if (isRolling)
-                    {
-                        <div class="flex items-center">
-                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
-                            <span class="ml-2 text-blue-600">Rolling...</span>
-                        </div>
-                    }
-                </div>
-            </div>
+            <!-- Interactive Dice Rolling System -->
+            <InteractiveDiceRoller PlayerId="@playerDashboard.Id" 
+                                 OnDiceRolled="@OnDiceRolled" />
 
             <!-- Game Events Section -->
             @if (gameEvents.Any())
@@ -176,6 +122,7 @@
 @code {
     private PlayerDashboardDto? playerDashboard;
     private List<GameEventDto> gameEvents = new();
+    private List<ResourceChangeRecord> recentResourceChanges = new();
     private string newPlayerName = "";
     private string gameMessage = "";
     private bool isLoading = false;
@@ -293,6 +240,50 @@
     private string FormatEffect(int effect)
     {
         return effect > 0 ? $"+{effect}" : effect.ToString();
+    }
+
+    private async Task OnDiceRolled(DiceRollResult result)
+    {
+        if (playerDashboard == null) return;
+
+        try
+        {
+            // Update player dashboard with new values
+            var newDashboard = playerDashboard with
+            {
+                Income = result.IncomeChange,
+                Reputation = Math.Clamp(playerDashboard.Reputation + result.ReputationChange, 0, 100),
+                Happiness = Math.Clamp(playerDashboard.Happiness + result.HappinessChange, 0, 100),
+                CurrentJob = result.NewJob,
+                LastActiveAt = DateTime.UtcNow
+            };
+
+            playerDashboard = newDashboard;
+
+            // Add to recent changes for educational feedback
+            var changeRecord = new ResourceChangeRecord(
+                result.IncomeChange - playerDashboard.Income, // Income change from previous
+                result.ReputationChange,
+                result.HappinessChange,
+                result.EncouragingMessage,
+                EventType.Career,
+                DateTime.UtcNow
+            );
+
+            recentResourceChanges.Insert(0, changeRecord);
+            if (recentResourceChanges.Count > 10)
+            {
+                recentResourceChanges.RemoveAt(10);
+            }
+
+            gameMessage = result.EncouragingMessage;
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            gameMessage = "Something went wrong with the dice roll. Try again!";
+            StateHasChanged();
+        }
     }
 
     public async ValueTask DisposeAsync()
