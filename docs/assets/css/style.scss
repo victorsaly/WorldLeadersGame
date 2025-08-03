@@ -45,14 +45,14 @@
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   
-  /* Gradients */
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --educational-gradient: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  /* Monochrome gradients */
+  --bg-gradient: #1a1a1a;
+  --educational-gradient: #2a2a2a;
   
-  /* Educational game colors */
-  --educational-green: #059669;
-  --learning-blue: #2563eb;
-  --brand-accent: #7c3aed;
+  /* Monochrome colors */
+  --educational-green: #2a2a2a;
+  --learning-blue: #2a2a2a;
+  --brand-accent: #1a1a1a;
   
   /* UI colors */
   --foreground: #1f2937;
@@ -477,7 +477,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Hero section styling with enhanced dark mode */
+/* Hero section styling - monochrome */
 .hero-section {
   background: var(--bg-gradient);
   color: white;
@@ -1421,7 +1421,7 @@ tr:hover {
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: 0.75rem;
-  padding: 1.5rem;
+  /*padding: 1.5rem;*/
   text-align: center;
   transition: all 0.3s ease;
   position: relative;

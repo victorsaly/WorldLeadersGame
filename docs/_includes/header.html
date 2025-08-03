@@ -71,6 +71,21 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Responsive title sizing */
+@media (max-width: 768px) {
+  .site-title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-title {
+    font-size: 1rem;
+  }
 }
 
 .site-title:hover {
