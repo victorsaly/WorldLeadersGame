@@ -13,5 +13,8 @@
   name: Technical Docs
   path: /technical-docs/
 -
+  name: Issues
+  path: /issues/
+-
   name: About
   path: /about/

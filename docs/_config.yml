@@ -63,8 +63,9 @@ google_analytics: ''
 header_pages:
   - index.md
   - blog.md
-  - technical-docs.md
   - journey.md
+  - technical-docs.md
+  - issues.md
   - about.md
 
 # Collections for better organization
@@ -81,6 +82,9 @@ collections:
   milestones:
     output: true
     permalink: /milestones/:name/
+  issues:
+    output: true
+    permalink: /issues/:name/
 
 # Defaults
 defaults:
@@ -103,6 +107,11 @@ defaults:
   - scope:
       path: ""
       type: "milestones"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "issues"
     values:
       layout: "page"
 
