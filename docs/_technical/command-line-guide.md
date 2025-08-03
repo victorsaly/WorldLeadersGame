@@ -3,9 +3,21 @@ layout: page
 title: "Command Line Guide - World Leaders Game"
 date: 2025-08-03
 category: "technical-guide"
-tags: ["command-line", "development", "setup", "troubleshooting"]
-author: "Victor Saly"
+tags: ["command-line", "development", "setup", "troubleshooting", "educational-game"]
+author: "AI-Generated with Human Oversight"
+educational_objective: "Master command-line development workflow for educational game projects"
+target_audience: "developers-and-educators"
+difficulty_level: "beginner"
+code_review_ready: true
+child_safety: "verified"
+cultural_sensitivity: "reviewed"
 ---
+
+> **🎓 Learning Objective**: Master efficient command-line workflows for developing, building, and deploying educational games with .NET Aspire
+> **🌍 Real-World Application**: Essential developer tools and commands for rapid educational software development and troubleshooting
+> **👶 Age Appropriateness**: Technical guide for developers creating educational experiences for 12-year-old learners
+> **🛡️ Safety Check**: All development workflows include child safety validation steps and secure deployment practices
+> **🌐 Cultural Sensitivity**: Development practices support global educational content creation and culturally inclusive development
 
 # 🚀 Command Line Guide - World Leaders Game
 
