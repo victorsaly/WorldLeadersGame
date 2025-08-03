@@ -1,14 +1,10 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Add PostgreSQL database for the educational game
-var postgres = builder.AddPostgres("postgres")
-    .WithEnvironment("POSTGRES_DB", "worldleaders");
+// Educational game now uses in-memory database for simplified development
+// No external database dependencies required for this educational application
 
-var database = postgres.AddDatabase("worldleadersdb");
-
-// Add the Game API service
-var apiService = builder.AddProject("worldleaders-api", "../WorldLeaders.API/WorldLeaders.API.csproj")
-    .WithReference(database);
+// Add the Game API service with in-memory database
+var apiService = builder.AddProject("worldleaders-api", "../WorldLeaders.API/WorldLeaders.API.csproj");
 
 // Add the Blazor Web application  
 var webApp = builder.AddProject("worldleaders-web", "../WorldLeaders.Web/WorldLeaders.Web.csproj")
