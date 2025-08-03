@@ -26,13 +26,13 @@
       <div class="nav-menu" id="main-menu">
         <ul class="nav-links">
           {% assign pages = site.header_pages | default: site.pages %}
-          {% for page in pages %}
-            {% if page.title %}
+          {% for nav_page in pages %}
+            {% if nav_page.title %}
               <li class="nav-item">
-                <a href="{{ page.url | relative_url }}" 
-                   class="nav-link{% if page.url == '/' and request.path == '/' %} active{% elsif page.url != '/' and request.path contains page.url %} active{% endif %}"
-                   {% if page.url == page_url %}aria-current="page"{% endif %}>
-                  {{ page.title }}
+                <a href="{{ nav_page.url | relative_url }}" 
+                   class="nav-link{% if nav_page.url == page.url %} active{% endif %}"
+                   {% if nav_page.url == page.url %}aria-current="page"{% endif %}>
+                  {{ nav_page.title }}
                 </a>
               </li>
             {% endif %}
