@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "About the Project"
+title: "About"
 subtitle: "AI-First Father-Son Educational Software Development Experiment"
 permalink: /about/
 ---

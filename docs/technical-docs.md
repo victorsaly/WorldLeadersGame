@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Technical Documentation"
+title: "Tech"
 subtitle: "Comprehensive Implementation Guides & Architecture Documentation"
 permalink: /technical-docs/
 ---

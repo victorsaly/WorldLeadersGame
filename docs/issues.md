@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "AI-Generated Issues"
+title: "Issues"
 subtitle: "Systematic Problem-Solving for Educational Game Development"
 date: 2025-08-03
 permalink: /issues/

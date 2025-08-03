@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Development Blog"
+title: "Blog"
 subtitle: "Real-Time AI-Led Game Creation Journey Documentation"
 permalink: /blog/
 ---

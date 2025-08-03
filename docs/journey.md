@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Development Journey"
+title: "Journey"
 subtitle: "18-Week AI-First Educational Software Development Documentation"
 permalink: /journey/
 ---
