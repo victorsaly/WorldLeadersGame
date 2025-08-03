@@ -14,6 +14,10 @@ author:
   twitter_username: victorsaly
   github_username: victorsaly
 
+# Additional author reference for compatibility
+name: "Victor & Oliver Saly"
+email: "info@victorsaly.com"
+
 # Build settings
 markdown: kramdown
 highlighter: rouge

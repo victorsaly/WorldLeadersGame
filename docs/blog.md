@@ -56,34 +56,34 @@ Personal insights into collaborative creative direction and educational validati
 
 ---
 
-## 🗂️ **Archive by Category**
+## Archive by Category
 
-### 🤖 AI Development
+### AI Development
 
 - [AI Prompt Engineering Patterns](/journey/technical-deep-dives/ai-prompt-engineering/)
 - [GitHub Copilot Instruction Development](/technical/copilot-instructions/)
 - [Autonomous Code Generation Examples](/technical/ai-code-examples/)
 
-### 🎮 Game Development
+### Game Development
 
 - [Educational Game Architecture](/journey/milestones/milestone-01-architecture/)
 - [Real-World Data Integration](/technical/data-integration/)
 - [Child-Friendly UI/UX Patterns](/technical/child-ui-patterns/)
 
-### 📊 Weekly Progress
+### Weekly Progress
 
 - [Week 1: Planning & Architecture](/journey/week-by-week/week-01-planning/)
 - [Week 2: Foundation Implementation](/journey/week-by-week/week-02-foundation/)
 - [Week 3: Game Engine Development](/journey/week-by-week/week-03-game-engine/)
 
-### 🏆 Major Milestones
+### Major Milestones
 
 - [Milestone 1: Complete Architecture Built](/journey/milestones/milestone-01-architecture/)
 - [Milestone 2: First Playable Version](/journey/milestones/milestone-02-mvp/) _(Coming Soon)_
 
 ---
 
-## 📱 **Follow Our Journey**
+## Follow Our Journey
 
 - **RSS Feed**: [Subscribe to updates](/feed.xml)
 - **GitHub**: [Watch repository for real-time commits](https://github.com/victorsaly/WorldLeadersGame)
@@ -93,7 +93,7 @@ Personal insights into collaborative creative direction and educational validati
 ---
 
 <div class="newsletter-signup">
-  <h3>🎯 Stay Updated</h3>
+  <h3>Stay Updated</h3>
   <p>Want to follow our AI-first development experiment? <strong>Star our GitHub repository</strong> and <strong>watch for updates</strong> to get notified of major milestones and breakthrough insights.</p>
   <a href="https://github.com/victorsaly/WorldLeadersGame" class="cta-button">Follow on GitHub →</a>
 </div>
