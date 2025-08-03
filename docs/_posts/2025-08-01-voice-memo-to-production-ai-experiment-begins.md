@@ -6,6 +6,10 @@ date: 2025-08-01
 categories: ["development", "ai", "education"]
 tags: ["artificial-intelligence", "educational-technology", "software-development", "collaboration", "child-led-design"]
 author: "Victor Saly"
+pin: true
+image:
+  path: /assets/game-block-ai-image.png
+  alt: AI-generated game foundation architecture
 excerpt: "Everything started with a five-minute voice memo from my son describing his dream educational game. Instead of filing it away as a 'someday' project, we decided to attempt something unprecedented: let AI build it with 95% autonomy while we serve as creative directors."
 reading_time: "8 min read"
 featured_image: "/assets/game-block-ai-image.png"
@@ -15,7 +19,7 @@ educational_objective: "Demonstrate AI-first development methodology for educati
 target_audience: "developers, educators, and parents interested in AI-assisted learning"
 child_safety: "verified"
 cultural_sensitivity: "reviewed"
-pin: true
+child_safety_verified: true
 ---
 
 > **🎓 Learning Objective**: Learn how AI can autonomously transform creative educational concepts into production-ready software with minimal human intervention

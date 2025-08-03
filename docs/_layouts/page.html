@@ -2,46 +2,381 @@
 layout: default
 ---
 
+<!-- Reading progress indicator -->
+<div class="reading-progress" id="reading-progress"></div>
+
 <div class="page-content">
   <div class="wrapper">
     <div class="main-content">
+      
+      <!-- Breadcrumb navigation for better orientation -->
+      {% if page.collection %}
+        <nav class="breadcrumb" aria-label="Breadcrumb navigation">
+          <a href="{{ '/' | relative_url }}">🏠 Home</a>
+          <span class="breadcrumb-separator">→</span>
+          {% case page.collection %}
+            {% when 'journey' %}
+              <a href="{{ '/journey/' | relative_url }}">📝 Journey</a>
+            {% when 'technical' %}
+              <a href="{{ '/technical-docs/' | relative_url }}">🛠️ Technical</a>
+            {% when 'milestones' %}
+              <a href="{{ '/milestones/' | relative_url }}">🏆 Milestones</a>
+            {% when 'issues' %}
+              <a href="{{ '/issues/' | relative_url }}">🎯 Issues</a>
+            {% when 'posts' %}
+              <a href="{{ '/blog/' | relative_url }}">📰 Blog</a>
+          {% endcase %}
+          <span class="breadcrumb-separator">→</span>
+          <span class="current-page">{{ page.title }}</span>
+        </nav>
+      {% endif %}
+      
+      <!-- Page header with enhanced metadata -->
       {% if page.title %}
         <header class="page-header">
           <h1>{{ page.title }}</h1>
           {% if page.subtitle %}
             <p class="page-subtitle">{{ page.subtitle }}</p>
           {% endif %}
-          {% if page.date %}
-            <div class="page-meta">
+          
+          <!-- Enhanced page metadata -->
+          <div class="page-meta">
+            {% if page.date %}
               <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%B %d, %Y" }}</time>
-              {% if page.category %} • <span class="category">{{ page.category }}</span>{% endif %}
-              {% if page.tags %} • Tags: {{ page.tags | join: ", " }}{% endif %}
+            {% endif %}
+            
+            {% if page.category %}
+              <span class="category-tag">{{ page.category }}</span>
+            {% endif %}
+            
+            {% if page.status %}
+              <span class="status-indicator status-{{ page.status }}">{{ page.status | capitalize }}</span>
+            {% endif %}
+            
+            {% if page.ai_autonomy %}
+              <span class="ai-autonomy">🤖 {{ page.ai_autonomy }} AI Autonomy</span>
+            {% endif %}
+            
+            {% if page.reading_time %}
+              <span class="reading-time">⏱️ {{ page.reading_time }}</span>
+            {% endif %}
+            
+            {% if page.educational_objective %}
+              <span class="educational-indicator">🎓 Educational Content</span>
+            {% endif %}
+          </div>
+          
+          <!-- Tags with mobile-friendly design -->
+          {% if page.tags and page.tags.size > 0 %}
+            <div class="tags-container">
+              {% for tag in page.tags %}
+                <span class="tag">{{ tag }}</span>
+              {% endfor %}
             </div>
           {% endif %}
         </header>
       {% endif %}
 
+      <!-- Main content -->
       <article>
         {{ content }}
       </article>
+      
+      <!-- Educational objective callout -->
+      {% if page.educational_objective %}
+        <div class="educational-callout">
+          <h4>🎯 Learning Objective</h4>
+          <p>{{ page.educational_objective }}</p>
+        </div>
+      {% endif %}
 
-      {% if page.collection == 'journey' or page.collection == 'technical' or page.collection == 'milestones' %}
-        <nav class="page-navigation">
-          {% if page.previous %}
-            <a href="{{ page.previous.url | relative_url }}" class="nav-previous">
-              ← {{ page.previous.title }}
+      <!-- Collection navigation (prev/next) with enhanced mobile support -->
+      {% if page.collection == 'journey' or page.collection == 'technical' or page.collection == 'milestones' or page.collection == 'issues' %}
+        <nav class="collection-nav" aria-label="Page navigation">
+          {% comment %} Find previous and next pages in collection {% endcomment %}
+          {% assign collection_pages = site[page.collection] | sort: 'date' %}
+          {% for p in collection_pages %}
+            {% if p.url == page.url %}
+              {% assign current_index = forloop.index0 %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+          
+          {% if current_index > 0 %}
+            {% assign prev_page = collection_pages[current_index | minus: 1] %}
+            <a href="{{ prev_page.url | relative_url }}" class="nav-previous">
+              ← {{ prev_page.title | truncate: 40 }}
             </a>
+          {% else %}
+            <span></span>
           {% endif %}
-          {% if page.next %}
-            <a href="{{ page.next.url | relative_url }}" class="nav-next">
-              {{ page.next.title }} →
+          
+          {% assign next_index = current_index | plus: 1 %}
+          {% if next_index < collection_pages.size %}
+            {% assign next_page = collection_pages[next_index] %}
+            <a href="{{ next_page.url | relative_url }}" class="nav-next">
+              {{ next_page.title | truncate: 40 }} →
             </a>
           {% endif %}
         </nav>
       {% endif %}
+      
+      <!-- Related content suggestions -->
+      {% if page.collection and page.collection != 'posts' %}
+        <aside class="related-content">
+          <h3>🔗 Related Content</h3>
+          <div class="related-grid">
+            {% assign related_posts = site.posts | where_exp: "post", "post.tags contains page.tags.first" | limit: 2 %}
+            {% for post in related_posts %}
+              <div class="related-card nav-card">
+                <h4><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h4>
+                <p>{{ post.excerpt | strip_html | truncate: 100 }}</p>
+                <small>{{ post.date | date: "%B %d, %Y" }}</small>
+              </div>
+            {% endfor %}
+            
+            {% comment %} Add related collection pages {% endcomment %}
+            {% assign related_pages = site[page.collection] | where_exp: "p", "p.url != page.url" | sample: 2 %}
+            {% for p in related_pages %}
+              <div class="related-card nav-card">
+                <h4><a href="{{ p.url | relative_url }}">{{ p.title }}</a></h4>
+                <p>{{ p.content | strip_html | truncate: 100 }}</p>
+                <small>{{ p.date | date: "%B %d, %Y" }}</small>
+              </div>
+            {% endfor %}
+          </div>
+        </aside>
+      {% endif %}
     </div>
   </div>
 </div>
+
+<style>
+/* Enhanced page header styles */
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-subtitle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--muted-foreground);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.page-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+
+.page-meta time {
+  color: var(--medium-gray);
+  font-weight: 500;
+}
+
+.category-tag {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ai-autonomy {
+  background: var(--brand-accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.educational-indicator {
+  background: var(--educational-green);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Enhanced tags container with mobile optimization */
+.tags-container {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: var(--subtle-gray);
+  border: 1px solid var(--border);
+  color: var(--muted-foreground);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  border-color: var(--accent);
+}
+
+/* Educational callout styling */
+.educational-callout {
+  background: linear-gradient(135deg, var(--educational-green), var(--learning-blue));
+  color: white;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  margin: 2rem 0;
+  border-left: 4px solid var(--accent-yellow);
+}
+
+.educational-callout h4 {
+  color: white;
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+}
+
+.educational-callout p {
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Related content grid */
+.related-content {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.related-card {
+  padding: 1rem;
+}
+
+.related-card h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.related-card a {
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.related-card a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.related-card p {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.related-card small {
+  color: var(--medium-gray);
+  font-size: 0.75rem;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .page-header {
+    text-align: left;
+    padding-bottom: 1rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .page-meta {
+    justify-content: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .tags-container {
+    justify-content: flex-start;
+  }
+  
+  .collection-nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .collection-nav a {
+    max-width: 100%;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .related-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .breadcrumb {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* High contrast mode for accessibility */
+@media (prefers-contrast: high) {
+  .status-indicator,
+  .category-tag,
+  .ai-autonomy,
+  .educational-indicator {
+    border: 2px solid currentColor;
+  }
+  
+  .educational-callout {
+    border: 2px solid var(--accent-yellow);
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .tag,
+  .nav-card,
+  .related-card {
+    transition: none;
+  }
+  
+  .tag:hover,
+  .nav-card:hover,
+  .related-card:hover {
+    transform: none;
+  }
+}
+</style>
 
 <style>
 .page-header {
