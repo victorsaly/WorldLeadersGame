@@ -10,6 +10,12 @@ namespace WorldLeaders.Infrastructure.Services;
 /// </summary>
 public class ContentModerationService : IContentModerationService
 {
+    // Constants for age-appropriate content validation
+    private const int MaxAgeAppropriateWordCount = 80; // Approximately 400 characters
+    
+    // Configurable inappropriate terms - can be updated without code changes
+    private readonly string[] _inappropriateTerms = { "stupid", "dumb", "idiot", "hate" };
+
     /// <summary>
     /// Comprehensive content validation for child safety
     /// Combines multiple validation layers for maximum protection
@@ -148,7 +154,7 @@ public class ContentModerationService : IContentModerationService
         var words = content.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
         // Age-appropriate length (not too long for 12-year-olds)
-        if (words.Length > 80) // Approximately 400 characters
+        if (words.Length > MaxAgeAppropriateWordCount)
             return false;
 
         // Check for overly complex vocabulary
@@ -168,8 +174,7 @@ public class ContentModerationService : IContentModerationService
     private bool ContainsInappropriateLanguage(string content)
     {
         // Check for truly inappropriate language for children - be more lenient for educational content
-        var inappropriateTerms = new[] { "stupid", "dumb", "idiot", "hate" };
-        return inappropriateTerms.Any(term => content.Contains(term));
+        return _inappropriateTerms.Any(term => content.Contains(term));
     }
 
     private bool ContainsScaryContent(string content)
