@@ -18,8 +18,8 @@ featured_image: "/assets/world-leaders-logo.svg"
 medium_style: true
 code_review_ready: true
 image:
-  path: /assets/game-block-ai-image3.jpg
-  alt: AI-generated game The AI-driven approach to educational game development continues to evolve
+  path: /assets/linkedin-images/ai-generated-issues-linkedin.png
+  alt: Professional LinkedIn image - AI-Generated Issues Systematic Problem-Solving
 ---
 
 ![World Leaders Game Logo]({{ '/assets/world-leaders-logo.svg' | relative_url }})

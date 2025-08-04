@@ -13,6 +13,9 @@ tags:
   ]
 author: "Victor Saly"
 excerpt: "Implementing six distinct AI personalities with comprehensive child safety validation for educational game mentorship - achieving 92% AI autonomy while maintaining 100% child protection."
+image:
+  path: /assets/linkedin-images/ai-agent-personality-linkedin.png
+  alt: Professional LinkedIn image - AI Agent Personality System Child-Safe Education
 ---
 
 **How we created 6 AI personalities that safely teach 12-year-olds geography, economics, and languages**
@@ -374,12 +377,12 @@ Azure AI operates on **pay-as-you-go** pricing - ideal for educational projects 
 
 #### **Real-World Educational Costs**
 
-| Usage Scenario | Daily Interactions | Monthly Cost | Per Student |
-|----------------|-------------------|--------------|-------------|
-| **Individual Learning** | 10-20 AI chats | £8-15 | £8-15 |
-| **Small Classroom** | 50-100 AI chats | £25-40 | £2.50-4.00 |
-| **Home Education** | 5-15 AI chats | £5-12 | £5-12 |
-| **Tutoring Sessions** | 20-30 AI chats | £15-25 | £15-25 |
+| Usage Scenario          | Daily Interactions | Monthly Cost | Per Student |
+| ----------------------- | ------------------ | ------------ | ----------- |
+| **Individual Learning** | 10-20 AI chats     | £8-15        | £8-15       |
+| **Small Classroom**     | 50-100 AI chats    | £25-40       | £2.50-4.00  |
+| **Home Education**      | 5-15 AI chats      | £5-12        | £5-12       |
+| **Tutoring Sessions**   | 20-30 AI chats     | £15-25       | £15-25      |
 
 #### **What You Pay For**
 

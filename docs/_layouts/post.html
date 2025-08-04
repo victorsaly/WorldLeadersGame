@@ -147,7 +147,19 @@ layout: default
         {% endif %}
       </header>
 
+     
+
       <div class="post-content" itemprop="articleBody">
+
+         <!-- Featured image display -->
+      {% if page.image.path %}
+        <div style="text-align: center; margin: 20px 0;">
+          <img src="{{ page.image.path | relative_url }}" alt="{{ page.image.alt | default: page.title }}" style="max-width: 100%; height: auto;">
+          <br>
+          <em>{{ page.image.alt | default: page.title }}</em>
+        </div>
+      {% endif %}
+      
         {{ content }}
       </div>
 

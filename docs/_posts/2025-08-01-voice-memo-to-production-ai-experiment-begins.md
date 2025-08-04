@@ -15,8 +15,8 @@ tags:
 author: "Victor Saly"
 pin: true
 image:
-  path: /assets/game-block-ai-image.png
-  alt: AI-generated game foundation architecture
+  path: /assets/linkedin-images/voice-memo-to-production-linkedin.png
+  alt: Professional LinkedIn image - Voice Memo to Production AI Development
 educational_objective: "Demonstrates how AI can transform child creativity into production-ready educational software"
 child_safety_verified: true
 ---

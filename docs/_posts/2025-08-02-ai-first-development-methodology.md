@@ -4,11 +4,18 @@ title: "AI-First Development"
 subtitle: "Achieving 95% Autonomous Code Generation"
 date: 2025-08-02
 categories: ["development", "ai", "education"]
-tags: ["artificial-intelligence", "github-copilot", "software-development", "methodology", "educational-software"]
+tags:
+  [
+    "artificial-intelligence",
+    "github-copilot",
+    "software-development",
+    "methodology",
+    "educational-software",
+  ]
 author: "Victor Saly"
 image:
-  path: /assets/game-block-ai-image2.jpg
-  alt: AI-generated game blocks showing autonomous development results
+  path: /assets/linkedin-images/ai-first-development-linkedin.png
+  alt: Professional LinkedIn image - AI-First Development Methodology
 educational_objective: "Demonstrates systematic approach to AI-led educational software development with high autonomy"
 child_safety_verified: true
 ---

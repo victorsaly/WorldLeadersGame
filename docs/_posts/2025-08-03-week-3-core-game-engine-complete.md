@@ -14,8 +14,8 @@ tags:
   ]
 excerpt: "Week 3 breakthrough: GitHub Copilot achieves 95% autonomy while building a complete game engine with interactive dice mechanics, resource management, and child-friendly UI components. The AI-first approach delivers 1,600+ lines of production-ready code."
 image:
-  path: /assets/game-block-ai-image2.jpg
-  alt: AI-generated game engine architecture with educational components
+  path: /assets/linkedin-images/week-3-core-game-engine-complete-linkedin.png
+  alt: Professional LinkedIn image - Week 3 Core Game Engine Complete
 ---
 
 The breakthrough moment came when GitHub Copilot generated 1,600+ lines of production-ready game engine code with 95% autonomy, transforming our educational vision into a fully functional system that teaches 12-year-olds career progression, resource management, and strategic thinking through interactive gameplay.
