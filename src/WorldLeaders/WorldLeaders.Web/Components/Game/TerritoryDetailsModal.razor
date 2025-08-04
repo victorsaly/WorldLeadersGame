@@ -1,0 +1,496 @@
+@* 
+Territory Details Modal Component
+Context: Educational geography and culture learning modal for 12-year-old players
+Educational Objective: Deep learning about countries, cultures, languages, and geography
+Safety Requirements: Age-appropriate content, encouraging messages, child-friendly design
+*@
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Enums
+@using WorldLeaders.Shared.Services
+@inject ITerritoryService TerritoryService
+@inject ILogger<TerritoryDetailsModal> Logger
+
+@if (isVisible && selectedTerritory != null)
+{
+    <div class="modal-overlay" @onclick="CloseModal">
+        <div class="modal-content" @onclick:stopPropagation="true">
+            <div class="modal-header">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-blue-800">
+                        🌍 @selectedTerritory.CountryName
+                    </h2>
+                    <button @onclick="CloseModal" class="close-button">
+                        ❌
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                @if (isLoading)
+                {
+                    <div class="text-center py-8">
+                        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                        <p class="mt-2 text-blue-600">Loading details...</p>
+                    </div>
+                }
+                else if (territoryDetails != null)
+                {
+                    <!-- Country Header with Flag -->
+                    <div class="country-header">
+                        <div class="flag-container">
+                            <img src="@territoryDetails.FlagUrl" 
+                                 alt="@territoryDetails.CountryName flag" 
+                                 class="country-flag">
+                            <div class="tier-badge tier-@territoryDetails.Tier.ToString().ToLower()">
+                                @GetTierEmoji(territoryDetails.Tier) @territoryDetails.Tier
+                            </div>
+                        </div>
+                        <div class="country-info">
+                            <h3 class="text-xl font-bold text-blue-800">@territoryDetails.CountryName</h3>
+                            <p class="text-blue-600">Capital: @territoryDetails.Capital</p>
+                            <p class="text-blue-600">Region: @territoryDetails.Region</p>
+                            <p class="text-sm text-gray-600">Population: @territoryDetails.Population.ToString("N0") people</p>
+                        </div>
+                    </div>
+
+                    <!-- Educational Fact -->
+                    <div class="educational-section bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                        <h4 class="font-bold text-yellow-800 mb-2">🧠 Did You Know?</h4>
+                        <p class="text-yellow-700">@territoryDetails.EducationalFact</p>
+                    </div>
+
+                    <!-- Territory Information -->
+                    <div class="territory-stats grid grid-cols-2 gap-4 mb-4">
+                        <div class="stat-card">
+                            <div class="stat-icon">💰</div>
+                            <div>
+                                <p class="stat-label">Purchase Cost</p>
+                                <p class="stat-value">$@territoryDetails.Cost</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⭐</div>
+                            <div>
+                                <p class="stat-label">Reputation Required</p>
+                                <p class="stat-value">@territoryDetails.ReputationRequired%</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📈</div>
+                            <div>
+                                <p class="stat-label">Monthly Income</p>
+                                <p class="stat-value">$@territoryDetails.MonthlyIncome</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🌍</div>
+                            <div>
+                                <p class="stat-label">GDP</p>
+                                <p class="stat-value">$@territoryDetails.GdpInBillions.ToString("F1")B</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Languages Section -->
+                    @if (territoryDetails.OfficialLanguages.Any())
+                    {
+                        <div class="languages-section mb-4">
+                            <h4 class="font-bold text-purple-800 mb-2">🗣️ Languages Spoken</h4>
+                            <div class="flex flex-wrap gap-2">
+                                @foreach (var language in territoryDetails.OfficialLanguages)
+                                {
+                                    <span class="language-tag">@language</span>
+                                }
+                            </div>
+                            @if (territoryDetails.IsOwned)
+                            {
+                                <button @onclick="StartLanguageChallenge" class="btn-child-friendly bg-purple-500 mt-2">
+                                    🎯 Practice Languages
+                                </button>
+                            }
+                        </div>
+                    }
+
+                    <!-- Geographic Features -->
+                    @if (territoryDetails.GeographicFeatures.Any())
+                    {
+                        <div class="features-section mb-4">
+                            <h4 class="font-bold text-green-800 mb-2">🏔️ Geographic Features</h4>
+                            <div class="feature-grid">
+                                @foreach (var feature in territoryDetails.GeographicFeatures)
+                                {
+                                    <div class="feature-item">🌄 @feature</div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Cultural Highlights -->
+                    @if (territoryDetails.CulturalHighlights.Any())
+                    {
+                        <div class="culture-section mb-4">
+                            <h4 class="font-bold text-orange-800 mb-2">🎭 Cultural Highlights</h4>
+                            <div class="culture-grid">
+                                @foreach (var highlight in territoryDetails.CulturalHighlights)
+                                {
+                                    <div class="culture-item">🎨 @highlight</div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Cultural Context Button -->
+                    <div class="cultural-context mb-4">
+                        <button @onclick="LoadCulturalContext" 
+                                class="btn-child-friendly bg-orange-500 w-full"
+                                disabled="@isLoadingCulturalContext">
+                            @if (isLoadingCulturalContext)
+                            {
+                                <span>🔄 Loading...</span>
+                            }
+                            else
+                            {
+                                <span>📚 Learn More About @territoryDetails.CountryName</span>
+                            }
+                        </button>
+                    </div>
+
+                    <!-- Cultural Context Display -->
+                    @if (culturalContext != null)
+                    {
+                        <div class="cultural-context-display bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
+                            <h4 class="font-bold text-blue-800 mb-3">📖 About @culturalContext.CountryName</h4>
+                            
+                            <div class="context-section mb-3">
+                                <h5 class="font-semibold text-blue-700 mb-1">🏛️ Historical Significance</h5>
+                                <p class="text-blue-600 text-sm">@culturalContext.HistoricalSignificance</p>
+                            </div>
+
+                            <div class="context-section mb-3">
+                                <h5 class="font-semibold text-blue-700 mb-1">🎪 Cultural Traditions</h5>
+                                <ul class="text-blue-600 text-sm">
+                                    @foreach (var tradition in culturalContext.CulturalTraditions)
+                                    {
+                                        <li>• @tradition</li>
+                                    }
+                                </ul>
+                            </div>
+
+                            <div class="context-section mb-3">
+                                <h5 class="font-semibold text-blue-700 mb-1">🗺️ Geography Lesson</h5>
+                                <p class="text-blue-600 text-sm">@culturalContext.GeographyLesson</p>
+                            </div>
+
+                            <div class="context-section">
+                                <h5 class="font-semibold text-blue-700 mb-1">💡 Economics Lesson</h5>
+                                <p class="text-blue-600 text-sm">@culturalContext.EconomicLesson</p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        @if (territoryDetails.IsOwned)
+                        {
+                            <div class="owned-territory">
+                                <div class="success-message">
+                                    <span class="text-green-700 font-bold">🎉 You own this territory!</span>
+                                    <p class="text-green-600 text-sm">It generates $@territoryDetails.MonthlyIncome monthly income</p>
+                                </div>
+                            </div>
+                        }
+                        else if (territoryDetails.IsAvailable)
+                        {
+                            <div class="acquisition-section">
+                                @if (CanAfford(territoryDetails))
+                                {
+                                    <button @onclick="AcquireTerritory" 
+                                            class="btn-child-friendly bg-green-500 w-full"
+                                            disabled="@isAcquiring">
+                                        @if (isAcquiring)
+                                        {
+                                            <span>🔄 Acquiring...</span>
+                                        }
+                                        else
+                                        {
+                                            <span>🏴 Acquire @territoryDetails.CountryName for $@territoryDetails.Cost</span>
+                                        }
+                                    </button>
+                                }
+                                else
+                                {
+                                    <div class="requirements-not-met">
+                                        <p class="text-red-600 font-semibold mb-2">📝 Requirements to acquire:</p>
+                                        @if (PlayerIncome < territoryDetails.Cost)
+                                        {
+                                            <p class="text-red-500 text-sm">💰 Need $@territoryDetails.Cost (you have $@PlayerIncome)</p>
+                                        }
+                                        @if (PlayerReputation < territoryDetails.ReputationRequired)
+                                        {
+                                            <p class="text-red-500 text-sm">⭐ Need @territoryDetails.ReputationRequired% reputation (you have @PlayerReputation%)</p>
+                                        }
+                                        <p class="text-blue-600 text-sm mt-2">💡 Keep playing to meet these requirements!</p>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="not-available">
+                                <p class="text-gray-600">This territory is not currently available for acquisition.</p>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public TerritoryDto? SelectedTerritory { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback<Guid> OnAcquire { get; set; }
+    [Parameter] public EventCallback OnLanguageChallenge { get; set; }
+    [Parameter] public int PlayerIncome { get; set; }
+    [Parameter] public int PlayerReputation { get; set; }
+
+    private TerritoryDetailDto? territoryDetails;
+    private CulturalContextDto? culturalContext;
+    private bool isLoading = false;
+    private bool isLoadingCulturalContext = false;
+    private bool isAcquiring = false;
+    private bool isVisible => IsVisible;
+    private TerritoryDto? selectedTerritory => SelectedTerritory;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (isVisible && selectedTerritory != null && 
+            (territoryDetails == null || territoryDetails.Id != selectedTerritory.Id))
+        {
+            await LoadTerritoryDetails();
+        }
+    }
+
+    private async Task LoadTerritoryDetails()
+    {
+        try
+        {
+            isLoading = true;
+            culturalContext = null; // Reset cultural context
+            StateHasChanged();
+
+            territoryDetails = await TerritoryService.GetTerritoryDetailsAsync(selectedTerritory!.Id);
+            
+            Logger.LogInformation("Loaded details for territory {TerritoryName}", territoryDetails.CountryName);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading territory details for {TerritoryId}", selectedTerritory?.Id);
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadCulturalContext()
+    {
+        if (territoryDetails == null) return;
+
+        try
+        {
+            isLoadingCulturalContext = true;
+            StateHasChanged();
+
+            culturalContext = await TerritoryService.GetTerritoryCulturalContextAsync(territoryDetails.Id);
+            
+            Logger.LogInformation("Loaded cultural context for territory {TerritoryName}", territoryDetails.CountryName);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading cultural context for territory {TerritoryId}", territoryDetails.Id);
+        }
+        finally
+        {
+            isLoadingCulturalContext = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task AcquireTerritory()
+    {
+        if (territoryDetails == null) return;
+
+        try
+        {
+            isAcquiring = true;
+            StateHasChanged();
+
+            await OnAcquire.InvokeAsync(territoryDetails.Id);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error acquiring territory {TerritoryId}", territoryDetails.Id);
+        }
+        finally
+        {
+            isAcquiring = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task StartLanguageChallenge()
+    {
+        await OnLanguageChallenge.InvokeAsync();
+    }
+
+    private async Task CloseModal()
+    {
+        await OnClose.InvokeAsync();
+    }
+
+    private bool CanAfford(TerritoryDetailDto territory)
+    {
+        return PlayerIncome >= territory.Cost && PlayerReputation >= territory.ReputationRequired;
+    }
+
+    private string GetTierEmoji(TerritoryTier tier) => tier switch
+    {
+        TerritoryTier.Small => "🏘️",
+        TerritoryTier.Medium => "🏙️",
+        TerritoryTier.Major => "🏛️",
+        _ => "🌍"
+    };
+}
+
+<style>
+.modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50;
+}
+
+.modal-content {
+    @apply bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-screen overflow-y-auto;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.modal-header {
+    @apply bg-blue-100 p-4 border-b border-blue-200;
+}
+
+.modal-body {
+    @apply p-6;
+}
+
+.close-button {
+    @apply text-red-500 hover:text-red-700 text-xl font-bold transition-colors;
+}
+
+.country-header {
+    @apply flex items-start gap-4 mb-6;
+}
+
+.flag-container {
+    @apply relative;
+}
+
+.country-flag {
+    @apply w-32 h-20 object-cover rounded-lg shadow-md;
+}
+
+.tier-badge {
+    @apply absolute -top-2 -right-2 text-xs px-2 py-1 rounded-full font-bold;
+}
+
+.tier-small {
+    @apply bg-green-100 text-green-800;
+}
+
+.tier-medium {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.tier-major {
+    @apply bg-red-100 text-red-800;
+}
+
+.country-info {
+    @apply flex-1;
+}
+
+.educational-section {
+    @apply rounded-lg;
+}
+
+.territory-stats {
+    @apply mb-4;
+}
+
+.stat-card {
+    @apply bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center gap-3;
+}
+
+.stat-icon {
+    @apply text-2xl;
+}
+
+.stat-label {
+    @apply text-xs text-gray-600 font-medium;
+}
+
+.stat-value {
+    @apply text-lg font-bold text-blue-800;
+}
+
+.language-tag {
+    @apply bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.feature-grid, .culture-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-2;
+}
+
+.feature-item, .culture-item {
+    @apply bg-gray-50 text-gray-700 px-3 py-2 rounded text-sm;
+}
+
+.btn-child-friendly {
+    @apply px-4 py-2 rounded-lg font-bold text-white transition-all duration-200;
+    @apply hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-child-friendly:disabled {
+    @apply opacity-50 cursor-not-allowed hover:scale-100;
+}
+
+.success-message {
+    @apply bg-green-50 border-2 border-green-200 rounded-lg p-4 text-center;
+}
+
+.requirements-not-met {
+    @apply bg-red-50 border-2 border-red-200 rounded-lg p-4;
+}
+
+.cultural-context-display {
+    @apply animation-fade-in;
+}
+
+.context-section {
+    @apply border-b border-blue-100 pb-2;
+}
+
+.context-section:last-child {
+    @apply border-b-0 pb-0;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animation-fade-in {
+    animation: fade-in 0.3s ease-out;
+}
+</style>
