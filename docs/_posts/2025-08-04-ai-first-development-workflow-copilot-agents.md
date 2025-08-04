@@ -22,21 +22,40 @@ Our workflow transforms traditional software development by putting AI in the dr
 
 ```mermaid
 graph TD
-    A[Voice Memo/Idea] --> B[AI Issue Generation]
-    B --> C[GitHub Issue Creation]
-    C --> D[Copilot Agent Analysis]
-    D --> E[AI Code Generation]
-    E --> F[Educational Safety Validation]
-    F --> G[Pull Request Creation]
-    G --> H[AI Code Review]
-    H --> I[Human Educational Review]
-    I --> J[Merge to Main]
-    J --> K[Documentation Update]
+    A[🎙️ Voice Memo/Idea] --> B{🤖 AI Analysis}
+    B -->|Educational Context| C[📋 AI Issue Generation]
+    C --> D[📝 GitHub Issue Created]
+    D --> E{👨‍💻 Copilot Agent}
+    E -->|@github-copilot implement| F[🏗️ Architecture Design]
+    F --> G[💻 Code Generation]
+    G --> H{🛡️ Safety Pipeline}
+    H -->|✅ Pass| I[📄 Auto PR Creation]
+    H -->|❌ Fail| J[🔄 Safety Fallback]
+    J --> G
+    I --> K{👨‍🎓 Human Review}
+    K -->|Educational ✅| L[🔀 Merge to Main]
+    K -->|Needs Changes| M[🔧 AI Refinement]
+    M --> G
+    L --> N[📚 Auto Documentation]
+    N --> O[🔄 Learning Loop]
+    O -->|Feedback| B
     
-    style A fill:#e1f5fe
-    style F fill:#fff3e0
-    style I fill:#f3e5f5
-    style K fill:#e8f5e8
+    %% Styling for different phases
+    classDef aiPhase fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef safetyPhase fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef humanPhase fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef outputPhase fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    
+    class A,B,C,E,F,G,M aiPhase
+    class H,J safetyPhase
+    class D,K humanPhase
+    class I,L,N,O outputPhase
+    
+    %% Add interaction arrows with labels
+    B -.->|"95% AI Autonomy"| E
+    K -.->|"5% Human Oversight"| L
+    O -.->|"Continuous Improvement"| B
+    H -.->|"Multi-layer Validation"| I
 ```
 
 ---
@@ -110,20 +129,45 @@ Once the issue is created, we use GitHub Copilot's agent system to handle the im
 
 ```mermaid
 sequenceDiagram
-    participant H as Human
-    participant GA as GitHub Agent
-    participant CA as Copilot Agent
-    participant AI as Azure OpenAI
-    participant R as Repository
+    participant 👨‍💻 as Human Developer
+    participant 🤖 as GitHub Copilot
+    participant 🧠 as Claude AI
+    participant 🛡️ as Safety Validator
+    participant 📦 as Repository
+    participant 👨‍🎓 as Educational Reviewer
     
-    H->>GA: Assign issue to Copilot
-    GA->>CA: Analyze issue requirements
-    CA->>AI: Generate implementation strategy
-    AI->>CA: Return code architecture
-    CA->>R: Create feature branch
-    CA->>R: Generate initial code
-    CA->>GA: Request human review
-    GA->>H: Notify for educational validation
+    Note over 👨‍💻,📦: 95% AI Autonomy Workflow
+    
+    👨‍💻->>🤖: @copilot implement issue #32
+    🤖->>🧠: Analyze educational requirements
+    🧠-->>🤖: Educational context + safety needs
+    
+    loop Code Generation Cycle
+        🤖->>📦: Generate feature branch
+        🤖->>📦: Create initial implementation
+        🤖->>🛡️: Validate child safety
+        alt Safety Check Passes
+            🛡️-->>🤖: ✅ Content approved
+        else Safety Check Fails
+            🛡️-->>🤖: ❌ Apply fallback
+            🤖->>🤖: Regenerate with safety constraints
+        end
+    end
+    
+    🤖->>📦: Create comprehensive PR
+    📦->>👨‍🎓: Notify for educational review
+    
+    Note over 👨‍🎓: 5% Human Oversight
+    alt Educational Review Passes
+        👨‍🎓->>📦: ✅ Approve & merge
+        📦->>🤖: Trigger documentation update
+    else Needs Educational Refinement
+        👨‍🎓->>🤖: 🔄 Request changes
+        🤖->>🤖: Refine with educational feedback
+    end
+    
+    📦->>🧠: Send outcome data for learning
+    🧠-->>🤖: Update patterns for next iteration
 ```
 
 ### Copilot Agent Commands
@@ -216,20 +260,42 @@ Every AI-generated feature goes through our comprehensive safety validation:
 
 ```mermaid
 flowchart TD
-    A[AI Generated Code] --> B[Content Moderation]
-    B --> C[Age Appropriateness Check]
-    C --> D[Educational Value Assessment]
-    D --> E[Cultural Sensitivity Review]
-    E --> F{All Checks Pass?}
-    F -->|Yes| G[Approve for Testing]
-    F -->|No| H[Apply Safety Fallbacks]
-    H --> I[Re-validate]
-    I --> F
+    Start([🤖 AI Generated Code]) --> ContentMod{🔍 Content Moderation}
+    ContentMod -->|✅ Clean| AgeCheck{👶 Age Appropriateness}
+    ContentMod -->|❌ Flagged| Block1[🚫 Block & Generate Fallback]
     
-    style B fill:#ffebee
-    style C fill:#e8f5e8
-    style D fill:#e3f2fd
-    style E fill:#f3e5f5
+    AgeCheck -->|✅ 12yr+ Suitable| EduValue{📚 Educational Value}
+    AgeCheck -->|❌ Too Complex/Simple| Block2[🔄 Adjust Reading Level]
+    
+    EduValue -->|✅ High Learning Value| Cultural{🌍 Cultural Sensitivity}
+    EduValue -->|❌ Low Educational Worth| Block3[📈 Enhance Learning Content]
+    
+    Cultural -->|✅ Respectful| Privacy{🔒 Privacy Check}
+    Cultural -->|❌ Potentially Offensive| Block4[🛠️ Cultural Refinement]
+    
+    Privacy -->|✅ COPPA Compliant| Approved([✅ Code Approved])
+    Privacy -->|❌ Privacy Risk| Block5[🔐 Privacy Protection]
+    
+    Block1 --> Regenerate[🔄 AI Regeneration]
+    Block2 --> Regenerate
+    Block3 --> Regenerate
+    Block4 --> Regenerate
+    Block5 --> Regenerate
+    
+    Regenerate --> ContentMod
+    
+    Approved --> Deploy[🚀 Ready for Testing]
+    
+    %% Dynamic styling
+    classDef checkNode fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef blockNode fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+    classDef approvedNode fill:#e8f5e8,stroke:#388e3c,stroke-width:3px
+    classDef processNode fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    
+    class ContentMod,AgeCheck,EduValue,Cultural,Privacy checkNode
+    class Block1,Block2,Block3,Block4,Block5 blockNode
+    class Approved,Deploy approvedNode
+    class Start,Regenerate processNode
 ```
 
 ### Safety Validation Code
@@ -359,15 +425,42 @@ Our workflow includes continuous improvement based on educational outcomes:
 
 ```mermaid
 graph TD
-    A[Educational Outcome Data] --> B[AI Model Feedback]
-    B --> C[Pattern Recognition]
-    C --> D[Improved Prompts]
-    D --> E[Better Code Generation]
-    E --> F[Enhanced Educational Value]
-    F --> A
+    subgraph "🎯 Learning Analytics"
+        A[👨‍🎓 Educational Outcome Data] --> B[📊 Performance Metrics]
+        B --> C[🧠 Pattern Analysis]
+    end
     
-    style A fill:#e8f5e8
-    style F fill:#e3f2fd
+    subgraph "🤖 AI Model Evolution"
+        C --> D[📝 Prompt Refinement]
+        D --> E[🎯 Better Code Generation]
+        E --> F[📈 Enhanced Educational Value]
+    end
+    
+    subgraph "🔄 Feedback Integration"
+        F --> G[👨‍💻 Developer Experience]
+        G --> H[👶 Child Learning Outcomes]
+        H --> I[🏫 Teacher Feedback]
+        I --> A
+    end
+    
+    %% External feedback loops
+    J[🎮 Game Usage Data] -.-> A
+    K[👨‍👩‍👧‍👦 Parent Feedback] -.-> A
+    L[🛡️ Safety Incident Reports] -.-> C
+    
+    %% Improvement indicators
+    F -.->|"Improved Autonomy"| M[📊 95% → 98% AI]
+    H -.->|"Better Learning"| N[🎯 Enhanced Engagement]
+    
+    classDef dataNode fill:#e3f2fd,stroke:#1976d2,stroke-width:2px
+    classDef aiNode fill:#e8f5e8,stroke:#388e3c,stroke-width:2px
+    classDef feedbackNode fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef outcomeNode fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    
+    class A,B,J,K,L dataNode
+    class C,D,E aiNode
+    class F,G,I feedbackNode
+    class H,M,N outcomeNode
 ```
 
 ---
