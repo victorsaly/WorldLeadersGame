@@ -1,0 +1,342 @@
+@* 
+Territory Explorer Component
+Context: Educational game component for 12-year-old players learning world geography
+Educational Objective: Interactive territory discovery and acquisition with cultural learning
+Safety Requirements: Age-appropriate content, positive messaging, child-friendly design
+*@
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Enums
+@using WorldLeaders.Shared.Services
+@inject ITerritoryService TerritoryService
+@inject ILogger<TerritoryExplorer> Logger
+
+<div class="territory-explorer bg-gradient-to-br from-blue-50 to-green-50 rounded-xl p-6 shadow-lg">
+    <div class="text-center mb-6">
+        <h2 class="text-3xl font-bold text-blue-800 mb-2">🌍 Territory Explorer</h2>
+        <p class="text-blue-600 text-lg">Discover amazing countries around the world!</p>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p class="mt-4 text-blue-600">Loading territories...</p>
+        </div>
+    }
+    else
+    {
+        <!-- Territory Filter Tabs -->
+        <div class="mb-6">
+            <div class="flex flex-wrap justify-center gap-2 mb-4">
+                <button @onclick="() => FilterByTier(null)" 
+                        class="btn-tab @(selectedTier == null ? "active" : "")">
+                    🌍 All Countries
+                </button>
+                <button @onclick="() => FilterByTier(TerritoryTier.Small)" 
+                        class="btn-tab @(selectedTier == TerritoryTier.Small ? "active" : "")">
+                    🏘️ Small Nations
+                </button>
+                <button @onclick="() => FilterByTier(TerritoryTier.Medium)" 
+                        class="btn-tab @(selectedTier == TerritoryTier.Medium ? "active" : "")">
+                    🏙️ Medium Powers
+                </button>
+                <button @onclick="() => FilterByTier(TerritoryTier.Major)" 
+                        class="btn-tab @(selectedTier == TerritoryTier.Major ? "active" : "")">
+                    🏛️ Major Powers
+                </button>
+            </div>
+        </div>
+
+        <!-- Owned Territories Section -->
+        @if (ownedTerritories.Any())
+        {
+            <div class="mb-8 bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                <h3 class="text-xl font-bold text-green-800 mb-3">🏴 Your Territories (@ownedTerritories.Count)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach (var territory in ownedTerritories)
+                    {
+                        <div class="territory-card owned">
+                            <div class="territory-flag">
+                                <img src="https://flagcdn.com/w320/@(territory.CountryCode.ToLower()).png" 
+                                     alt="@territory.CountryName flag" class="w-full h-20 object-cover rounded-t-lg">
+                            </div>
+                            <div class="p-3">
+                                <h4 class="font-bold text-green-800">@territory.CountryName</h4>
+                                <p class="text-sm text-green-600">Monthly Income: $@territory.MonthlyIncome</p>
+                                <p class="text-xs text-gray-600">Languages: @string.Join(", ", territory.OfficialLanguages.Take(2))</p>
+                                <button @onclick="() => ViewTerritoryDetails(territory.Id)" 
+                                        class="mt-2 btn-child-friendly btn-small">
+                                    📖 Learn More
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-green-700 font-semibold">Total Monthly Income: $@totalMonthlyIncome</p>
+                </div>
+            </div>
+        }
+
+        <!-- Available Territories Section -->
+        <div class="mb-6">
+            <h3 class="text-xl font-bold text-blue-800 mb-3">
+                🗺️ Available Territories 
+                @if (selectedTier != null)
+                {
+                    <span class="text-sm font-normal text-blue-600">(@GetTierDescription(selectedTier.Value))</span>
+                }
+            </h3>
+            
+            @if (filteredTerritories.Any())
+            {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    @foreach (var territory in filteredTerritories.Take(12)) // Show max 12 at a time for children
+                    {
+                        <div class="territory-card available">
+                            <div class="territory-flag relative">
+                                <img src="https://flagcdn.com/w320/@(territory.CountryCode.ToLower()).png" 
+                                     alt="@territory.CountryName flag" class="w-full h-20 object-cover rounded-t-lg">
+                                <div class="tier-badge tier-@territory.Tier.ToString().ToLower()">
+                                    @GetTierEmoji(territory.Tier)
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <h4 class="font-bold text-blue-800 text-sm">@territory.CountryName</h4>
+                                <div class="text-xs text-gray-600 mb-2">
+                                    <p>💰 Cost: $@territory.Cost</p>
+                                    <p>⭐ Reputation: @territory.ReputationRequired%</p>
+                                    <p>📈 Income: $@territory.MonthlyIncome/month</p>
+                                </div>
+                                <div class="flex gap-1">
+                                    <button @onclick="() => ViewTerritoryDetails(territory.Id)" 
+                                            class="btn-child-friendly btn-small bg-blue-500">
+                                        👁️ View
+                                    </button>
+                                    <button @onclick="() => AcquireTerritory(territory.Id)" 
+                                            class="btn-child-friendly btn-small bg-green-500"
+                                            disabled="@(!CanAffordTerritory(territory))">
+                                        @if (CanAffordTerritory(territory))
+                                        {
+                                            <span>🏴 Buy</span>
+                                        }
+                                        else
+                                        {
+                                            <span>💡 Goal</span>
+                                        }
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                @if (filteredTerritories.Count > 12)
+                {
+                    <div class="text-center mt-4">
+                        <p class="text-blue-600">Showing 12 of @filteredTerritories.Count territories</p>
+                        <button @onclick="LoadMoreTerritories" class="btn-child-friendly mt-2">
+                            🔄 Load More
+                        </button>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text-center py-8 bg-gray-50 rounded-lg">
+                    <p class="text-gray-600">🔍 No territories found in this category.</p>
+                    <p class="text-sm text-gray-500">Try a different tier or check back later!</p>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Educational Tips -->
+    <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mt-6">
+        <h4 class="font-bold text-yellow-800 mb-2">💡 Learning Tips</h4>
+        <ul class="text-sm text-yellow-700 space-y-1">
+            <li>🎯 Start with Small Nations to build your reputation!</li>
+            <li>🌍 Each territory teaches you about different countries and cultures</li>
+            <li>💰 Territories generate monthly income to help you buy more</li>
+            <li>🗣️ Learn the languages of your territories for bonus points!</li>
+            <li>⭐ Higher reputation lets you acquire bigger, more valuable territories</li>
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid PlayerId { get; set; }
+    [Parameter] public EventCallback<TerritoryDto> OnTerritorySelected { get; set; }
+    [Parameter] public int PlayerIncome { get; set; }
+    [Parameter] public int PlayerReputation { get; set; }
+
+    private List<TerritoryDto> availableTerritories = new();
+    private List<TerritoryDto> ownedTerritories = new();
+    private List<TerritoryDto> filteredTerritories = new();
+    private TerritoryTier? selectedTier = null;
+    private bool isLoading = true;
+    private int totalMonthlyIncome = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTerritories();
+    }
+
+    private async Task LoadTerritories()
+    {
+        try
+        {
+            isLoading = true;
+            StateHasChanged();
+
+            var tasks = new[]
+            {
+                TerritoryService.GetAvailableTerritoriesAsync(PlayerId),
+                TerritoryService.GetPlayerTerritoriesAsync(PlayerId),
+                TerritoryService.CalculateMonthlyTerritoryIncomeAsync(PlayerId)
+            };
+
+            var results = await Task.WhenAll(tasks);
+            availableTerritories = (List<TerritoryDto>)results[0];
+            ownedTerritories = (List<TerritoryDto>)results[1];
+            totalMonthlyIncome = (int)results[2];
+
+            FilterByTier(selectedTier);
+
+            Logger.LogInformation("Loaded {AvailableCount} available and {OwnedCount} owned territories for player {PlayerId}",
+                availableTerritories.Count, ownedTerritories.Count, PlayerId);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading territories for player {PlayerId}", PlayerId);
+            // Show user-friendly error message
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private void FilterByTier(TerritoryTier? tier)
+    {
+        selectedTier = tier;
+        filteredTerritories = tier == null 
+            ? availableTerritories.OrderBy(t => t.Tier).ThenBy(t => t.Cost).ToList()
+            : availableTerritories.Where(t => t.Tier == tier).OrderBy(t => t.Cost).ToList();
+    }
+
+    private async Task AcquireTerritory(Guid territoryId)
+    {
+        try
+        {
+            // This will be handled by a modal or separate component
+            await OnTerritorySelected.InvokeAsync(filteredTerritories.First(t => t.Id == territoryId));
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error selecting territory {TerritoryId}", territoryId);
+        }
+    }
+
+    private async Task ViewTerritoryDetails(Guid territoryId)
+    {
+        try
+        {
+            // This will open a details modal
+            await OnTerritorySelected.InvokeAsync(filteredTerritories.Concat(ownedTerritories).First(t => t.Id == territoryId));
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error viewing territory details {TerritoryId}", territoryId);
+        }
+    }
+
+    private void LoadMoreTerritories()
+    {
+        // Implementation for pagination if needed
+    }
+
+    private bool CanAffordTerritory(TerritoryDto territory)
+    {
+        return PlayerIncome >= territory.Cost && PlayerReputation >= territory.ReputationRequired;
+    }
+
+    private string GetTierDescription(TerritoryTier tier) => tier switch
+    {
+        TerritoryTier.Small => "Easy to acquire, perfect for beginners!",
+        TerritoryTier.Medium => "Moderate challenge, good income potential",
+        TerritoryTier.Major => "Advanced territories for experienced leaders",
+        _ => "All territories"
+    };
+
+    private string GetTierEmoji(TerritoryTier tier) => tier switch
+    {
+        TerritoryTier.Small => "🏘️",
+        TerritoryTier.Medium => "🏙️", 
+        TerritoryTier.Major => "🏛️",
+        _ => "🌍"
+    };
+}
+
+<style>
+.territory-explorer {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.btn-tab {
+    @apply px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200;
+    @apply bg-white text-blue-600 border-2 border-blue-200 hover:bg-blue-50;
+}
+
+.btn-tab.active {
+    @apply bg-blue-500 text-white border-blue-500;
+}
+
+.territory-card {
+    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden;
+    max-width: 280px;
+}
+
+.territory-card.owned {
+    @apply border-2 border-green-300 bg-green-50;
+}
+
+.territory-card.available {
+    @apply border-2 border-blue-200 hover:border-blue-300;
+}
+
+.territory-flag {
+    position: relative;
+    height: 80px;
+}
+
+.tier-badge {
+    @apply absolute top-1 right-1 text-xs px-2 py-1 rounded-full font-bold;
+}
+
+.tier-small {
+    @apply bg-green-100 text-green-800;
+}
+
+.tier-medium {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.tier-major {
+    @apply bg-red-100 text-red-800;
+}
+
+.btn-child-friendly {
+    @apply px-3 py-2 rounded-lg font-bold text-white transition-all duration-200;
+    @apply hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-small {
+    @apply px-2 py-1 text-xs;
+}
+
+.btn-child-friendly:disabled {
+    @apply opacity-50 cursor-not-allowed hover:scale-100;
+}
+</style>

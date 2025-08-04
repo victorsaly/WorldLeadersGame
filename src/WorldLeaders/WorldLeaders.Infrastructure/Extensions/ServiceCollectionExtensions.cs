@@ -64,6 +64,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGameEngine, GameEngine>();
         services.AddScoped<IDiceService, DiceService>();
         services.AddScoped<IPlayerService, PlayerService>();
+        
+        // Add territory management services for educational geography learning
+        services.AddScoped<ITerritoryService, TerritoryService>();
+        services.AddHttpClient<IExternalDataService, ExternalDataService>();
 
         // Add AI agent services for child-safe educational interactions
         services.AddScoped<IContentModerationService, ContentModerationService>();
