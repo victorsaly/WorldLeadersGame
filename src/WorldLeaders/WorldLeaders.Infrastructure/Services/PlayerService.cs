@@ -38,7 +38,7 @@ public class PlayerService : IPlayerService
             // Check if username already exists
             var existingPlayer = await _context.Players
                 .FirstOrDefaultAsync(p => p.Username == request.Username && !p.IsDeleted);
-            
+
             if (existingPlayer != null)
             {
                 throw new InvalidOperationException("Username already exists");
@@ -60,7 +60,7 @@ public class PlayerService : IPlayerService
             _context.Players.Add(playerEntity);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Created new player: {Username} with ID: {PlayerId}", 
+            _logger.LogInformation("Created new player: {Username} with ID: {PlayerId}",
                 request.Username, playerEntity.Id);
 
             return MapToPlayer(playerEntity);
@@ -240,14 +240,14 @@ public class PlayerService : IPlayerService
             _context.PlayerAchievements.Add(achievementEntity);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Awarded achievement {AchievementId} to player {PlayerId}", 
+            _logger.LogInformation("Awarded achievement {AchievementId} to player {PlayerId}",
                 achievementId, playerId);
 
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error awarding achievement {AchievementId} to player {PlayerId}", 
+            _logger.LogError(ex, "Error awarding achievement {AchievementId} to player {PlayerId}",
                 achievementId, playerId);
             return false;
         }
