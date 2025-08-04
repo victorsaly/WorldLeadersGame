@@ -5,6 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add local configuration file if it exists
+if (File.Exists("appsettings.local.json"))
+{
+    builder.Configuration.AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true);
+}
+
 // Add services to the container
 builder.Services.AddControllers();
 
@@ -30,8 +36,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { 
-        Title = "World Leaders Game API", 
+    c.SwaggerDoc("v1", new()
+    {
+        Title = "World Leaders Game API",
         Version = "v1",
         Description = "Educational game API for 12-year-old players to learn about world leadership, geography, and languages"
     });

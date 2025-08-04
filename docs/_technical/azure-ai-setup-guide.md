@@ -417,6 +417,7 @@ curl -X POST "$CONTENT_MODERATOR_ENDPOINT/contentmoderator/moderate/v1.0/Process
 ### Character Length and Content Moderation Optimization
 
 **Issue**: Initial Azure OpenAI integration had two critical issues:
+
 1. Response length exceeding 400 characters causing UI problems
 2. Overly restrictive content moderation blocking educational content
 
@@ -436,6 +437,7 @@ var chatCompletionsOptions = new ChatCompletionsOptions()
 ```
 
 **Enhanced System Prompts**:
+
 ```csharp
 private string GetSystemPrompt(AgentType agentType)
 {
@@ -471,7 +473,7 @@ private bool ValidatePositiveMessaging(string content)
 {
     var hasPositiveWords = positiveIndicators.Any(indicator => content.Contains(indicator));
     var hasNegativeMessaging = ContainsNegativeMessaging(content);
-    
+
     // Allow content that either has positive words OR doesn't have negative messaging
     return hasPositiveWords || !hasNegativeMessaging;
 }
@@ -488,6 +490,7 @@ private bool ValidatePositiveMessaging(string content)
 - **Layer 5**: Character length validation
 
 **Results Achieved**:
+
 - ✅ **Character Length**: Consistent responses 200-300 characters
 - ✅ **Validation Success**: 90-100% validation success rate across all agents
 - ✅ **Token Efficiency**: 560-580 tokens per response, optimized for cost
@@ -511,6 +514,7 @@ private bool ValidatePositiveMessaging(string content)
 ```
 
 **Production Metrics**:
+
 - **Response Time**: <2 seconds average
 - **Character Count**: 200-300 characters consistently
 - **Validation Pass Rate**: CareerGuide (100%), FortuneTeller (100%), EventNarrator (90%+)

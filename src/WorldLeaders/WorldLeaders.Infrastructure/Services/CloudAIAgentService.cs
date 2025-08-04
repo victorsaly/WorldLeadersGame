@@ -346,14 +346,14 @@ Remember: You're helping a young person learn about the world through an excitin
             if (!moderationResult.IsApproved || !moderationResult.IsSafe || !moderationResult.IsAgeAppropriate)
             {
                 _logger.LogWarning(
-                    "Content moderation failed for {AgentType}: {Reason}", 
+                    "Content moderation failed for {AgentType}: {Reason}",
                     agentType, moderationResult.Reason);
                 return false;
             }
 
             // Layer 2: Basic safety checks
             var lowerResponse = response.ToLowerInvariant();
-            
+
             // Check for inappropriate content patterns
             var inappropriatePatterns = new[]
             {
@@ -364,7 +364,7 @@ Remember: You're helping a young person learn about the world through an excitin
             if (inappropriatePatterns.Any(pattern => lowerResponse.Contains(pattern)))
             {
                 _logger.LogWarning(
-                    "Safety pattern detection failed for {AgentType}: {Response}", 
+                    "Safety pattern detection failed for {AgentType}: {Response}",
                     agentType, response);
                 return false;
             }
@@ -374,7 +374,7 @@ Remember: You're helping a young person learn about the world through an excitin
             if (!hasEducationalValue)
             {
                 _logger.LogInformation(
-                    "Response lacks educational value for {AgentType}: {Response}", 
+                    "Response lacks educational value for {AgentType}: {Response}",
                     agentType, response);
                 // Note: We don't fail here, just log for monitoring
             }
@@ -384,8 +384,8 @@ Remember: You're helping a young person learn about the world through an excitin
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, 
-                "Safety validation error for {AgentType}: {Response}", 
+            _logger.LogError(ex,
+                "Safety validation error for {AgentType}: {Response}",
                 agentType, response);
             return false; // Fail safe - reject on error
         }

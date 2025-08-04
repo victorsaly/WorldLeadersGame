@@ -146,7 +146,7 @@ public class ContentModerationService : IContentModerationService
 
         // Check reading level (simplified assessment)
         var words = content.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        
+
         // Age-appropriate length (not too long for 12-year-olds)
         if (words.Length > 80) // Approximately 400 characters
             return false;
@@ -186,18 +186,18 @@ public class ContentModerationService : IContentModerationService
 
     private bool ValidatePositiveMessaging(string content)
     {
-        var positiveIndicators = new[] { 
+        var positiveIndicators = new[] {
             "great", "awesome", "wonderful", "amazing", "excellent", "fantastic", "good", "super", "brilliant",
             "well done", "keep going", "you can", "let's", "together", "learn", "explore", "discover",
             "exciting", "fun", "interesting", "cool", "nice", "beautiful", "magnificent", "marvelous",
             "success", "achieve", "grow", "improve", "progress", "develop", "potential", "opportunity",
             "adventure", "journey", "path", "forward", "future", "hope", "bright", "strong", "skill"
         };
-        
+
         // More flexible - if content doesn't contain negative messaging and has educational value, consider it positive
         var hasPositiveWords = positiveIndicators.Any(indicator => content.Contains(indicator));
         var hasNegativeMessaging = ContainsNegativeMessaging(content);
-        
+
         // Allow content that either has positive words OR doesn't have negative messaging (neutral educational content)
         return hasPositiveWords || !hasNegativeMessaging;
     }
@@ -208,7 +208,7 @@ public class ContentModerationService : IContentModerationService
             return true; // No specific context required
 
         var contextLower = context.ToLowerInvariant();
-        
+
         // Geography context
         if (contextLower.Contains("geography"))
         {
@@ -236,11 +236,11 @@ public class ContentModerationService : IContentModerationService
     private bool ValidateFactualContent(string content)
     {
         // Simple validation for factual language indicators
-        var factualIndicators = new[] { 
-            "learn", "study", "discover", "explore", "understand", "practice", 
-            "develop", "grow", "improve", "progress", "achieve" 
+        var factualIndicators = new[] {
+            "learn", "study", "discover", "explore", "understand", "practice",
+            "develop", "grow", "improve", "progress", "achieve"
         };
-        
+
         return factualIndicators.Any(indicator => content.Contains(indicator));
     }
 
