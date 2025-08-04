@@ -64,6 +64,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDiceService, DiceService>();
         services.AddScoped<IPlayerService, PlayerService>();
 
+        // Add AI agent services for child-safe educational interactions
+        services.AddScoped<IContentModerationService, ContentModerationService>();
+        services.AddScoped<IAIAgentService, AIAgentService>();
+
         return services;
     }
 

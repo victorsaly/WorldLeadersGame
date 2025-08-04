@@ -118,3 +118,16 @@ public record ResourceChangeRecord(
     EventType? EventType,
     DateTime Timestamp
 );
+
+/// <summary>
+/// DTO for AI agent personality information display
+/// </summary>
+public record AgentPersonalityInfo(
+    AgentType AgentType,
+    string Name,
+    string Description,
+    string Personality,
+    string EducationalFocus,
+    string IconEmoji,
+    List<string> ExampleResponses
+);
