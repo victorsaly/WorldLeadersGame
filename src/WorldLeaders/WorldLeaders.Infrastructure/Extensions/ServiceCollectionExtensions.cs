@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WorldLeaders.Infrastructure.Configuration;
 using WorldLeaders.Infrastructure.Data;
 using WorldLeaders.Infrastructure.Services;
 using WorldLeaders.Shared.Services;
@@ -66,7 +67,26 @@ public static class ServiceCollectionExtensions
 
         // Add AI agent services for child-safe educational interactions
         services.AddScoped<IContentModerationService, ContentModerationService>();
-        services.AddScoped<IAIAgentService, AIAgentService>();
+
+        // Configure Azure AI options
+        services.Configure<AzureAIOptions>(configuration.GetSection(AzureAIOptions.SectionName));
+        services.Configure<ContentModeratorOptions>(configuration.GetSection(ContentModeratorOptions.SectionName));
+        services.Configure<SpeechServicesOptions>(configuration.GetSection(SpeechServicesOptions.SectionName));
+
+        // Register AI services - Cloud service takes priority, falls back to local service
+        var azureEndpoint = configuration.GetValue<string>("AzureOpenAI:Endpoint");
+        var azureApiKey = configuration.GetValue<string>("AzureOpenAI:ApiKey");
+
+        if (!string.IsNullOrEmpty(azureEndpoint) && !string.IsNullOrEmpty(azureApiKey))
+        {
+            // Use cloud AI service when Azure credentials are configured
+            services.AddScoped<IAIAgentService, CloudAIAgentService>();
+        }
+        else
+        {
+            // Fall back to local mock service for development
+            services.AddScoped<IAIAgentService, AIAgentService>();
+        }
 
         return services;
     }

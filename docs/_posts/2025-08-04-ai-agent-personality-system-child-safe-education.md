@@ -234,6 +234,14 @@ public class AIAgentService : IAIAgentService
             var fallbackResponse = GetSafeFallbackResponse(agentType);
             await LogSafetyFallbackUsedAsync(
                 agentType, response, fallbackResponse, playerId);
+            return new AIAgentResponse(agentType, fallbackResponse, true);se, playerId);
+                return new AIAgentResponse(agentType, response, true);
+            }
+
+            // Use safe fallback if validation fails
+            var fallbackResponse = GetSafeFallbackResponse(agentType);
+            await LogSafetyFallbackUsedAsync(
+                agentType, response, fallbackResponse, playerId);
             return new AIAgentResponse(agentType, fallbackResponse, true);
         }
         catch (Exception ex)
