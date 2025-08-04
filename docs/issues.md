@@ -151,10 +151,14 @@ Issues related to game mechanics, educational content, and child safety features
 
 #### Week 4 Progress (Current)
 
+{% assign issue_4_1 = site.issues | where: "issue_number", "4.1" | first %}
+{% assign issue_4_2 = site.issues | where: "issue_number", "4.2" | first %}
+{% assign issue_4_3 = site.issues | where: "issue_number", "4.3" | first %}
+
 - **Total Week 4 Issues**: {{ site.issues | where: "week", 4 | size }}
-- **AI Agent System**: {{ site.issues | where: "issue_number", "4.1" | first.status | default: "planned" }}
-- **Territory Management**: {{ site.issues | where: "issue_number", "4.2" | first.status | default: "planned" }}
-- **Speech Recognition**: {{ site.issues | where: "issue_number", "4.3" | first.status | default: "planned" }}
+- **AI Agent System**: {{ issue_4_1.status | default: "planned" }}
+- **Territory Management**: {{ issue_4_2.status | default: "planned" }}
+- **Speech Recognition**: {{ issue_4_3.status | default: "planned" }}
 
 #### Overall Project Status
 
