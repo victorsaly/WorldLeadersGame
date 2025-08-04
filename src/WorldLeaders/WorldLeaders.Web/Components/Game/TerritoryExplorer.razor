@@ -189,17 +189,15 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
             isLoading = true;
             StateHasChanged();
 
-            var tasks = new[]
-            {
-                TerritoryService.GetAvailableTerritoriesAsync(PlayerId),
-                TerritoryService.GetPlayerTerritoriesAsync(PlayerId),
-                TerritoryService.CalculateMonthlyTerritoryIncomeAsync(PlayerId)
-            };
+            var availableTask = TerritoryService.GetAvailableTerritoriesAsync(PlayerId);
+            var ownedTask = TerritoryService.GetPlayerTerritoriesAsync(PlayerId);
+            var incomeTask = TerritoryService.CalculateMonthlyTerritoryIncomeAsync(PlayerId);
 
-            var results = await Task.WhenAll(tasks);
-            availableTerritories = (List<TerritoryDto>)results[0];
-            ownedTerritories = (List<TerritoryDto>)results[1];
-            totalMonthlyIncome = (int)results[2];
+            await Task.WhenAll(availableTask, ownedTask, incomeTask);
+            
+            availableTerritories = await availableTask;
+            ownedTerritories = await ownedTask;
+            totalMonthlyIncome = await incomeTask;
 
             FilterByTier(selectedTier);
 
@@ -285,25 +283,50 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
 }
 
 .btn-tab {
-    @apply px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200;
-    @apply bg-white text-blue-600 border-2 border-blue-200 hover:bg-blue-50;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+    background: white;
+    color: #2563eb;
+    border: 2px solid #bfdbfe;
+}
+
+.btn-tab:hover {
+    background: #eff6ff;
 }
 
 .btn-tab.active {
-    @apply bg-blue-500 text-white border-blue-500;
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
 }
 
 .territory-card {
-    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    overflow: hidden;
     max-width: 280px;
 }
 
+.territory-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
 .territory-card.owned {
-    @apply border-2 border-green-300 bg-green-50;
+    border: 2px solid #86efac;
+    background: #f0fdf4;
 }
 
 .territory-card.available {
-    @apply border-2 border-blue-200 hover:border-blue-300;
+    border: 2px solid #bfdbfe;
+}
+
+.territory-card.available:hover {
+    border-color: #93c5fd;
 }
 
 .territory-flag {
@@ -312,31 +335,56 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
 }
 
 .tier-badge {
-    @apply absolute top-1 right-1 text-xs px-2 py-1 rounded-full font-bold;
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
 }
 
 .tier-small {
-    @apply bg-green-100 text-green-800;
+    background: #dcfce7;
+    color: #166534;
 }
 
 .tier-medium {
-    @apply bg-yellow-100 text-yellow-800;
+    background: #fef3c7;
+    color: #92400e;
 }
 
 .tier-major {
-    @apply bg-red-100 text-red-800;
+    background: #fecaca;
+    color: #991b1b;
 }
 
 .btn-child-friendly {
-    @apply px-3 py-2 rounded-lg font-bold text-white transition-all duration-200;
-    @apply hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    color: white;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-child-friendly:hover {
+    transform: scale(1.05);
+}
+
+.btn-child-friendly:active {
+    transform: scale(0.95);
 }
 
 .btn-small {
-    @apply px-2 py-1 text-xs;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
 }
 
 .btn-child-friendly:disabled {
-    @apply opacity-50 cursor-not-allowed hover:scale-100;
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 </style>

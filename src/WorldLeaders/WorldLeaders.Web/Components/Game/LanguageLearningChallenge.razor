@@ -1,0 +1,710 @@
+@* 
+Language Learning Challenge Component
+Context: Educational language practice for 12-year-old players learning from owned territories
+Educational Objective: Language pronunciation practice connected to geography and territory ownership
+Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-friendly design
+*@
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Services
+@inject ITerritoryService TerritoryService
+@inject ILogger<LanguageLearningChallenge> Logger
+
+<div class="language-challenge-container">
+    @if (isVisible)
+    {
+        <div class="modal-overlay" @onclick="CloseChallenge">
+            <div class="modal-content" @onclick:stopPropagation="true">
+                <div class="modal-header">
+                    <h2 class="text-2xl font-bold text-purple-800">🗣️ Language Learning Adventure</h2>
+                    <button @onclick="CloseChallenge" class="close-button">❌</button>
+                </div>
+
+                <div class="modal-body">
+                    @if (isLoading)
+                    {
+                        <div class="text-center py-8">
+                            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                            <p class="mt-2 text-purple-600">Loading language challenges...</p>
+                        </div>
+                    }
+                    else if (challenges.Any())
+                    {
+                        @if (currentChallenge != null)
+                        {
+                            <!-- Current Challenge Display -->
+                            <div class="challenge-display">
+                                <div class="challenge-header">
+                                    <div class="challenge-info">
+                                        <h3 class="text-xl font-bold text-purple-800">
+                                            Challenge @(currentChallengeIndex + 1) of @challenges.Count
+                                        </h3>
+                                        <p class="text-purple-600">Learn to say "Hello" in @currentChallenge.LanguageName!</p>
+                                    </div>
+                                    <div class="challenge-score">
+                                        <div class="score-circle">
+                                            <span class="text-2xl font-bold text-green-600">@correctAnswers</span>
+                                            <span class="text-sm text-gray-600">/@challenges.Count</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Word to Learn -->
+                                <div class="word-display">
+                                    <div class="word-card">
+                                        <h4 class="text-3xl font-bold text-blue-800 mb-2">@currentChallenge.Word</h4>
+                                        <p class="text-lg text-blue-600 mb-4">Pronunciation: @currentChallenge.Pronunciation</p>
+                                        
+                                        <!-- Audio Playback -->
+                                        <div class="audio-section mb-4">
+                                            <button @onclick="PlayAudio" class="btn-child-friendly bg-blue-500 mb-2">
+                                                🔊 Listen to Pronunciation
+                                            </button>
+                                            @if (!string.IsNullOrEmpty(currentChallenge.AudioUrl))
+                                            {
+                                                <audio @ref="audioElement" preload="auto">
+                                                    <source src="@currentChallenge.AudioUrl" type="audio/mpeg">
+                                                    Your browser does not support audio playback.
+                                                </audio>
+                                            }
+                                        </div>
+
+                                        <!-- Practice Input -->
+                                        <div class="practice-section">
+                                            <label class="block text-purple-700 font-semibold mb-2">
+                                                🎤 Try to say it yourself! Type what you hear:
+                                            </label>
+                                            <input @bind="userInput" 
+                                                   @onkeypress="HandleKeyPress"
+                                                   class="practice-input" 
+                                                   placeholder="Type your pronunciation attempt..."
+                                                   disabled="@isSubmitting">
+                                            
+                                            <div class="input-buttons mt-3">
+                                                <button @onclick="CheckAnswer" 
+                                                        class="btn-child-friendly bg-green-500"
+                                                        disabled="@(string.IsNullOrWhiteSpace(userInput) || isSubmitting)">
+                                                    @if (isSubmitting)
+                                                    {
+                                                        <span>🔄 Checking...</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>✅ Check My Answer</span>
+                                                    }
+                                                </button>
+                                                
+                                                <button @onclick="SkipChallenge" 
+                                                        class="btn-child-friendly bg-gray-500 ml-2">
+                                                    ⏭️ Skip This One
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Feedback Display -->
+                                        @if (!string.IsNullOrEmpty(feedbackMessage))
+                                        {
+                                            <div class="feedback-section mt-4">
+                                                <div class="feedback-card @(isCorrect ? "correct" : "incorrect")">
+                                                    <div class="feedback-icon">
+                                                        @(isCorrect ? "🎉" : "💪")
+                                                    </div>
+                                                    <div class="feedback-content">
+                                                        <p class="feedback-message">@feedbackMessage</p>
+                                                        @if (!isCorrect)
+                                                        {
+                                                            <p class="feedback-hint">
+                                                                💡 Hint: Listen carefully and try to match the sounds!
+                                                            </p>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Progress Bar -->
+                                        <div class="progress-section mt-6">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" 
+                                                     style="width: @(((double)(currentChallengeIndex + 1) / challenges.Count) * 100)%"></div>
+                                            </div>
+                                            <p class="text-center text-sm text-gray-600 mt-2">
+                                                Progress: @(currentChallengeIndex + 1) of @challenges.Count challenges
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Challenge Complete -->
+                            <div class="challenge-complete">
+                                <div class="completion-card">
+                                    <div class="completion-icon">🏆</div>
+                                    <h3 class="text-2xl font-bold text-yellow-800 mb-2">
+                                        Amazing Work, Language Explorer!
+                                    </h3>
+                                    <p class="text-yellow-700 mb-4">
+                                        You completed @challenges.Count language challenges and got @correctAnswers correct!
+                                    </p>
+                                    
+                                    <div class="completion-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-number">@correctAnswers</span>
+                                            <span class="stat-label">Correct</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-number">@((int)((double)correctAnswers / challenges.Count * 100))%</span>
+                                            <span class="stat-label">Accuracy</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-number">@languagesLearned.Count</span>
+                                            <span class="stat-label">Languages</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="completion-rewards">
+                                        <h4 class="font-bold text-green-800 mb-2">🎁 Your Rewards:</h4>
+                                        <ul class="rewards-list">
+                                            <li>💰 +@bonusIncome bonus income!</li>
+                                            <li>⭐ +@bonusReputation reputation points!</li>
+                                            <li>🧠 Language learning achievement!</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="completion-actions mt-6">
+                                        <button @onclick="TryAgain" class="btn-child-friendly bg-purple-500 mr-2">
+                                            🔄 Practice Again
+                                        </button>
+                                        <button @onclick="CloseChallenge" class="btn-child-friendly bg-blue-500">
+                                            ✨ Continue Playing
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <!-- No Challenges Available -->
+                        <div class="no-challenges">
+                            <div class="no-challenges-card">
+                                <div class="text-6xl mb-4">🗺️</div>
+                                <h3 class="text-xl font-bold text-gray-800 mb-2">No Language Challenges Available</h3>
+                                <p class="text-gray-600 mb-4">
+                                    You need to own territories to practice their languages!
+                                </p>
+                                <p class="text-blue-600 text-sm">
+                                    💡 Acquire some territories first, then come back to learn their languages.
+                                </p>
+                                <button @onclick="CloseChallenge" class="btn-child-friendly bg-blue-500 mt-4">
+                                    🏴 Go Get Some Territories!
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public Guid PlayerId { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback<(int bonusIncome, int bonusReputation)> OnRewardsEarned { get; set; }
+
+    private List<LanguageChallengeDto> challenges = new();
+    private LanguageChallengeDto? currentChallenge;
+    private int currentChallengeIndex = 0;
+    private int correctAnswers = 0;
+    private HashSet<string> languagesLearned = new();
+    private bool isLoading = false;
+    private bool isSubmitting = false;
+    private bool isCorrect = false;
+    private string userInput = "";
+    private string feedbackMessage = "";
+    private ElementReference audioElement;
+    private int bonusIncome = 0;
+    private int bonusReputation = 0;
+
+    private bool isVisible => IsVisible;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (isVisible && PlayerId != Guid.Empty && !challenges.Any())
+        {
+            await LoadLanguageChallenges();
+        }
+    }
+
+    private async Task LoadLanguageChallenges()
+    {
+        try
+        {
+            isLoading = true;
+            StateHasChanged();
+
+            challenges = await TerritoryService.GetTerritoryLanguageChallengesAsync(PlayerId);
+            
+            if (challenges.Any())
+            {
+                currentChallengeIndex = 0;
+                currentChallenge = challenges[0];
+                correctAnswers = 0;
+                languagesLearned.Clear();
+            }
+
+            Logger.LogInformation("Loaded {Count} language challenges for player {PlayerId}", 
+                challenges.Count, PlayerId);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading language challenges for player {PlayerId}", PlayerId);
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task CheckAnswer()
+    {
+        if (currentChallenge == null || string.IsNullOrWhiteSpace(userInput)) return;
+
+        try
+        {
+            isSubmitting = true;
+            StateHasChanged();
+
+            // Simple pronunciation checking - in a real implementation, this would use speech recognition
+            isCorrect = CheckPronunciation(userInput.Trim(), currentChallenge.Word, currentChallenge.Pronunciation);
+            
+            if (isCorrect)
+            {
+                correctAnswers++;
+                languagesLearned.Add(currentChallenge.LanguageCode);
+                feedbackMessage = GetPositiveFeedback();
+            }
+            else
+            {
+                feedbackMessage = GetEncouragingFeedback();
+            }
+
+            StateHasChanged();
+            
+            // Auto-advance after showing feedback
+            await Task.Delay(3000);
+            await NextChallenge();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error checking language answer for challenge {LanguageCode}", 
+                currentChallenge?.LanguageCode);
+        }
+        finally
+        {
+            isSubmitting = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task SkipChallenge()
+    {
+        feedbackMessage = "That's okay! Every language takes practice. Let's try another one! 💪";
+        StateHasChanged();
+        
+        await Task.Delay(2000);
+        await NextChallenge();
+    }
+
+    private async Task NextChallenge()
+    {
+        userInput = "";
+        feedbackMessage = "";
+        isCorrect = false;
+
+        if (currentChallengeIndex < challenges.Count - 1)
+        {
+            currentChallengeIndex++;
+            currentChallenge = challenges[currentChallengeIndex];
+        }
+        else
+        {
+            // Challenge complete - calculate rewards
+            await CompleteChallenge();
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task CompleteChallenge()
+    {
+        try
+        {
+            // Calculate rewards based on performance
+            var accuracyPercentage = (double)correctAnswers / challenges.Count;
+            bonusIncome = (int)(correctAnswers * 50 * (1 + accuracyPercentage)); // Base 50 per correct, bonus for accuracy
+            bonusReputation = Math.Min(10, correctAnswers * 2); // Max 10 reputation points
+
+            currentChallenge = null; // This will show the completion screen
+
+            // Notify parent component about rewards
+            await OnRewardsEarned.InvokeAsync((bonusIncome, bonusReputation));
+
+            Logger.LogInformation("Player {PlayerId} completed language challenge with {Correct}/{Total} correct answers", 
+                PlayerId, correctAnswers, challenges.Count);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error completing language challenge for player {PlayerId}", PlayerId);
+        }
+    }
+
+    private async Task TryAgain()
+    {
+        currentChallengeIndex = 0;
+        currentChallenge = challenges.FirstOrDefault();
+        correctAnswers = 0;
+        languagesLearned.Clear();
+        userInput = "";
+        feedbackMessage = "";
+        isCorrect = false;
+        bonusIncome = 0;
+        bonusReputation = 0;
+        StateHasChanged();
+    }
+
+    private async Task CloseChallenge()
+    {
+        await OnClose.InvokeAsync();
+    }
+
+    private async Task PlayAudio()
+    {
+        try
+        {
+            if (audioElement.Context != null)
+            {
+                await audioElement.FocusAsync(); // This helps trigger audio context
+                // In a real implementation, you would play the audio file
+                // For now, we'll just provide visual feedback
+                Logger.LogInformation("Playing audio for word: {Word}", currentChallenge?.Word);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error playing audio for language challenge");
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(userInput) && !isSubmitting)
+        {
+            await CheckAnswer();
+        }
+    }
+
+    private bool CheckPronunciation(string userInput, string targetWord, string pronunciation)
+    {
+        // Simplified pronunciation checking for educational purposes
+        // In a real implementation, this would use advanced speech recognition
+        
+        var cleanUserInput = userInput.ToLowerInvariant().Replace(" ", "");
+        var cleanTargetWord = targetWord.ToLowerInvariant().Replace(" ", "");
+        var cleanPronunciation = pronunciation.ToLowerInvariant().Replace("-", "").Replace(" ", "");
+
+        // Check for exact match, close phonetic match, or reasonable attempt
+        return cleanUserInput == cleanTargetWord || 
+               cleanUserInput == cleanPronunciation ||
+               IsCloseMatch(cleanUserInput, cleanTargetWord) ||
+               IsCloseMatch(cleanUserInput, cleanPronunciation);
+    }
+
+    private bool IsCloseMatch(string input, string target)
+    {
+        if (input.Length == 0 || target.Length == 0) return false;
+        
+        // Simple Levenshtein distance check for close matches
+        var distance = ComputeLevenshteinDistance(input, target);
+        var maxLength = Math.Max(input.Length, target.Length);
+        var similarity = 1.0 - (double)distance / maxLength;
+        
+        return similarity >= 0.7; // 70% similarity threshold for children
+    }
+
+    private int ComputeLevenshteinDistance(string s, string t)
+    {
+        var d = new int[s.Length + 1, t.Length + 1];
+
+        for (int i = 0; i <= s.Length; i++)
+            d[i, 0] = i;
+        for (int j = 0; j <= t.Length; j++)
+            d[0, j] = j;
+
+        for (int i = 1; i <= s.Length; i++)
+        {
+            for (int j = 1; j <= t.Length; j++)
+            {
+                int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+                d[i, j] = Math.Min(Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1), d[i - 1, j - 1] + cost);
+            }
+        }
+
+        return d[s.Length, t.Length];
+    }
+
+    private string GetPositiveFeedback()
+    {
+        var messages = new[]
+        {
+            "🌟 Excellent pronunciation! You're a natural language learner!",
+            "🎉 Perfect! You nailed that pronunciation!",
+            "✨ Amazing work! You're mastering languages like a true world leader!",
+            "🚀 Fantastic! Your pronunciation skills are getting better!",
+            "🏆 Outstanding! You're becoming a language expert!",
+            "💫 Wonderful! Keep up the great language learning!"
+        };
+        return messages[Random.Shared.Next(messages.Length)];
+    }
+
+    private string GetEncouragingFeedback()
+    {
+        var messages = new[]
+        {
+            "💪 Good try! Language learning takes practice - you're doing great!",
+            "🌱 Nice effort! Every attempt makes you better at languages!",
+            "🎯 Keep going! You're learning something new with each try!",
+            "✨ Great attempt! Languages are tricky but you're getting there!",
+            "🌟 Don't worry! Even expert language learners needed practice!",
+            "🚀 Good job trying! Each practice makes you stronger!"
+        };
+        return messages[Random.Shared.Next(messages.Length)];
+    }
+}
+
+<style>
+.language-challenge-container {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 50;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-width: 48rem;
+    width: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    background: #f3e8ff;
+    padding: 1rem;
+    border-bottom: 1px solid #c4b5fd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.close-button {
+    color: #ef4444;
+    font-size: 1.25rem;
+    font-weight: 700;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #dc2626;
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.score-circle {
+    background: #dcfce7;
+    border-radius: 50%;
+    padding: 1rem;
+    text-align: center;
+    min-width: 4rem;
+}
+
+.word-card {
+    background: linear-gradient(to bottom right, #eff6ff, #f3e8ff);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.practice-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #c4b5fd;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+}
+
+.practice-input:focus {
+    border-color: #8b5cf6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.btn-child-friendly {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    color: white;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-child-friendly:hover {
+    transform: scale(1.05);
+}
+
+.btn-child-friendly:active {
+    transform: scale(0.95);
+}
+
+.btn-child-friendly:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.feedback-card {
+    border-radius: 0.5rem;
+    padding: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.feedback-card.correct {
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+}
+
+.feedback-card.incorrect {
+    background: #fffbeb;
+    border: 2px solid #fcd34d;
+}
+
+.feedback-icon {
+    font-size: 1.5rem;
+}
+
+.feedback-message {
+    font-weight: 600;
+}
+
+.feedback-card.correct .feedback-message {
+    color: #166534;
+}
+
+.feedback-card.incorrect .feedback-message {
+    color: #92400e;
+}
+
+.feedback-hint {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.feedback-card.incorrect .feedback-hint {
+    color: #d97706;
+}
+
+.progress-bar {
+    width: 100%;
+    background: #e5e7eb;
+    border-radius: 9999px;
+    height: 0.75rem;
+}
+
+.progress-fill {
+    background: #8b5cf6;
+    height: 0.75rem;
+    border-radius: 9999px;
+    transition: width 0.5s;
+}
+
+.completion-card, .no-challenges-card {
+    background: linear-gradient(to bottom right, #fffbeb, #fed7aa);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.completion-icon {
+    font-size: 3.75rem;
+    margin-bottom: 1rem;
+}
+
+.completion-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 1.5rem 0;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e40af;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #2563eb;
+}
+
+.rewards-list {
+    text-align: left;
+    max-width: 20rem;
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+}
+
+.rewards-list li {
+    color: #166534;
+    font-weight: 500;
+    margin: 0.5rem 0;
+}
+</style>
