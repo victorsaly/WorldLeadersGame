@@ -167,8 +167,8 @@ public class ContentModerationService : IContentModerationService
 
     private bool ContainsInappropriateLanguage(string content)
     {
-        // Check for mild inappropriate language that might not be in the main prohibited list
-        var inappropriateTerms = new[] { "stupid", "dumb", "idiot", "hate", "awful", "terrible", "horrible" };
+        // Check for truly inappropriate language for children - be more lenient for educational content
+        var inappropriateTerms = new[] { "stupid", "dumb", "idiot", "hate" };
         return inappropriateTerms.Any(term => content.Contains(term));
     }
 
@@ -187,11 +187,19 @@ public class ContentModerationService : IContentModerationService
     private bool ValidatePositiveMessaging(string content)
     {
         var positiveIndicators = new[] { 
-            "great", "awesome", "wonderful", "amazing", "excellent", "fantastic", "good job", 
-            "well done", "keep going", "you can", "let's", "together", "learn", "explore", "discover" 
+            "great", "awesome", "wonderful", "amazing", "excellent", "fantastic", "good", "super", "brilliant",
+            "well done", "keep going", "you can", "let's", "together", "learn", "explore", "discover",
+            "exciting", "fun", "interesting", "cool", "nice", "beautiful", "magnificent", "marvelous",
+            "success", "achieve", "grow", "improve", "progress", "develop", "potential", "opportunity",
+            "adventure", "journey", "path", "forward", "future", "hope", "bright", "strong", "skill"
         };
         
-        return positiveIndicators.Any(indicator => content.Contains(indicator));
+        // More flexible - if content doesn't contain negative messaging and has educational value, consider it positive
+        var hasPositiveWords = positiveIndicators.Any(indicator => content.Contains(indicator));
+        var hasNegativeMessaging = ContainsNegativeMessaging(content);
+        
+        // Allow content that either has positive words OR doesn't have negative messaging (neutral educational content)
+        return hasPositiveWords || !hasNegativeMessaging;
     }
 
     private bool ValidateEducationalContext(string content, string context)

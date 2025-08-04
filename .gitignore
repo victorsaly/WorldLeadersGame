@@ -9,6 +9,12 @@ obj/
 *.pdb
 *.exe
 
+# Azure AI Configuration (Sensitive Data)
+.env.production
+azure-ai-config.local.json
+*.local.json
+appsettings.local.json
+
 # Build results
 [Dd]ebug/
 [Rr]elease/

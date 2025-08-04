@@ -25,6 +25,10 @@ permalink: /technical-docs/
 - [**Comprehensive Copilot Instructions**]({{ '/technical/copilot-instructions/' | relative_url }}) - Transform generic AI into educational game expert
 - [**AI Prompt Engineering Patterns**]({{ '/technical/ai-prompt-engineering/' | relative_url }}) - Advanced prompt patterns for educational content
 
+### Azure AI Services
+
+- [**Azure AI Security Guide**]({{ '/technical/azure-ai-security-guide/' | relative_url }}) - Safe credential management and secure Azure AI integration
+
 ---
 
 ## Game Development Guides
