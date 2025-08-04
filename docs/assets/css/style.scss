@@ -279,7 +279,7 @@ body {
 
 .page-content {
   flex: 1;
-  padding: 2rem 0;
+  padding: 1rem 0;
 }
 
 /* Typography with mobile-first approach */
@@ -451,6 +451,7 @@ body.dark {
 }
 
 article.post-preview {
+    background: var(--bg-secondary);
     padding: 25px;
     border-bottom: 1px solid #ccc !important;
 }
