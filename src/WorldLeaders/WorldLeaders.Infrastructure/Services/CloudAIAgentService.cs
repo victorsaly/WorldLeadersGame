@@ -34,8 +34,20 @@ public class CloudAIAgentService : IAIAgentService
         _logger = logger;
         _random = new Random();
 
-        // Initialize Azure OpenAI client
-        if (!string.IsNullOrEmpty(_aiOptions.Endpoint) && !string.IsNullOrEmpty(_aiOptions.ApiKey))
+        // Initialize Azure OpenAI client with validation
+        if (string.IsNullOrEmpty(_aiOptions.Endpoint) || string.IsNullOrEmpty(_aiOptions.ApiKey))
+        {
+            _logger.LogWarning("Azure OpenAI credentials not configured, using fallback responses only");
+        }
+        else if (!IsValidEndpoint(_aiOptions.Endpoint))
+        {
+            _logger.LogError("Azure OpenAI endpoint is not a valid absolute URI: {Endpoint}", _aiOptions.Endpoint);
+        }
+        else if (!IsValidApiKey(_aiOptions.ApiKey))
+        {
+            _logger.LogError("Azure OpenAI API key does not match the expected format.");
+        }
+        else
         {
             _openAIClient = new OpenAIClient(
                 new Uri(_aiOptions.Endpoint),
@@ -43,10 +55,23 @@ public class CloudAIAgentService : IAIAgentService
 
             _logger.LogInformation("Azure OpenAI client initialized for educational AI agents");
         }
-        else
-        {
-            _logger.LogWarning("Azure OpenAI credentials not configured, using fallback responses only");
-        }
+    }
+
+    private static bool IsValidEndpoint(string endpoint)
+    {
+        return Uri.TryCreate(endpoint, UriKind.Absolute, out var uriResult)
+            && (uriResult.Scheme == Uri.UriSchemeHttps || uriResult.Scheme == Uri.UriSchemeHttp);
+    }
+
+    private static bool IsValidApiKey(string apiKey)
+    {
+        // Azure OpenAI keys are typically 32+ character alphanumeric strings, sometimes with dashes
+        // Example: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" or "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        // Adjust the regex as needed for your environment
+        if (string.IsNullOrWhiteSpace(apiKey))
+            return false;
+        // Accepts 32+ alphanumeric or dash characters
+        return System.Text.RegularExpressions.Regex.IsMatch(apiKey, @"^[A-Za-z0-9\-]{32,}$");
     }
 
     /// <summary>
@@ -141,7 +166,7 @@ public class CloudAIAgentService : IAIAgentService
                     new ChatRequestSystemMessage(systemPrompt),
                     new ChatRequestUserMessage(userPrompt)
                 },
-                MaxTokens = 80, // Reduced to ensure responses stay under 300 characters
+                MaxTokens = 200, // Increased to allow more comprehensive responses; will trim to 300 chars after
                 Temperature = (float)_aiOptions.Temperature,
                 User = playerId.ToString() // For usage tracking and safety auditing
             };

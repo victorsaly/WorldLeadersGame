@@ -57,7 +57,9 @@ public class AIController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error generating AI response for agent {AgentType}", request?.AgentType);
+            // Log error without sensitive user input to protect child privacy
+            _logger.LogError(ex, "Error generating AI response for agent {AgentType} from player {PlayerId}", 
+                request?.AgentType, request?.PlayerId);
             
             // Always provide safe fallback on error
             var fallbackResponse = await _aiAgentService.GetSafeFallbackResponseAsync(

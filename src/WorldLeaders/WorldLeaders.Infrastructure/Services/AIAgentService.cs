@@ -142,10 +142,22 @@ public class AIAgentService : IAIAgentService
 
         var fullResponse = string.Join(" ", responseBuilder);
         
-        // Ensure response doesn't exceed maximum length
+        // Ensure response doesn't exceed maximum length with word-boundary-aware truncation
         if (fullResponse.Length > AIAgentConstants.MaxResponseLength)
         {
-            fullResponse = fullResponse.Substring(0, AIAgentConstants.MaxResponseLength - 3) + "...";
+            int maxLen = AIAgentConstants.MaxResponseLength - 3; // account for "..."
+            if (maxLen > 0 && fullResponse.Length > maxLen)
+            {
+                int lastSpace = fullResponse.LastIndexOf(' ', maxLen);
+                if (lastSpace > 0)
+                {
+                    fullResponse = fullResponse.Substring(0, lastSpace) + "...";
+                }
+                else
+                {
+                    fullResponse = fullResponse.Substring(0, maxLen) + "...";
+                }
+            }
         }
 
         return await Task.FromResult(fullResponse);
