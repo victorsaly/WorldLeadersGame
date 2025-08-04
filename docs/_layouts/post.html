@@ -2,6 +2,100 @@
 layout: default
 ---
 
+<!-- Mermaid.js support for diagrams -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#ffffff',
+        primaryTextColor: '#000000',
+        primaryBorderColor: '#000000',
+        lineColor: '#000000',
+        secondaryColor: '#f8f9fa',
+        tertiaryColor: '#ffffff',
+        background: '#ffffff',
+        mainBkg: '#ffffff',
+        secondBkg: '#f8f9fa',
+        tertiaryBkg: '#ffffff',
+        nodeTextColor: '#000000',
+        textColor: '#000000',
+        edgeLabelBackground: '#ffffff',
+        clusterBkg: '#f8f9fa',
+        clusterBorder: '#000000',
+        defaultLinkColor: '#000000',
+        titleColor: '#000000',
+        edgeColor: '#000000'
+      }
+    });
+    
+    // Convert mermaid code blocks to diagrams
+    const mermaidBlocks = document.querySelectorAll('code.language-mermaid, pre code.language-mermaid');
+    mermaidBlocks.forEach((block, index) => {
+      const pre = block.closest('pre') || block;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mermaid';
+      wrapper.textContent = block.textContent;
+      wrapper.id = 'mermaid-' + index;
+      pre.parentNode.replaceChild(wrapper, pre);
+    });
+    
+    // Also handle plain mermaid class
+    const plainMermaidBlocks = document.querySelectorAll('.language-mermaid');
+    plainMermaidBlocks.forEach((block, index) => {
+      if (!block.classList.contains('mermaid')) {
+        block.classList.add('mermaid');
+        block.id = 'mermaid-plain-' + index;
+      }
+    });
+    
+    // Initialize mermaid
+    mermaid.run();
+  });
+</script>
+<style>
+  .mermaid {
+    text-align: center;
+    margin: 1rem 0;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  
+  /* Ensure all Mermaid elements use monochrome colors */
+  .mermaid svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .mermaid .node rect,
+  .mermaid .node circle,
+  .mermaid .node ellipse,
+  .mermaid .node polygon {
+    fill: #ffffff !important;
+    stroke: #000000 !important;
+    stroke-width: 2px !important;
+  }
+  
+  .mermaid .edgePath path {
+    stroke: #000000 !important;
+    stroke-width: 2px !important;
+  }
+  
+  .mermaid .edgeLabel {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .mermaid text {
+    fill: #000000 !important;
+    font-family: 'Inter', sans-serif !important;
+  }
+</style>
+
 <div class="page-content">
   <div class="wrapper">
     <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
