@@ -191,6 +191,14 @@ is age-appropriate and educationally valuable
 all AI responses
 ```
 
+### AI Prompt Interface in Action
+
+Here's what the GitHub Copilot agent interaction looks like in practice:
+
+![GitHub Copilot AI Prompt Interface]({{ site.baseurl }}/assets/game-ai-prompt.png)
+
+*Live demonstration of our AI-first development workflow using GitHub Copilot agents for educational game development with child safety validation.*
+
 ---
 
 ## 💻 Step 3: AI Code Generation Process
