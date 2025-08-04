@@ -158,7 +158,7 @@ Safety Requirements: Age-appropriate content, encouraging messages, child-friend
                     <!-- Cultural Context Display -->
                     @if (culturalContext != null)
                     {
-                        <div class="cultural-context-display bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
+                        <div class="cultural-context-display fadeIn bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-4">
                             <h4 class="font-bold text-blue-800 mb-3">📖 About @culturalContext.CountryName</h4>
                             
                             <div class="context-section mb-3">
@@ -368,129 +368,225 @@ Safety Requirements: Age-appropriate content, encouraging messages, child-friend
 
 <style>
 .modal-overlay {
-    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 50;
 }
 
 .modal-content {
-    @apply bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-screen overflow-y-auto;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-width: 56rem;
+    width: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
     font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
 .modal-header {
-    @apply bg-blue-100 p-4 border-b border-blue-200;
+    background: #dbeafe;
+    padding: 1rem;
+    border-bottom: 1px solid #bfdbfe;
 }
 
 .modal-body {
-    @apply p-6;
+    padding: 1.5rem;
 }
 
 .close-button {
-    @apply text-red-500 hover:text-red-700 text-xl font-bold transition-colors;
+    color: #ef4444;
+    font-size: 1.25rem;
+    font-weight: 700;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #dc2626;
 }
 
 .country-header {
-    @apply flex items-start gap-4 mb-6;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .flag-container {
-    @apply relative;
+    position: relative;
 }
 
 .country-flag {
-    @apply w-32 h-20 object-cover rounded-lg shadow-md;
+    width: 8rem;
+    height: 5rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .tier-badge {
-    @apply absolute -top-2 -right-2 text-xs px-2 py-1 rounded-full font-bold;
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
 }
 
 .tier-small {
-    @apply bg-green-100 text-green-800;
+    background: #dcfce7;
+    color: #166534;
 }
 
 .tier-medium {
-    @apply bg-yellow-100 text-yellow-800;
+    background: #fef3c7;
+    color: #92400e;
 }
 
 .tier-major {
-    @apply bg-red-100 text-red-800;
+    background: #fecaca;
+    color: #991b1b;
 }
 
 .country-info {
-    @apply flex-1;
+    flex: 1;
 }
 
 .educational-section {
-    @apply rounded-lg;
+    border-radius: 0.5rem;
 }
 
 .territory-stats {
-    @apply mb-4;
+    margin-bottom: 1rem;
 }
 
 .stat-card {
-    @apply bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center gap-3;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .stat-icon {
-    @apply text-2xl;
+    font-size: 1.5rem;
 }
 
 .stat-label {
-    @apply text-xs text-gray-600 font-medium;
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 500;
 }
 
 .stat-value {
-    @apply text-lg font-bold text-blue-800;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1e40af;
 }
 
 .language-tag {
-    @apply bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium;
+    background: #f3e8ff;
+    color: #7c3aed;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
 }
 
 .feature-grid, .culture-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 gap-2;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+/* Medium screens and up */
+.feature-grid, .culture-grid {
+    grid-template-columns: 1fr 1fr;
 }
 
 .feature-item, .culture-item {
-    @apply bg-gray-50 text-gray-700 px-3 py-2 rounded text-sm;
+    background: #f9fafb;
+    color: #374151;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
 }
 
 .btn-child-friendly {
-    @apply px-4 py-2 rounded-lg font-bold text-white transition-all duration-200;
-    @apply hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    color: white;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-child-friendly:hover {
+    transform: scale(1.05);
+}
+
+.btn-child-friendly:active {
+    transform: scale(0.95);
 }
 
 .btn-child-friendly:disabled {
-    @apply opacity-50 cursor-not-allowed hover:scale-100;
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .success-message {
-    @apply bg-green-50 border-2 border-green-200 rounded-lg p-4 text-center;
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
 }
 
 .requirements-not-met {
-    @apply bg-red-50 border-2 border-red-200 rounded-lg p-4;
+    background: #fef2f2;
+    border: 2px solid #fca5a5;
+    border-radius: 0.5rem;
+    padding: 1rem;
 }
 
 .cultural-context-display {
-    @apply animation-fade-in;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .context-section {
-    @apply border-b border-blue-100 pb-2;
+    border-bottom: 1px solid #dbeafe;
+    padding-bottom: 0.5rem;
 }
 
 .context-section:last-child {
-    @apply border-b-0 pb-0;
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
-@keyframes fade-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Keyframes alternative */
+.fadeIn {
+    animation: fadeInAnimation 0.3s ease-out;
 }
 
-.animation-fade-in {
-    animation: fade-in 0.3s ease-out;
+/* Using class-based approach for animations */
+.fadeInAnimation {
+    opacity: 1;
+    transform: translateY(0);
 }
 </style>
