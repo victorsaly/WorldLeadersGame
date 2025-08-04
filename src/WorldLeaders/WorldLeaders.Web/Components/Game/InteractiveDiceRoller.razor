@@ -67,7 +67,7 @@
                     <span class="text-3xl mr-3">@GetJobEmoji(lastRollResult.NewJob)</span>
                     <div class="text-center">
                         <h5 class="text-xl font-bold text-gray-800">@lastRollResult.NewJob</h5>
-                        <p class="text-green-600 font-bold text-lg">${lastRollResult.IncomeChange:N0}/month</p>
+                        <p class="text-green-600 font-bold text-lg">$@(lastRollResult.IncomeChange.ToString("N0"))/month</p>
                     </div>
                 </div>
                 <p class="text-gray-600 text-sm text-center">@lastRollResult.JobDescription</p>
@@ -77,7 +77,7 @@
             <div class="grid grid-cols-3 gap-4">
                 <div class="text-center bg-green-50 rounded-lg p-3">
                     <div class="text-2xl">💰</div>
-                    <div class="text-green-600 font-bold">+${lastRollResult.IncomeChange:N0}</div>
+                    <div class="text-green-600 font-bold">+$@(lastRollResult.IncomeChange.ToString("N0"))</div>
                     <div class="text-xs text-gray-600">Monthly Income</div>
                 </div>
                 <div class="text-center bg-blue-50 rounded-lg p-3">
