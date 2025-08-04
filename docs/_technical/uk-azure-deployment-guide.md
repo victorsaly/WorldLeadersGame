@@ -239,6 +239,64 @@ curl -X GET "https://localhost:7289/api/AI/personalities"
 
 ---
 
+## 💰 Pay-As-You-Go Pricing for Educational Projects
+
+### **Azure AI Services Pricing Model**
+
+All Azure AI services operate on **pay-as-you-go** basis - perfect for educational projects:
+
+#### **Azure OpenAI (GPT-4)**
+- **Model**: GPT-4 (0613)
+- **Input Tokens**: $0.03 per 1K tokens (~750 words)
+- **Output Tokens**: $0.06 per 1K tokens (~750 words)
+- **Educational Usage**: 10-50 interactions/day = £15-30/month
+
+#### **Content Moderator**
+- **Text Moderation**: $1 per 1,000 transactions
+- **Educational Usage**: 100-500 validations/day = £3-15/month
+
+#### **Speech Services**
+- **Speech-to-Text**: $1 per hour of audio
+- **Text-to-Speech**: $4 per 1M characters
+- **Educational Usage**: 30 minutes/day = £15-25/month
+
+### **Realistic Educational Project Costs**
+
+#### **Small Classroom (5-10 students)**
+- **Daily Usage**: 50 AI interactions, 100 safety checks, 15 min speech
+- **Monthly Cost**: £25-40 total
+- **Per Student**: £2.50-4.00/month
+
+#### **Individual Learning (1-2 students)**
+- **Daily Usage**: 10-20 AI interactions, 20-40 safety checks, 5 min speech
+- **Monthly Cost**: £8-15 total
+- **Perfect for**: Home education, tutoring, personal projects
+
+#### **Medium School Project (20-30 students)**
+- **Daily Usage**: 200 AI interactions, 400 safety checks, 60 min speech
+- **Monthly Cost**: £80-120 total
+- **Per Student**: £2.70-4.00/month
+
+### **Free Tier Benefits**
+
+- **Content Moderator**: First 5,000 transactions/month FREE
+- **Speech Services**: First 5 hours speech-to-text/month FREE
+- **OpenAI**: No free tier, but very affordable for educational use
+
+### **Cost Control Features**
+
+```bash
+# Set up budget alerts in Azure
+az consumption budget create \
+  --resource-group rg-worldleaders-personal \
+  --budget-name "educational-ai-budget" \
+  --amount 50 \
+  --time-grain Monthly \
+  --time-period "2025-08-01" "2026-07-31"
+```
+
+---
+
 ## ⚠️ Important Considerations
 
 ### **Azure OpenAI Access**

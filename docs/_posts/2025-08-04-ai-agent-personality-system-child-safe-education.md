@@ -368,7 +368,49 @@ Each AI agent directly supports specific educational standards:
 
 ---
 
-## 🚀 What's Next: Expanding the Educational Ecosystem
+## � Educational Project Economics: Pay-As-You-Go Affordability
+
+### **Perfect for Small Educational Projects**
+
+Azure AI operates on **pay-as-you-go** pricing - ideal for educational projects with moderate usage:
+
+#### **Real-World Educational Costs**
+
+| Usage Scenario | Daily Interactions | Monthly Cost | Per Student |
+|----------------|-------------------|--------------|-------------|
+| **Individual Learning** | 10-20 AI chats | £8-15 | £8-15 |
+| **Small Classroom** | 50-100 AI chats | £25-40 | £2.50-4.00 |
+| **Home Education** | 5-15 AI chats | £5-12 | £5-12 |
+| **Tutoring Sessions** | 20-30 AI chats | £15-25 | £15-25 |
+
+#### **What You Pay For**
+
+- **Only Active Usage**: No fixed monthly fees
+- **Educational Rates**: GPT-4 at ~£0.04 per conversation
+- **Safety Included**: Content moderation costs built-in
+- **Scalable**: Start small, grow as needed
+
+#### **Free Tier Benefits**
+
+- **5,000 FREE** safety checks per month
+- **5 hours FREE** speech recognition per month
+- **No commitment**: Cancel anytime, pay only for what you use
+
+### **Cost Control for Educational Budgets**
+
+```bash
+# Set educational budget alerts
+az consumption budget create \
+  --budget-name "classroom-ai-budget" \
+  --amount 30 \
+  --time-grain Monthly
+```
+
+**Perfect for**: Personal projects, home education, small classrooms, tutoring services, and educational experimentation without large upfront costs.
+
+---
+
+## �🚀 What's Next: Expanding the Educational Ecosystem
 
 Our AI Agent Personality System provides the foundation for advanced educational features:
 
