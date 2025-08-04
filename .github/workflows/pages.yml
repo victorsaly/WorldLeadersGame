@@ -39,6 +39,7 @@ jobs:
           ruby-version: '3.1'
           bundler-cache: true
           working-directory: './docs'
+          bundler: 'latest'
       
       - name: Setup Pages
         id: pages
