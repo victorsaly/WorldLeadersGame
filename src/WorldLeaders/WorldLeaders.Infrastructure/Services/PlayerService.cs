@@ -52,7 +52,7 @@ public class PlayerService : IPlayerService
                 Reputation = 0, // Build reputation through gameplay
                 Happiness = 50, // Start with neutral happiness
                 CurrentJob = JobLevel.Farmer,
-                CurrentGameState = GameState.NotStarted,
+                CurrentGameState = GameState.InProgress, // Game starts immediately
                 GameStartedAt = DateTime.UtcNow,
                 LastActiveAt = DateTime.UtcNow
             };
