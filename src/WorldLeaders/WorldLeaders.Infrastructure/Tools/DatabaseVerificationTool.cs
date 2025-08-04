@@ -78,7 +78,9 @@ public class DatabaseVerificationTool
             foreach (var (tableName, description) in tables)
             {
                 var tableExists = await dbContext.Database
+#pragma warning disable EF1002
                     .SqlQueryRaw<int>($"SELECT 1 FROM information_schema.tables WHERE table_name = '{tableName.ToLower()}'")
+#pragma warning restore EF1002
                     .AnyAsync();
                 Console.WriteLine($"   {(tableExists ? "✅" : "❌")} {tableName}: {description}");
             }
