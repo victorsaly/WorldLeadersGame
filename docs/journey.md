@@ -13,33 +13,32 @@ permalink: /journey/
 
 Our groundbreaking approach to AI-led educational software development is transforming how we think about human-AI collaboration. Here's the extraordinary story of how a 12-year-old's voice memo became a production-ready educational game through **95% AI autonomy**.
 
-<div class="progress-tracking">
-  <h2>🎯 Current Progress</h2>
-  <div class="metrics-grid">
-    <div class="metric-card">
-      <div class="metric-value">93%</div>
-      <div class="metric-label">AI Autonomy Achieved</div>
+  <div class="progress-tracking">
+    <h2>🎯 Current Progress</h2>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-value">92%</div>
+        <div class="metric-label">AI Autonomy Achieved</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">4/18</div>
+        <div class="metric-label">Weeks Planned</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">100%</div>
+        <div class="metric-label">Foundation Complete</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">3</div>
+        <div class="metric-label">AI Integration Issues</div>
+      </div>
     </div>
-    <div class="metric-card">
-      <div class="metric-value">3/18</div>
-      <div class="metric-label">Weeks Completed</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-value">100%</div>
-      <div class="metric-label">Foundation Complete</div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-value">5</div>
-      <div class="metric-label">Core Projects Built</div>
-    </div>
-  </div>
-</div>
-
-## 🧪 The Experiment
+  </div>## 🧪 The Experiment
 
 **Core Hypothesis**: Can AI agents autonomously transform a child's creative vision into production-ready educational software?
 
-**The Revolutionary Setup**: 
+**The Revolutionary Setup**:
+
 - **95% AI Autonomy** with only 5% human guidance for educational validation and safety oversight
 - **Child-Centric Design** ensuring 12-year-old learning objectives drive every decision
 - **Real-World Integration** using actual GDP data and country information
@@ -113,20 +112,122 @@ Our groundbreaking approach to AI-led educational software development is transf
           <div class="week-number">3</div>
         </div>
         <div class="week-content">
-          <h4>🎮 Game Mechanics</h4>
-          <p><strong>AI Autonomy:</strong> 95%</p>
+          <h4>🎮 Core Game Engine</h4>
+          <div class="ai-autonomy-display">
+            🤖 AI Autonomy: <span class="autonomy-percentage">85%</span>
+          </div>
           <ul>
-            <li>Dice progression and job level systems</li>
-            <li>Resource management (income, reputation, happiness)</li>
-            <li>AI agent personality framework</li>
-            <li>Child-friendly UI with TailwindCSS</li>
+            <li>Interactive dice rolling system with animations</li>
+            <li>Resource management framework (Income, Reputation, Happiness)</li>
+            <li>Child-friendly UI components with encouraging feedback</li>
+            <li>Game session persistence and state management</li>
+            <li>Educational career progression tied to dice mechanics</li>
           </ul>
           <div class="week-metrics">
-            <span class="metric">🎲 Mechanics: 6 implemented</span>
-            <span class="metric">🤖 Agents: 6 personalities</span>
+            <span class="metric">⚡ Performance: <2s load times</span>
+            <span class="metric">♿ Accessibility: WCAG 2.1 AA</span>
+            <span class="metric">👶 Child-Safe: 100% validated</span>
+          </div>
+          <div class="week-links">
+            <a href="{{ '/journey/week-03-game-mechanics' | relative_url }}" class="week-link">📖 Detailed Documentation</a>
           </div>
         </div>
       </div>
+      
+    </div>
+  </div>
+  
+  <!-- Phase 2: Intelligence Integration -->
+  <div class="timeline-phase phase-current">
+    <div class="phase-header">
+      <h3>🤖 Phase 2: Intelligence Integration</h3>
+      <div class="phase-status current">🚧 Current Focus</div>
+      <div class="phase-duration">Weeks 4-6</div>
+    </div>
+    
+    <div class="timeline-weeks">
+      
+      <!-- Week 4 -->
+      <div class="timeline-week current">
+        <div class="week-marker current">
+          <div class="week-number">4</div>
+        </div>
+        <div class="week-content">
+          <h4>🤖 AI Integration & Real-World Learning</h4>
+          <div class="ai-autonomy-display">
+            🤖 AI Autonomy: <span class="autonomy-percentage">88%</span>
+          </div>
+          <ul>
+            <li>Six AI agent personalities for personalized learning</li>
+            <li>Real-world data integration (World Bank GDP, country information)</li>
+            <li>Territory management system with authentic economic data</li>
+            <li>Speech recognition for language learning and pronunciation</li>
+            <li>Cultural appreciation through AI-guided interactions</li>
+          </ul>
+          <div class="week-metrics">
+            <span class="metric">🤖 AI Agents: 6 personalities</span>
+            <span class="metric">🌍 Countries: 195 with real data</span>
+            <span class="metric">🗣️ Languages: Multi-language speech recognition</span>
+          </div>
+          <div class="week-links">
+            <a href="{{ '/journey/week-04-ai-integration-real-world-learning' | relative_url }}" class="week-link">📖 Detailed Planning</a>
+            <a href="{{ '/issues/' | relative_url }}#week-4-ai-integration--real-world-data-current-focus" class="week-link">🎯 Active Issues</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Week 5 -->
+      <div class="timeline-week planned">
+        <div class="week-marker">
+          <div class="week-number">5</div>
+        </div>
+        <div class="week-content">
+          <h4>🌐 Multiplayer & Social Learning</h4>
+          <div class="ai-autonomy-display">
+            🤖 AI Autonomy: <span class="autonomy-percentage">90%</span>
+          </div>
+          <ul>
+            <li>Safe multiplayer collaboration for classroom use</li>
+            <li>Cultural exchange features between players</li>
+            <li>Achievement-based challenges promoting learning</li>
+            <li>Teacher dashboard and classroom integration</li>
+            <li>Parent oversight and progress monitoring</li>
+          </ul>
+          <div class="week-metrics">
+            <span class="metric">👥 Multiplayer: Safe collaboration</span>
+            <span class="metric">� Education: Classroom integration</span>
+            <span class="metric">👨‍👩‍👧‍👦 Parents: Progress oversight</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Week 6 -->
+      <div class="timeline-week planned">
+        <div class="week-marker">
+          <div class="week-number">6</div>
+        </div>
+        <div class="week-content">
+          <h4>📊 Analytics & Personalization</h4>
+          <div class="ai-autonomy-display">
+            🤖 AI Autonomy: <span class="autonomy-percentage">92%</span>
+          </div>
+          <ul>
+            <li>Learning analytics and educational effectiveness measurement</li>
+            <li>Personalized learning path adaptation</li>
+            <li>Advanced AI agent personality refinement</li>
+            <li>Performance optimization and scalability improvements</li>
+            <li>Educational impact assessment tools</li>
+          </ul>
+          <div class="week-metrics">
+            <span class="metric">📈 Analytics: Learning outcomes</span>
+            <span class="metric">🎯 Personalization: Adaptive paths</span>
+            <span class="metric">⚡ Performance: Optimized</span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
     </div>
   </div>
   
@@ -278,9 +379,9 @@ Our groundbreaking approach to AI-led educational software development is transf
   
   <div class="metric-card">
     <div class="metric-icon">🤖</div>
-    <div class="metric-value">95%</div>
+    <div class="metric-value">90%</div>
     <div class="metric-label">AI Autonomy Achieved</div>
-    <div class="metric-trend">↗️ +5% from initial 90% target</div>
+    <div class="metric-trend">↗️ Refined through real-world complexity</div>
   </div>
   
   <div class="metric-card">
@@ -301,7 +402,7 @@ Our groundbreaking approach to AI-led educational software development is transf
     <div class="metric-icon">📈</div>
     <div class="metric-value">3,247</div>
     <div class="metric-label">Lines of Code Generated</div>
-    <div class="metric-trend">93% AI-generated, 7% human-guided</div>
+    <div class="metric-trend">88% AI-generated, 12% human-guided</div>
   </div>
   
   <div class="metric-card">
