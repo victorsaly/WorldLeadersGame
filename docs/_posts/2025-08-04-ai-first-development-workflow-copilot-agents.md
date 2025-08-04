@@ -8,8 +8,6 @@ author: "Victor Saly"
 excerpt: "A comprehensive guide to our revolutionary AI-first development workflow - from AI-generated issues to automated pull requests using GitHub Copilot agents."
 ---
 
-# AI-First Development Workflow: From Issue Creation to Pull Request
-
 **How we achieve 95% AI autonomy in educational software development**
 
 In our World Leaders Game project, we've developed a revolutionary AI-first workflow that achieves 95% development autonomy. This post documents our complete process from issue creation to pull request completion using GitHub Copilot and AI agents.

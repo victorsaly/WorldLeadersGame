@@ -22,8 +22,6 @@ image:
   alt: AI-generated game The AI-driven approach to educational game development continues to evolve
 ---
 
-# AI-Generated Issues: Systematic Problem-Solving for Educational Game Development
-
 ![World Leaders Game Logo]({{ '/assets/world-leaders-logo.svg' | relative_url }})
 _The AI-driven approach to educational game development continues to evolve_
 
