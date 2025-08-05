@@ -173,7 +173,7 @@
         catch (Exception ex)
         {
             // SignalR connection failed - continue without real-time updates
-            Console.WriteLine($"SignalR connection failed: {ex.Message}");
+            Logger.LogWarning(ex, "SignalR connection failed, continuing without real-time updates");
         }
     }
 
