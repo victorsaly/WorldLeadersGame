@@ -1,0 +1,35 @@
+graph TB
+    subgraph "Real-World Data Integration"
+        A[REST Countries API] --> B[External Data Service]
+        C[World Bank GDP Data] --> B
+        D[Country Flags & Info] --> B
+        B --> E[Content Safety Validation]
+    end
+
+    subgraph "Territory Management Core"
+        E --> F[Territory Service]
+        F --> G[Strategic Acquisition Logic]
+        F --> H[Economic Tier Classification]
+        F --> I[Monthly Income Generation]
+    end
+
+    subgraph "Educational UI Layer"
+        G --> J[Territory Explorer]
+        H --> K[Territory Details Modal]
+        I --> L[Language Learning Challenge]
+        J --> M[Child-Friendly Interface]
+        K --> M
+        L --> M
+    end
+
+    subgraph "Database & Persistence"
+        F --> N[Entity Framework Core]
+        N --> O[In-Memory Database]
+        O --> P[106 Seeded Territories]
+        P --> Q[Multi-Tier Classification]
+    end
+
+    style A fill:#e1f5fe
+    style C fill:#e1f5fe
+    style M fill:#f3e5f5
+    style P fill:#e8f5e8
