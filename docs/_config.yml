@@ -39,6 +39,9 @@ collections:
   milestones:
     output: true
     permalink: /milestones/:name/
+  issues:
+    output: true
+    permalink: /issues/:name/
 
 # Defaults
 defaults:

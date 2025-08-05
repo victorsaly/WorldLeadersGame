@@ -40,6 +40,11 @@ jobs:
           bundler-cache: true
           working-directory: './docs'
           bundler: 'latest'
+          
+      - name: Install dependencies
+        run: |
+          bundle config set --local deployment false
+          bundle install
       
       - name: Setup Pages
         id: pages
