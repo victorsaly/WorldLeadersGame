@@ -607,7 +607,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         }
     }
 
-    private async Task TryAgain()
+    private void TryAgain()
     {
         currentChallengeIndex = 0;
         currentChallenge = challenges.FirstOrDefault();
@@ -740,7 +740,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     /// <param name="base64AudioData">Base64 encoded PCM audio data</param>
     /// <param name="durationSeconds">Duration of the recording in seconds</param>
     [JSInvokable]
-    public async Task OnAudioRecorded(string base64AudioData, double durationSeconds)
+    public void OnAudioRecorded(string base64AudioData, double durationSeconds)
     {
         try
         {

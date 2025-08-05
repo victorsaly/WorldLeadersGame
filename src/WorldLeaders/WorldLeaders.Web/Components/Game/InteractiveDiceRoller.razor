@@ -143,9 +143,9 @@
     private DiceRollResult? lastRollResult;
     private List<DiceRollHistory> diceHistory = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        await LoadDiceHistory();
+        LoadDiceHistory();
     }
 
     private async Task RollDice()
@@ -217,7 +217,7 @@
         }
     }
 
-    private async Task LoadDiceHistory()
+    private void LoadDiceHistory()
     {
         try
         {
