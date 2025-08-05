@@ -2,6 +2,7 @@
 @using WorldLeaders.Shared.DTOs
 @using WorldLeaders.Shared.Enums
 @using WorldLeaders.Shared.Services
+@inject ILogger<InteractiveDiceRoller> Logger
 
 <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
     <h3 class="text-2xl font-bold text-purple-600 mb-4 text-center">🎲 Roll for Your Next Job!</h3>
@@ -196,7 +197,7 @@
         catch (Exception ex)
         {
             // Error handling with child-friendly message
-            Console.WriteLine($"Error rolling dice: {ex.Message}");
+            Logger.LogError(ex, "Error rolling dice for player {PlayerId}", PlayerId);
         }
         finally
         {
@@ -227,7 +228,7 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading dice history: {ex.Message}");
+            Logger.LogWarning(ex, "Error loading dice history for player {PlayerId}", PlayerId);
         }
     }
 
