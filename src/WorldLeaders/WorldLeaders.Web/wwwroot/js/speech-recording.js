@@ -334,4 +334,73 @@ window.speechRecorderInterop = {
     }
 };
 
-console.log('Speech recording module loaded for educational language learning');
+/**
+ * Speech Synthesis functions for educational pronunciation playback
+ * Context: Child-safe audio playback for language learning
+ * Educational Objective: Provide clear pronunciation examples for 12-year-olds
+ */
+
+/**
+ * Create a SpeechSynthesisUtterance with educational settings
+ * @param {object} options - Speech synthesis options
+ * @returns {SpeechSynthesisUtterance} Configured utterance for educational use
+ */
+window.createSpeechUtterance = function(options) {
+    if (!('speechSynthesis' in window)) {
+        console.warn('Speech Synthesis not supported in this browser');
+        return null;
+    }
+
+    const utterance = new SpeechSynthesisUtterance();
+    
+    // Set text and language
+    utterance.text = options.text || '';
+    utterance.lang = options.lang || 'en-US';
+    
+    // Child-friendly speech settings
+    utterance.rate = options.rate || 0.8;    // Slightly slower for learning
+    utterance.pitch = options.pitch || 1.0;  // Normal pitch
+    utterance.volume = options.volume || 1.0; // Full volume
+    
+    // Educational event handlers
+    utterance.onstart = function() {
+        console.log(`Starting pronunciation of: "${options.text}" in ${options.lang}`);
+    };
+    
+    utterance.onend = function() {
+        console.log(`Finished pronunciation of: "${options.text}"`);
+    };
+    
+    utterance.onerror = function(event) {
+        console.error('Speech synthesis error:', event.error);
+    };
+    
+    return utterance;
+};
+
+/**
+ * Check if Speech Synthesis is supported
+ * @returns {boolean} True if speech synthesis is available
+ */
+window.isSpeechSynthesisSupported = function() {
+    return ('speechSynthesis' in window);
+};
+
+/**
+ * Get available voices for language learning
+ * @returns {Array} Array of available speech synthesis voices
+ */
+window.getAvailableVoices = function() {
+    if (!('speechSynthesis' in window)) {
+        return [];
+    }
+    
+    return speechSynthesis.getVoices().map(voice => ({
+        name: voice.name,
+        lang: voice.lang,
+        localService: voice.localService,
+        default: voice.default
+    }));
+};
+
+console.log('Speech recording and synthesis modules loaded for educational language learning');

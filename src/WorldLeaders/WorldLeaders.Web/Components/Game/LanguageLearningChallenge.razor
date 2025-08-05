@@ -63,13 +63,6 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
                                             <button @onclick="PlayAudio" class="btn-child-friendly bg-blue-500 mb-2">
                                                 🔊 Listen to Pronunciation
                                             </button>
-                                            @if (!string.IsNullOrEmpty(currentChallenge.AudioUrl))
-                                            {
-                                                <audio @ref="audioElement" preload="auto">
-                                                    <source src="@currentChallenge.AudioUrl" type="audio/mpeg">
-                                                    Your browser does not support audio playback.
-                                                </audio>
-                                            }
                                         </div>
 
                                         <!-- Practice Input -->
@@ -303,7 +296,6 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     private bool isCorrect = false;
     private string userInput = "";
     private string feedbackMessage = "";
-    private ElementReference audioElement;
     private int bonusIncome = 0;
     private int bonusReputation = 0;
 
@@ -632,17 +624,46 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     {
         try
         {
-            if (audioElement.Context != null)
+            if (currentChallenge?.Word == null)
             {
-                await audioElement.FocusAsync(); // This helps trigger audio context
-                // In a real implementation, you would play the audio file
-                // For now, we'll just provide visual feedback
-                Logger.LogInformation("Playing audio for word: {Word}", currentChallenge?.Word);
+                Logger.LogWarning("No current challenge word to play audio for");
+                return;
+            }
+
+            // Use browser's Speech Synthesis API for educational pronunciation
+            var utteranceOptions = new
+            {
+                text = currentChallenge.Word,
+                lang = currentChallenge.LanguageCode ?? "en-US",
+                rate = 0.8, // Slightly slower for learning
+                pitch = 1.0,
+                volume = 1.0
+            };
+
+            // Call JavaScript to use Speech Synthesis API
+            await JSRuntime.InvokeVoidAsync("speechSynthesis.speak", 
+                await JSRuntime.InvokeAsync<object>("createSpeechUtterance", utteranceOptions));
+
+            Logger.LogInformation("Playing audio pronunciation for word: {Word} in language: {Language}", 
+                currentChallenge.Word, currentChallenge.LanguageCode);
+
+            // Provide visual feedback that audio is playing
+            feedbackMessage = $"🔊 Listen carefully to the pronunciation of '{currentChallenge.Word}'!";
+            StateHasChanged();
+            
+            // Clear feedback after a few seconds
+            await Task.Delay(3000);
+            if (feedbackMessage.StartsWith("🔊"))
+            {
+                feedbackMessage = "";
+                StateHasChanged();
             }
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error playing audio for language challenge");
+            feedbackMessage = "Sorry, audio playback is not available on this device. Try the pronunciation challenge instead!";
+            StateHasChanged();
         }
     }
 
