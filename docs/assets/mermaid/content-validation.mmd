@@ -1,0 +1,16 @@
+graph TB
+    subgraph "Multi-Layer Content Validation"
+        A[External API Data] --> B[Content Moderation Service]
+        B --> C[Age-Appropriate Language Check]
+        C --> D[Cultural Sensitivity Review]
+        D --> E[Educational Value Validation]
+    end
+
+    subgraph "Safety Fallbacks"
+        F[Safe Content Database] --> G[Emergency Responses]
+        G --> H[Positive Messaging Only]
+    end
+
+    E --> I{Content Approved?}
+    I -->|Yes| J[Display to Child]
+    I -->|No| F
