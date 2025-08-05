@@ -6,6 +6,7 @@
 @using WorldLeaders.Web.Services
 @using Microsoft.AspNetCore.SignalR.Client
 @inject IHttpClientFactory HttpClientFactory
+@inject ILogger<GameDashboard> Logger
 @inject IHubConnectionFactory HubConnectionFactory
 @implements IAsyncDisposable
 
@@ -107,7 +108,7 @@
                 <p class="text-gray-600 mb-6">Begin your educational adventure and learn about world leadership, geography, and languages!</p>
                 
                 <div class="max-w-md mx-auto">
-                    <input @bind="newPlayerName" @onkeypress="@((e) => { if (e.Key == "Enter") CreatePlayer(); })"
+                    <input @bind="newPlayerName" @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreatePlayer(); })"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                            placeholder="Enter your name (2-20 characters)" maxlength="20" />
                     
@@ -147,7 +148,6 @@
     private string gameMessage = "";
     private string errorMessage = "";
     private bool isLoading = false;
-    private bool isRolling = false;
     private HubConnection? hubConnection;
 
     protected override async Task OnInitializedAsync()
@@ -242,10 +242,12 @@
         catch (HttpRequestException ex)
         {
             errorMessage = "Cannot connect to the game server. Please make sure the game is running.";
+            Logger.LogWarning(ex, "Failed to connect to game server while creating player");
         }
         catch (Exception ex)
         {
             errorMessage = "An unexpected error occurred. Please try again.";
+            Logger.LogError(ex, "Unexpected error while creating player");
         }
         finally
         {
@@ -258,7 +260,6 @@
     {
         if (playerDashboard == null) return;
 
-        isRolling = true;
         try
         {
             var httpClient = HttpClientFactory.CreateClient("GameAPI");
@@ -277,10 +278,7 @@
         catch (Exception ex)
         {
             gameMessage = "Failed to roll for new job. Please try again.";
-        }
-        finally
-        {
-            isRolling = false;
+            Logger.LogError(ex, "Error rolling for new job for player {PlayerId}", playerDashboard.Id);
         }
     }
 
@@ -302,7 +300,8 @@
         }
         catch (Exception ex)
         {
-            // Handle silently for now
+            // Handle silently for now - events are optional
+            Logger.LogWarning(ex, "Failed to load game events");
         }
     }
 
@@ -321,7 +320,7 @@
         return effect > 0 ? $"+{effect}" : effect.ToString();
     }
 
-    private async Task OnDiceRolled(DiceRollResult result)
+    private void OnDiceRolled(DiceRollResult result)
     {
         if (playerDashboard == null) return;
 
@@ -361,6 +360,7 @@
         catch (Exception ex)
         {
             gameMessage = "Something went wrong with the dice roll. Try again!";
+            Logger.LogError(ex, "Error handling dice roll result for player {PlayerId}", playerDashboard?.Id);
             StateHasChanged();
         }
     }
