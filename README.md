@@ -3,7 +3,7 @@
 
 <div align="center">
 
-![Game Logo](https://worldleadersgame.co.uk/assets/world-leaders-logo.svg)
+![Game Logo](https://docs.worldleadersgame.co.uk/assets/world-leaders-logo.svg)
 
 **📊 Current Status: Week 3 • 95% AI Autonomy • Educational Focus**
 
@@ -11,7 +11,7 @@
 [![.NET 8 LTS](https://img.shields.io/badge/.NET-8.0%20LTS-purple?logo=dotnet)](https://dotnet.microsoft.com/)
 [![Blazor Server](https://img.shields.io/badge/Blazor-Server-red?logo=blazor)](https://blazor.net/)
 [![Azure OpenAI](https://img.shields.io/badge/Azure-OpenAI-green?logo=microsoft)](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
-[![Educational](https://img.shields.io/badge/Educational-12%20year%20olds-yellow?logo=graduation-cap)](https://worldleadersgame.co.uk/about)
+[![Educational](https://img.shields.io/badge/Educational-12%20year%20olds-yellow?logo=graduation-cap)](https://docs.worldleadersgame.co.uk/about)
 
 </div>
 
@@ -98,16 +98,16 @@ This project answers that question through a **live 18-week educational software
 
 Our documentation system captures the complete development journey, methodology, and educational outcomes:
 
-### 🎯 [**Explore Full Documentation →**](https://worldleadersgame.co.uk)
+### 🎯 [**Explore Full Documentation →**](https://docs.worldleadersgame.co.uk)
 
 #### Key Documentation Sections
 
 | Section | Purpose | Status |
 |---------|---------|--------|
-| [**Development Journey**](https://worldleadersgame.co.uk/journey) | Week-by-week AI collaboration insights | 📝 Live Updates |
-| [**Technical Guides**](https://worldleadersgame.co.uk/technical-docs) | Implementation patterns and architecture | ✅ Complete |
-| [**Educational Methodology**](https://worldleadersgame.co.uk/blog) | AI-first development insights | 📊 Analytics |
-| [**Project Milestones**](https://worldleadersgame.co.uk/milestones) | Achievement tracking and metrics | 🎯 Goal Tracking |
+| [**Development Journey**](https://docs.worldleadersgame.co.uk/journey) | Week-by-week AI collaboration insights | 📝 Live Updates |
+| [**Technical Guides**](https://docs.worldleadersgame.co.uk/technical-docs) | Implementation patterns and architecture | ✅ Complete |
+| [**Educational Methodology**](https://docs.worldleadersgame.co.uk/blog) | AI-first development insights | 📊 Analytics |
+| [**Project Milestones**](https://docs.worldleadersgame.co.uk/milestones) | Achievement tracking and metrics | 🎯 Goal Tracking |
 | [**GitHub Issues**](https://github.com/victorsaly/WorldLeadersGame/issues) | AI-generated development tasks | 🤖 AI-Driven |
 
 ---
@@ -122,7 +122,7 @@ Our young creative director didn't just describe the game—he designed it:
 
 | Original Sketches | Digital Logo Design |
 |-------------------|---------------------|
-| ![Game Mockup 1](https://worldleadersgame.co.uk/assets/game-mockup-1.png) | ![Game Mockup 2](https://worldleadersgame.co.uk/assets/game-mockup-2.png) |
+| ![Game Mockup 1](https://docs.worldleadersgame.co.uk/assets/game-mockup-1.png) | ![Game Mockup 2](https://docs.worldleadersgame.co.uk/assets/game-mockup-2.png) |
 | *Hand-drawn interface mockups* | *Independent Figma logo creation* |
 
 </div>
@@ -256,10 +256,10 @@ This is primarily a father-son learning experiment, but we welcome:
 
 ### Project Links
 
-- 📖 **[Complete Documentation](https://worldleadersgame.co.uk)** - Full development journey and methodology
-- 🔄 **[Live Development](https://worldleadersgame.co.uk/journey)** - Week-by-week progress updates  
+- 📖 **[Complete Documentation](https://docs.worldleadersgame.co.uk)** - Full development journey and methodology
+- 🔄 **[Live Development](https://docs.worldleadersgame.co.uk/journey)** - Week-by-week progress updates  
 - 🎯 **[GitHub Issues](https://github.com/victorsaly/WorldLeadersGame/issues)** - AI-generated development tasks
-- 🏆 **[Milestones](https://worldleadersgame.co.uk/milestones)** - Achievement tracking
+- 🏆 **[Milestones](https://docs.worldleadersgame.co.uk/milestones)** - Achievement tracking
 
 ### Educational Impact
 
@@ -273,6 +273,6 @@ This is primarily a father-son learning experiment, but we welcome:
 
 **Built with ❤️ by a father-son team and AI collaboration**
 
-[📚 Documentation](https://worldleadersgame.co.uk) • [🎮 Play Game](https://github.com/victorsaly/WorldLeadersGame/releases) • [🤖 AI Methodology](https://worldleadersgame.co.uk/blog) • [📊 Progress](https://worldleadersgame.co.uk/journey)
+[📚 Documentation](https://docs.worldleadersgame.co.uk) • [🎮 Play Game](https://github.com/victorsaly/WorldLeadersGame/releases) • [🤖 AI Methodology](https://docs.worldleadersgame.co.uk/blog) • [📊 Progress](https://docs.worldleadersgame.co.uk/journey)
 
 </div>
