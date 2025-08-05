@@ -73,6 +73,10 @@ permalink: /technical-docs/
 - Docker & PostgreSQL Configuration (Coming Soon)
 - VS Code Extensions & AI Tools (Coming Soon)
 
+### Production Deployment
+
+- [**Production Deployment Configuration Guide**]({{ '/technical/production-deployment-configuration/' | relative_url }}) - Complete guide for secure production deployment with API configuration
+
 ### Testing & Quality Assurance
 
 - Educational Content Testing Strategies (Coming Soon)
