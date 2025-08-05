@@ -25,7 +25,12 @@ To:
     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 ```
 
-### 2. Required GitHub Secrets
+### 2. Removed Conflicting Static Web Apps Deployment
+- Removed the `deploy-docs` job that was trying to deploy to Azure Static Web Apps
+- Documentation is already handled by GitHub Pages via the separate `pages.yml` workflow
+- Fixed dependency chain: `post-deployment` now only depends on `deploy-to-azure`
+
+### 3. Required GitHub Secrets
 
 You need to add these three secrets to your GitHub repository:
 

@@ -231,41 +231,9 @@ jobs:
           exit 1
         fi
 
-  deploy-docs:
-    runs-on: ubuntu-latest
-    name: 📚 Deploy Documentation
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-    - name: 📥 Checkout code
-      uses: actions/checkout@v4
-      
-    - name: 💎 Setup Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.1'
-        bundler-cache: true
-        working-directory: docs
-        
-    - name: 🏗️ Build Jekyll site
-      run: |
-        cd docs
-        bundle install
-        bundle exec jekyll build
-        
-    - name: 📚 Deploy to Azure Static Web Apps
-      uses: Azure/static-web-apps-deploy@v1
-      with:
-        azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        action: "upload"
-        app_location: "docs"
-        output_location: "_site"
-        skip_app_build: true
-
   post-deployment:
     runs-on: ubuntu-latest
-    needs: [deploy-to-azure, deploy-docs]
+    needs: [deploy-to-azure]
     name: 🎉 Post-Deployment Validation
     if: github.ref == 'refs/heads/main'
     
@@ -277,7 +245,7 @@ jobs:
         echo ""
         echo "✅ Web App: https://${{ env.AZURE_WEB_APP_NAME }}.azurewebsites.net"
         echo "✅ API: https://${{ env.AZURE_API_APP_NAME }}.azurewebsites.net"
-        echo "✅ Documentation: Available via Static Web App"
+        echo "✅ Documentation: Available via GitHub Pages"
         echo ""
         echo "🛡️ Child Safety: All safety validations passed"
         echo "📚 Educational Value: Learning objectives preserved"
@@ -292,7 +260,7 @@ jobs:
         echo "### ✅ Successfully Deployed Components:" >> $GITHUB_STEP_SUMMARY
         echo "- 🌐 **Blazor Web App**: Educational game interface" >> $GITHUB_STEP_SUMMARY
         echo "- 🔧 **API Service**: Game mechanics and AI agents" >> $GITHUB_STEP_SUMMARY
-        echo "- 📚 **Documentation**: Educational methodology guides" >> $GITHUB_STEP_SUMMARY
+        echo "- 📚 **Documentation**: Educational methodology guides (GitHub Pages)" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### 🎯 Educational Objectives Achieved:" >> $GITHUB_STEP_SUMMARY
         echo "- Geography learning through territory acquisition" >> $GITHUB_STEP_SUMMARY
