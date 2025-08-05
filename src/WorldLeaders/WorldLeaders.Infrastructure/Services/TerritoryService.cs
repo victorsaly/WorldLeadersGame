@@ -18,6 +18,10 @@ namespace WorldLeaders.Infrastructure.Services;
 /// </summary>
 public class TerritoryService : ITerritoryService
 {
+    // Educational constants for child-friendly limits
+    private const int MAX_LANGUAGE_CHALLENGES = 5; // Limit challenges to avoid overwhelming children
+    private const int CHILD_ACCURACY_REQUIREMENT = 70; // 70% accuracy required for children
+    
     private readonly WorldLeadersDbContext _context;
     private readonly IExternalDataService _externalDataService;
     private readonly IPlayerService _playerService;
@@ -273,12 +277,12 @@ public class TerritoryService : ITerritoryService
                         GetSimpleWord(territory.CountryName, languageCode),
                         GetPronunciation(territory.CountryName, languageCode),
                         $"/audio/{languageCode}/{territory.CountryCode.ToLower()}.mp3",
-                        70 // 70% accuracy required for children
+                        CHILD_ACCURACY_REQUIREMENT // 70% accuracy required for children
                     ));
                 }
             }
 
-            return challenges.Take(5).ToList(); // Limit to 5 challenges to avoid overwhelming children
+            return challenges.Take(MAX_LANGUAGE_CHALLENGES).ToList(); // Limit to 5 challenges to avoid overwhelming children
         }
         catch (Exception ex)
         {

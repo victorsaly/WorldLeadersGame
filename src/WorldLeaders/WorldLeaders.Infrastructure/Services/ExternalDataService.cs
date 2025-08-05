@@ -12,6 +12,10 @@ namespace WorldLeaders.Infrastructure.Services;
 /// </summary>
 public class ExternalDataService : IExternalDataService
 {
+    // Educational constants for child-friendly limits
+    private const int MAX_LANGUAGES_PER_TERRITORY = 3; // Limit to 3 languages for children
+    private const int MAX_CURRENCIES_PER_TERRITORY = 2; // Limit to 2 currencies for simplicity
+    
     private readonly HttpClient _httpClient;
     private readonly IContentModerationService _contentModerationService;
     private readonly ILogger<ExternalDataService> _logger;
@@ -187,7 +191,7 @@ public class ExternalDataService : IExternalDataService
         return languages.Values
             .Where(lang => !string.IsNullOrEmpty(lang.Name))
             .Select(lang => lang.Name!)
-            .Take(3) // Limit to 3 languages for children
+            .Take(MAX_LANGUAGES_PER_TERRITORY) // Limit to 3 languages for children
             .ToList();
     }
 
@@ -198,7 +202,7 @@ public class ExternalDataService : IExternalDataService
         return currencies.Values
             .Where(curr => !string.IsNullOrEmpty(curr.Name))
             .Select(curr => curr.Name!)
-            .Take(2) // Limit to 2 currencies for simplicity
+            .Take(MAX_CURRENCIES_PER_TERRITORY) // Limit to 2 currencies for simplicity
             .ToList();
     }
 }

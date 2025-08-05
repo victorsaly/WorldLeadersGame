@@ -210,6 +210,9 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 </div>
 
 @code {
+    // Educational constants for child-friendly learning
+    private const double PRONUNCIATION_ACCURACY_THRESHOLD = 0.7; // 70% similarity threshold for children
+    
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public Guid PlayerId { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
@@ -433,7 +436,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         var maxLength = Math.Max(input.Length, target.Length);
         var similarity = 1.0 - (double)distance / maxLength;
         
-        return similarity >= 0.7; // 70% similarity threshold for children
+        return similarity >= PRONUNCIATION_ACCURACY_THRESHOLD; // 70% similarity threshold for children
     }
 
     private int ComputeLevenshteinDistance(string s, string t)
