@@ -80,13 +80,13 @@ echo -e "${BLUE}🔐 Creating federated credential for GitHub OIDC...${NC}"
 REPO_OWNER="victorsaly"
 REPO_NAME="WorldLeadersGame"
 
-# Create federated credential for main branch
+# Create federated credential for production environment
 az ad app federated-credential create \
     --id $CLIENT_ID \
-    --parameters "{\"name\":\"github-main\",\"issuer\":\"https://token.actions.githubusercontent.com\",\"subject\":\"repo:${REPO_OWNER}/${REPO_NAME}:ref:refs/heads/main\",\"audiences\":[\"api://AzureADTokenExchange\"]}"
+    --parameters "{\"name\":\"github-production\",\"issuer\":\"https://token.actions.githubusercontent.com\",\"subject\":\"repo:${REPO_OWNER}/${REPO_NAME}:environment:production\",\"audiences\":[\"api://AzureADTokenExchange\"]}"
 
 if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✅ Federated credential created for main branch!${NC}"
+    echo -e "${GREEN}✅ Federated credential created for production environment!${NC}"
 else
     echo -e "${YELLOW}⚠️  Federated credential creation failed (may already exist)${NC}"
 fi

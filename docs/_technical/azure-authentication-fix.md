@@ -97,6 +97,32 @@ This script will:
 
 **Child Safety Consideration**: Proper credential management ensures the educational game deployment remains secure and stable for 12-year-old users.
 
+## 🆕 OIDC Subject Claim Fix (August 5, 2025)
+
+**New Issue Identified**: Federated identity credential subject claim mismatch
+```
+Error: No matching federated identity record found for presented assertion subject 
+'repo:victorsaly/WorldLeadersGame:environment:production'
+```
+
+**Root Cause**: The GitHub workflow uses `environment: production` which creates a different subject claim than expected.
+
+**Subject Claim Formats**:
+- ❌ **Old (Main Branch)**: `repo:victorsaly/WorldLeadersGame:ref:refs/heads/main`
+- ✅ **New (Environment)**: `repo:victorsaly/WorldLeadersGame:environment:production`
+
+**Quick Fix Available**:
+```bash
+# Run the OIDC credential fix script
+./scripts/fix-azure-oidc-credential.sh
+```
+
+This script will:
+1. Find your existing service principal
+2. Remove the old federated credential (if exists)
+3. Create a new credential with the correct subject claim
+4. Verify the configuration
+
 ## 📚 Related Documentation
 
 - [Azure Service Principal Authentication](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals)
