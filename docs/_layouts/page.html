@@ -276,8 +276,8 @@ window.addEventListener('scroll', function() {
 const currentBgImage = getComputedStyle(document.body).getPropertyValue('--random-bg-image');
 
 // Apply the random background to hero sections and page headers
-const style = document.createElement('style');
-style.textContent = `
+const heroStyle = document.createElement('style');
+heroStyle.textContent = `
   .hero-section {
     background-image: ${currentBgImage};
     background-size: cover;
@@ -300,7 +300,7 @@ style.textContent = `
     z-index: 2;
   }
 `;
-document.head.appendChild(style);
+document.head.appendChild(heroStyle);
 
 // Smooth scroll for collection navigation
 document.querySelectorAll('.collection-nav a').forEach(link => {
