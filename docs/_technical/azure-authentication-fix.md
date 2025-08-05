@@ -111,17 +111,23 @@ Error: No matching federated identity record found for presented assertion subje
 - ❌ **Old (Main Branch)**: `repo:victorsaly/WorldLeadersGame:ref:refs/heads/main`
 - ✅ **New (Environment)**: `repo:victorsaly/WorldLeadersGame:environment:production`
 
-**Quick Fix Available**:
+**✅ Fix Applied Successfully** (August 5, 2025):
 ```bash
-# Run the OIDC credential fix script
+# OIDC credential fix script completed successfully
 ./scripts/fix-azure-oidc-credential.sh
 ```
 
-This script will:
-1. Find your existing service principal
-2. Remove the old federated credential (if exists)
-3. Create a new credential with the correct subject claim
-4. Verify the configuration
+**Results**:
+- ✅ Found service principal: `worldleaders-github-actions` (Client ID: `6971e7b8-6812-4eff-aaaf-0db3e77d9d93`)
+- ✅ Removed old federated credential: `github-main`
+- ✅ Created new credential: `github-production` with correct subject claim
+- ✅ Verified configuration matches workflow requirements
+
+**New Federated Credential**:
+- **Name**: `github-production`
+- **Subject**: `repo:victorsaly/WorldLeadersGame:environment:production`
+- **Issuer**: `https://token.actions.githubusercontent.com`
+- **Audience**: `api://AzureADTokenExchange`
 
 ## 📚 Related Documentation
 
@@ -129,10 +135,20 @@ This script will:
 - [GitHub Actions Azure Login](https://github.com/Azure/login#readme)
 - [GitHub Repository Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets)
 
-## ✅ Verification
+## ✅ Verification Status
 
-After adding the secrets, the GitHub Actions workflow should:
-1. ✅ Authenticate successfully with Azure
+**OIDC Configuration**: ✅ **COMPLETE** (August 5, 2025)
+- Federated credential properly configured for `environment:production`
+- Subject claim matches GitHub Actions workflow requirements
+- Service principal authentication ready for deployment
+
+**Next Steps**:
+1. ✅ **Authentication Fixed** - OIDC credential configured correctly
+2. 🔄 **Ready to Deploy** - GitHub Actions workflow should now authenticate successfully  
+3. 🚀 **Test Deployment** - Trigger workflow to verify end-to-end functionality
+
+**Expected Results** after triggering GitHub Actions:
+1. ✅ Authenticate successfully with Azure using OIDC
 2. ✅ Deploy the Web App to `worldleaders-web-prod`
 3. ✅ Deploy the API to `worldleaders-api-prod`
 4. ✅ Configure proper .NET 8 runtime settings
