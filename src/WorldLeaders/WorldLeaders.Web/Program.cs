@@ -1,6 +1,6 @@
 using WorldLeaders.Web.Components;
 using WorldLeaders.Web.Services;
-using WorldLeaders.Infrastructure.Extensions;
+using WorldLeaders.Shared.Services;
 using Microsoft.AspNetCore.SignalR.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Add Infrastructure services (EF Core + Game Services)
-builder.Services.AddInfrastructure(builder.Configuration);
+// Register HTTP-based client services for API communication
+builder.Services.AddScoped<ITerritoryService, TerritoryClientService>();
+builder.Services.AddScoped<ISpeechRecognitionService, SpeechRecognitionClientService>();
 
 // Add HttpClient for API communication
 builder.Services.AddHttpClient("GameAPI", client =>

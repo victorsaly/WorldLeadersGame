@@ -43,6 +43,46 @@
             <InteractiveDiceRoller PlayerId="@playerDashboard.Id" 
                                  OnDiceRolled="@OnDiceRolled" />
 
+            <!-- Territory Explorer - World Geography Learning -->
+            <TerritoryExplorer PlayerId="@playerDashboard.Id" 
+                             PlayerReputation="@playerDashboard.Reputation"
+                             PlayerIncome="@playerDashboard.Income"
+                             OnTerritorySelected="@OnTerritoryPurchased" />
+
+            <!-- Language Learning Challenge - Speech Recognition -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-purple-800">🗣️ Language Learning</h3>
+                    <button @onclick="@(() => showLanguageChallenge = true)" 
+                            class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300">
+                        Practice Speaking
+                    </button>
+                </div>
+                <p class="text-gray-600">Practice pronouncing words from your territories and learn about different cultures!</p>
+            </div>
+
+            <!-- Language Learning Challenge Modal -->
+            <LanguageLearningChallenge IsVisible="@showLanguageChallenge" 
+                                     PlayerId="@playerDashboard.Id"
+                                     OnClose="@(() => showLanguageChallenge = false)" />
+
+            <!-- AI Learning Assistants -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold text-indigo-800">🤖 AI Learning Assistants</h3>
+                    <button @onclick="@(() => showAIChat = true)" 
+                            class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-2 px-4 rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all duration-300">
+                        Chat with AI Guides
+                    </button>
+                </div>
+                <p class="text-gray-600">Get personalized advice from AI mentors specializing in careers, territories, languages, and leadership strategy!</p>
+            </div>
+
+            <!-- AI Agent Chat Modal -->
+            <AIAgentChat IsVisible="@showAIChat" 
+                        PlayerId="@playerDashboard.Id"
+                        OnClose="@(() => showAIChat = false)" />
+
             <!-- Game Events Section -->
             @if (gameEvents.Any())
             {
@@ -108,7 +148,7 @@
                 <p class="text-gray-600 mb-6">Begin your educational adventure and learn about world leadership, geography, and languages!</p>
                 
                 <div class="max-w-md mx-auto">
-                    <input @bind="newPlayerName" @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreatePlayer(); })"
+                    <input @bind="newPlayerName" @bind:event="oninput" @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreatePlayer(); })"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                            placeholder="Enter your name (2-20 characters)" maxlength="20" />
                     
@@ -148,6 +188,8 @@
     private string gameMessage = "";
     private string errorMessage = "";
     private bool isLoading = false;
+    private bool showLanguageChallenge = false;
+    private bool showAIChat = false;
     private HubConnection? hubConnection;
 
     protected override async Task OnInitializedAsync()
@@ -363,6 +405,46 @@
             Logger.LogError(ex, "Error handling dice roll result for player {PlayerId}", playerDashboard?.Id);
             StateHasChanged();
         }
+    }
+
+    private async Task OnTerritoryPurchased(TerritoryDto territory)
+    {
+        try
+        {
+            // Refresh player dashboard to reflect territory purchase
+            if (playerDashboard != null)
+            {
+                playerDashboard = await LoadPlayerDashboard(playerDashboard.Id);
+                gameMessage = $"🎉 Congratulations! You've acquired {territory.CountryName}! Learn about its culture and language.";
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            gameMessage = "Territory purchase completed! Your dashboard will update shortly.";
+            Logger.LogError(ex, "Error refreshing dashboard after territory purchase");
+            StateHasChanged();
+        }
+    }
+
+    private async Task<PlayerDashboardDto?> LoadPlayerDashboard(Guid playerId)
+    {
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("GameAPI");
+            var response = await httpClient.GetAsync($"api/Game/players/{playerId}/dashboard");
+            
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<PlayerDashboardDto>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading player dashboard for player {PlayerId}", playerId);
+        }
+        
+        return null;
     }
 
     public async ValueTask DisposeAsync()
