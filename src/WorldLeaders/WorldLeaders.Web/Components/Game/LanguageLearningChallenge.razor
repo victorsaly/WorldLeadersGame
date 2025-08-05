@@ -463,15 +463,15 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             hasRecordedAudio = false;
             StateHasChanged();
 
-            // Simulate recording for demo - in a real implementation this would use browser MediaRecorder API
-            // For now, we'll simulate a 2-second recording
+            // TODO: Implement real microphone recording using browser MediaRecorder API via JS interop
+            // For now, we'll simulate a 2-second recording for development/testing
             await Task.Delay(2000);
             
-            // Generate dummy audio data for testing
-            recordedAudioData = new byte[16000 * 2]; // 1 second of 16kHz 16-bit audio
+            // Generate dummy audio data for testing (2 seconds of 16kHz 16-bit audio = 16000 samples/sec * 2 bytes/sample * 2 seconds)
+            recordedAudioData = new byte[16000 * 2 * 2]; // 2 seconds of 16kHz 16-bit audio
             Random.Shared.NextBytes(recordedAudioData);
             
-            Logger.LogInformation("Simulated audio recording for language challenge");
+            Logger.LogInformation("Simulated audio recording for language challenge - 2 seconds of dummy data generated");
         }
         catch (Exception ex)
         {

@@ -97,14 +97,15 @@ public class SpeechRecognitionService : ISpeechRecognitionService
             var language = GetAzureLanguageCode(languageCode);
             _speechConfig.SpeechRecognitionLanguage = language;
 
-            // Create audio config from byte array (real-time processing, no storage)
-            using var audioConfig = AudioConfig.FromStreamInput(
-                AudioInputStream.CreatePushStream(AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1)));
+            // Create push stream with proper format (16kHz, 16-bit, mono)
+            var audioFormat = AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1);
+            var pushStream = AudioInputStream.CreatePushStream(audioFormat);
             
+            // Create audio config from the push stream
+            using var audioConfig = AudioConfig.FromStreamInput(pushStream);
             using var recognizer = new SpeechRecognizer(_speechConfig, audioConfig);
 
-            // Process audio data (real-time, no storage)
-            var pushStream = AudioInputStream.CreatePushStream(AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1));
+            // Write audio data to push stream and close it
             pushStream.Write(audioData);
             pushStream.Close();
 
@@ -145,14 +146,15 @@ public class SpeechRecognitionService : ISpeechRecognitionService
             var language = GetAzureLanguageCode(languageCode);
             _speechConfig.SpeechRecognitionLanguage = language;
 
-            // Create audio config (real-time processing)
-            using var audioConfig = AudioConfig.FromStreamInput(
-                AudioInputStream.CreatePushStream(AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1)));
+            // Create push stream with proper format (16kHz, 16-bit, mono)
+            var audioFormat = AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1);
+            var pushStream = AudioInputStream.CreatePushStream(audioFormat);
             
+            // Create audio config from the push stream
+            using var audioConfig = AudioConfig.FromStreamInput(pushStream);
             using var recognizer = new SpeechRecognizer(_speechConfig, audioConfig);
 
-            // Process audio data
-            var pushStream = AudioInputStream.CreatePushStream(AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1));
+            // Write audio data to push stream and close it
             pushStream.Write(audioData);
             pushStream.Close();
 
