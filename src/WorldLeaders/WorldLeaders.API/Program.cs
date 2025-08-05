@@ -32,7 +32,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add Swagger for API documentation
+// Add Swagger for API documentation (available in all environments for educational transparency)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -40,7 +40,21 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "World Leaders Game API",
         Version = "v1",
-        Description = "Educational game API for 12-year-old players to learn about world leadership, geography, and languages"
+        Description = "Educational game API for 12-year-old players to learn about world leadership, geography, and languages",
+        Contact = new()
+        {
+            Name = "World Leaders Game",
+            Url = new Uri("https://github.com/victorsaly/WorldLeadersGame")
+        }
+    });
+
+    // Add security definitions for production environments
+    c.AddSecurityDefinition("ApiKey", new()
+    {
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Name = "X-API-Key",
+        Description = "API Key for accessing educational game endpoints (production only)"
     });
 });
 
@@ -50,13 +64,32 @@ builder.AddServiceDefaults();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
+
+// Enable Swagger in all environments (with security considerations for production)
+app.UseSwagger();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    // Development: Full Swagger UI with all features
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "World Leaders Game API v1");
         c.RoutePrefix = string.Empty; // Serve Swagger UI at root
+        c.DisplayRequestDuration();
+        c.EnableTryItOutByDefault();
+    });
+}
+else
+{
+    // Production: Limited Swagger UI for educational transparency
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "World Leaders Game API v1");
+        c.RoutePrefix = "docs"; // Serve Swagger UI at /docs instead of root
+        c.DocumentTitle = "World Leaders Game API Documentation";
+        c.DefaultModelExpandDepth(1);
+        c.DefaultModelsExpandDepth(1);
+        c.SupportedSubmitMethods(); // Disable all submit methods in production
     });
 }
 
