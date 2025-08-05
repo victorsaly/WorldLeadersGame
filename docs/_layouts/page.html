@@ -270,31 +270,16 @@ window.addEventListener('scroll', function() {
   }
 });
 
-// Random background image selection for hero sections
-// Note: These images were created using AI text-to-image generation
-// for the World Leaders Game project - educational gaming visuals
-const backgroundImages = [
-  '/assets/game-ai-prompt.png',
-  '/assets/game-block-ai-image.png',
-  '/assets/game-block-ai-image2.jpg',
-  '/assets/game-block-ai-image3.jpg'
-];
-
-// Select random background on page load
-const randomImage = backgroundImages[Math.floor(Math.random() * backgroundImages.length)];
-document.body.style.setProperty('--random-bg-image', `url('${randomImage}')`);
+// Add hero section styling to existing background image functionality
+// The backgroundImages variable is already defined in default.html layout
+// Get the current random image from the CSS variable set by default.html
+const currentBgImage = getComputedStyle(document.body).getPropertyValue('--random-bg-image');
 
 // Apply the random background to hero sections and page headers
 const style = document.createElement('style');
 style.textContent = `
-  body::before {
-    background-image: url('${randomImage}');
-  }
-  .page-header::before {
-    background-image: url('${randomImage}');
-  }
   .hero-section {
-    background-image: url('${randomImage}');
+    background-image: ${currentBgImage};
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
