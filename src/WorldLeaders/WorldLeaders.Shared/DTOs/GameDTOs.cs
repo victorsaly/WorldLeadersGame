@@ -74,7 +74,7 @@ public record AIAgentResponse(
 );
 
 /// <summary>
-/// DTO for language learning challenges
+/// DTO for language learning challenges with speech recognition support
 /// </summary>
 public record LanguageChallengeDto(
     string LanguageCode,
@@ -82,19 +82,56 @@ public record LanguageChallengeDto(
     string Word,
     string Pronunciation,
     string AudioUrl,
-    int RequiredAccuracy
+    int RequiredAccuracy,
+    bool SupportsSpeechRecognition = true,
+    string CulturalContext = "",
+    ChallengeType Type = ChallengeType.BasicWord
 );
 
 /// <summary>
-/// DTO for language challenge results
+/// DTO for language challenge results with speech assessment
 /// </summary>
 public record LanguageChallengeResult(
     string LanguageCode,
     int AccuracyPercentage,
     bool Passed,
     int BonusIncome,
+    string Feedback,
+    SpeechAssessmentDetails? SpeechAssessment = null
+);
+
+/// <summary>
+/// Speech assessment details for pronunciation feedback
+/// </summary>
+public record SpeechAssessmentDetails(
+    double PronunciationScore,
+    double FluencyScore,
+    double CompletenessScore,
+    string RecognizedText,
+    List<WordScore> WordScores,
+    bool UsedSpeechRecognition
+);
+
+/// <summary>
+/// Individual word pronunciation scoring
+/// </summary>
+public record WordScore(
+    string Word,
+    double Score,
     string Feedback
 );
+
+/// <summary>
+/// Types of language learning challenges
+/// </summary>
+public enum ChallengeType
+{
+    BasicWord,
+    Greeting,
+    CountryName,
+    CulturalPhrase,
+    CommonExpression
+}
 
 /// <summary>
 /// DTO for game state updates
