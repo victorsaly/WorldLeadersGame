@@ -270,15 +270,23 @@ public class TerritoryService : ITerritoryService
                 var languages = DeserializeLanguages(territory.OfficialLanguagesJson);
                 foreach (var languageCode in languages)
                 {
-                    // Create simplified language challenges for children
-                    challenges.Add(new LanguageChallengeDto(
-                        languageCode,
-                        GetLanguageName(languageCode),
-                        GetSimpleWord(territory.CountryName, languageCode),
-                        GetPronunciation(territory.CountryName, languageCode),
-                        $"/audio/{languageCode}/{territory.CountryCode.ToLower()}.mp3",
-                        CHILD_ACCURACY_REQUIREMENT // 70% accuracy required for children
-                    ));
+                    // Create progressive language challenges for children
+                    var challengeTypes = new[]
+                    {
+                        ChallengeType.BasicWord,
+                        ChallengeType.Greeting,
+                        ChallengeType.CountryName,
+                        ChallengeType.CulturalPhrase
+                    };
+
+                    foreach (var challengeType in challengeTypes)
+                    {
+                        var challenge = CreateLanguageChallenge(territory, languageCode, challengeType);
+                        if (challenge != null)
+                        {
+                            challenges.Add(challenge);
+                        }
+                    }
                 }
             }
 
@@ -443,42 +451,194 @@ public class TerritoryService : ITerritoryService
         _ => "Local Language"
     };
 
-    private string GetSimpleWord(string countryName, string languageCode)
+    private string GetSimpleWord(string wordType, string languageCode)
     {
-        // Simple greetings in different languages for children
-        return languageCode switch
+        // Simple words and greetings in different languages for children
+        return (wordType, languageCode) switch
         {
-            "es" => "Hola", // Hello in Spanish
-            "fr" => "Bonjour", // Hello in French  
-            "de" => "Guten Tag", // Hello in German
-            "it" => "Ciao", // Hello in Italian
-            "pt" => "Olá", // Hello in Portuguese
-            "zh" => "Nǐ hǎo", // Hello in Chinese
-            "ja" => "Konnichiwa", // Hello in Japanese
-            "ko" => "Annyeonghaseyo", // Hello in Korean
-            "ru" => "Privet", // Hello in Russian
-            "ar" => "Marhaba", // Hello in Arabic
-            "hi" => "Namaste", // Hello in Hindi
+            ("hello", "es") => "Hola",
+            ("hello", "fr") => "Bonjour", 
+            ("hello", "de") => "Guten Tag",
+            ("hello", "it") => "Ciao",
+            ("hello", "pt") => "Olá",
+            ("hello", "zh") => "Nǐ hǎo",
+            ("hello", "ja") => "Konnichiwa",
+            ("hello", "ko") => "Annyeonghaseyo",
+            ("hello", "ru") => "Privet",
+            ("hello", "ar") => "Marhaba",
+            ("hello", "hi") => "Namaste",
+            
+            ("thank you", "es") => "Gracias",
+            ("thank you", "fr") => "Merci",
+            ("thank you", "de") => "Danke",
+            ("thank you", "it") => "Grazie",
+            ("thank you", "pt") => "Obrigado",
+            ("thank you", "zh") => "Xièxie",
+            ("thank you", "ja") => "Arigatou",
+            ("thank you", "ko") => "Gamsahamnida",
+            ("thank you", "ru") => "Spasibo",
+            ("thank you", "ar") => "Shukran",
+            ("thank you", "hi") => "Dhanyawad",
+            
             _ => "Hello"
         };
     }
 
-    private string GetPronunciation(string countryName, string languageCode)
+    private string GetPronunciation(string wordType, string languageCode)
     {
-        return languageCode switch
+        return (wordType, languageCode) switch
         {
-            "es" => "OH-lah",
-            "fr" => "bon-ZHOOR",
-            "de" => "GOO-ten tahk",
-            "it" => "chow",
-            "pt" => "oh-LAH",
-            "zh" => "nee how",
-            "ja" => "kon-nee-chee-wah",
-            "ko" => "ahn-nyeong-hah-say-yo",
-            "ru" => "pree-VEHT",
-            "ar" => "mar-HAH-bah",
-            "hi" => "nah-mas-TAY",
+            ("hello", "es") => "OH-lah",
+            ("hello", "fr") => "bon-ZHOOR",
+            ("hello", "de") => "GOO-ten tahk",
+            ("hello", "it") => "chow",
+            ("hello", "pt") => "oh-LAH",
+            ("hello", "zh") => "nee how",
+            ("hello", "ja") => "kon-nee-chee-wah",
+            ("hello", "ko") => "ahn-nyeong-hah-say-yo",
+            ("hello", "ru") => "pree-VEHT",
+            ("hello", "ar") => "mar-HAH-bah",
+            ("hello", "hi") => "nah-mas-TAY",
+            
+            ("thank you", "es") => "GRAH-see-ahs",
+            ("thank you", "fr") => "mer-SEE",
+            ("thank you", "de") => "DAHN-keh",
+            ("thank you", "it") => "GRAH-tsee-eh",
+            ("thank you", "pt") => "oh-bree-GAH-doo",
+            ("thank you", "zh") => "shyeh-shyeh",
+            ("thank you", "ja") => "ah-ree-gah-toh",
+            ("thank you", "ko") => "gam-sah-ham-nee-dah",
+            ("thank you", "ru") => "spah-SEE-boh",
+            ("thank you", "ar") => "SHOOK-ran",
+            ("thank you", "hi") => "dahn-yah-wahd",
+            
             _ => "HEH-loh"
+        };
+    }
+
+    private LanguageChallengeDto? CreateLanguageChallenge(TerritoryEntity territory, string languageCode, ChallengeType challengeType)
+    {
+        var languageName = GetLanguageName(languageCode);
+        
+        return challengeType switch
+        {
+            ChallengeType.BasicWord => new LanguageChallengeDto(
+                languageCode,
+                languageName,
+                GetSimpleWord("hello", languageCode),
+                GetPronunciation("hello", languageCode),
+                $"/audio/{languageCode}/hello.mp3",
+                CHILD_ACCURACY_REQUIREMENT,
+                true,
+                $"Learn to say 'Hello' in {languageName}!",
+                ChallengeType.BasicWord
+            ),
+            
+            ChallengeType.Greeting => new LanguageChallengeDto(
+                languageCode,
+                languageName,
+                GetSimpleWord("thank you", languageCode),
+                GetPronunciation("thank you", languageCode),
+                $"/audio/{languageCode}/thankyou.mp3",
+                CHILD_ACCURACY_REQUIREMENT,
+                true,
+                $"Learn to say 'Thank you' in {languageName}!",
+                ChallengeType.Greeting
+            ),
+            
+            ChallengeType.CountryName => new LanguageChallengeDto(
+                languageCode,
+                languageName,
+                GetCountryNameInLanguage(territory.CountryName, languageCode),
+                GetCountryPronunciation(territory.CountryName, languageCode),
+                $"/audio/{languageCode}/{territory.CountryCode.ToLower()}.mp3",
+                CHILD_ACCURACY_REQUIREMENT,
+                true,
+                $"Learn to say '{territory.CountryName}' in {languageName}!",
+                ChallengeType.CountryName
+            ),
+            
+            ChallengeType.CulturalPhrase => new LanguageChallengeDto(
+                languageCode,
+                languageName,
+                GetCulturalPhrase(territory.CountryCode, languageCode),
+                GetCulturalPhrasePronunciation(territory.CountryCode, languageCode),
+                $"/audio/{languageCode}/cultural.mp3",
+                CHILD_ACCURACY_REQUIREMENT,
+                true,
+                $"Learn a cultural phrase from {territory.CountryName}!",
+                ChallengeType.CulturalPhrase
+            ),
+            
+            _ => null
+        };
+    }
+    
+    private string GetCountryNameInLanguage(string countryName, string languageCode)
+    {
+        // Return localized country names where available
+        return (countryName, languageCode) switch
+        {
+            ("United States", "es") => "Estados Unidos",
+            ("United States", "fr") => "États-Unis",
+            ("United States", "de") => "Vereinigte Staaten",
+            ("China", "zh") => "中国",
+            ("Japan", "ja") => "日本",
+            ("Germany", "de") => "Deutschland",
+            ("France", "fr") => "France",
+            ("Spain", "es") => "España",
+            ("Italy", "it") => "Italia",
+            ("Brazil", "pt") => "Brasil",
+            _ => countryName // Default to English name
+        };
+    }
+    
+    private string GetCountryPronunciation(string countryName, string languageCode)
+    {
+        return (countryName, languageCode) switch
+        {
+            ("United States", "es") => "es-TAH-dos oo-NEE-dos",
+            ("United States", "fr") => "ay-TAH oh-NEE",
+            ("China", "zh") => "zhong-guo",
+            ("Japan", "ja") => "nee-hon",
+            ("Germany", "de") => "DOYTSH-lant",
+            ("France", "fr") => "frahnss",
+            ("Spain", "es") => "es-PAH-nyah",
+            ("Italy", "it") => "ee-TAH-lee-ah",
+            ("Brazil", "pt") => "brah-ZEEL",
+            _ => countryName.ToLowerInvariant()
+        };
+    }
+    
+    private string GetCulturalPhrase(string countryCode, string languageCode)
+    {
+        return (countryCode, languageCode) switch
+        {
+            ("ES", "es") => "¡Buen viaje!",
+            ("FR", "fr") => "Bon voyage!",
+            ("DE", "de") => "Gute Reise!",
+            ("IT", "it") => "Buon viaggio!",
+            ("CN", "zh") => "一路平安",
+            ("JP", "ja") => "気をつけて",
+            ("BR", "pt") => "Boa viagem!",
+            ("RU", "ru") => "Счастливого пути!",
+            _ => "Have a nice day!"
+        };
+    }
+    
+    private string GetCulturalPhrasePronunciation(string countryCode, string languageCode)
+    {
+        return (countryCode, languageCode) switch
+        {
+            ("ES", "es") => "bwen vee-AH-heh",
+            ("FR", "fr") => "bon voy-AHZH",
+            ("DE", "de") => "GOO-teh RYE-zeh",
+            ("IT", "it") => "bwon vee-AH-joh",
+            ("CN", "zh") => "yee-loo ping-an",
+            ("JP", "ja") => "kee-wo-tsoo-keh-teh",
+            ("BR", "pt") => "boh-ah vee-AH-zhem",
+            ("RU", "ru") => "schast-LEE-vo-vo poo-TEE",
+            _ => "have a nice day"
         };
     }
 

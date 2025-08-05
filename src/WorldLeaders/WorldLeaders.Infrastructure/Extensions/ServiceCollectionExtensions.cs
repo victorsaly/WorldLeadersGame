@@ -71,6 +71,9 @@ public static class ServiceCollectionExtensions
 
         // Add AI agent services for child-safe educational interactions
         services.AddScoped<IContentModerationService, ContentModerationService>();
+        
+        // Add speech recognition services for pronunciation learning
+        services.AddScoped<ISpeechRecognitionService, SpeechRecognitionService>();
 
         // Configure Azure AI options
         services.Configure<AzureAIOptions>(configuration.GetSection(AzureAIOptions.SectionName));
