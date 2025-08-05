@@ -9,6 +9,9 @@ obj/
 *.pdb
 *.exe
 
+# Azure specific publish settings
+publish-azure/*
+
 # Azure AI Configuration (Sensitive Data)
 .env.production
 azure-ai-config.local.json
@@ -388,3 +391,8 @@ docs/.jekyll-cache/
 docs/.jekyll-metadata
 docs/Gemfile.lock
 docs/.sass-cache/
+
+# Azure deployment logs and artifacts (temporary troubleshooting files)
+LogFiles/
+web-app-logs.zip
+deployments/

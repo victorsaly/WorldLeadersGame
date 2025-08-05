@@ -64,7 +64,7 @@ az group create \
 echo -e "${YELLOW}🏗️ Deploying Azure infrastructure...${NC}"
 DEPLOYMENT_OUTPUT=$(az deployment group create \
     --resource-group $RESOURCE_GROUP \
-    --template-file azure-deploy.bicep \
+    --template-file infrastructure/azure-deploy.bicep \
     --parameters projectName=$PROJECT_NAME environment=$ENVIRONMENT location=$LOCATION customDomainName="$CUSTOM_DOMAIN" \
     --query 'properties.outputs' \
     --output json)

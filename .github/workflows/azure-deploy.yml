@@ -82,6 +82,7 @@ jobs:
         dotnet publish WorldLeaders.Web/WorldLeaders.Web.csproj \
           --configuration Release \
           --output ../../web-app-publish \
+          --runtime linux-x64 \
           --self-contained false
           
     - name: 📦 Upload Web App artifact
@@ -116,6 +117,7 @@ jobs:
         dotnet publish WorldLeaders.API/WorldLeaders.API.csproj \
           --configuration Release \
           --output ../../api-publish \
+          --runtime linux-x64 \
           --self-contained false
           
     - name: 📦 Upload API artifact
@@ -159,17 +161,40 @@ jobs:
         app-name: ${{ env.AZURE_WEB_APP_NAME }}
         package: web-app-publish/
         
+    - name: 🔧 Configure Web App Runtime
+      run: |
+        echo "🔧 Configuring .NET 8 runtime and startup command for Web App..."
+        az webapp config set \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --name ${{ env.AZURE_WEB_APP_NAME }} \
+          --net-framework-version "v8.0" \
+          --startup-file "dotnet WorldLeaders.Web.dll"
+        
     - name: 🔧 Deploy API to Azure
       uses: azure/webapps-deploy@v3
       with:
         app-name: ${{ env.AZURE_API_APP_NAME }}
         package: api-publish/
         
+    - name: 🔧 Configure API Runtime
+      run: |
+        echo "🔧 Configuring .NET 8 runtime and startup command for API..."
+        az webapp config set \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --name ${{ env.AZURE_API_APP_NAME }} \
+          --net-framework-version "v8.0" \
+          --startup-file "dotnet WorldLeaders.API.dll"
+    - name: 🔄 Restart Applications
+      run: |
+        echo "🔄 Restarting applications to apply new configuration..."
+        az webapp restart --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AZURE_WEB_APP_NAME }}
+        az webapp restart --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AZURE_API_APP_NAME }}
+        echo "⏳ Waiting for applications to start..."
+        sleep 30
+
     - name: 🏥 Health Check - Web App
       run: |
         echo "🔍 Checking Web App health..."
-        # Wait for deployment to complete
-        sleep 30
         
         WEB_URL="https://${{ env.AZURE_WEB_APP_NAME }}.azurewebsites.net"
         echo "Testing: $WEB_URL"

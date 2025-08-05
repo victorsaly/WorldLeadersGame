@@ -309,7 +309,6 @@ _This issues system demonstrates how AI can systematically identify, document, a
   border-radius: 4px;
   font-size: 0.8rem;
 }
-</style>
 
 .issue-card {
 padding: 1.5rem;
