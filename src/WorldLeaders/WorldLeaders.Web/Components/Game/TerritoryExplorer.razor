@@ -91,7 +91,7 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
             @if (filteredTerritories.Any())
             {
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    @foreach (var territory in filteredTerritories.Take(12)) // Show max 12 at a time for children
+                    @foreach (var territory in filteredTerritories.Take(MAX_TERRITORIES_PER_PAGE))
                     {
                         <div class="territory-card available">
                             <div class="territory-flag relative">
@@ -165,6 +165,9 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
 </div>
 
 @code {
+    // Educational constants for child-friendly display
+    private const int MAX_TERRITORIES_PER_PAGE = 12; // Show max 12 at a time for children
+    
     [Parameter] public Guid PlayerId { get; set; }
     [Parameter] public EventCallback<TerritoryDto> OnTerritorySelected { get; set; }
     [Parameter] public int PlayerIncome { get; set; }
