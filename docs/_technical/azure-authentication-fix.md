@@ -1,8 +1,36 @@
 # Azure Deployment Authentication Fix
 
-**Issue**: GitHub Actions failing with "Login failed with Error: Using auth-type: SERVICE_PRINCIPAL. Not all values are present."
+**Issue**: GitHub Actions failing with "Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable" and "Please make sure to give write permissions to id-token in the workflow."
 
-**Root Cause**: The Azure login action was using the deprecated `creds` parameter format instead of individual service principal parameters.
+**Root Cause**: The Azure login action requires OIDC (OpenID Connect) authentication with proper workflow permissions and federated credentials.
+
+## 🔧 Solution Applied
+
+### 1. Updated GitHub Actions Workflow
+Added required permissions:
+```yaml
+permissions:
+  id-token: write
+  contents: read
+```
+
+Changed authentication from:
+```yaml
+- name: 🔐 Azure Login
+  uses: azure/login@v1
+  with:
+    creds: ${{ secrets.AZURE_CREDENTIALS }}
+```
+
+To modern OIDC approach:
+```yaml
+- name: 🔐 Azure Login
+  uses: azure/login@v1
+  with:
+    client-id: ${{ secrets.AZURE_CLIENT_ID }}
+    tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+```
 
 ## 🔧 Solution Applied
 
@@ -30,7 +58,12 @@ To:
 - Documentation is already handled by GitHub Pages via the separate `pages.yml` workflow
 - Fixed dependency chain: `post-deployment` now only depends on `deploy-to-azure`
 
-### 3. Required GitHub Secrets
+### 3. Enhanced Security with OIDC
+- Added workflow permissions for `id-token: write` and `contents: read`
+- Configured federated credentials for passwordless authentication
+- Enhanced security with temporary, scoped credentials instead of long-lived secrets
+
+### 4. Required GitHub Secrets
 
 You need to add these three secrets to your GitHub repository:
 
@@ -50,8 +83,11 @@ Use the provided script to create the service principal and get the required val
 
 This script will:
 - Create a service principal with contributor access to the resource group
+- **Set up federated credentials for OIDC authentication (no passwords needed)**
 - Display the exact values you need to add as GitHub secrets
 - Provide step-by-step instructions for adding them to GitHub
+
+**Security Benefits**: OIDC provides enhanced security with temporary tokens instead of permanent passwords.
 
 ## 🎯 Educational Context
 

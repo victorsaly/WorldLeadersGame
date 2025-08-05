@@ -75,6 +75,22 @@ CLIENT_ID=$(echo $SP_OUTPUT | jq -r '.clientId')
 TENANT_ID=$(echo $SP_OUTPUT | jq -r '.tenantId')
 SUBSCRIPTION_ID_FROM_SP=$(echo $SP_OUTPUT | jq -r '.subscriptionId')
 
+# Create federated credential for GitHub Actions OIDC
+echo -e "${BLUE}🔐 Creating federated credential for GitHub OIDC...${NC}"
+REPO_OWNER="victorsaly"
+REPO_NAME="WorldLeadersGame"
+
+# Create federated credential for main branch
+az ad app federated-credential create \
+    --id $CLIENT_ID \
+    --parameters "{\"name\":\"github-main\",\"issuer\":\"https://token.actions.githubusercontent.com\",\"subject\":\"repo:${REPO_OWNER}/${REPO_NAME}:ref:refs/heads/main\",\"audiences\":[\"api://AzureADTokenExchange\"]}"
+
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}✅ Federated credential created for main branch!${NC}"
+else
+    echo -e "${YELLOW}⚠️  Federated credential creation failed (may already exist)${NC}"
+fi
+
 echo ""
 echo -e "${YELLOW}🔑 GitHub Repository Secrets to Add:${NC}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -95,6 +111,11 @@ echo "1. Go to your GitHub repository: https://github.com/victorsaly/WorldLeader
 echo "2. Navigate to Settings → Secrets and variables → Actions"
 echo "3. Click 'New repository secret' for each secret above"
 echo "4. Copy and paste the exact values shown above"
+echo ""
+echo -e "${BLUE}🔐 OIDC Authentication Setup:${NC}"
+echo "✅ Federated credential created for secure, password-less authentication"
+echo "✅ No client secret required - GitHub Actions will use OIDC tokens"
+echo "✅ Enhanced security with temporary, scoped credentials"
 echo ""
 echo -e "${GREEN}🎉 Setup complete!${NC}"
 echo "Your Azure Service Principal is ready for GitHub Actions deployment."
