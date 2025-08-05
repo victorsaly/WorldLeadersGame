@@ -237,7 +237,7 @@ We're documenting everything in real-time:
   
   <ul>
     <li><strong>GitHub</strong>: <a href="https://github.com/victorsaly/WorldLeadersGame">Follow our repository</a></li>
-    <li><strong>Weekly Updates</strong>: <a href="/blog/">Read our development blog</a></li>
+    <li><strong>Weekly Updates</strong>: <a href="/post/">Read our development posts</a></li>
     <li><strong>Technical Docs</strong>: <a href="/technical-docs/">Explore our AI guidance patterns</a></li>
     <li><strong>Complete Journey</strong>: <a href="/journey/">See detailed week-by-week progress</a></li>
   </ul>

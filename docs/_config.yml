@@ -20,16 +20,13 @@ plugins:
 # Navigation
 header_pages:
   - index.md
-  - blog.md
+  - post.md
   - technical-docs.md
   - journey.md
   - about.md
 
 # Collections for better organization
 collections:
-  posts:
-    output: true
-    permalink: /blog/:year/:month/:day/:title/
   journey:
     output: true
     permalink: /journey/:name/
@@ -42,6 +39,9 @@ collections:
   issues:
     output: true
     permalink: /issues/:name/
+
+# Posts permalink (separate from collections)
+permalink: /post/:year/:month/:day/:title/
 
 # Defaults
 defaults:

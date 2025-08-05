@@ -173,7 +173,7 @@ Issues related to game mechanics, educational content, and child safety features
 
 - **[Journey Documentation]({{ '/journey/' | relative_url }})**: Week-by-week development progress
 - **[Technical Guides]({{ '/technical-docs/' | relative_url }})**: Implementation documentation
-- **[Blog Posts]({{ '/blog/' | relative_url }})**: Development insights and methodology
+- **[Posts]({{ '/post/' | relative_url }})**: Development insights and methodology
 
 ---
 

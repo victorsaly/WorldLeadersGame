@@ -39,10 +39,12 @@ Requires Docker Desktop only.
 cd docs
 bundle config set --local path 'vendor/bundle'
 bundle install
-bundle exec jekyll serve
+bundle exec jekyll serve --baseurl ""
 ```
 
-**All methods open**: http://localhost:4000/ConquerTheWorldGame
+**Important**: The `--baseurl ""` parameter is required to serve at `http://localhost:4000/` instead of `http://localhost:4000/WorldLeadersGame/`
+
+**All methods open**: http://localhost:4000/
 
 ---
 
@@ -91,12 +93,32 @@ lsof -ti:4000 | xargs kill
 
 **That's it!** Pick one method and test your documentation changes before committing.
 
+## ⚡ Quick Reference
+
+**Recommended**: Use the scripts to avoid URL path issues
+
 ```bash
 cd docs
 ./test-docker.sh
 ```
 
-Opens: http://localhost:4000/ConquerTheWorldGame
+**Manual Jekyll**: Always include `--baseurl ""` to serve at root
+
+```bash
+cd docs
+bundle exec jekyll serve --baseurl ""
+```
+
+**Important**: Without `--baseurl ""`, Jekyll serves at `/WorldLeadersGame/` path instead of root (`/`)
+
+---
+
+```bash
+cd docs
+./test-docker.sh
+```
+
+Opens: http://localhost:4000/
 
 ### Method 2: Ruby + Jekyll (Traditional)
 
@@ -106,15 +128,15 @@ Opens: http://localhost:4000/ConquerTheWorldGame
 cd docs
 bundle config set --local path 'vendor/bundle'
 bundle install
-bundle exec jekyll serve
+bundle exec jekyll serve --baseurl ""
 ```
 
-Opens: http://localhost:4000/ConquerTheWorldGame
+Opens: http://localhost:4000/
 
 ### Method 3: GitHub Codespaces (Cloud)
 
 1. GitHub repo → Code → Codespaces → Create
-2. Terminal: `cd docs && bundle install && bundle exec jekyll serve --host 0.0.0.0`
+2. Terminal: `cd docs && bundle install && bundle exec jekyll serve --host 0.0.0.0 --baseurl ""`
 3. Open forwarded port 4000
 
 ---
@@ -139,13 +161,13 @@ docker run --rm \
   --volume="$PWD:/srv/jekyll:Z" \
   --publish 4000:4000 \
   jekyll/jekyll:3.9 \
-  jekyll serve --watch --force_polling --host 0.0.0.0
+  jekyll serve --watch --force_polling --host 0.0.0.0 --baseurl ""
 
 # Build only (no server)
 docker run --rm \
   --volume="$PWD:/srv/jekyll:Z" \
   jekyll/jekyll:3.9 \
-  jekyll build
+  jekyll build --baseurl ""
 
 # Health check
 docker run --rm \
@@ -172,12 +194,22 @@ docker run --rm \
 # Start server and auto-refresh on changes
 ./test-docker.sh
 
-# Test specific URLs
-open http://localhost:4000/ConquerTheWorldGame/
-open http://localhost:4000/ConquerTheWorldGame/blog/
-open http://localhost:4000/ConquerTheWorldGame/journey/
-open http://localhost:4000/ConquerTheWorldGame/technical/
+# Test specific URLs (with correct baseurl override)
+open http://localhost:4000/
+open http://localhost:4000/blog/
+open http://localhost:4000/journey/
+open http://localhost:4000/technical/
+
+# Test individual blog posts
+open http://localhost:4000/2025/08/05/week-4-ai-builds-multilingual-learning-platform/
+open http://localhost:4000/2025/08/03/week-3-core-game-engine-complete/
 ```
+
+**Important**: If blog posts don't appear at `/blog/`, check:
+
+1. Are you using `--baseurl ""` when running Jekyll manually?
+2. Try accessing posts directly at their individual URLs first
+3. Check Jekyll build output for any error messages
 
 ---
 
@@ -234,6 +266,25 @@ title: "Page Title"
 
 **Problem**: "Markdown not rendering"
 **Solution**: Verify file extension is `.md` and frontmatter is correct
+
+**Problem**: Site serves at `http://127.0.0.1:4000/WorldLeadersGame/` instead of `http://localhost:4000/`
+**Solution**: Always include `--baseurl ""` when running Jekyll manually:
+
+```bash
+# Wrong (serves at /WorldLeadersGame/ path)
+bundle exec jekyll serve
+
+# Correct (serves at root path)
+bundle exec jekyll serve --baseurl ""
+```
+
+**Problem**: Blog page at `/blog/` shows no posts
+**Solution**: This is usually caused by the baseurl issue. Try:
+
+1. **Use the correct Jekyll command**: `bundle exec jekyll serve --baseurl ""`
+2. **Access individual posts first**: Try http://localhost:4000/2025/08/05/week-4-ai-builds-multilingual-learning-platform/
+3. **Check Jekyll build output**: Look for error messages during site generation
+4. **Use the Docker method**: `./test-docker.sh` (automatically handles baseurl correctly)
 
 ---
 
@@ -316,10 +367,10 @@ author: "AI-Generated with Human Oversight"
 
 ### Common Success URLs
 
-- **Homepage**: http://localhost:4000/ConquerTheWorldGame/
-- **Latest Blog**: http://localhost:4000/ConquerTheWorldGame/blog/2025/08/03/week-2-foundation-complete/
-- **Current Journey**: http://localhost:4000/ConquerTheWorldGame/journey/week-03-game-mechanics/
-- **Tech Guide**: http://localhost:4000/ConquerTheWorldGame/technical/ai-prompt-engineering/
+- **Homepage**: http://localhost:4000/
+- **Latest Blog**: http://localhost:4000/2025/08/05/week-4-ai-builds-multilingual-learning-platform/
+- **Current Journey**: http://localhost:4000/journey/week-04-ai-integration-real-world-learning/
+- **Tech Guide**: http://localhost:4000/technical/ai-prompt-engineering/
 
 ---
 

@@ -19,19 +19,19 @@ echo "✅ Found Jekyll configuration"
 # Try to use system Jekyll first (if available)
 if command -v jekyll &> /dev/null; then
     echo "✅ Using system Jekyll"
-    echo "🌐 Starting server at http://localhost:4000/ConquerTheWorldGame"
+    echo "🌐 Starting server at http://localhost:4000/"
     echo "🛑 Press Ctrl+C to stop"
     echo ""
-    jekyll serve --host 0.0.0.0 --port 4000
+    jekyll serve --host 0.0.0.0 --port 4000 --baseurl ""
 elif command -v bundle &> /dev/null; then
     echo "✅ Using Bundler"
     echo "📦 Installing dependencies..."
     bundle config set --local path 'vendor/bundle'
     if bundle install; then
-        echo "🌐 Starting server at http://localhost:4000/ConquerTheWorldGame"
+        echo "🌐 Starting server at http://localhost:4000/"
         echo "🛑 Press Ctrl+C to stop"
         echo ""
-        bundle exec jekyll serve --host 0.0.0.0 --port 4000
+        bundle exec jekyll serve --host 0.0.0.0 --port 4000 --baseurl ""
     else
         echo "❌ Bundle install failed. Try Docker method instead:"
         echo "   ./test-docker.sh"

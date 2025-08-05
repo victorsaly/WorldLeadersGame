@@ -147,7 +147,7 @@ Each milestone represents a major leap forward in:
 
 - **[📝 Development Journey]({{ '/journey/' | relative_url }})** - Week-by-week progress details
 - **[🔧 Technical Documentation]({{ '/technical-docs/' | relative_url }})** - Implementation guides and architecture
-- **[📰 Blog Updates]({{ '/blog/' | relative_url }})** - Real-time development insights
+- **[📰 Post Updates]({{ '/post/' | relative_url }})** - Real-time development insights
 - **[🏠 Project Homepage]({{ '/' | relative_url }})** - Complete project overview
 
 ---

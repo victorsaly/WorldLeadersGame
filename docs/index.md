@@ -53,9 +53,9 @@ title: "World Leaders Game"
   </div>
   
   <div class="nav-card shadcn-card">
-    <h3>📰 Latest Blog Posts</h3>
+    <h3>📰 Latest Posts</h3>
     <p>Real-time updates on our AI-led development experiment.</p>
-    <a href="{{ '/blog/' | relative_url }}" class="btn">View Blog</a>
+    <a href="{{ '/post/' | relative_url }}" class="btn">View Posts</a>
   </div>
 </div>
 
@@ -129,7 +129,7 @@ Working with GitHub Copilot, we implemented a complete AI agent personality syst
 
 ## 🗺️ **Explore Our Documentation**
 
-### 📰 **[Blog & Weekly Updates]({{ '/blog/' | relative_url }})**
+### 📰 **[Posts & Weekly Updates]({{ '/post/' | relative_url }})**
 
 - Weekly development logs showing AI autonomy in action
 - Real-time progress updates and milestone achievements
@@ -197,7 +197,7 @@ Everything started with a 5-minute voice memo from a 12-year-old describing his 
   {% endfor %}
 </div>
 
-[**View All Blog Posts →**]({{ '/blog/' | relative_url }})
+[**View All Posts →**]({{ '/post/' | relative_url }})
 
 ---
 
@@ -212,5 +212,5 @@ Everything started with a 5-minute voice memo from a 12-year-old describing his 
 
 <div class="highlight-box">
   <h3>🎯 Ready to Follow Our Journey?</h3>
-  <p>Explore our <strong><a href="{{ '/journey/' | relative_url }}">complete documentation</a></strong> to see how AI autonomy is transforming educational software development, or dive into our <strong><a href="{{ '/blog/' | relative_url }}">weekly blog updates</a></strong> for real-time progress insights.</p>
+  <p>Explore our <strong><a href="{{ '/journey/' | relative_url }}">complete documentation</a></strong> to see how AI autonomy is transforming educational software development, or dive into our <strong><a href="{{ '/post/' | relative_url }}">weekly post updates</a></strong> for real-time progress insights.</p>
 </div>

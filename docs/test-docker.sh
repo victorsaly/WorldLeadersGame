@@ -73,7 +73,7 @@ print_status "Building and serving Jekyll site..."
 echo ""
 print_success "🎉 Starting Jekyll with Docker..."
 echo ""
-echo -e "${YELLOW}📝 Open your browser to: http://localhost:4000/ConquerTheWorldGame${NC}"
+echo -e "${YELLOW}📝 Open your browser to: http://localhost:4000/${NC}"
 echo -e "${YELLOW}🛑 Press Ctrl+C to stop the server${NC}"
 echo ""
 
@@ -82,4 +82,4 @@ docker run --rm \
   --volume="$PWD:/srv/jekyll:Z" \
   --publish 4000:4000 \
   jekyll/jekyll:3.9 \
-  jekyll serve --watch --force_polling --host 0.0.0.0
+  jekyll serve --watch --force_polling --host 0.0.0.0 --baseurl ""
