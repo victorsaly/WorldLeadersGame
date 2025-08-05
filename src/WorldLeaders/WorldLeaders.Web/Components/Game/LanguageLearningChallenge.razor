@@ -7,6 +7,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 @using WorldLeaders.Shared.DTOs
 @using WorldLeaders.Shared.Services
 @inject ITerritoryService TerritoryService
+@inject ISpeechRecognitionService SpeechRecognitionService
 @inject ILogger<LanguageLearningChallenge> Logger
 
 <div class="language-challenge-container">
@@ -71,21 +72,91 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
                                         <!-- Practice Input -->
                                         <div class="practice-section">
                                             <label class="block text-purple-700 font-semibold mb-2">
-                                                🎤 Try to say it yourself! Type what you hear:
+                                                🎤 Try to say it yourself! 
                                             </label>
-                                            <input @bind="userInput" 
-                                                   @onkeypress="HandleKeyPress"
-                                                   class="practice-input" 
-                                                   placeholder="Type your pronunciation attempt..."
-                                                   disabled="@isSubmitting">
+                                            
+                                            <!-- Speech Recognition Toggle -->
+                                            <div class="speech-options mb-3">
+                                                @if (speechRecognitionSupported && currentChallenge.SupportsSpeechRecognition)
+                                                {
+                                                    <div class="speech-mode-selector">
+                                                        <button @onclick="() => SetInputMode(true)" 
+                                                                class="btn-mode @(useSpeechInput ? "active" : "")">
+                                                            🎤 Speak
+                                                        </button>
+                                                        <button @onclick="() => SetInputMode(false)" 
+                                                                class="btn-mode @(!useSpeechInput ? "active" : "")">
+                                                            ⌨️ Type
+                                                        </button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="speech-unavailable">
+                                                        <span class="text-orange-600">🔄 Speech recognition setting up... You can type for now!</span>
+                                                    </div>
+                                                }
+                                            </div>
+
+                                            @if (useSpeechInput && speechRecognitionSupported)
+                                            {
+                                                <!-- Speech Recording Section -->
+                                                <div class="speech-recording">
+                                                    <div class="recording-controls">
+                                                        @if (!isRecording)
+                                                        {
+                                                            <button @onclick="StartRecording" 
+                                                                    class="btn-child-friendly bg-red-500 record-button"
+                                                                    disabled="@isSubmitting">
+                                                                🎤 Hold to Record
+                                                            </button>
+                                                        }
+                                                        else
+                                                        {
+                                                            <button @onclick="StopRecording" 
+                                                                    class="btn-child-friendly bg-gray-500 record-button recording">
+                                                                🔴 Release to Stop
+                                                            </button>
+                                                        }
+                                                    </div>
+                                                    
+                                                    @if (hasRecordedAudio)
+                                                    {
+                                                        <div class="recording-status">
+                                                            <span class="text-green-600">✅ Audio recorded! Click "Check My Pronunciation" below.</span>
+                                                        </div>
+                                                    }
+                                                    
+                                                    @if (isRecording)
+                                                    {
+                                                        <div class="recording-indicator">
+                                                            <div class="pulse-animation"></div>
+                                                            <span class="text-red-600">🔴 Recording... speak clearly!</span>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <!-- Text Input Section -->
+                                                <input @bind="userInput" 
+                                                       @onkeypress="HandleKeyPress"
+                                                       class="practice-input" 
+                                                       placeholder="Type what you heard or your pronunciation attempt..."
+                                                       disabled="@isSubmitting">
+                                            }
                                             
                                             <div class="input-buttons mt-3">
                                                 <button @onclick="CheckAnswer" 
                                                         class="btn-child-friendly bg-green-500"
-                                                        disabled="@(string.IsNullOrWhiteSpace(userInput) || isSubmitting)">
+                                                        disabled="@((!hasRecordedAudio && useSpeechInput) || (string.IsNullOrWhiteSpace(userInput) && !useSpeechInput) || isSubmitting)">
                                                     @if (isSubmitting)
                                                     {
                                                         <span>🔄 Checking...</span>
+                                                    }
+                                                    else if (useSpeechInput)
+                                                    {
+                                                        <span>🎤 Check My Pronunciation</span>
                                                     }
                                                     else
                                                     {
@@ -218,6 +289,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     [Parameter] public EventCallback OnClose { get; set; }
     [Parameter] public EventCallback<(int bonusIncome, int bonusReputation)> OnRewardsEarned { get; set; }
 
+    // Challenge state
     private List<LanguageChallengeDto> challenges = new();
     private LanguageChallengeDto? currentChallenge;
     private int currentChallengeIndex = 0;
@@ -232,7 +304,38 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     private int bonusIncome = 0;
     private int bonusReputation = 0;
 
+    // Speech recognition state
+    private bool speechRecognitionSupported = false;
+    private bool useSpeechInput = false;
+    private bool isRecording = false;
+    private bool hasRecordedAudio = false;
+    private byte[]? recordedAudioData = null;
+
     private bool isVisible => IsVisible;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Check if speech recognition is supported
+        try
+        {
+            var healthStatus = await SpeechRecognitionService.CheckServiceHealthAsync();
+            speechRecognitionSupported = healthStatus.IsAvailable;
+            
+            if (speechRecognitionSupported)
+            {
+                Logger.LogInformation("Speech recognition is available for language learning");
+            }
+            else
+            {
+                Logger.LogWarning("Speech recognition not available: {Message}", healthStatus.StatusMessage);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error checking speech recognition availability");
+            speechRecognitionSupported = false;
+        }
+    }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -275,25 +378,49 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 
     private async Task CheckAnswer()
     {
-        if (currentChallenge == null || string.IsNullOrWhiteSpace(userInput)) return;
+        if (currentChallenge == null) return;
 
         try
         {
             isSubmitting = true;
             StateHasChanged();
 
-            // Simple pronunciation checking - in a real implementation, this would use speech recognition
-            isCorrect = CheckPronunciation(userInput.Trim(), currentChallenge.Word, currentChallenge.Pronunciation);
+            if (useSpeechInput && hasRecordedAudio && recordedAudioData != null)
+            {
+                // Use speech recognition for pronunciation assessment
+                var pronunciationResult = await SpeechRecognitionService.AssessPronunciationAsync(
+                    recordedAudioData, currentChallenge.Word, currentChallenge.LanguageCode);
+
+                isCorrect = pronunciationResult.Passed;
+                feedbackMessage = pronunciationResult.ChildFriendlyFeedback;
+
+                Logger.LogInformation("Speech pronunciation assessment: Score={Score}, Passed={Passed}", 
+                    pronunciationResult.OverallScore, pronunciationResult.Passed);
+            }
+            else if (!useSpeechInput && !string.IsNullOrWhiteSpace(userInput))
+            {
+                // Use text similarity checking for typed input
+                isCorrect = CheckPronunciation(userInput.Trim(), currentChallenge.Word, currentChallenge.Pronunciation);
+                
+                if (isCorrect)
+                {
+                    feedbackMessage = GetPositiveFeedback();
+                }
+                else
+                {
+                    feedbackMessage = GetEncouragingFeedback();
+                }
+            }
+            else
+            {
+                feedbackMessage = "Please provide input (speech or text) to check your pronunciation!";
+                isCorrect = false;
+            }
             
             if (isCorrect)
             {
                 correctAnswers++;
                 languagesLearned.Add(currentChallenge.LanguageCode);
-                feedbackMessage = GetPositiveFeedback();
-            }
-            else
-            {
-                feedbackMessage = GetEncouragingFeedback();
             }
 
             StateHasChanged();
@@ -306,11 +433,70 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         {
             Logger.LogError(ex, "Error checking language answer for challenge {LanguageCode}", 
                 currentChallenge?.LanguageCode);
+            feedbackMessage = "Sorry, we had trouble checking your answer. Please try again!";
         }
         finally
         {
             isSubmitting = false;
             StateHasChanged();
+        }
+    }
+
+    private void SetInputMode(bool useSpeech)
+    {
+        useSpeechInput = useSpeech && speechRecognitionSupported;
+        
+        // Clear previous input when switching modes
+        userInput = "";
+        hasRecordedAudio = false;
+        recordedAudioData = null;
+        feedbackMessage = "";
+        
+        StateHasChanged();
+    }
+
+    private async Task StartRecording()
+    {
+        try
+        {
+            isRecording = true;
+            hasRecordedAudio = false;
+            StateHasChanged();
+
+            // Simulate recording for demo - in a real implementation this would use browser MediaRecorder API
+            // For now, we'll simulate a 2-second recording
+            await Task.Delay(2000);
+            
+            // Generate dummy audio data for testing
+            recordedAudioData = new byte[16000 * 2]; // 1 second of 16kHz 16-bit audio
+            Random.Shared.NextBytes(recordedAudioData);
+            
+            Logger.LogInformation("Simulated audio recording for language challenge");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error starting audio recording");
+            feedbackMessage = "Sorry, we couldn't start recording. Please try typing your answer instead!";
+        }
+    }
+
+    private async Task StopRecording()
+    {
+        try
+        {
+            isRecording = false;
+            hasRecordedAudio = recordedAudioData != null && recordedAudioData.Length > 0;
+            StateHasChanged();
+
+            if (hasRecordedAudio)
+            {
+                Logger.LogInformation("Audio recording completed, ready for assessment");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error stopping audio recording");
+            feedbackMessage = "Recording stopped with an error. Please try again!";
         }
     }
 
@@ -328,6 +514,8 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         userInput = "";
         feedbackMessage = "";
         isCorrect = false;
+        hasRecordedAudio = false;
+        recordedAudioData = null;
 
         if (currentChallengeIndex < challenges.Count - 1)
         {
@@ -377,6 +565,8 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         isCorrect = false;
         bonusIncome = 0;
         bonusReputation = 0;
+        hasRecordedAudio = false;
+        recordedAudioData = null;
         StateHasChanged();
     }
 
@@ -709,5 +899,105 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     color: #166534;
     font-weight: 500;
     margin: 0.5rem 0;
+}
+
+/* Speech Recognition Styles */
+.speech-options {
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+}
+
+.speech-mode-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.btn-mode {
+    padding: 0.5rem 1rem;
+    border: 2px solid #cbd5e1;
+    border-radius: 0.375rem;
+    background: white;
+    color: #64748b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-mode.active {
+    background: #8b5cf6;
+    color: white;
+    border-color: #8b5cf6;
+}
+
+.btn-mode:hover:not(.active) {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+}
+
+.speech-unavailable {
+    padding: 0.5rem;
+    background: #fed7aa;
+    border-radius: 0.375rem;
+    text-align: center;
+}
+
+.speech-recording {
+    text-align: center;
+    padding: 1rem;
+}
+
+.recording-controls {
+    margin-bottom: 1rem;
+}
+
+.record-button {
+    font-size: 1.125rem;
+    padding: 1rem 2rem;
+    min-width: 12rem;
+}
+
+.record-button.recording {
+    animation: pulse 1.5s infinite;
+}
+
+.recording-status {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: #dcfce7;
+    border-radius: 0.375rem;
+}
+
+.recording-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.pulse-animation {
+    width: 1rem;
+    height: 1rem;
+    background: #ef4444;
+    border-radius: 50%;
+    animation: pulse 1s infinite;
+}
+
+@@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 </style>
