@@ -29,7 +29,7 @@ header_pages:
 collections:
   posts:
     output: true
-    permalink: /blog/:year/:month/:day/:title/
+    permalink: /blog/:title/
   journey:
     output: true
     permalink: /journey/:name/

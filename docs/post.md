@@ -1,11 +1,11 @@
 ---
-layout: page
-title: "Development Blog"
+layout: default
+title: "Development Posts"
 subtitle: "Real-Time AI-Led Game Creation Journey Documentation"
-permalink: /blog/
+permalink: /post/
 ---
 
-## 🎯 Blog Categories
+## 🎯 Post Categories
 
 <div class="quick-nav">
   <div class="nav-card">

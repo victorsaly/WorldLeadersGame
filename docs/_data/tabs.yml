@@ -4,8 +4,8 @@
   name: Home
   path: /
 -
-  name: Blog
-  path: /blog/
+  name: Diary
+  path: /post/
 -
   name: Journey
   path: /journey/
