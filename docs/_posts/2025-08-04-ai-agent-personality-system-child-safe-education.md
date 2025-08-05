@@ -466,7 +466,7 @@ curl -X POST "https://localhost:7289/api/AI/validate" \
 
 - **[Full Source Code](https://github.com/victorsaly/WorldLeadersGame/tree/copilot/fix-34)**: Complete AI agent implementation
 - **[PR #35 Details](https://github.com/victorsaly/WorldLeadersGame/pull/35)**: Technical specifications and safety validation
-- **[Child Safety Framework](https://worldleadersgame.co.uk/technical/ai-safety-and-child-protection)**: Comprehensive safety guidelines
+- **[Child Safety Framework](https://docs.worldleadersgame.co.uk/technical/ai-safety-and-child-protection)**: Comprehensive safety guidelines
 - **[Educational Standards](https://worldleadersgame.co.uk/technical/educational-game-development)**: Learning objective alignment
 
 ---
