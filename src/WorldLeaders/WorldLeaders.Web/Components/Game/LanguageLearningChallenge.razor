@@ -6,9 +6,12 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 *@
 @using WorldLeaders.Shared.DTOs
 @using WorldLeaders.Shared.Services
+@using Microsoft.JSInterop
 @inject ITerritoryService TerritoryService
 @inject ISpeechRecognitionService SpeechRecognitionService
+@inject IJSRuntime JSRuntime
 @inject ILogger<LanguageLearningChallenge> Logger
+@implements IAsyncDisposable
 
 <div class="language-challenge-container">
     @if (isVisible)
@@ -310,24 +313,50 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     private bool isRecording = false;
     private bool hasRecordedAudio = false;
     private byte[]? recordedAudioData = null;
+    private double recordedAudioDuration = 0.0;
+    private IJSObjectReference? jsModule;
+    private DotNetObjectReference<LanguageLearningChallenge>? dotNetRef;
 
     private bool isVisible => IsVisible;
 
     protected override async Task OnInitializedAsync()
     {
-        // Check if speech recognition is supported
+        // Create .NET object reference for JavaScript callbacks
+        dotNetRef = DotNetObjectReference.Create(this);
+
+        // Load JavaScript module for speech recording
+        try
+        {
+            jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/speech-recording.js");
+            await jsModule.InvokeVoidAsync("speechRecorderInterop.init", dotNetRef);
+            
+            // Check if browser supports MediaRecorder API
+            var browserSupported = await jsModule.InvokeAsync<bool>("speechRecorderInterop.isSupported");
+            
+            Logger.LogInformation("Browser MediaRecorder support: {Supported}", browserSupported);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading speech recording JavaScript module");
+        }
+
+        // Check if speech recognition service is supported
         try
         {
             var healthStatus = await SpeechRecognitionService.CheckServiceHealthAsync();
-            speechRecognitionSupported = healthStatus.IsAvailable;
+            var serviceSupported = healthStatus.IsAvailable;
+            
+            // Both browser and service must support speech recognition
+            speechRecognitionSupported = (jsModule != null) && serviceSupported;
             
             if (speechRecognitionSupported)
             {
-                Logger.LogInformation("Speech recognition is available for language learning");
+                Logger.LogInformation("Speech recognition is fully available for language learning (browser + service)");
             }
             else
             {
-                Logger.LogWarning("Speech recognition not available: {Message}", healthStatus.StatusMessage);
+                Logger.LogWarning("Speech recognition not fully available - Browser: {Browser}, Service: {Service}", 
+                    jsModule != null, serviceSupported);
             }
         }
         catch (Exception ex)
@@ -457,46 +486,70 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 
     private async Task StartRecording()
     {
+        if (jsModule == null)
+        {
+            Logger.LogError("JavaScript module not loaded for speech recording");
+            feedbackMessage = "Speech recording not available. Please try typing your answer instead!";
+            StateHasChanged();
+            return;
+        }
+
         try
         {
             isRecording = true;
             hasRecordedAudio = false;
+            feedbackMessage = "";
             StateHasChanged();
 
-            // TODO: Implement real microphone recording using browser MediaRecorder API via JS interop
-            // For now, we'll simulate a 2-second recording for development/testing
-            await Task.Delay(2000);
+            Logger.LogInformation("Starting real microphone recording for language challenge");
             
-            // Generate dummy audio data for testing (2 seconds of 16kHz 16-bit audio = 16000 samples/sec * 2 bytes/sample * 2 seconds)
-            recordedAudioData = new byte[16000 * 2 * 2]; // 2 seconds of 16kHz 16-bit audio
-            Random.Shared.NextBytes(recordedAudioData);
+            // Start real microphone recording via JavaScript interop
+            var success = await jsModule.InvokeAsync<bool>("speechRecorderInterop.startRecording");
             
-            Logger.LogInformation("Simulated audio recording for language challenge - 2 seconds of dummy data generated");
+            if (!success)
+            {
+                isRecording = false;
+                feedbackMessage = "Could not start recording. Please check microphone permissions and try again!";
+                StateHasChanged();
+            }
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error starting audio recording");
-            feedbackMessage = "Sorry, we couldn't start recording. Please try typing your answer instead!";
+            Logger.LogError(ex, "Error starting real microphone recording");
+            isRecording = false;
+            feedbackMessage = "Recording failed to start. Please try typing your answer instead!";
+            StateHasChanged();
         }
     }
 
     private async Task StopRecording()
     {
+        if (jsModule == null || !isRecording)
+        {
+            return;
+        }
+
         try
         {
-            isRecording = false;
-            hasRecordedAudio = recordedAudioData != null && recordedAudioData.Length > 0;
-            StateHasChanged();
-
-            if (hasRecordedAudio)
+            Logger.LogInformation("Stopping real microphone recording for language challenge");
+            
+            // Stop real microphone recording via JavaScript interop
+            var success = await jsModule.InvokeAsync<bool>("speechRecorderInterop.stopRecording");
+            
+            if (!success)
             {
-                Logger.LogInformation("Audio recording completed, ready for assessment");
+                feedbackMessage = "Recording stopped with an error. Please try again!";
+                StateHasChanged();
             }
+            
+            // Note: isRecording will be set to false in OnAudioRecorded callback
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error stopping audio recording");
+            Logger.LogError(ex, "Error stopping real microphone recording");
+            isRecording = false;
             feedbackMessage = "Recording stopped with an error. Please try again!";
+            StateHasChanged();
         }
     }
 
@@ -676,6 +729,113 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             "🚀 Good job trying! Each practice makes you stronger!"
         };
         return messages[Random.Shared.Next(messages.Length)];
+    }
+
+    // JavaScript Interop Callback Methods
+    
+    /// <summary>
+    /// Called by JavaScript when audio recording is completed and processed
+    /// Educational context: Real microphone audio converted to PCM format for Azure Speech Services
+    /// </summary>
+    /// <param name="base64AudioData">Base64 encoded PCM audio data</param>
+    /// <param name="durationSeconds">Duration of the recording in seconds</param>
+    [JSInvokable]
+    public async Task OnAudioRecorded(string base64AudioData, double durationSeconds)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(base64AudioData))
+            {
+                Logger.LogWarning("Received empty audio data from JavaScript");
+                isRecording = false;
+                hasRecordedAudio = false;
+                feedbackMessage = "No audio was captured. Please try recording again!";
+                StateHasChanged();
+                return;
+            }
+
+            // Convert base64 back to byte array
+            recordedAudioData = Convert.FromBase64String(base64AudioData);
+            recordedAudioDuration = durationSeconds;
+            
+            isRecording = false;
+            hasRecordedAudio = true;
+            
+            Logger.LogInformation("Real microphone audio received: {Size} bytes, {Duration:F2} seconds", 
+                recordedAudioData.Length, durationSeconds);
+            
+            // Provide encouraging feedback about successful recording
+            if (durationSeconds < 0.5)
+            {
+                feedbackMessage = "Recording was very short. Try speaking a bit longer and click 'Check My Pronunciation'!";
+            }
+            else if (durationSeconds > 4.0)
+            {
+                feedbackMessage = "Great recording! That was nice and clear. Click 'Check My Pronunciation'!";
+            }
+            else
+            {
+                feedbackMessage = "Perfect! Audio recorded successfully. Click 'Check My Pronunciation'!";
+            }
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error processing recorded audio data from JavaScript");
+            isRecording = false;
+            hasRecordedAudio = false;
+            feedbackMessage = "Error processing your recording. Please try again!";
+            StateHasChanged();
+        }
+    }
+
+    /// <summary>
+    /// Called by JavaScript when recording encounters an error
+    /// Child-friendly error handling with helpful suggestions
+    /// </summary>
+    /// <param name="errorMessage">Error message from JavaScript</param>
+    [JSInvokable]
+    public void OnRecordingError(string errorMessage)
+    {
+        try
+        {
+            Logger.LogWarning("Recording error from JavaScript: {Error}", errorMessage);
+            
+            isRecording = false;
+            hasRecordedAudio = false;
+            feedbackMessage = errorMessage; // Already child-friendly from JavaScript
+            
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error handling recording error callback");
+        }
+    }
+
+    // IAsyncDisposable Implementation
+    
+    public async ValueTask DisposeAsync()
+    {
+        try
+        {
+            // Clean up JavaScript module and stop any ongoing recording
+            if (jsModule != null)
+            {
+                await jsModule.InvokeVoidAsync("speechRecorderInterop.dispose");
+                await jsModule.DisposeAsync();
+            }
+
+            // Dispose .NET object reference
+            dotNetRef?.Dispose();
+            
+            Logger.LogInformation("Language learning challenge component disposed successfully");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error disposing language learning challenge component");
+        }
     }
 }
 
