@@ -2,6 +2,15 @@ name: Deploy World Leaders Game to Azure
 
 # Educational game CI/CD pipeline for safe deployment
 # Context: Deploy educational game for 12-year-old learners to Azure
+#
+# Required GitHub Secrets:
+# - AZURE_CLIENT_ID: Service Principal Client ID
+# - AZURE_TENANT_ID: Azure AD Tenant ID  
+# - AZURE_SUBSCRIPTION_ID: Azure Subscription ID
+#
+# To create these secrets:
+# 1. Create Service Principal: az ad sp create-for-rbac --name "worldleaders-github-actions" --role contributor --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group}
+# 2. Add the returned clientId, tenantId, and subscriptionId as GitHub repository secrets
 
 on:
   push:
@@ -141,7 +150,9 @@ jobs:
     - name: 🔐 Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         
     - name: 📥 Download Web App artifact
       uses: actions/download-artifact@v4
