@@ -308,6 +308,8 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     private double recordedAudioDuration = 0.0;
     private IJSObjectReference? jsModule;
     private DotNetObjectReference<LanguageLearningChallenge>? dotNetRef;
+    private bool _disposed = false;
+    private CancellationTokenSource _cancellationTokenSource = new();
 
     private bool isVisible => IsVisible;
 
@@ -393,18 +395,24 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         finally
         {
             isLoading = false;
-            StateHasChanged();
+            if (!_disposed)
+            {
+                StateHasChanged();
+            }
         }
     }
 
     private async Task CheckAnswer()
     {
-        if (currentChallenge == null) return;
+        if (currentChallenge == null || _disposed) return;
 
         try
         {
             isSubmitting = true;
-            StateHasChanged();
+            if (!_disposed)
+            {
+                StateHasChanged();
+            }
 
             if (useSpeechInput && hasRecordedAudio && recordedAudioData != null)
             {
@@ -444,11 +452,25 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
                 languagesLearned.Add(currentChallenge.LanguageCode);
             }
 
-            StateHasChanged();
+            if (!_disposed)
+            {
+                StateHasChanged();
+            }
             
             // Auto-advance after showing feedback
-            await Task.Delay(3000);
-            await NextChallenge();
+            try
+            {
+                await Task.Delay(3000, _cancellationTokenSource.Token);
+                if (!_disposed && !_cancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    await NextChallenge();
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Component was disposed during delay - this is expected
+                return;
+            }
         }
         catch (Exception ex)
         {
@@ -459,7 +481,10 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         finally
         {
             isSubmitting = false;
-            StateHasChanged();
+            if (!_disposed)
+            {
+                StateHasChanged();
+            }
         }
     }
 
@@ -839,8 +864,13 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     
     public async ValueTask DisposeAsync()
     {
+        _disposed = true;
+        
         try
         {
+            // Cancel any ongoing delays or async operations
+            _cancellationTokenSource?.Cancel();
+            
             // Clean up JavaScript module and stop any ongoing recording
             if (jsModule != null)
             {
@@ -850,6 +880,9 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 
             // Dispose .NET object reference
             dotNetRef?.Dispose();
+            
+            // Dispose cancellation token source
+            _cancellationTokenSource?.Dispose();
             
             Logger.LogInformation("Language learning challenge component disposed successfully");
         }

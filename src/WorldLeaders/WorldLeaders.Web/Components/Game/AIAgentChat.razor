@@ -1,0 +1,460 @@
+@* 
+AI Agent Chat Component
+Context: Educational AI interaction for 12-year-old players with safe, educational content
+Educational Objective: Guided learning through AI mentors with different specialties
+Safety Requirements: Content moderation, age-appropriate responses, positive messaging
+*@
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Enums
+@inject IJSRuntime JSRuntime
+@inject ILogger<AIAgentChat> Logger
+@implements IAsyncDisposable
+
+<div class="ai-chat-container">
+    @if (isVisible)
+    {
+        <div class="modal-overlay" @onclick="CloseChat">
+            <div class="modal-content" @onclick:stopPropagation="true">
+                <div class="modal-header">
+                    <h2 class="text-2xl font-bold text-indigo-800">🤖 AI Learning Assistants</h2>
+                    <button @onclick="CloseChat" class="close-button">❌</button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Agent Selection -->
+                    <div class="agent-selection mb-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-3">Choose your learning guide:</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            @foreach (var agent in availableAgents)
+                            {
+                                <button @onclick="() => SelectAgent(agent.Type)" 
+                                        class="agent-card @(selectedAgent?.Type == agent.Type ? "selected" : "")">
+                                    <div class="text-2xl mb-2">@agent.Emoji</div>
+                                    <div class="font-bold text-sm">@agent.Name</div>
+                                    <div class="text-xs text-gray-600">@agent.Specialty</div>
+                                </button>
+                            }
+                        </div>
+                    </div>
+
+                    @if (selectedAgent != null)
+                    {
+                        <!-- Chat Interface -->
+                        <div class="chat-interface">
+                            <div class="chat-messages" style="height: 300px; overflow-y: auto;">
+                                @foreach (var message in chatMessages)
+                                {
+                                    <div class="message @(message.IsFromAgent ? "agent-message" : "user-message")">
+                                        <div class="message-content">
+                                            @if (message.IsFromAgent)
+                                            {
+                                                <span class="agent-emoji">@selectedAgent.Emoji</span>
+                                            }
+                                            <span class="message-text">@message.Content</span>
+                                        </div>
+                                    </div>
+                                }
+                                @if (isThinking)
+                                {
+                                    <div class="message agent-message">
+                                        <div class="message-content">
+                                            <span class="agent-emoji">@selectedAgent.Emoji</span>
+                                            <span class="thinking-dots">Thinking...</span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Input Area -->
+                            <div class="chat-input-area">
+                                <div class="input-group">
+                                    <input @bind="currentMessage" @onkeypress="@HandleKeyPress" 
+                                           class="chat-input" placeholder="Ask me anything about your leadership journey!" 
+                                           disabled="@isThinking" />
+                                    <button @onclick="SendMessage" disabled="@(string.IsNullOrWhiteSpace(currentMessage) || isThinking)"
+                                            class="send-button">
+                                        Send
+                                    </button>
+                                </div>
+                                <div class="input-help">
+                                    <span class="text-xs text-gray-500">Ask about: career advice, territory strategy, language tips, or game help!</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+.ai-chat-container .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.ai-chat-container .modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.ai-chat-container .modal-header {
+    padding: 20px;
+    border-bottom: 2px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+}
+
+.ai-chat-container .close-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    padding: 4px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.ai-chat-container .close-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.ai-chat-container .modal-body {
+    padding: 20px;
+}
+
+.ai-chat-container .agent-card {
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+}
+
+.ai-chat-container .agent-card:hover {
+    border-color: #6366f1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.ai-chat-container .agent-card.selected {
+    border-color: #6366f1;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+}
+
+.ai-chat-container .chat-messages {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.ai-chat-container .message {
+    margin-bottom: 12px;
+}
+
+.ai-chat-container .message-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.ai-chat-container .agent-message .message-content {
+    justify-content: flex-start;
+}
+
+.ai-chat-container .user-message .message-content {
+    justify-content: flex-end;
+}
+
+.ai-chat-container .agent-emoji {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.ai-chat-container .message-text {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    max-width: 80%;
+}
+
+.ai-chat-container .user-message .message-text {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+}
+
+.ai-chat-container .thinking-dots {
+    background: white;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-style: italic;
+    color: #6b7280;
+}
+
+.ai-chat-container .input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.ai-chat-container .chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.ai-chat-container .chat-input:focus {
+    outline: none;
+    border-color: #6366f1;
+}
+
+.ai-chat-container .send-button {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.ai-chat-container .send-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.ai-chat-container .send-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ai-chat-container .input-help {
+    margin-top: 8px;
+    text-align: center;
+}
+</style>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; }
+    [Parameter] public Guid PlayerId { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+
+    private bool isVisible => IsVisible;
+    private bool isThinking = false;
+    private string currentMessage = "";
+    private AIAgentInfo? selectedAgent;
+    private List<ChatMessage> chatMessages = new();
+    private bool _disposed = false;
+    private CancellationTokenSource _cancellationTokenSource = new();
+
+    private readonly List<AIAgentInfo> availableAgents = new()
+    {
+        new AIAgentInfo 
+        { 
+            Type = AgentType.CareerGuide, 
+            Name = "Career Guide", 
+            Emoji = "👩‍💼", 
+            Specialty = "Job advice & growth" 
+        },
+        new AIAgentInfo 
+        { 
+            Type = AgentType.TerritoryStrategist, 
+            Name = "Territory Expert", 
+            Emoji = "🗺️", 
+            Specialty = "Expansion strategy" 
+        },
+        new AIAgentInfo 
+        { 
+            Type = AgentType.LanguageTutor, 
+            Name = "Language Tutor", 
+            Emoji = "🗣️", 
+            Specialty = "Language learning" 
+        },
+        new AIAgentInfo 
+        { 
+            Type = AgentType.HappinessAdvisor, 
+            Name = "Happiness Guide", 
+            Emoji = "😊", 
+            Specialty = "Population management" 
+        },
+        new AIAgentInfo 
+        { 
+            Type = AgentType.FortuneTeller, 
+            Name = "Strategy Oracle", 
+            Emoji = "🔮", 
+            Specialty = "Future planning" 
+        }
+    };
+
+    private void SelectAgent(AgentType agentType)
+    {
+        if (_disposed) return;
+        
+        selectedAgent = availableAgents.FirstOrDefault(a => a.Type == agentType);
+        chatMessages.Clear();
+        
+        if (selectedAgent != null)
+        {
+            // Welcome message from the selected agent
+            var welcomeMessage = selectedAgent.Type switch
+            {
+                AgentType.CareerGuide => "Hello! I'm here to help you advance your career and achieve your leadership goals! What would you like to know about job progression?",
+                AgentType.TerritoryStrategist => "Greetings, future leader! I can help you plan your territorial expansion and teach you about different countries. What's your strategy?",
+                AgentType.LanguageTutor => "¡Hola! Bonjour! I'm excited to help you learn languages from around the world! Which country's language interests you?",
+                AgentType.HappinessAdvisor => "Welcome! Keeping your citizens happy is the key to successful leadership. How can I help you improve your population's wellbeing?",
+                AgentType.FortuneTeller => "The mystical winds whisper of great potential in your future! Let me share strategic insights to guide your path to leadership.",
+                _ => "Hello! I'm here to help you on your leadership journey!"
+            };
+            
+            chatMessages.Add(new ChatMessage 
+            { 
+                Content = welcomeMessage, 
+                IsFromAgent = true 
+            });
+        }
+        
+        if (!_disposed)
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(currentMessage) || selectedAgent == null || _disposed)
+            return;
+
+        // Add user message
+        chatMessages.Add(new ChatMessage 
+        { 
+            Content = currentMessage.Trim(), 
+            IsFromAgent = false 
+        });
+
+        var userInput = currentMessage.Trim();
+        currentMessage = "";
+        isThinking = true;
+        
+        if (!_disposed)
+        {
+            StateHasChanged();
+        }
+
+        try
+        {
+            // Simulate AI response based on agent type (in a real implementation, this would call your AI service)
+            await Task.Delay(1500, _cancellationTokenSource.Token); // Simulate thinking time with cancellation support
+            
+            // Check if component is still active after delay
+            if (!_disposed && !_cancellationTokenSource.Token.IsCancellationRequested)
+            {
+                var response = GenerateSafeResponse(selectedAgent.Type, userInput);
+                
+                chatMessages.Add(new ChatMessage 
+                { 
+                    Content = response, 
+                    IsFromAgent = true 
+                });
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Component was disposed during async operation - this is expected
+            return;
+        }
+        catch (Exception ex)
+        {
+            if (!_disposed)
+            {
+                Logger.LogError(ex, "Error generating AI response");
+                chatMessages.Add(new ChatMessage 
+                { 
+                    Content = "I'm having trouble thinking right now. Could you try asking again?", 
+                    IsFromAgent = true 
+                });
+            }
+        }
+        finally
+        {
+            isThinking = false;
+            if (!_disposed)
+            {
+                StateHasChanged();
+            }
+        }
+    }
+
+    private string GenerateSafeResponse(AgentType agentType, string userInput)
+    {
+        // Safe, educational responses based on agent type
+        // In a real implementation, this would use your AI service with content moderation
+        return agentType switch
+        {
+            AgentType.CareerGuide => "That's a great question about your career! Remember, every job teaches valuable skills. Keep rolling the dice and learning new abilities!",
+            AgentType.TerritoryStrategist => "Excellent strategic thinking! Consider starting with smaller territories to build your reputation, then work toward larger countries. Geography knowledge is power!",
+            AgentType.LanguageTutor => "¡Fantástico! Language learning opens doors to understanding different cultures. Practice pronunciation and learn about the countries you're interested in!",
+            AgentType.HappinessAdvisor => "Wonderful question! Happy citizens support great leaders. Focus on positive events and making decisions that benefit everyone in your territories!",
+            AgentType.FortuneTeller => "The crystals reveal... your dedication to learning will lead to great success! Stay curious and keep exploring new opportunities!",
+            _ => "That's a thoughtful question! Keep exploring and learning - you're on the path to becoming a great leader!"
+        };
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(currentMessage))
+        {
+            await SendMessage();
+        }
+    }
+
+    private async Task CloseChat()
+    {
+        await OnClose.InvokeAsync();
+    }
+
+    private class ChatMessage
+    {
+        public string Content { get; set; } = "";
+        public bool IsFromAgent { get; set; }
+    }
+
+    private class AIAgentInfo
+    {
+        public AgentType Type { get; set; }
+        public string Name { get; set; } = "";
+        public string Emoji { get; set; } = "";
+        public string Specialty { get; set; } = "";
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        _disposed = true;
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource?.Dispose();
+    }
+}
