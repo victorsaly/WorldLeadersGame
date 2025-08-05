@@ -37,7 +37,8 @@ Personal insights into collaborative creative direction and educational validati
 ## 📝 **Latest Posts**
 
 <div class="post-list">
-  {% for post in site.posts %}
+  {% assign recent_posts = site.posts | slice: 0, 5 %}
+  {% for post in recent_posts %}
   <article class="post-item">
     <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
     <p class="post-meta">
@@ -58,6 +59,13 @@ Personal insights into collaborative creative direction and educational validati
   </article>
   {% unless forloop.last %}<hr>{% endunless %}
   {% endfor %}
+  
+  {% if site.posts.size > 5 %}
+  <div class="more-posts">
+    <p><strong>{{ site.posts.size | minus: 5 }} more posts available</strong></p>
+    <p>Browse all posts in the <a href="#archive-by-category">archive below</a> or check our <a href="/journey/">development journey</a>.</p>
+  </div>
+  {% endif %}
 </div>
 
 ---
