@@ -68,9 +68,9 @@ public class JwtAuthenticationService(
             }
 
             // Check if user already exists
-            var existingUser = await userManager.FindByNameAsync(request.Username) 
+            var existingUser = await userManager.FindByNameAsync(request.Username)
                 ?? await userManager.FindByEmailAsync(request.Email);
-            
+
             if (existingUser != null)
             {
                 throw new InvalidOperationException("User with this username or email already exists");
@@ -141,7 +141,7 @@ public class JwtAuthenticationService(
         try
         {
             // Find user by username or email
-            var user = await userManager.FindByNameAsync(request.UsernameOrEmail) 
+            var user = await userManager.FindByNameAsync(request.UsernameOrEmail)
                 ?? await userManager.FindByEmailAsync(request.UsernameOrEmail);
 
             if (user == null)
@@ -162,12 +162,12 @@ public class JwtAuthenticationService(
             if (!signInResult.Succeeded)
             {
                 logger.LogWarning("Login failed: Invalid password - {UserId}", user.Id);
-                
+
                 if (signInResult.IsLockedOut)
                 {
                     throw new UnauthorizedAccessException("Account is locked due to multiple failed attempts");
                 }
-                
+
                 throw new UnauthorizedAccessException("Invalid username/email or password");
             }
 
@@ -196,103 +196,6 @@ public class JwtAuthenticationService(
     }
 
     /// <summary>
-    /// Create a temporary guest session for exploring the system without registration
-    /// </summary>
-    public Task<GuestAuthenticationResponse> CreateGuestSessionAsync(GuestAccessRequest request)
-    {
-        try
-        {
-            logger.LogInformation("Creating guest session for display name: {DisplayName}, age: {Age}", 
-                request.DisplayName ?? "Anonymous", request.Age);
-
-            // Generate a unique guest ID
-            var guestId = Guid.NewGuid();
-            var now = DateTime.UtcNow;
-            
-            // Determine session duration (capped at 30 minutes for safety)
-            var sessionDuration = Math.Min(request.SessionDurationMinutes, 30);
-            var expiresAt = now.AddMinutes(sessionDuration);
-
-            // Create guest session claims
-            var claims = new List<Claim>
-            {
-                new("sub", guestId.ToString()),
-                new("jti", Guid.NewGuid().ToString()),
-                new(ClaimTypes.Role, UserRole.Guest.ToString()),
-                new("isGuest", "true"),
-                new("iat", new DateTimeOffset(now).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
-            };
-
-            // Add child safety claims
-            claims.Add(new("isChild", "true"));
-            claims.Add(new("requiresChildSafety", "true"));
-
-            if (request.Age.HasValue)
-            {
-                claims.Add(new("age", request.Age.Value.ToString()));
-            }
-
-            if (!string.IsNullOrEmpty(request.DisplayName))
-            {
-                claims.Add(new("displayName", request.DisplayName));
-            }
-
-            // Generate JWT token for guest session
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtOptions.SecretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = expiresAt,
-                Issuer = _jwtOptions.Issuer,
-                Audience = _jwtOptions.Audience,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            // Create guest user info
-            var guestUserInfo = new GuestUserInfoDto
-            {
-                GuestId = guestId,
-                DisplayName = request.DisplayName ?? "Guest Explorer",
-                Age = request.Age,
-                SessionStartedAt = now,
-                SessionExpiresAt = expiresAt,
-                HasParentalAwareness = request.HasParentalAwareness
-            };
-
-            // Create guest authentication response
-            var response = new GuestAuthenticationResponse
-            {
-                AccessToken = tokenString,
-                ExpiresAt = expiresAt,
-                Guest = guestUserInfo,
-                SessionTimeoutMinutes = sessionDuration,
-                AvailableFeatures = new List<string>
-                {
-                    "BasicGameplay",
-                    "CountryExploration", 
-                    "LanguageLearning",
-                    "SafeAIChat"
-                },
-                RegistrationEncouragement = "Create an account to save your progress and unlock more features!"
-            };
-
-            logger.LogInformation("Guest session created successfully: {GuestId}, expires: {ExpiresAt}", 
-                guestId, expiresAt);
-
-            return Task.FromResult(response);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error creating guest session");
-            throw;
-        }
-    }
-
-    /// <summary>
     /// Validate JWT token and return user information
     /// </summary>
     public async Task<UserInfoDto?> ValidateTokenAsync(string token)
@@ -315,8 +218,8 @@ public class JwtAuthenticationService(
             };
 
             var principal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
-            
-            if (validatedToken is not JwtSecurityToken jwtToken || 
+
+            if (validatedToken is not JwtSecurityToken jwtToken ||
                 !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             {
                 return null;
@@ -422,7 +325,7 @@ public class JwtAuthenticationService(
                 return true;
             }
 
-            logger.LogWarning("Password change failed for user: {UserId}. Errors: {Errors}", 
+            logger.LogWarning("Password change failed for user: {UserId}. Errors: {Errors}",
                 userId, string.Join(", ", result.Errors.Select(e => e.Description)));
             return false;
         }
@@ -497,13 +400,13 @@ public class JwtAuthenticationService(
             }
 
             // Extend session by the original timeout duration
-            var extensionMinutes = user.RequiresChildSafety 
-                ? _childSafetyOptions.ChildSessionTimeoutMinutes 
+            var extensionMinutes = user.RequiresChildSafety
+                ? _childSafetyOptions.ChildSessionTimeoutMinutes
                 : _childSafetyOptions.AdultSessionTimeoutMinutes;
 
             session.ExpiresAt = DateTime.UtcNow.AddMinutes(extensionMinutes);
             session.LastActivityAt = DateTime.UtcNow;
-            
+
             await dbContext.SaveChangesAsync();
 
             logger.LogInformation("Session extended for user: {UserId} until {ExpiresAt}", userId, session.ExpiresAt);
@@ -525,8 +428,8 @@ public class JwtAuthenticationService(
         var key = Encoding.ASCII.GetBytes(_jwtOptions.SecretKey);
 
         // Determine session timeout based on user type
-        var sessionTimeoutMinutes = user.RequiresChildSafety 
-            ? _childSafetyOptions.ChildSessionTimeoutMinutes 
+        var sessionTimeoutMinutes = user.RequiresChildSafety
+            ? _childSafetyOptions.ChildSessionTimeoutMinutes
             : _childSafetyOptions.AdultSessionTimeoutMinutes;
 
         var expiresAt = DateTime.UtcNow.AddMinutes(sessionTimeoutMinutes);
@@ -544,8 +447,8 @@ public class JwtAuthenticationService(
                 new Claim("IsChild", user.IsChild.ToString()),
                 new Claim("Age", user.CalculateAge().ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, jwtId),
-                new Claim(JwtRegisteredClaimNames.Iat, 
-                    new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(), 
+                new Claim(JwtRegisteredClaimNames.Iat,
+                    new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),
                     ClaimValueTypes.Integer64)
             }),
             Expires = expiresAt,

@@ -104,6 +104,7 @@ public class AuthController(
     }
 
     /// <summary>
+<<<<<<< HEAD
     /// Create a guest session for exploring the system without registration
     /// </summary>
     /// <param name="request">Guest access request</param>
@@ -148,6 +149,8 @@ public class AuthController(
     }
 
     /// <summary>
+=======
+>>>>>>> c291e29 (Implement comprehensive authentication system with JWT, child safety, and cost tracking)
     /// Logout user and invalidate session
     /// </summary>
     /// <returns>Success status</returns>
