@@ -70,17 +70,17 @@ public enum UserRole
     /// Guest user (temporary exploration without registration, enhanced safety features)
     /// </summary>
     Guest = 0,
-    
+
     /// <summary>
     /// Student (typically 12+ years old, requires enhanced safety features)
     /// </summary>
     Student = 1,
-    
+
     /// <summary>
     /// Teacher (can oversee student accounts, create educational content)
     /// </summary>
     Teacher = 2,
-    
+
     /// <summary>
     /// Administrator (full system access, can manage all accounts)
     /// </summary>
@@ -96,27 +96,27 @@ public enum SafetyEventType
     /// Content was flagged by moderation system
     /// </summary>
     ContentFlagged = 1,
-    
+
     /// <summary>
     /// User session exceeded time limits
     /// </summary>
     SessionTimeout = 2,
-    
+
     /// <summary>
     /// Parental consent was required or updated
     /// </summary>
     ParentalConsent = 3,
-    
+
     /// <summary>
     /// GDPR data request or deletion
     /// </summary>
     GdprRequest = 4,
-    
+
     /// <summary>
     /// User attempted unauthorized access
     /// </summary>
     UnauthorizedAccess = 5,
-    
+
     /// <summary>
     /// Child safety policy violation
     /// </summary>
@@ -132,22 +132,22 @@ public enum SafetyEventSeverity
     /// Informational - no action required
     /// </summary>
     Info = 1,
-    
+
     /// <summary>
     /// Low risk - monitor but continue
     /// </summary>
     Low = 2,
-    
+
     /// <summary>
     /// Medium risk - may require intervention
     /// </summary>
     Medium = 3,
-    
+
     /// <summary>
     /// High risk - immediate action required
     /// </summary>
     High = 4,
-    
+
     /// <summary>
     /// Critical risk - suspend account/session
     /// </summary>
