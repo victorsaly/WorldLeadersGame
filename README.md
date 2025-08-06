@@ -255,6 +255,81 @@ dotnet run --project src/WorldLeaders/WorldLeaders.AppHost
 # 3. Start Web: dotnet run --project src/WorldLeaders/WorldLeaders.Web
 ```
 
+### 🔐 Authentication Setup for UK Educational Deployment
+
+The game includes comprehensive JWT authentication with child safety features:
+
+#### 1. Configure JWT Authentication
+
+Update `src/WorldLeaders/WorldLeaders.API/appsettings.json`:
+
+```json
+{
+  "Jwt": {
+    "SecretKey": "your-jwt-secret-key-must-be-at-least-32-characters-long-for-educational-security",
+    "Issuer": "WorldLeadersGame",
+    "Audience": "WorldLeadersGame.API",
+    "ExpirationMinutes": 60,
+    "ChildSessionTimeoutMinutes": 30
+  },
+  "ChildSafety": {
+    "Enabled": true,
+    "ChildAgeThreshold": 13,
+    "RequireParentalConsent": true,
+    "ChildSessionTimeoutMinutes": 30,
+    "EnforceGdprCompliance": true
+  },
+  "CostTracking": {
+    "Enabled": true,
+    "DailyCostLimitGBP": 0.08,
+    "Currency": "GBP"
+  }
+}
+```
+
+#### 2. Azure AD B2C Setup (Optional - UK South Region)
+
+For production deployments with Azure AD B2C:
+
+```json
+{
+  "AzureAdB2C": {
+    "TenantId": "your-tenant-id",
+    "ClientId": "your-client-id",
+    "Instance": "https://yourtenant.b2clogin.com",
+    "Domain": "yourtenant.onmicrosoft.com",
+    "Region": "UK South",
+    "Enabled": true
+  }
+}
+```
+
+#### 3. API Authentication Endpoints
+
+The API provides comprehensive authentication endpoints:
+
+- `POST /api/auth/register` - Register new user (with child safety validation)
+- `POST /api/auth/login` - User authentication
+- `POST /api/auth/logout` - Secure logout
+- `POST /api/auth/refresh` - Token refresh
+- `GET /api/auth/session` - Session information
+- `GET /api/auth/cost-summary` - Daily cost tracking (£0.08/user/day)
+
+#### 4. Child Safety Features
+
+- **COPPA Compliance**: Automatic parental consent for users under 13
+- **GDPR Compliance**: Data protection validation for UK educational use
+- **Session Management**: Shorter timeouts for child accounts (30 minutes)
+- **Content Validation**: Safe username and display name validation
+- **Cost Monitoring**: Per-user daily cost limits (£0.08/user/day)
+- **Audit Trail**: Comprehensive safety event logging
+
+#### 5. Role-Based Access
+
+- **Student**: Default role for educational users (enhanced safety)
+- **Teacher**: Can oversee student accounts and create content
+- **Admin**: Full system access for school administrators
+
 ### Explore Documentation Locally
 
 ```bash
