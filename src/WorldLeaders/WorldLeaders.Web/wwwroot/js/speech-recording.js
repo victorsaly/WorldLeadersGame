@@ -15,6 +15,7 @@ class SpeechRecorder {
         this.stream = null;
         this.isRecording = false;
         this.dotNetRef = null;
+        this.autoStopTimer = null; // Timer for auto-stop functionality
     }
 
     /**
@@ -101,7 +102,7 @@ class SpeechRecorder {
             console.log('Educational speech recording started successfully');
             
             // Auto-stop after MAX_RECORDING_TIME_MS for child safety (prevent long recordings)
-            setTimeout(() => {
+            this.autoStopTimer = setTimeout(() => {
                 if (this.isRecording) {
                     console.log(`Auto-stopping recording after ${MAX_RECORDING_TIME_MS / 1000} seconds (child safety limit)`);
                     this.stopRecording();
@@ -143,6 +144,13 @@ class SpeechRecorder {
 
         try {
             this.isRecording = false;
+            
+            // Clear auto-stop timer since we're manually stopping
+            if (this.autoStopTimer) {
+                clearTimeout(this.autoStopTimer);
+                this.autoStopTimer = null;
+            }
+            
             this.mediaRecorder.stop();
             console.log('Stopping educational speech recording...');
             return true;
@@ -284,6 +292,13 @@ class SpeechRecorder {
      */
     cleanup() {
         console.log('Cleaning up speech recording resources...');
+        
+        // Clear auto-stop timer if active
+        if (this.autoStopTimer) {
+            clearTimeout(this.autoStopTimer);
+            this.autoStopTimer = null;
+            console.log('Cleared auto-stop timer');
+        }
         
         if (this.stream) {
             this.stream.getTracks().forEach(track => {

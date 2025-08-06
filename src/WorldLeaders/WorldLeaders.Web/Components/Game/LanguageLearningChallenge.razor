@@ -280,6 +280,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     // Educational constants for child-friendly learning
     private const double PRONUNCIATION_ACCURACY_THRESHOLD = 0.7; // 70% similarity threshold for children
     private const int FEEDBACK_DISPLAY_DURATION_MS = 3000; // 3 seconds to show feedback before auto-advancing
+    private const string AUDIO_FEEDBACK_PREFIX = "🔊"; // Constant for audio feedback identification
     
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public Guid PlayerId { get; set; }
@@ -305,6 +306,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     private bool useSpeechInput = false;
     private bool isRecording = false;
     private bool hasRecordedAudio = false;
+    private bool _isPlayingAudio = false; // Track audio playback state instead of emoji comparison
     private byte[]? recordedAudioData = null;
     private double recordedAudioDuration = 0.0;
     private IJSObjectReference? jsModule;
@@ -396,7 +398,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         finally
         {
             isLoading = false;
-            if (!_disposed)
+            if (!IsDisposed())
             {
                 StateHasChanged();
             }
@@ -405,12 +407,12 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 
     private async Task CheckAnswer()
     {
-        if (currentChallenge == null || _disposed) return;
+        if (currentChallenge == null || IsDisposed()) return;
 
         try
         {
             isSubmitting = true;
-            if (!_disposed)
+            if (!IsDisposed())
             {
                 StateHasChanged();
             }
@@ -453,7 +455,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
                 languagesLearned.Add(currentChallenge.LanguageCode);
             }
 
-            if (!_disposed)
+            if (!IsDisposed())
             {
                 StateHasChanged();
             }
@@ -462,7 +464,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             try
             {
                 await Task.Delay(FEEDBACK_DISPLAY_DURATION_MS, _cancellationTokenSource.Token);
-                if (!_disposed && !_cancellationTokenSource.Token.IsCancellationRequested)
+                if (!IsDisposed() && !_cancellationTokenSource.Token.IsCancellationRequested)
                 {
                     await NextChallenge();
                 }
@@ -482,7 +484,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         finally
         {
             isSubmitting = false;
-            if (!_disposed)
+            if (!IsDisposed())
             {
                 StateHasChanged();
             }
@@ -675,13 +677,15 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 
             // Provide visual feedback that audio is playing
             feedbackMessage = $"🔊 Listen carefully to the pronunciation of '{currentChallenge.Word}'!";
+            _isPlayingAudio = true;
             StateHasChanged();
             
             // Clear feedback after a few seconds
             await Task.Delay(FEEDBACK_DISPLAY_DURATION_MS);
-            if (feedbackMessage.StartsWith("🔊"))
+            if (_isPlayingAudio && !IsDisposed())
             {
                 feedbackMessage = "";
+                _isPlayingAudio = false;
                 StateHasChanged();
             }
         }
@@ -860,6 +864,9 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             Logger.LogError(ex, "Error handling recording error callback");
         }
     }
+
+    // Helper method for consistent disposal checking
+    private bool IsDisposed() => _disposed;
 
     // IAsyncDisposable Implementation
     

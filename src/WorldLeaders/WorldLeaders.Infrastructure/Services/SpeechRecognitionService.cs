@@ -25,6 +25,11 @@ public class SpeechRecognitionService : ISpeechRecognitionService
     private readonly int _maxAudioDurationSeconds;
     private readonly double _confidenceThreshold;
     
+    // Audio format constants for consistent speech processing
+    private const uint SAMPLE_RATE_HZ = 16000;    // 16kHz standard for speech recognition
+    private const byte BITS_PER_SAMPLE = 16;      // 16-bit audio depth
+    private const byte AUDIO_CHANNELS = 1;        // Mono channel for speech
+    
     // Supported languages for the educational game
     private readonly Dictionary<string, string> _supportedLanguages = new()
     {
@@ -93,7 +98,7 @@ public class SpeechRecognitionService : ISpeechRecognitionService
                 return CreateErrorResult("No audio provided", targetText);
             }
 
-            if (audioData.Length > _maxAudioDurationSeconds * 16000 * 2) // 16kHz, 16-bit audio
+            if (audioData.Length > _maxAudioDurationSeconds * SAMPLE_RATE_HZ * (BITS_PER_SAMPLE / 8)) // Sample rate × bit depth
             {
                 return CreateErrorResult("Audio too long - please try a shorter recording", targetText);
             }
@@ -103,7 +108,7 @@ public class SpeechRecognitionService : ISpeechRecognitionService
             _speechConfig.SpeechRecognitionLanguage = language;
 
             // Create push stream with proper format (16kHz, 16-bit, mono)
-            var audioFormat = AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1);
+            var audioFormat = AudioStreamFormat.GetWaveFormatPCM(SAMPLE_RATE_HZ, BITS_PER_SAMPLE, AUDIO_CHANNELS);
             var pushStream = AudioInputStream.CreatePushStream(audioFormat);
             
             // Create audio config from the push stream
@@ -152,7 +157,7 @@ public class SpeechRecognitionService : ISpeechRecognitionService
             _speechConfig.SpeechRecognitionLanguage = language;
 
             // Create push stream with proper format (16kHz, 16-bit, mono)
-            var audioFormat = AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1);
+            var audioFormat = AudioStreamFormat.GetWaveFormatPCM(SAMPLE_RATE_HZ, BITS_PER_SAMPLE, AUDIO_CHANNELS);
             var pushStream = AudioInputStream.CreatePushStream(audioFormat);
             
             // Create audio config from the push stream
