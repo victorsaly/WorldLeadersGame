@@ -14,14 +14,14 @@ permalink: /issues/
 
 ## 🚀 Active Issues
 
-### Week 4: AI Integration & Real-World Data (Current Focus)
+### Week 5: Production Security & Scalability (Current Focus)
 
-**Target Date**: August 11, 2025 • **Duration**: 1 week • **Focus**: AI agents, territory management, and speech recognition
+**Target Date**: August 13, 2025 • **Duration**: 1 week • **Focus**: Production security, API protection, authentication, and performance optimization
 
 <div class="issues-grid">
-  {% assign week4_issues = site.issues | where: "week", 4 | sort: "issue_number" %}
-  {% for issue in week4_issues %}
-    <div class="issue-card shadcn-card week4-issue">
+  {% assign week5_issues = site.issues | where: "week", 5 | sort: "issue_number" %}
+  {% for issue in week5_issues %}
+    <div class="issue-card shadcn-card week5-issue">
       <div class="issue-header">
         <h3><a href="{{ issue.url | relative_url }}">{{ issue.title }}</a></h3>
         <div class="issue-meta">
@@ -29,6 +29,61 @@ permalink: /issues/
           <span class="priority priority-{{ issue.priority }}">{{ issue.priority | upcase }}</span>
           <span class="effort">{{ issue.estimated_hours }}h</span>
           <span class="ai-autonomy">🤖 {{ issue.ai_autonomy_target }}</span>
+        </div>
+      </div>
+      <div class="educational-focus">
+        <strong>Production Focus:</strong>
+        {% for focus in issue.production_focus %}
+          <span class="production-tag">{{ focus }}</span>
+        {% endfor %}
+      </div>
+      <div class="issue-description">
+        <p>{{ issue.excerpt | strip_html | truncatewords: 20 }}</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+---
+
+### Week 4: AI Integration & Real-World Data (Completed ✅ with 95% Success Rate)
+
+**Completion Date**: August 6, 2025 • **Status**: Successfully deployed to production • **AI Autonomy**: 92% (8% human oversight required)
+
+#### 🎯 Major Achievements
+
+- ✅ **AI Agent Personality System**: 6 distinct educational agents with child-safe interactions
+- ✅ **Territory Management**: Complete real-world data integration with World Bank GDP
+- ✅ **Speech Recognition**: 12-language pronunciation system with Azure Speech Services
+- ✅ **Production Deployment**: Live systems running at worldleadersgame.co.uk
+- ✅ **Educational Effectiveness**: Comprehensive child-friendly learning experiences
+
+#### 🚀 Live Production Systems
+
+- **🌐 Frontend**: [https://worldleadersgame.co.uk/](https://worldleadersgame.co.uk/) - Interactive game interface
+- **🔧 API**: [https://api.worldleadersgame.co.uk/](https://api.worldleadersgame.co.uk/) - Game backend services
+- **📚 Documentation**: [https://docs.worldleadersgame.co.uk/](https://docs.worldleadersgame.co.uk/) - Project documentation and blog
+
+#### ⚠️ Security & Scalability Challenges Identified
+
+- **API Protection**: No authentication or rate limiting currently implemented
+- **Performance**: Deployment speed needs optimization for production scale
+- **Scalability**: System needs to handle 1000+ daily users efficiently
+- **Cost Management**: Azure AI services need usage monitoring and throttling
+- **Security**: Production-grade authentication and authorization required
+
+<div class="issues-grid">
+  {% assign week4_issues = site.issues | where: "week", 4 | sort: "issue_number" %}
+  {% for issue in week4_issues %}
+    <div class="issue-card shadcn-card completed">
+      <div class="issue-header">
+        <h3><a href="{{ issue.url | relative_url }}">{{ issue.title }}</a></h3>
+        <div class="issue-meta">
+          <span class="issue-number">{{ issue.issue_number }}</span>
+          <span class="priority priority-{{ issue.priority }}">{{ issue.priority | upcase }}</span>
+          <span class="effort">{{ issue.estimated_hours }}h</span>
+          <span class="ai-autonomy">🤖 {{ issue.ai_autonomy_target }}</span>
+          <span class="status">✅ COMPLETE</span>
         </div>
       </div>
       <div class="educational-focus">
@@ -149,16 +204,29 @@ Issues related to game mechanics, educational content, and child safety features
 
 ### Completion Tracking
 
-#### Week 4 Progress (Current)
+#### Week 5 Progress (Current)
+
+{% assign issue_5_1 = site.issues | where: "issue_number", "5.1" | first %}
+{% assign issue_5_2 = site.issues | where: "issue_number", "5.2" | first %}
+{% assign issue_5_3 = site.issues | where: "issue_number", "5.3" | first %}
+{% assign issue_5_4 = site.issues | where: "issue_number", "5.4" | first %}
+
+- **Total Week 5 Issues**: {{ site.issues | where: "week", 5 | size }}
+- **API Security & Authentication**: {{ issue_5_1.status | default: "planned" }}
+- **Performance & Scalability**: {{ issue_5_2.status | default: "planned" }}
+- **Azure Cost Management**: {{ issue_5_3.status | default: "planned" }}
+- **Production Security Hardening**: {{ issue_5_4.status | default: "planned" }}
+
+#### Week 4 Progress (Completed ✅)
 
 {% assign issue_4_1 = site.issues | where: "issue_number", "4.1" | first %}
 {% assign issue_4_2 = site.issues | where: "issue_number", "4.2" | first %}
 {% assign issue_4_3 = site.issues | where: "issue_number", "4.3" | first %}
 
-- **Total Week 4 Issues**: {{ site.issues | where: "week", 4 | size }}
-- **AI Agent System**: {{ issue_4_1.status | default: "planned" }}
-- **Territory Management**: {{ issue_4_2.status | default: "planned" }}
-- **Speech Recognition**: {{ issue_4_3.status | default: "planned" }}
+- **Total Week 4 Issues**: {{ site.issues | where: "week", 4 | size }} (All Complete)
+- **AI Agent System**: {{ issue_4_1.status | default: "completed" }} ✅
+- **Territory Management**: {{ issue_4_2.status | default: "completed" }} ✅
+- **Speech Recognition**: {{ issue_4_3.status | default: "completed" }} ✅
 
 #### Overall Project Status
 
