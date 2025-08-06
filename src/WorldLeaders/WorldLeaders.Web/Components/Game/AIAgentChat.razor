@@ -264,6 +264,9 @@ Safety Requirements: Content moderation, age-appropriate responses, positive mes
     [Parameter] public Guid PlayerId { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
 
+    // Constants
+    private const int AI_THINKING_DELAY_MS = 1500; // Simulate realistic AI response time
+
     private bool isVisible => IsVisible;
     private bool isThinking = false;
     private string currentMessage = "";
@@ -368,7 +371,7 @@ Safety Requirements: Content moderation, age-appropriate responses, positive mes
         try
         {
             // Simulate AI response based on agent type (in a real implementation, this would call your AI service)
-            await Task.Delay(1500, _cancellationTokenSource.Token); // Simulate thinking time with cancellation support
+            await Task.Delay(AI_THINKING_DELAY_MS, _cancellationTokenSource.Token); // Simulate thinking time with cancellation support
             
             // Check if component is still active after delay
             if (!_disposed && !_cancellationTokenSource.Token.IsCancellationRequested)
