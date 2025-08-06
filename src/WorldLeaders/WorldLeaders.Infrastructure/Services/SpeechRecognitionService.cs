@@ -16,14 +16,14 @@ namespace WorldLeaders.Infrastructure.Services;
 /// </summary>
 public class SpeechRecognitionService : ISpeechRecognitionService
 {
-    // Educational constants for child-friendly assessment
-    private const double CHILD_PASSING_SCORE = 70.0; // 70% accuracy threshold for children
-    private const int MAX_AUDIO_DURATION_SECONDS = 10; // Limit recording duration for children
-    private const double CONFIDENCE_THRESHOLD = 0.6; // Minimum confidence for recognition
-    
     private readonly SpeechConfig _speechConfig;
     private readonly ILogger<SpeechRecognitionService> _logger;
     private readonly IConfiguration _configuration;
+    
+    // Educational settings loaded from configuration with child-friendly defaults
+    private readonly double _childPassingScore;
+    private readonly int _maxAudioDurationSeconds;
+    private readonly double _confidenceThreshold;
     
     // Supported languages for the educational game
     private readonly Dictionary<string, string> _supportedLanguages = new()
@@ -48,6 +48,11 @@ public class SpeechRecognitionService : ISpeechRecognitionService
     {
         _configuration = configuration;
         _logger = logger;
+        
+        // Load educational settings from configuration with child-friendly defaults
+        _childPassingScore = _configuration.GetValue<double>("SpeechServices:ChildPassingScore", 70.0);
+        _maxAudioDurationSeconds = _configuration.GetValue<int>("SpeechServices:MaxAudioDurationSeconds", 10);
+        _confidenceThreshold = _configuration.GetValue<double>("SpeechServices:ConfidenceThreshold", 0.6);
         
         // Initialize Azure Speech Config with child safety settings
         var speechKey = _configuration["SpeechServices:ApiKey"];
@@ -88,7 +93,7 @@ public class SpeechRecognitionService : ISpeechRecognitionService
                 return CreateErrorResult("No audio provided", targetText);
             }
 
-            if (audioData.Length > MAX_AUDIO_DURATION_SECONDS * 16000 * 2) // 16kHz, 16-bit audio
+            if (audioData.Length > _maxAudioDurationSeconds * 16000 * 2) // 16kHz, 16-bit audio
             {
                 return CreateErrorResult("Audio too long - please try a shorter recording", targetText);
             }
@@ -242,7 +247,7 @@ public class SpeechRecognitionService : ISpeechRecognitionService
             var completeness = recognizedText.Length > 0 ? 100 : 0;
             var overall = (accuracy + fluency + completeness) / 3.0;
             
-            var passed = overall >= CHILD_PASSING_SCORE;
+            var passed = overall >= _childPassingScore;
             var feedback = await GetChildFriendlyFeedbackAsync(overall, targetText, GetLanguageName(languageCode));
             
             // Create simplified word-level scores

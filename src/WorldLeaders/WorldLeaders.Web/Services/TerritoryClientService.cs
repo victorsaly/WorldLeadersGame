@@ -16,6 +16,28 @@ public class TerritoryClientService : ITerritoryService
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<TerritoryClientService> _logger;
 
+    // Default territory fallback values for educational safety
+    private const string DefaultCountryName = "Unknown Territory";
+    private const string DefaultCountryCode = "XX";
+    private const decimal DefaultGdpInBillions = 0m;
+    private const TerritoryTier DefaultTier = TerritoryTier.Small;
+    private const int DefaultCost = 1000;
+    private const int DefaultReputationRequired = 10;
+    private const int DefaultMonthlyIncome = 100;
+    private const bool DefaultIsAvailable = false;
+    private const bool DefaultIsOwned = false;
+    private const string DefaultFlagUrl = "";
+    private const string DefaultCapital = "Unknown";
+    private const long DefaultPopulation = 0;
+    private const string DefaultRegion = "Unknown";
+    private const string DefaultSubregion = "Unknown";
+    private const string DefaultEducationalFact = "This territory is currently not available for exploration.";
+    
+    private static readonly List<string> DefaultOfficialLanguages = new() { "en" };
+    private static readonly List<string> DefaultCurrencies = new() { "USD" };
+    private static readonly List<string> DefaultGeographicFeatures = new() { "Unknown features" };
+    private static readonly List<string> DefaultCulturalHighlights = new() { "Discover cultural highlights by exploring!" };
+
     public TerritoryClientService(IHttpClientFactory httpClientFactory, ILogger<TerritoryClientService> logger)
     {
         _httpClientFactory = httpClientFactory;
@@ -281,25 +303,25 @@ public class TerritoryClientService : ITerritoryService
     {
         return new TerritoryDetailDto(
             Id: territoryId,
-            CountryName: "Unknown Territory",
-            CountryCode: "XX",
-            OfficialLanguages: new List<string> { "en" },
-            GdpInBillions: 0m,
-            Tier: TerritoryTier.Small,
-            Cost: 1000,
-            ReputationRequired: 10,
-            MonthlyIncome: 100,
-            IsAvailable: false,
-            IsOwned: false,
-            FlagUrl: "",
-            Capital: "Unknown",
-            Population: 0,
-            Region: "Unknown",
-            Subregion: "Unknown",
-            Currencies: new List<string> { "USD" },
-            EducationalFact: "This territory is currently not available for exploration.",
-            GeographicFeatures: new List<string> { "Unknown features" },
-            CulturalHighlights: new List<string> { "Discover cultural highlights by exploring!" }
+            CountryName: DefaultCountryName,
+            CountryCode: DefaultCountryCode,
+            OfficialLanguages: DefaultOfficialLanguages,
+            GdpInBillions: DefaultGdpInBillions,
+            Tier: DefaultTier,
+            Cost: DefaultCost,
+            ReputationRequired: DefaultReputationRequired,
+            MonthlyIncome: DefaultMonthlyIncome,
+            IsAvailable: DefaultIsAvailable,
+            IsOwned: DefaultIsOwned,
+            FlagUrl: DefaultFlagUrl,
+            Capital: DefaultCapital,
+            Population: DefaultPopulation,
+            Region: DefaultRegion,
+            Subregion: DefaultSubregion,
+            Currencies: DefaultCurrencies,
+            EducationalFact: DefaultEducationalFact,
+            GeographicFeatures: DefaultGeographicFeatures,
+            CulturalHighlights: DefaultCulturalHighlights
         );
     }
 
