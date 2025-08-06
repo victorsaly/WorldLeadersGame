@@ -1,0 +1,393 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using WorldLeaders.Infrastructure.Configuration;
+using WorldLeaders.Infrastructure.Data;
+using WorldLeaders.Shared.DTOs;
+using WorldLeaders.Shared.Enums;
+using WorldLeaders.Shared.Models;
+using WorldLeaders.Shared.Services;
+
+namespace WorldLeaders.Infrastructure.Services;
+
+/// <summary>
+/// Context: Educational game child safety validation for 12-year-old players
+/// Educational Objective: COPPA/GDPR compliant safety validation and audit trail
+/// Safety Requirements: Content moderation, age verification, parental consent management
+/// </summary>
+public class ChildSafetyValidator(
+    IOptions<ChildSafetyOptions> childSafetyOptions,
+    WorldLeadersDbContext dbContext,
+    IContentModerationService contentModerationService,
+    ILogger<ChildSafetyValidator> logger) : IChildSafetyValidator
+{
+    private readonly ChildSafetyOptions _options = childSafetyOptions.Value;
+
+    /// <summary>
+    /// Validate user registration for child safety compliance
+    /// </summary>
+    public async Task<ChildSafetyValidationResponse> ValidateRegistrationAsync(RegisterUserRequest request)
+    {
+        logger.LogInformation("Validating registration for user: {Username}", request.Username);
+
+        var warnings = new List<string>();
+        var age = CalculateAge(request.DateOfBirth);
+
+        try
+        {
+            // Check age requirements
+            if (age < 0)
+            {
+                return new ChildSafetyValidationResponse
+                {
+                    IsApproved = false,
+                    Reason = "Invalid date of birth - future date not allowed",
+                    ConfidenceScore = 1.0,
+                    Warnings = warnings
+                };
+            }
+
+            if (age > 100)
+            {
+                warnings.Add("Unusually high age detected - please verify date of birth");
+            }
+
+            // Child-specific validation (under 13)
+            if (age < _options.ChildAgeThreshold)
+            {
+                // COPPA compliance checks
+                if (_options.RequireParentalConsent && !request.HasParentalConsent)
+                {
+                    return new ChildSafetyValidationResponse
+                    {
+                        IsApproved = false,
+                        Reason = "Parental consent required for users under 13 (COPPA compliance)",
+                        ConfidenceScore = 1.0,
+                        Warnings = warnings
+                    };
+                }
+
+                if (string.IsNullOrEmpty(request.ParentalEmail))
+                {
+                    return new ChildSafetyValidationResponse
+                    {
+                        IsApproved = false,
+                        Reason = "Parental email required for users under 13",
+                        ConfidenceScore = 1.0,
+                        Warnings = warnings
+                    };
+                }
+
+                warnings.Add("Child account detected - enhanced safety features will be enabled");
+            }
+
+            // GDPR compliance check
+            if (_options.EnforceGdprCompliance && !request.HasGdprConsent)
+            {
+                return new ChildSafetyValidationResponse
+                {
+                    IsApproved = false,
+                    Reason = "GDPR consent required for data processing",
+                    ConfidenceScore = 1.0,
+                    Warnings = warnings
+                };
+            }
+
+            // Validate display name for appropriateness
+            var nameValidation = await ValidateContentAsync(new ChildSafetyValidationRequest
+            {
+                UserId = Guid.Empty, // New user, no ID yet
+                Content = request.DisplayName,
+                ValidationType = "DisplayName"
+            });
+
+            if (!nameValidation.IsApproved)
+            {
+                return new ChildSafetyValidationResponse
+                {
+                    IsApproved = false,
+                    Reason = $"Display name inappropriate: {nameValidation.Reason}",
+                    ConfidenceScore = nameValidation.ConfidenceScore,
+                    Warnings = warnings.Concat(nameValidation.Warnings).ToList()
+                };
+            }
+
+            // Validate username for appropriateness
+            var usernameValidation = await ValidateContentAsync(new ChildSafetyValidationRequest
+            {
+                UserId = Guid.Empty, // New user, no ID yet
+                Content = request.Username,
+                ValidationType = "Username"
+            });
+
+            if (!usernameValidation.IsApproved)
+            {
+                return new ChildSafetyValidationResponse
+                {
+                    IsApproved = false,
+                    Reason = $"Username inappropriate: {usernameValidation.Reason}",
+                    ConfidenceScore = usernameValidation.ConfidenceScore,
+                    Warnings = warnings.Concat(usernameValidation.Warnings).ToList()
+                };
+            }
+
+            logger.LogInformation("Registration validation passed for user: {Username}", request.Username);
+
+            return new ChildSafetyValidationResponse
+            {
+                IsApproved = true,
+                Reason = "Registration meets all child safety requirements",
+                ConfidenceScore = 0.95,
+                Warnings = warnings
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error during registration validation for user: {Username}", request.Username);
+            
+            return new ChildSafetyValidationResponse
+            {
+                IsApproved = false,
+                Reason = "Validation service error - please try again",
+                ConfidenceScore = 0.0,
+                Warnings = warnings
+            };
+        }
+    }
+
+    /// <summary>
+    /// Validate content for child appropriateness
+    /// </summary>
+    public async Task<ChildSafetyValidationResponse> ValidateContentAsync(ChildSafetyValidationRequest request)
+    {
+        try
+        {
+            // Use content moderation service for primary validation
+            var moderationResult = await contentModerationService.ValidateContentAsync(request.Content, request.ValidationType);
+
+            // Additional custom validation for educational context
+            var customValidation = ValidateEducationalContent(request.Content, request.ValidationType);
+
+            // Combine results
+            var isApproved = moderationResult.IsApproved && customValidation.IsApproved;
+            var reason = isApproved 
+                ? "Content approved for educational use" 
+                : $"{moderationResult.Reason}; {customValidation.Reason}".Trim(';', ' ');
+
+            var warnings = new List<string>();
+            if (moderationResult.Concerns?.Any() == true)
+                warnings.AddRange(moderationResult.Concerns);
+            if (customValidation.Warnings?.Any() == true)
+                warnings.AddRange(customValidation.Warnings);
+
+            var confidenceScore = Math.Min(moderationResult.ConfidenceScore, customValidation.ConfidenceScore);
+
+            // Log validation result
+            if (_options.LogAllEvents)
+            {
+                await LogSafetyEventAsync(new ChildSafetyAudit
+                {
+                    UserId = request.UserId,
+                    EventType = SafetyEventType.ContentFlagged,
+                    Description = $"Content validation: {request.ValidationType} - {(isApproved ? "Approved" : "Rejected")}",
+                    Severity = isApproved ? SafetyEventSeverity.Info : SafetyEventSeverity.Medium,
+                    ActionTaken = !isApproved,
+                    ActionDescription = isApproved ? null : $"Content blocked: {reason}"
+                });
+            }
+
+            return new ChildSafetyValidationResponse
+            {
+                IsApproved = isApproved,
+                Reason = reason,
+                ConfidenceScore = confidenceScore,
+                Warnings = warnings
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error validating content for user: {UserId}", request.UserId);
+            
+            return new ChildSafetyValidationResponse
+            {
+                IsApproved = false,
+                Reason = "Content validation service error",
+                ConfidenceScore = 0.0,
+                Warnings = new List<string> { "Validation service temporarily unavailable" }
+            };
+        }
+    }
+
+    /// <summary>
+    /// Check if user requires parental consent based on age
+    /// </summary>
+    public bool RequiresParentalConsent(DateTime dateOfBirth)
+    {
+        if (!_options.RequireParentalConsent)
+            return false;
+
+        var age = CalculateAge(dateOfBirth);
+        return age < _options.ChildAgeThreshold;
+    }
+
+    /// <summary>
+    /// Validate parental consent token (simplified implementation)
+    /// </summary>
+    public async Task<bool> ValidateParentalConsentAsync(string consentToken)
+    {
+        try
+        {
+            // In a real implementation, this would validate a cryptographically signed token
+            // For now, we'll do basic validation
+            
+            if (string.IsNullOrEmpty(consentToken) || consentToken.Length < 32)
+            {
+                return false;
+            }
+
+            // Check if token exists in database and is still valid
+            // This is a simplified check - in production, use proper JWT validation
+            await Task.Delay(100); // Simulate async operation
+            
+            return true; // For educational purposes, assume valid
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error validating parental consent token");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Generate parental consent request token
+    /// </summary>
+    public async Task<string> GenerateParentalConsentRequestAsync(Guid childUserId, string parentalEmail)
+    {
+        try
+        {
+            // In a real implementation, this would generate a cryptographically secure token
+            // and send an email to the parent with a consent link
+            
+            var token = $"{childUserId}_{parentalEmail}_{DateTime.UtcNow.Ticks}";
+            var base64Token = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(token));
+            
+            logger.LogInformation("Generated parental consent token for child: {ChildUserId}", childUserId);
+            
+            // In production, send email here
+            await Task.Delay(100); // Simulate async email operation
+            
+            return base64Token;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error generating parental consent token for child: {ChildUserId}", childUserId);
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// Log safety event for audit trail
+    /// </summary>
+    public async Task<bool> LogSafetyEventAsync(ChildSafetyAudit audit)
+    {
+        try
+        {
+            dbContext.ChildSafetyAudits.Add(audit);
+            await dbContext.SaveChangesAsync();
+            
+            logger.LogInformation("Safety event logged: {EventType} for user {UserId}", audit.EventType, audit.UserId);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error logging safety event: {EventType} for user {UserId}", audit.EventType, audit.UserId);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Calculate age from date of birth
+    /// </summary>
+    private static int CalculateAge(DateTime dateOfBirth)
+    {
+        var today = DateTime.Today;
+        var age = today.Year - dateOfBirth.Year;
+        if (dateOfBirth.Date > today.AddYears(-age)) age--;
+        return age;
+    }
+
+    /// <summary>
+    /// Custom validation for educational content
+    /// </summary>
+    private ChildSafetyValidationResponse ValidateEducationalContent(string content, string validationType)
+    {
+        var warnings = new List<string>();
+        
+        // Basic educational content validation
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            return new ChildSafetyValidationResponse
+            {
+                IsApproved = false,
+                Reason = "Content cannot be empty",
+                ConfidenceScore = 1.0,
+                Warnings = warnings
+            };
+        }
+
+        // Check for length limits based on type
+        var maxLength = validationType.ToLowerInvariant() switch
+        {
+            "username" => 50,
+            "displayname" => 50,
+            "message" => 1000,
+            "gamecontent" => 500,
+            _ => 1000
+        };
+
+        if (content.Length > maxLength)
+        {
+            return new ChildSafetyValidationResponse
+            {
+                IsApproved = false,
+                Reason = $"Content exceeds maximum length of {maxLength} characters",
+                ConfidenceScore = 1.0,
+                Warnings = warnings
+            };
+        }
+
+        // Basic inappropriate content detection (simplified)
+        var inappropriatePatterns = new[]
+        {
+            "password", "secret", "private", "personal", "address", "phone",
+            "email", "contact", "meet", "alone", "gift", "money"
+        };
+
+        var lowerContent = content.ToLowerInvariant();
+        var foundInappropriate = inappropriatePatterns.Any(pattern => lowerContent.Contains(pattern));
+
+        if (foundInappropriate)
+        {
+            warnings.Add("Content may contain personal information - please review");
+        }
+
+        // Educational appropriateness check
+        if (validationType.ToLowerInvariant() == "gamecontent")
+        {
+            var educationalKeywords = new[] { "country", "geography", "language", "leader", "economic", "learn" };
+            var hasEducationalContent = educationalKeywords.Any(keyword => lowerContent.Contains(keyword));
+            
+            if (!hasEducationalContent)
+            {
+                warnings.Add("Content may not be educational - consider adding learning elements");
+            }
+        }
+
+        return new ChildSafetyValidationResponse
+        {
+            IsApproved = !foundInappropriate,
+            Reason = foundInappropriate ? "Content may contain inappropriate information" : "Content meets educational standards",
+            ConfidenceScore = foundInappropriate ? 0.3 : 0.8,
+            Warnings = warnings
+        };
+    }
+}

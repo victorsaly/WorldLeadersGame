@@ -14,7 +14,7 @@ if (File.Exists("appsettings.local.json"))
 // Add services to the container
 builder.Services.AddControllers();
 
-// Add Infrastructure services (EF Core + Game Services)
+// Add Infrastructure services (EF Core + Game Services + Authentication)
 builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add SignalR for real-time updates
@@ -40,11 +40,35 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "World Leaders Game API",
         Version = "v1",
-        Description = "Educational game API for 12-year-old players to learn about world leadership, geography, and languages",
+        Description = "Educational game API for 12-year-old players to learn about world leadership, geography, and languages with secure authentication",
         Contact = new()
         {
             Name = "World Leaders Game",
             Url = new Uri("https://github.com/victorsaly/WorldLeadersGame")
+        }
+    });
+
+    // Add JWT Bearer authentication to Swagger
+    c.AddSecurityDefinition("Bearer", new()
+    {
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme. Enter your token below."
+    });
+
+    c.AddSecurityRequirement(new()
+    {
+        {
+            new()
+            {
+                Reference = new()
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
         }
     });
 
@@ -100,6 +124,10 @@ app.UseHttpsRedirection();
 
 // Enable CORS
 app.UseCors("EducationalGamePolicy");
+
+// Add authentication and authorization middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Map controllers
 app.MapControllers();
