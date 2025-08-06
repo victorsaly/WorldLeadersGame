@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WorldLeaders.Infrastructure.Configuration;
 using WorldLeaders.Infrastructure.Data;
+using WorldLeaders.Infrastructure.Extensions;
 using WorldLeaders.Infrastructure.Services;
 using WorldLeaders.Shared.Services;
 
@@ -11,6 +12,7 @@ namespace WorldLeaders.Infrastructure.Extensions;
 /// <summary>
 /// Dependency injection extensions for Infrastructure layer
 /// Configures Entity Framework with multiple database providers for educational game data
+/// Enhanced with authentication and child safety services
 /// </summary>
 public static class ServiceCollectionExtensions
 {
@@ -59,6 +61,9 @@ public static class ServiceCollectionExtensions
                 options.EnableDetailedErrors();
             }
         });
+
+        // Add educational authentication services
+        services.AddEducationalAuthentication(configuration);
 
         // Add game engine services
         services.AddScoped<IGameEngine, GameEngine>();
