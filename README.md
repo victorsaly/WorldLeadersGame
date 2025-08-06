@@ -1,4 +1,5 @@
 # 🎮 World Leaders Game
+
 ### An AI-First Father-Son Ed## 📖 Table of Contents
 
 - [🚀 The Revolutionary Experiment](#-the-revolutionary-experiment)
@@ -21,10 +22,12 @@
 **📊 Current Status: Week 3 • 95% AI Autonomy • Educational Focus**
 
 <!-- Primary Links -->
+
 [![🌐 Live Website](https://img.shields.io/badge/🌐_Live_Website-worldleadersgame.co.uk-2ea44f?style=for-the-badge&logo=safari&logoColor=white)](https://worldleadersgame.co.uk)
 [![📚 Documentation](https://img.shields.io/badge/📚_Documentation-docs.worldleadersgame.co.uk-blue?style=for-the-badge&logo=gitbook&logoColor=white)](https://docs.worldleadersgame.co.uk)
 
 <!-- GitHub Repository Status -->
+
 [![GitHub Release](https://img.shields.io/github/v/release/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/releases)
 [![GitHub Issues](https://img.shields.io/github/issues/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/issues)
 [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/pulls)
@@ -33,12 +36,14 @@
 [![GitHub Watchers](https://img.shields.io/github/watchers/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/watchers)
 
 <!-- Development Activity -->
+
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/w/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/commits/main)
 [![GitHub last commit](https://img.shields.io/github/last-commit/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/commits/main)
 [![GitHub repo size](https://img.shields.io/github/repo-size/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame)
 [![Lines of code](https://img.shields.io/tokei/lines/github/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame)
 
 <!-- Technology Stack -->
+
 [![.NET 8 LTS](https://img.shields.io/badge/.NET-8.0%20LTS-512BD4?style=flat-square&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![Blazor Server](https://img.shields.io/badge/Blazor-Server-512BD4?style=flat-square&logo=blazor&logoColor=white)](https://blazor.net/)
 [![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=c-sharp&logoColor=white)](https://docs.microsoft.com/en-us/dotnet/csharp/)
@@ -47,17 +52,20 @@
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)](https://www.docker.com/)
 
 <!-- AI & Educational -->
+
 [![Azure OpenAI](https://img.shields.io/badge/Azure_OpenAI-GPT--4-FF6B35?style=flat-square&logo=openai&logoColor=white)](https://azure.microsoft.com/en-us/products/ai-services/openai-service)
 [![Educational](https://img.shields.io/badge/Educational-Ages_12+-FFD700?style=flat-square&logo=graduation-cap&logoColor=black)](https://docs.worldleadersgame.co.uk/about)
 [![Child Safe](https://img.shields.io/badge/Child_Safe-COPPA_Compliant-00CED1?style=flat-square&logo=shield&logoColor=white)](https://docs.worldleadersgame.co.uk/technical-docs)
 [![AI Autonomy](https://img.shields.io/badge/AI_Autonomy-95%25-FF69B4?style=flat-square&logo=robot&logoColor=white)](https://docs.worldleadersgame.co.uk/journey)
 
 <!-- Project Management -->
+
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square&logo=opensourceinitiative&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/blob/main/LICENSE)
 [![Contributors](https://img.shields.io/github/contributors/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/graphs/contributors)
 [![Maintenance](https://img.shields.io/maintenance/yes/2025?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame)
 
 <!-- Social & Community -->
+
 [![GitHub Discussions](https://img.shields.io/github/discussions/victorsaly/WorldLeadersGame?style=flat-square&logo=github&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/discussions)
 [![Twitter Follow](https://img.shields.io/twitter/follow/victorsaly?style=flat-square&logo=twitter&logoColor=white&color=1DA1F2)](https://twitter.com/victorsaly)
 
@@ -89,14 +97,14 @@ This project answers that question through a **live 18-week educational software
 
 ### 📈 Current Achievements (Week 3)
 
-| Metric | Achievement | Traditional Timeline |
-|--------|-------------|---------------------|
-| **AI Autonomy** | 95% | N/A |
-| **Architecture** | Complete .NET Aspire Solution | 6-8 weeks |
-| **Game Mechanics** | Core educational gameplay implemented | 4-6 weeks |
-| **Documentation** | Comprehensive Jekyll site with 50+ pages | 3-4 weeks |
-| **Child Safety** | Multi-layer AI content validation | 2-3 weeks |
-| **Educational Value** | Real-world geography, economics, language learning | Ongoing |
+| Metric                | Achievement                                        | Traditional Timeline |
+| --------------------- | -------------------------------------------------- | -------------------- |
+| **AI Autonomy**       | 95%                                                | N/A                  |
+| **Architecture**      | Complete .NET Aspire Solution                      | 6-8 weeks            |
+| **Game Mechanics**    | Core educational gameplay implemented              | 4-6 weeks            |
+| **Documentation**     | Comprehensive Jekyll site with 50+ pages           | 3-4 weeks            |
+| **Child Safety**      | Multi-layer AI content validation                  | 2-3 weeks            |
+| **Educational Value** | Real-world geography, economics, language learning | Ongoing              |
 
 **Total Traditional Development Time Saved: 15-21 weeks**
 
@@ -109,6 +117,7 @@ This project answers that question through a **live 18-week educational software
 **Core Concept**: Progress from peasant to world leader while learning geography, economics, and languages through engaging, AI-assisted gameplay.
 
 #### 🎲 Game Mechanics
+
 - **Career Progression**: Dice-based job advancement (Farmer → Politician → World Leader)
 - **Territory Acquisition**: Real countries priced using World Bank GDP data
 - **Resource Management**: Income, reputation, and population happiness
@@ -116,6 +125,7 @@ This project answers that question through a **live 18-week educational software
 - **AI Tutors**: Six educational AI agents providing guidance and support
 
 #### 🌍 Real-World Educational Integration
+
 - **Geography**: Country recognition and cultural awareness
 - **Economics**: GDP concepts and strategic resource management
 - **Languages**: Multi-lingual pronunciation with Azure Speech Services
@@ -131,22 +141,22 @@ This project answers that question through a **live 18-week educational software
 🎮 WorldLeaders.AppHost        # Aspire orchestration
 🌐 WorldLeaders.Web           # Blazor Server (child-friendly UI)
 🔧 WorldLeaders.API           # Game logic + SignalR hubs
-📊 WorldLeaders.Shared        # Domain models + DTOs  
+📊 WorldLeaders.Shared        # Domain models + DTOs
 🗄️ WorldLeaders.Infrastructure # EF Core + external services
 ```
 
 ### Technology Stack
 
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| **Frontend** | Blazor Server + TailwindCSS | Child-friendly, responsive UI |
-| **Backend** | ASP.NET Core 8 LTS | Stable educational platform |
-| **Database** | PostgreSQL + Entity Framework Core | Robust data persistence |
-| **AI Services** | Azure OpenAI (GPT-4) | Educational AI agents |
-| **Speech** | Azure Speech Services | Pronunciation assessment |
-| **Real-Time** | SignalR | Live gameplay updates |
-| **Data** | World Bank API | Real GDP/country data |
-| **Orchestration** | .NET Aspire | Microservices coordination |
+| Layer             | Technology                         | Purpose                       |
+| ----------------- | ---------------------------------- | ----------------------------- |
+| **Frontend**      | Blazor Server + TailwindCSS        | Child-friendly, responsive UI |
+| **Backend**       | ASP.NET Core 8 LTS                 | Stable educational platform   |
+| **Database**      | PostgreSQL + Entity Framework Core | Robust data persistence       |
+| **AI Services**   | Azure OpenAI (GPT-4)               | Educational AI agents         |
+| **Speech**        | Azure Speech Services              | Pronunciation assessment      |
+| **Real-Time**     | SignalR                            | Live gameplay updates         |
+| **Data**          | World Bank API                     | Real GDP/country data         |
+| **Orchestration** | .NET Aspire                        | Microservices coordination    |
 
 ### 🛡️ Child Safety Framework
 
@@ -168,14 +178,14 @@ Our comprehensive documentation website captures the complete development journe
 
 <div align="center">
 
-| 📖 Section | 🎯 Purpose | 📊 Status | 🔗 Direct Link |
-|------------|-------------|-----------|----------------|
-| [**🏠 Home**](https://docs.worldleadersgame.co.uk) | Project overview and navigation | ✅ Complete | [Visit →](https://docs.worldleadersgame.co.uk) |
-| [**📅 Journey**](https://docs.worldleadersgame.co.uk/journey) | Week-by-week AI collaboration insights | 📝 Live Updates | [View →](https://docs.worldleadersgame.co.uk/journey) |
-| [**🔧 Technical**](https://docs.worldleadersgame.co.uk/technical-docs) | Implementation patterns & architecture | ✅ Complete | [Explore →](https://docs.worldleadersgame.co.uk/technical-docs) |
-| [**📝 Blog**](https://docs.worldleadersgame.co.uk/blog) | Educational methodology insights | 📊 Analytics | [Read →](https://docs.worldleadersgame.co.uk/blog) |
-| [**🏆 Milestones**](https://docs.worldleadersgame.co.uk/milestones) | Achievement tracking & metrics | 🎯 Goal Tracking | [Track →](https://docs.worldleadersgame.co.uk/milestones) |
-| [**🐛 Issues**](https://docs.worldleadersgame.co.uk/issues) | AI-generated development tasks | 🤖 AI-Driven | [Monitor →](https://docs.worldleadersgame.co.uk/issues) |
+| 📖 Section                                                             | 🎯 Purpose                             | 📊 Status        | 🔗 Direct Link                                                  |
+| ---------------------------------------------------------------------- | -------------------------------------- | ---------------- | --------------------------------------------------------------- |
+| [**🏠 Home**](https://docs.worldleadersgame.co.uk)                     | Project overview and navigation        | ✅ Complete      | [Visit →](https://docs.worldleadersgame.co.uk)                  |
+| [**📅 Journey**](https://docs.worldleadersgame.co.uk/journey)          | Week-by-week AI collaboration insights | 📝 Live Updates  | [View →](https://docs.worldleadersgame.co.uk/journey)           |
+| [**🔧 Technical**](https://docs.worldleadersgame.co.uk/technical-docs) | Implementation patterns & architecture | ✅ Complete      | [Explore →](https://docs.worldleadersgame.co.uk/technical-docs) |
+| [**📝 Blog**](https://docs.worldleadersgame.co.uk/blog)                | Educational methodology insights       | 📊 Analytics     | [Read →](https://docs.worldleadersgame.co.uk/blog)              |
+| [**🏆 Milestones**](https://docs.worldleadersgame.co.uk/milestones)    | Achievement tracking & metrics         | 🎯 Goal Tracking | [Track →](https://docs.worldleadersgame.co.uk/milestones)       |
+| [**🐛 Issues**](https://docs.worldleadersgame.co.uk/issues)            | AI-generated development tasks         | 🤖 AI-Driven     | [Monitor →](https://docs.worldleadersgame.co.uk/issues)         |
 
 </div>
 
@@ -198,16 +208,17 @@ Our young creative director didn't just describe the game—he designed it:
 
 <div align="center">
 
-| Original Sketches | Digital Logo Design |
-|-------------------|---------------------|
+| Original Sketches                                                              | Digital Logo Design                                                            |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
 | ![Game Mockup 1](https://docs.worldleadersgame.co.uk/assets/game-mockup-1.png) | ![Game Mockup 2](https://docs.worldleadersgame.co.uk/assets/game-mockup-2.png) |
-| *Hand-drawn interface mockups* | *Independent Figma logo creation* |
+| _Hand-drawn interface mockups_                                                 | _Independent Figma logo creation_                                              |
 
 </div>
 
 **Child-Led Design Elements:**
+
 - 🎨 Complete visual identity (logo, colors, layout)
-- 🎮 Game mechanics and progression systems  
+- 🎮 Game mechanics and progression systems
 - 🌍 Educational objectives and learning goals
 - 🎭 AI agent personalities and interaction styles
 
@@ -217,16 +228,16 @@ Our young creative director didn't just describe the game—he designed it:
 
 ### The AI Dream Team
 
-| AI System | Role | Autonomy Level |
-|-----------|------|----------------|
-| **Claude Sonnet 3.5** | Strategic architect, content creator | 95% |
-| **GitHub Copilot** | Real-time implementation, code generation | 90% |
-| **Azure OpenAI** | Educational AI agents, content validation | 85% |
+| AI System             | Role                                      | Autonomy Level |
+| --------------------- | ----------------------------------------- | -------------- |
+| **Claude Sonnet 3.5** | Strategic architect, content creator      | 95%            |
+| **GitHub Copilot**    | Real-time implementation, code generation | 90%            |
+| **Azure OpenAI**      | Educational AI agents, content validation | 85%            |
 
 ### Human Oversight (5%)
 
 - ✅ Educational validation and safety compliance
-- ✅ Creative guidance and vision alignment  
+- ✅ Creative guidance and vision alignment
 - ✅ Compilation error resolution when AI cannot self-correct
 - ✅ Real-world data accuracy verification
 
@@ -235,6 +246,7 @@ Our young creative director didn't just describe the game—he designed it:
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [PostgreSQL](https://www.postgresql.org/) (or use Docker container)
@@ -251,7 +263,7 @@ dotnet run --project src/WorldLeaders/WorldLeaders.AppHost
 
 # Or run manually (see tasks.json for all options)
 # 1. Start database: docker run --name worldleaders-postgres -e POSTGRES_DB=worldleaders -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres:15
-# 2. Start API: dotnet run --project src/WorldLeaders/WorldLeaders.API  
+# 2. Start API: dotnet run --project src/WorldLeaders/WorldLeaders.API
 # 3. Start Web: dotnet run --project src/WorldLeaders/WorldLeaders.Web
 ```
 
@@ -333,6 +345,7 @@ curl -X POST "https://localhost:7155/api/auth/guest" \
 ```
 
 **Guest Session Features**:
+
 - 🔒 **Child Safety Always Enabled**: Maximum protection for young users
 - ⏱️ **Limited Duration**: 5-30 minutes (encourages registration for longer play)
 - 🎮 **Core Features**: Basic gameplay, country exploration, language learning
@@ -341,6 +354,7 @@ curl -X POST "https://localhost:7155/api/auth/guest" \
 - 📈 **No Data Persistence**: Guest progress isn't saved (encourages account creation)
 
 **Perfect for**:
+
 - Parents evaluating the game for their children
 - Teachers exploring educational content
 - Children who want to try before committing to registration
@@ -375,19 +389,19 @@ bundle exec jekyll serve
 
 ### Week 3 Achievements
 
-| Area | Status | AI Autonomy | Educational Impact |
-|------|--------|-------------|-------------------|
-| **Architecture** | ✅ Complete | 98% | Foundation for scalable learning |
-| **Game Mechanics** | ✅ Core Implemented | 95% | Engaging educational gameplay |
-| **Documentation** | ✅ Comprehensive | 95% | Methodology preservation |
-| **Child Safety** | ✅ Multi-layer Protection | 90% | Safe learning environment |
-| **AI Agents** | 🔄 In Progress | 90% | Personalized tutoring |
-| **Speech Recognition** | 📋 Planned | TBD | Language learning assessment |
+| Area                   | Status                    | AI Autonomy | Educational Impact               |
+| ---------------------- | ------------------------- | ----------- | -------------------------------- |
+| **Architecture**       | ✅ Complete               | 98%         | Foundation for scalable learning |
+| **Game Mechanics**     | ✅ Core Implemented       | 95%         | Engaging educational gameplay    |
+| **Documentation**      | ✅ Comprehensive          | 95%         | Methodology preservation         |
+| **Child Safety**       | ✅ Multi-layer Protection | 90%         | Safe learning environment        |
+| **AI Agents**          | 🔄 In Progress            | 90%         | Personalized tutoring            |
+| **Speech Recognition** | 📋 Planned                | TBD         | Language learning assessment     |
 
 ### Next Milestones (Week 4)
 
 - [ ] **AI Agent Personality System** (8 hours estimated)
-- [ ] **Territory Management with Real-World Data** (10 hours estimated)  
+- [ ] **Territory Management with Real-World Data** (10 hours estimated)
 - [ ] **Speech Recognition Integration** (6 hours estimated)
 
 ---
@@ -422,7 +436,7 @@ bundle exec jekyll serve
 This is primarily a father-son learning experiment, but we welcome:
 
 - **Educational feedback** from teachers and parents
-- **Child safety suggestions** from child protection experts  
+- **Child safety suggestions** from child protection experts
 - **Technical insights** from AI and educational technology researchers
 - **Documentation improvements** for better methodology sharing
 
@@ -442,6 +456,7 @@ This is primarily a father-son learning experiment, but we welcome:
 This project is released under the **[MIT License](LICENSE)** to encourage educational use and adaptation.
 
 #### ✅ **What You Can Do**
+
 - ✅ **Use** the code for any purpose, including commercial projects
 - ✅ **Modify** and adapt the educational methodology for your needs
 - ✅ **Distribute** copies and modified versions
@@ -449,15 +464,18 @@ This project is released under the **[MIT License](LICENSE)** to encourage educa
 - ✅ **Study** our AI-first development methodology
 
 #### 🛡️ **Educational Responsibilities**
+
 - **Child Safety**: Maintain safety measures when adapting for children
 - **AI Content Moderation**: Preserve child protection systems
 - **Cultural Sensitivity**: Ensure respectful representation of countries/cultures
 - **Attribution**: Credit the original father-son AI collaboration experiment
 
 #### 🎓 **For Educators & Researchers**
+
 This project's comprehensive documentation and methodology are specifically designed for:
+
 - **Educational Technology Research**
-- **AI-Human Collaboration Studies** 
+- **AI-Human Collaboration Studies**
 - **Child-Safe Software Development**
 - **Parent-Child STEM Learning Projects**
 
@@ -471,14 +489,14 @@ This project's comprehensive documentation and methodology are specifically desi
 
 <div align="center">
 
-| � Resource | 📝 Description | 🎯 Purpose |
-|-------------|----------------|------------|
-| [**🏠 Main Website**](https://worldleadersgame.co.uk) | Project homepage and game portal | Play the game and overview |
-| [**📚 Documentation**](https://docs.worldleadersgame.co.uk) | Complete development documentation | Learn our methodology |
-| [**📅 Development Journey**](https://docs.worldleadersgame.co.uk/journey) | Week-by-week progress | Follow our AI collaboration |
-| [**🔧 Technical Guides**](https://docs.worldleadersgame.co.uk/technical-docs) | Implementation patterns | Replicate our approach |
-| [**📝 Blog Posts**](https://docs.worldleadersgame.co.uk/blog) | Educational insights | Understand our learning |
-| [**� Milestones**](https://docs.worldleadersgame.co.uk/milestones) | Achievement tracking | See our progress |
+| � Resource                                                                    | 📝 Description                     | 🎯 Purpose                  |
+| ----------------------------------------------------------------------------- | ---------------------------------- | --------------------------- |
+| [**🏠 Main Website**](https://worldleadersgame.co.uk)                         | Project homepage and game portal   | Play the game and overview  |
+| [**📚 Documentation**](https://docs.worldleadersgame.co.uk)                   | Complete development documentation | Learn our methodology       |
+| [**📅 Development Journey**](https://docs.worldleadersgame.co.uk/journey)     | Week-by-week progress              | Follow our AI collaboration |
+| [**🔧 Technical Guides**](https://docs.worldleadersgame.co.uk/technical-docs) | Implementation patterns            | Replicate our approach      |
+| [**📝 Blog Posts**](https://docs.worldleadersgame.co.uk/blog)                 | Educational insights               | Understand our learning     |
+| [**� Milestones**](https://docs.worldleadersgame.co.uk/milestones)            | Achievement tracking               | See our progress            |
 
 </div>
 
@@ -508,7 +526,7 @@ This project's comprehensive documentation and methodology are specifically desi
 
 ### Educational Impact
 
-> *"This isn't just building software—it's documenting a methodology for human-AI collaboration in educational technology while creating a genuine learning experience for a 12-year-old."*
+> _"This isn't just building software—it's documenting a methodology for human-AI collaboration in educational technology while creating a genuine learning experience for a 12-year-old."_
 
 **Join us on this journey of discovery, learning, and innovation in educational technology!**
 
@@ -521,12 +539,14 @@ This project's comprehensive documentation and methodology are specifically desi
 **Built with ❤️ by a father-son team and AI collaboration**
 
 <!-- Quick Links -->
+
 [![🏠 Website](https://img.shields.io/badge/🏠_Website-worldleadersgame.co.uk-2ea44f?style=for-the-badge&logo=safari&logoColor=white)](https://worldleadersgame.co.uk)
 [![📚 Docs](https://img.shields.io/badge/📚_Documentation-docs.worldleadersgame.co.uk-blue?style=for-the-badge&logo=gitbook&logoColor=white)](https://docs.worldleadersgame.co.uk)
 [![🎮 Game](https://img.shields.io/badge/🎮_Play_Game-Coming_Soon-FF6B35?style=for-the-badge&logo=gamepad&logoColor=white)](https://github.com/victorsaly/WorldLeadersGame/releases)
 [![🤖 AI_Journey](https://img.shields.io/badge/🤖_AI_Journey-95%25_Autonomy-FF69B4?style=for-the-badge&logo=robot&logoColor=white)](https://docs.worldleadersgame.co.uk/journey)
 
 <!-- Social & Community Links -->
+
 [![GitHub followers](https://img.shields.io/github/followers/victorsaly?style=social)](https://github.com/victorsaly)
 [![GitHub stars](https://img.shields.io/github/stars/victorsaly/WorldLeadersGame?style=social)](https://github.com/victorsaly/WorldLeadersGame)
 [![GitHub watchers](https://img.shields.io/github/watchers/victorsaly/WorldLeadersGame?style=social)](https://github.com/victorsaly/WorldLeadersGame)
@@ -541,6 +561,7 @@ This project's comprehensive documentation and methodology are specifically desi
 ---
 
 ### 🎯 **Experience the Future of Educational Game Development**
+
 **[🌐 Start at worldleadersgame.co.uk →](https://worldleadersgame.co.uk)**
 
 </div>
