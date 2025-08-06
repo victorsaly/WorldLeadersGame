@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: journey
 title: "Week 5: Production Security & Authentication"
 date: 2025-08-08
 week: 5
@@ -9,6 +9,23 @@ ai_autonomy_level: 95
 educational_focus: "Security & Child Safety"
 technical_focus: "JWT Authentication, Azure AD B2C, Child Safety Compliance"
 business_value: 90
+---
+
+# Week 5: Production Security & Authentication
+
+_Securing 1000+ Young Learners with Child-Safe Authentication_
+
+## 🎯 Educational Mission
+
+This week focused on implementing comprehensive authentication and security features specifically designed for educational platforms serving children. The system needed to balance robust security with COPPA/GDPR compliance while maintaining an engaging experience for 12-year-old learners.
+date: 2025-01-08
+estimated_hours: 8
+actual_hours: 8
+ai_autonomy_level: 95
+educational_focus: "Security & Child Safety"
+technical_focus: "JWT Authentication, Azure AD B2C, Child Safety Compliance"
+business_value: 90
+
 ---
 
 # Week 5: Production Security & Authentication
