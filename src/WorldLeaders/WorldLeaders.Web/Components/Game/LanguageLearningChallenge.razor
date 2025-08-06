@@ -279,6 +279,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 @code {
     // Educational constants for child-friendly learning
     private const double PRONUNCIATION_ACCURACY_THRESHOLD = 0.7; // 70% similarity threshold for children
+    private const int FEEDBACK_DISPLAY_DURATION_MS = 3000; // 3 seconds to show feedback before auto-advancing
     
     [Parameter] public bool IsVisible { get; set; }
     [Parameter] public Guid PlayerId { get; set; }
@@ -460,7 +461,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             // Auto-advance after showing feedback
             try
             {
-                await Task.Delay(3000, _cancellationTokenSource.Token);
+                await Task.Delay(FEEDBACK_DISPLAY_DURATION_MS, _cancellationTokenSource.Token);
                 if (!_disposed && !_cancellationTokenSource.Token.IsCancellationRequested)
                 {
                     await NextChallenge();
@@ -677,7 +678,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             StateHasChanged();
             
             // Clear feedback after a few seconds
-            await Task.Delay(3000);
+            await Task.Delay(FEEDBACK_DISPLAY_DURATION_MS);
             if (feedbackMessage.StartsWith("🔊"))
             {
                 feedbackMessage = "";

@@ -5,6 +5,9 @@
  * Educational Objective: Enable pronunciation practice with real microphone input
  */
 
+// Educational constants for child-safe speech recording
+const MAX_RECORDING_TIME_MS = 5000; // 5 seconds maximum for child safety
+
 class SpeechRecorder {
     constructor() {
         this.mediaRecorder = null;
@@ -97,13 +100,13 @@ class SpeechRecorder {
 
             console.log('Educational speech recording started successfully');
             
-            // Auto-stop after 5 seconds for child safety (prevent long recordings)
+            // Auto-stop after MAX_RECORDING_TIME_MS for child safety (prevent long recordings)
             setTimeout(() => {
                 if (this.isRecording) {
-                    console.log('Auto-stopping recording after 5 seconds (child safety limit)');
+                    console.log(`Auto-stopping recording after ${MAX_RECORDING_TIME_MS / 1000} seconds (child safety limit)`);
                     this.stopRecording();
                 }
-            }, 5000);
+            }, MAX_RECORDING_TIME_MS);
 
             return true;
 

@@ -36,9 +36,7 @@ builder.Services.AddScoped<ISpeechRecognitionService, SpeechRecognitionClientSer
 
 // Add HttpClient for API communication with production-ready configuration
 var apiConfiguration = builder.Configuration.GetSection("ApiSettings");
-var apiBaseUrl = builder.Configuration["ApiSettings:BaseUrl"] ?? 
-                 Environment.GetEnvironmentVariable("API_BASE_URL") ?? 
-                 (builder.Environment.IsProduction() ? "https://api.worldleadersgame.co.uk" : "https://localhost:7155");
+var apiBaseUrl = GetApiBaseUrl(builder.Configuration, builder.Environment);
 var apiTimeout = TimeSpan.FromSeconds(apiConfiguration.GetValue<int>("TimeoutSeconds", 30));
 
 builder.Services.AddHttpClient("GameAPI", client =>
@@ -153,3 +151,17 @@ app.MapRazorComponents<App>()
 app.MapDefaultEndpoints();
 
 app.Run();
+
+/// <summary>
+/// Helper method to determine the API base URL with fallback logic
+/// Context: Production-ready configuration for educational game API
+/// </summary>
+/// <param name="configuration">Application configuration</param>
+/// <param name="environment">Host environment</param>
+/// <returns>API base URL for HTTP client configuration</returns>
+static string GetApiBaseUrl(IConfiguration configuration, IWebHostEnvironment environment)
+{
+    return configuration["ApiSettings:BaseUrl"] ?? 
+           Environment.GetEnvironmentVariable("API_BASE_URL") ?? 
+           (environment.IsProduction() ? "https://api.worldleadersgame.co.uk" : "https://localhost:7155");
+}
