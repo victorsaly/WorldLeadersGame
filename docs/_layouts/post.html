@@ -6,9 +6,12 @@ layout: default
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Mermaid with production-safe configuration
     mermaid.initialize({
-      startOnLoad: false,
+      startOnLoad: true,
       theme: 'base',
+      securityLevel: 'loose',
+      fontFamily: 'Inter, sans-serif',
       themeVariables: {
         primaryColor: '#ffffff',
         primaryTextColor: '#000000',
@@ -31,28 +34,60 @@ layout: default
       }
     });
     
-    // Convert mermaid code blocks to diagrams
-    const mermaidBlocks = document.querySelectorAll('code.language-mermaid, pre code.language-mermaid');
-    mermaidBlocks.forEach((block, index) => {
-      const pre = block.closest('pre') || block;
-      const wrapper = document.createElement('div');
-      wrapper.className = 'mermaid';
-      wrapper.textContent = block.textContent;
-      wrapper.id = 'mermaid-' + index;
-      pre.parentNode.replaceChild(wrapper, pre);
-    });
+    // Enhanced Mermaid diagram detection and conversion
+    function processMermaidDiagrams() {
+      // Find all potential mermaid code blocks
+      const mermaidSelectors = [
+        'code.language-mermaid',
+        'pre code.language-mermaid',
+        '.language-mermaid',
+        'code[class*="mermaid"]',
+        'pre[class*="mermaid"]'
+      ];
+      
+      mermaidSelectors.forEach(selector => {
+        const blocks = document.querySelectorAll(selector);
+        blocks.forEach((block, index) => {
+          if (block.closest('.mermaid')) return; // Already processed
+          
+          const pre = block.closest('pre') || block;
+          const content = block.textContent || block.innerText;
+          
+          if (content.trim()) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'mermaid';
+            wrapper.textContent = content.trim();
+            wrapper.id = 'mermaid-diagram-' + selector.replace(/[^a-z]/gi, '') + '-' + index;
+            
+            pre.parentNode.replaceChild(wrapper, pre);
+          }
+        });
+      });
+    }
     
-    // Also handle plain mermaid class
-    const plainMermaidBlocks = document.querySelectorAll('.language-mermaid');
-    plainMermaidBlocks.forEach((block, index) => {
-      if (!block.classList.contains('mermaid')) {
-        block.classList.add('mermaid');
-        block.id = 'mermaid-plain-' + index;
-      }
-    });
+    // Process diagrams
+    processMermaidDiagrams();
     
-    // Initialize mermaid
-    mermaid.run();
+    // Run Mermaid rendering
+    try {
+      mermaid.run();
+    } catch (error) {
+      console.warn('Mermaid rendering error (non-critical):', error);
+      // Fallback: try to render individual diagrams
+      setTimeout(() => {
+        document.querySelectorAll('.mermaid').forEach(element => {
+          if (!element.getAttribute('data-processed')) {
+            try {
+              mermaid.render('mermaid-' + Date.now(), element.textContent, (svgCode) => {
+                element.innerHTML = svgCode;
+              });
+            } catch (e) {
+              console.warn('Individual mermaid render failed:', e);
+            }
+          }
+        });
+      }, 1000);
+    }
   });
 </script>
 <style>
