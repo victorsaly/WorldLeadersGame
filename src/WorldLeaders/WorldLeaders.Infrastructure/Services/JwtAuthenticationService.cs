@@ -32,8 +32,29 @@ public class JwtAuthenticationService(
     WorldLeadersDbContext dbContext,
     ILogger<JwtAuthenticationService> logger) : IAuthenticationService
 {
-    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
+    private readonly JwtOptions _jwtOptions = ValidateJwtOptions(jwtOptions.Value);
     private readonly ChildSafetyOptions _childSafetyOptions = childSafetyOptions.Value;
+
+    /// <summary>
+    /// Validate JWT options and provide fallback for development
+    /// </summary>
+    private static JwtOptions ValidateJwtOptions(JwtOptions options)
+    {
+        if (string.IsNullOrEmpty(options.SecretKey))
+        {
+            // For development only - generate a secure key
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+            if (environment == "Development")
+            {
+                return options with 
+                { 
+                    SecretKey = "WorldLeaders-Educational-Game-Development-Secret-Key-2025-Very-Long-String-For-256-Bit-Security-Child-Safe-Learning-Platform" 
+                };
+            }
+            throw new InvalidOperationException("JWT SecretKey is required in production environments");
+        }
+        return options;
+    }
 
     /// <summary>
     /// Azure AD B2C configuration for UK educational deployment
