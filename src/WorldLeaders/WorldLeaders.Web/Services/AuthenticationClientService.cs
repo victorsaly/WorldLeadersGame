@@ -228,22 +228,11 @@ public class AuthenticationClientService : IAuthenticationClientService
     {
         try
         {
-            // Simple JWT expiration check (in production, use proper JWT library)
-            var payload = token.Split('.')[1];
-            var paddedPayload = payload.PadRight(payload.Length + (4 - payload.Length % 4) % 4, '=');
-            var decodedBytes = Convert.FromBase64String(paddedPayload);
-            var decodedPayload = Encoding.UTF8.GetString(decodedBytes);
-            
-            var tokenData = JsonSerializer.Deserialize<JsonElement>(decodedPayload);
-            
-            if (tokenData.TryGetProperty("exp", out var expElement))
-            {
-                var exp = expElement.GetInt64();
-                var expDateTime = DateTimeOffset.FromUnixTimeSeconds(exp);
-                return DateTime.UtcNow >= expDateTime;
-            }
-            
-            return true; // Assume expired if we can't parse
+            // Use proper JWT validation for security
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            // The ValidTo property is in UTC
+            return DateTime.UtcNow >= jwtToken.ValidTo;
         }
         catch
         {

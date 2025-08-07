@@ -245,10 +245,45 @@ public class ChildSafetyValidator(
             }
 
             // Check if token exists in database and is still valid
-            // This is a simplified check - in production, use proper JWT validation
-            await Task.Delay(100); // Simulate async operation
+            // TODO: In production, implement a proper ParentalConsent entity with tokens
+            // For now, validate token format and check user consent status
             
-            return true; // For educational purposes, assume valid
+            // Validate token format (should be a proper JWT or signed token)
+            if (string.IsNullOrEmpty(consentToken) || consentToken.Length < 32)
+            {
+                logger.LogWarning("Invalid parental consent token format");
+                return false;
+            }
+
+            // In a production system, you would:
+            // var consentRecord = await dbContext.ParentalConsents
+            //     .FirstOrDefaultAsync(pc => pc.Token == consentToken && pc.ExpiresAt > DateTime.UtcNow);
+            // return consentRecord != null;
+            
+            // For development/educational purposes, validate token has proper structure
+            // Real implementation would verify cryptographic signature and expiration
+            try
+            {
+                // Basic token structure validation (placeholder for proper JWT/token validation)
+                var parts = consentToken.Split('.');
+                if (parts.Length >= 2) // JWT-like structure
+                {
+                    // Simulate database lookup delay
+                    await Task.Delay(50);
+                    
+                    // In development, accept well-formed tokens
+                    // TODO: Replace with actual database lookup and cryptographic validation
+                    return true;
+                }
+                
+                logger.LogWarning("Parental consent token structure invalid");
+                return false;
+            }
+            catch (Exception tokenEx)
+            {
+                logger.LogError(tokenEx, "Error parsing parental consent token");
+                return false;
+            }
         }
         catch (Exception ex)
         {
