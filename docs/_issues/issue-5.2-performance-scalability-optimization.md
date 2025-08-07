@@ -821,6 +821,7 @@ public class PerformanceMonitoringService : IPerformanceMonitoringService
 ### Phase 4: Deployment Pipeline Optimization (2 hours)
 
 #### 4.1 Fast Deployment Configuration
+{% raw %}
 ```yaml
 # Context: Optimize Azure deployment speed for rapid educational iteration
 # Objective: Reduce deployment time from current slow speeds to under 5 minutes
@@ -1021,6 +1022,7 @@ jobs:
         
         artillery run load-test.yml
 ```
+{% endraw %}
 
 ---
 

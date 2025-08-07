@@ -454,10 +454,11 @@ Safety Requirements: Content moderation, age-appropriate responses, positive mes
         public string Specialty { get; set; } = "";
     }
 
-    public async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         _disposed = true;
         _cancellationTokenSource?.Cancel();
         _cancellationTokenSource?.Dispose();
+        return ValueTask.CompletedTask;
     }
 }

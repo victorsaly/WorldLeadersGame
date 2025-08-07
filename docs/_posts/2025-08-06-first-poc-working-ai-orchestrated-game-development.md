@@ -14,7 +14,7 @@ tags:
   ]
 author: "Victor Saly - Technical Product Manager"
 excerpt: "What started as my 12-year-old son's passionate voice memo has become a live, production-ready educational platform. Through AI-first development, we transformed a child's imagination into enterprise-grade software running on Azure."
-reading_time: "12 min read" 
+reading_time: "12 min read"
 milestone: "Production POC"
 ai_autonomy: "95%"
 medium_style: true
@@ -26,9 +26,7 @@ image:
 
 # From Voice Memo to Production: How AI Built an Educational Game
 
-![AI-First Development POC Success]({{ site.baseurl }}/assets/linkedin-images/first-poc-working-ai-orchestrated-game-development-linkedin.png)
-
-*Professional LinkedIn image showcasing our AI-first development achievement - from voice memo to production POC*
+_Professional LinkedIn image showcasing our AI-first development achievement - from voice memo to production POC_
 
 ## The Challenge: Turning a Child's Vision into Reality
 
@@ -46,25 +44,6 @@ _Live production deployment: worldleadersgame.co.uk_
 - **Enterprise-grade infrastructure** on Microsoft Azure
 - **Real-world educational integration** with live GDP data
 - **Production deployment** with global CDN and SSL
-
----
-
-## The Development Journey: AI as Lead Developer
-
-> **"Dad, I have an idea for a game where you start as a peasant and become a world leader..."**
-
-What started as my 12-year-old son's passionate voice memo has become a live, production-ready educational platform. Through AI-first development, we transformed a child's imagination into enterprise-grade software running on Azure.
-
-_Live production deployment: worldleadersgame.co.uk_
-
-**� What We Achieved:**
-
-- **95% AI Autonomy** in development and architecture
-- **Enterprise-grade infrastructure** on Microsoft Azure
-- **Real-world educational integration** with live GDP data
-- **Production deployment** with global CDN and SSL
-
----
 
 ## The Development Journey: AI as Lead Developer
 
@@ -101,7 +80,7 @@ gantt
 
 ### Phase 1: Foundation & Architecture
 
-AI designed and implemented a complete microservices architecture using .NET Aspire, with proper separation of concerns and enterprise patterns I wouldn't have conceived independently.
+AI designed and implemented a complete microservices architecture using .NET Aspire, with proper separation of concerns and enterprise patterns.
 
 ### Phase 2: Core Implementation
 
@@ -111,11 +90,9 @@ The AI team built the entire game engine, real-world data integration, and child
 
 From localhost to live Azure deployment with custom domain, Cloudflare CDN, and enterprise-grade infrastructure - all orchestrated by AI with minimal human configuration.
 
----
-
 ## The Technical Achievement: Production-Ready Architecture
 
-### The Complete Technology Stack
+### Complete Technology Stack
 
 Our AI-first approach delivered enterprise-grade architecture that would typically require months of planning:
 
@@ -182,8 +159,6 @@ graph TB
 | **Resource Management**     | ✅ Live | Strategic thinking development  | 97%         |
 | **AI Educational Tutors**   | ✅ Live | Personalized learning support   | 92%         |
 | **Child Safety Framework**  | ✅ Live | COPPA-compliant protection      | 88%         |
-
----
 
 ## The AI Development Team: Performance Analysis
 
@@ -296,8 +271,6 @@ pie title "AI vs Human Contribution"
 | **AI Services**     | ✅ Live | <3s response        | Fallback systems  |
 | **CDN**             | ✅ Live | Global edge caching | DDoS protection   |
 
----
-
 ## 🎮 Live Platform Demonstration
 
 ### Platform Features Showcase
@@ -399,13 +372,11 @@ flowchart TD
 - COPPA-compliant framework ready for educational market entry
 - Real-time analytics and progress tracking for educators and parents
 
----
-
 ## 🧠 Lessons Learned: AI as Development Partner
 
 ### The Father & Project Manager Perspective
 
-As the human orchestrator in this AI-driven development, I've learned invaluable lessons about managing AI teams and production-ready software development:
+As the human orchestrator in this AI-driven development, I learned invaluable lessons about managing AI teams and production-ready software development:
 
 #### 🎯 **AI Excels At:**
 
@@ -445,11 +416,9 @@ As the human orchestrator in this AI-driven development, I've learned invaluable
    - Age-appropriate content validation
    - Real-world accuracy of educational content
 
-### The Codebase Challenge
+### Understanding AI-Generated Code
 
-#### Understanding AI-Generated Code
-
-As a project manager working with an AI-generated codebase, I've faced unique challenges:
+As a project manager working with an AI-generated codebase, I faced unique challenges:
 
 **The Challenge:**
 
@@ -464,8 +433,6 @@ As a project manager working with an AI-generated codebase, I've faced unique ch
 - Educational comments throughout the codebase explain purpose
 
 **Key Insight:** _AI doesn't just write code—it creates self-documenting, educational-focused implementations that are easier to understand than traditional codebases._
-
----
 
 ## 🚀 Production Readiness: Beyond POC
 
@@ -531,7 +498,7 @@ graph LR
 
 ---
 
-## 🌟 The Business Value: Real-World Impact
+## 🌟 Business Value: Real-World Impact
 
 ### Educational Technology Market Position
 
@@ -583,7 +550,9 @@ graph LR
 
 ## 💡 Key Insights for AI-First Development
 
-### For Other Developers
+## 💡 Key Insights for AI-First Development
+
+### For Developers
 
 1. **AI as Senior Developer**: Treat AI as your most experienced team member
 2. **Human as Product Manager**: Focus on vision, validation, and orchestration
@@ -606,8 +575,6 @@ graph LR
 3. **Production Readiness**: AI can build enterprise-grade systems
 4. **Documentation Value**: Comprehensive docs enable non-technical oversight
 5. **Educational Market**: Child safety and educational value create competitive moats
-
----
 
 ## 📊 ROI Analysis: The Business Case
 

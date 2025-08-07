@@ -1,6 +1,6 @@
 // Azure Bicep template for World Leaders Game deployment
 // Context: Educational game deployment for 12-year-old learners
-// Architecture: Web App + API + Static Site for docs with custom routing
+// Architecture: Web App + API + Static Site for docs with existing AI services
 
 param projectName string = 'worldleaders'
 param environment string = 'prod'
@@ -14,7 +14,7 @@ var apiAppName = '${projectName}-api-${environment}'
 var staticSiteName = '${projectName}-docs-${environment}'
 var storageAccountName = '${projectName}${environment}storage'
 
-// App Service Plan - B1 tier for cost efficiency with good performance
+// App Service Plan - B1 tier for educational game performance
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: appServicePlanName
   location: location
@@ -29,8 +29,10 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' = {
     capacity: 1
   }
   tags: {
-    project: 'World Leaders Game'
+    project: 'World Leaders Educational Game'
     environment: environment
+    target_audience: '12-year-old learners'
+    compliance: 'COPPA-GDPR'
   }
 }
 
