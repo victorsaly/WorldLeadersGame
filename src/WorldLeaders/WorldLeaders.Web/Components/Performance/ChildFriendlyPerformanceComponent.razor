@@ -1,0 +1,203 @@
+@using Microsoft.Extensions.Options
+@using WorldLeaders.Infrastructure.Configuration
+@using System.Diagnostics
+@inject IOptions<PerformanceConfig> PerformanceOptions
+@inject ILogger<ChildFriendlyPerformanceComponent> Logger
+
+@* 
+Context: Educational game component for 12-year-old players
+Educational Objective: Provide immediate visual feedback during loading operations
+Safety Requirements: Child-friendly loading indicators with encouraging messages
+*@
+
+<div class="performance-optimized-container @(IsLoading ? "loading" : "loaded")" 
+     style="min-height: @(Config.UI.MinButtonSizePx)px;">
+    
+    @if (IsLoading)
+    {
+        <div class="child-friendly-loader">
+            <div class="spinner-border text-primary" role="status" aria-label="Loading educational content">
+                <span class="visually-hidden">Loading your amazing world adventure...</span>
+            </div>
+            <div class="loading-message mt-2">
+                <span class="text-primary fw-bold">@LoadingMessage</span>
+                @if (ShowTimer && ElapsedMs > 0)
+                {
+                    <small class="text-muted d-block">@(ElapsedMs)ms</small>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        @ChildContent
+    }
+</div>
+
+<style>
+    .performance-optimized-container {
+        transition: opacity 0.3s ease-in-out;
+        min-height: @(Config.UI.MinButtonSizePx)px;
+    }
+
+    .performance-optimized-container.loading {
+        opacity: 0.8;
+    }
+
+    .performance-optimized-container.loaded {
+        opacity: 1;
+    }
+
+    .child-friendly-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .spinner-border {
+        width: @(Math.Max(32, Config.UI.MinButtonSizePx / 2))px;
+        height: @(Math.Max(32, Config.UI.MinButtonSizePx / 2))px;
+        border-width: 4px;
+    }
+
+    .loading-message {
+        font-size: @(Config.UI.OptimizeForTouch ? "1.1rem" : "1rem");
+        max-width: 300px;
+    }
+
+    /* Mobile optimizations for child-friendly touch interfaces */
+    @@media (max-width: 768px) {
+        .loading-message {
+            font-size: 1.2rem;
+        }
+        
+        .spinner-border {
+            width: @(Config.UI.MinButtonSizePx)px;
+            height: @(Config.UI.MinButtonSizePx)px;
+        }
+    }
+</style>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string LoadingMessage { get; set; } = "Loading your world adventure...";
+    [Parameter] public bool ShowTimer { get; set; } = false;
+    [Parameter] public EventCallback<long> OnLoadComplete { get; set; }
+
+    private bool IsLoading { get; set; } = true;
+    private long ElapsedMs { get; set; } = 0;
+    private Stopwatch? _stopwatch;
+    private System.Threading.Timer? _timer;
+    
+    private PerformanceConfig Config => PerformanceOptions.Value ?? PerformanceConfig.UKEducationalDefaults;
+
+    protected override void OnInitialized()
+    {
+        _stopwatch = Stopwatch.StartNew();
+        
+        if (ShowTimer)
+        {
+            _timer = new System.Threading.Timer(UpdateTimer, null, 100, 100);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Simulate minimum loading time for smooth UX
+            var minLoadingTime = Config.UI.OptimizeForTouch ? 300 : 200;
+            var elapsed = _stopwatch?.ElapsedMilliseconds ?? 0;
+            
+            if (elapsed < minLoadingTime)
+            {
+                await Task.Delay((int)(minLoadingTime - elapsed));
+            }
+
+            await CompleteLoading();
+        }
+    }
+
+    private async Task CompleteLoading()
+    {
+        _stopwatch?.Stop();
+        ElapsedMs = _stopwatch?.ElapsedMilliseconds ?? 0;
+        
+        _timer?.Dispose();
+        _timer = null;
+
+        IsLoading = false;
+        
+        // Log performance for monitoring
+        if (ElapsedMs > Config.UI.InitialLoadTimeTargetMs)
+        {
+            Logger.LogWarning("Child-friendly component loaded slowly: {ElapsedMs}ms (target: {TargetMs}ms)", 
+                ElapsedMs, Config.UI.InitialLoadTimeTargetMs);
+        }
+        else
+        {
+            Logger.LogInformation("Child-friendly component loaded successfully: {ElapsedMs}ms", ElapsedMs);
+        }
+
+        await OnLoadComplete.InvokeAsync(ElapsedMs);
+        StateHasChanged();
+    }
+
+    private void UpdateTimer(object? state)
+    {
+        ElapsedMs = _stopwatch?.ElapsedMilliseconds ?? 0;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+        _stopwatch?.Stop();
+    }
+
+    /// <summary>
+    /// Static method to create performance-optimized loading messages for children
+    /// </summary>
+    public static string GetChildFriendlyLoadingMessage(string operation)
+    {
+        var messages = operation.ToLowerInvariant() switch
+        {
+            "territory" or "country" => new[]
+            {
+                "🌍 Exploring amazing countries...",
+                "🗺️ Loading your world map...",
+                "🏛️ Discovering new territories..."
+            },
+            "language" or "speech" => new[]
+            {
+                "🗣️ Preparing language lessons...",
+                "🎯 Getting pronunciation ready...",
+                "🌐 Loading language tools..."
+            },
+            "ai" or "agent" => new[]
+            {
+                "🤖 Your AI tutor is getting ready...",
+                "👨‍🏫 Preparing your learning guide...",
+                "🎓 Setting up educational help..."
+            },
+            "game" or "progress" => new[]
+            {
+                "🎮 Loading your game progress...",
+                "⭐ Checking your achievements...",
+                "🏆 Preparing your next challenge..."
+            },
+            _ => new[]
+            {
+                "✨ Loading your adventure...",
+                "🚀 Getting everything ready...",
+                "🎯 Preparing something awesome..."
+            }
+        };
+
+        var random = new Random();
+        return messages[random.Next(messages.Length)];
+    }
+}

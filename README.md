@@ -409,6 +409,66 @@ bundle exec jekyll serve
 
 ---
 
+## ⚡ Performance & Scalability Optimization
+
+### 🎯 1000+ Concurrent Users Support
+
+Our educational platform is optimized for **1000+ concurrent users** with child-friendly performance requirements:
+
+#### **🚀 .NET 8 Performance Features**
+
+- **Primary Constructor DI**: Optimized dependency injection for faster startup
+- **Record Types**: Lightweight data structures reducing memory allocation
+- **Multi-layer Caching**: Memory + Redis + CDN for sub-2 second response times
+- **Native AOT Ready**: Faster startup times for child attention spans
+
+#### **🏗️ Auto-scaling Infrastructure (UK South)**
+
+- **App Service Plan**: Auto-scales 2-10 instances based on educational usage patterns
+- **Redis Caching**: Distributed cache for multi-instance performance
+- **Application Insights**: Real-time performance monitoring and alerting
+- **CDN Integration**: Static content delivery optimized for UK region
+
+#### **👶 Child-Friendly Performance**
+
+- **Target Load Time**: Sub-2 second initial page loads
+- **Interaction Response**: 300ms target for immediate feedback
+- **Large Touch Targets**: 48px minimum button size for tablets
+- **Visual Loading Indicators**: Encouraging messages during operations
+
+#### **📊 Performance Monitoring**
+
+Access real-time performance metrics:
+
+```bash
+# API Performance Endpoint
+GET /api/performance/metrics
+GET /api/performance/health
+
+# Sample Response
+{
+  "region": "UK South",
+  "configuredMaxResponseTime": 1500,
+  "concurrentUsersSupported": 1000,
+  "isChildFriendlyPerformance": true,
+  "memoryUsageMB": 512,
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+#### **🏛️ Azure Infrastructure**
+
+Optimized for UK educational deployment:
+
+- **Region**: UK South (GDPR compliance)
+- **Scaling**: Educational usage patterns (9 AM - 4 PM GMT peak)
+- **Cost Target**: £370-700/month for 1000+ users
+- **Availability**: 99.9% uptime SLA
+
+📁 **[Complete Infrastructure Documentation →](./infrastructure/azure/uk-south/README.md)**
+
+---
+
 ## 🌟 Why This Matters
 
 ### For Educational Technology
