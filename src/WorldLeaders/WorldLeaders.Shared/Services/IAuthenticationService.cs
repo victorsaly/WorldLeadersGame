@@ -25,6 +25,13 @@ public interface IAuthenticationService
     Task<AuthenticationResponse> LoginAsync(LoginRequest request);
 
     /// <summary>
+    /// Create a temporary guest session for exploring the system without registration
+    /// </summary>
+    /// <param name="request">Guest access request with child safety considerations</param>
+    /// <returns>Guest authentication response with limited access</returns>
+    Task<GuestAuthenticationResponse> CreateGuestSessionAsync(GuestAccessRequest request);
+
+    /// <summary>
     /// Validate an existing JWT token
     /// </summary>
     /// <param name="token">JWT token to validate</param>
