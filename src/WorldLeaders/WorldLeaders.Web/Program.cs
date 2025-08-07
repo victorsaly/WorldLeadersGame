@@ -149,8 +149,11 @@ if (!string.IsNullOrEmpty(redisConnectionString))
     });
 }
 
-// Add service defaults (Aspire) - includes health checks
-builder.AddServiceDefaults();
+// Add service defaults (Aspire) - Comment out for manual execution
+// builder.AddServiceDefaults();
+
+// Add health checks manually when not using Aspire
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -196,14 +199,14 @@ app.Use(async (context, next) =>
 app.UseStaticFiles();
 app.UseAntiforgery();
 
-// Map health checks
-app.MapHealthChecks("/health");
+// Map health checks - Comment out for manual execution since not all services available
+// app.MapHealthChecks("/health");
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-// Map default service endpoints (Aspire)
-app.MapDefaultEndpoints();
+// Map default service endpoints (Aspire) - Comment out for manual execution
+// app.MapDefaultEndpoints();
 
 app.Run();
 

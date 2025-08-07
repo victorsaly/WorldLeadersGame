@@ -91,8 +91,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Add service defaults (Aspire)
-builder.AddServiceDefaults();
+// Add service defaults (Aspire) - Comment out for manual execution
+// builder.AddServiceDefaults();
 
 var app = builder.Build();
 
@@ -144,7 +144,7 @@ app.MapControllers();
 // Map SignalR hubs
 app.MapHub<GameHub>("/gamehub");
 
-// Map default service endpoints (Aspire)
-app.MapDefaultEndpoints();
+// Map default service endpoints (Aspire) - Comment out for manual execution
+// app.MapDefaultEndpoints();
 
 app.Run();
