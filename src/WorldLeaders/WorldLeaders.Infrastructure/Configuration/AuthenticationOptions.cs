@@ -295,13 +295,26 @@ public record AuthenticationOptions
     {
         Jwt = new JwtOptions
         {
-            SecretKey = "your-jwt-secret-key-at-least-32-characters-long",
+            SecretKey = "REPLACE_WITH_SECURE_KEY_FROM_CONFIG", // Must be set via configuration or environment variable
             Issuer = "WorldLeadersGame",
             Audience = "WorldLeadersGame.API",
             ExpirationMinutes = 60,
             ChildSessionTimeoutMinutes = 30
         },
-        AzureAdB2C = AzureAdB2COptions.UKEducationalDefaults,
+        AzureAdB2C = new AzureAdB2COptions
+        {
+            TenantId = "SET_FROM_CONFIG",
+            ClientId = "SET_FROM_CONFIG", 
+            ClientSecret = "SET_FROM_CONFIG",
+            Instance = "SET_FROM_CONFIG",
+            Domain = "SET_FROM_CONFIG",
+            SignUpSignInPolicyId = "B2C_1_susi_educational",
+            ResetPasswordPolicyId = "B2C_1_pwd_reset_educational",
+            EditProfilePolicyId = "B2C_1_profile_edit_educational",
+            Region = "UK South",
+            Enabled = false,
+            ApiScopes = new List<string> { "SET_FROM_CONFIG" }
+        },
         ChildSafety = new ChildSafetyOptions(),
         CostTracking = new CostTrackingOptions(),
         RequireAuthentication = true

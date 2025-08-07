@@ -403,10 +403,10 @@ Real-World Connection: Secure identity creation for educational gaming
     {
         if (firstRender)
         {
-            // Focus on username field for better UX
+            // Focus on username field for better UX using safe JavaScript function
             try
             {
-                await JSRuntime.InvokeVoidAsync("eval", "document.getElementById('username')?.focus()");
+                await JSRuntime.InvokeVoidAsync("focusElementById", "username");
             }
             catch
             {

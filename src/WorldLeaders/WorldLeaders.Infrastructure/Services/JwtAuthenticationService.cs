@@ -38,7 +38,7 @@ public class JwtAuthenticationService(
     /// <summary>
     /// Azure AD B2C configuration for UK educational deployment
     /// </summary>
-    public required AzureAdB2COptions B2CConfig { get; init; } = AzureAdB2COptions.UKEducationalDefaults;
+    public required AzureAdB2COptions B2CConfig { get; init; }
 
     /// <summary>
     /// Azure region for data residency compliance
