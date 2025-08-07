@@ -1,23 +1,65 @@
 ---
 layout: page
-title: "Week 5: Production Security & Authentication"
+title: "Week 5: Production Security & Azure Cost Management"
 date: 2025-08-08
 week: 5
 estimated_hours: 8
 actual_hours: 8
 ai_autonomy_level: 95
-educational_focus: "Security & Child Safety"
-technical_focus: "JWT Authentication, Azure AD B2C, Child Safety Compliance"
-business_value: 90
+educational_focus: "Security, Child Safety & Cost Management"
+technical_focus: "JWT Authentication, Azure AD B2C, Child Safety Compliance, Azure Cost Management"
+business_value: 95
+enhanced_features: "Per-User Cost Attribution, Real-time Budget Monitoring, Educational Efficiency Scoring"
 ---
 
-# Week 5: Production Security & Authentication
+# Week 5: Production Security & Azure Cost Management
 
-_Securing 1000+ Young Learners with Child-Safe Authentication_
+_Securing 1000+ Young Learners with Child-Safe Authentication & Enterprise-Grade Cost Management_
 
-## 🎯 Educational Mission
+## 🎯 Enhanced Educational Mission
 
-This week focused on implementing comprehensive authentication and security features specifically designed for educational platforms serving children. The system needed to balance robust security with COPPA/GDPR compliance while maintaining an engaging experience for 12-year-old learners.
+This week expanded beyond authentication to implement **comprehensive Azure cost management** with **per-user attribution** specifically designed for **UK educational institutions** serving **12-year-old learners**. The challenge: protect educational budgets while maintaining high-quality AI-powered learning experiences.
+
+### 💰 Azure Cost Management Implementation
+
+#### Key Features Delivered
+- **Real-time cost tracking** with £0.08/user/day limits
+- **Automated budget alerts** at 80% threshold (£0.064)  
+- **Emergency throttling** with learning continuity protection
+- **Educational efficiency scoring** targeting 85+ points per £ spent
+- **ML-powered cost forecasting** for predictive budget management
+- **UK South regional pricing** with GDPR-compliant data handling
+- **Parent/school transparency** dashboards and reporting
+
+#### Technical Implementation
+```csharp
+/// Enhanced real-time cost tracking with .NET 8 record types
+public record RealTimeCostData(
+    Guid UserId,
+    DateTime Timestamp, 
+    string ServiceType,
+    decimal CostGBP,
+    string Region,
+    Dictionary<string, object> Metadata) : IComparable<RealTimeCostData>
+{
+    public decimal EducationalEfficiencyScore { get; init; } = 0m;
+}
+```
+
+#### New Cost Management API Endpoints
+- `GET /api/cost-management/enhanced-summary` - Real-time cost + efficiency
+- `GET /api/cost-management/forecast` - ML cost predictions (7-30 days)
+- `GET /api/cost-management/educational-efficiency` - Learning points per £
+- `POST /api/cost-management/track` - Track costs with educational metrics
+- `GET /api/cost-management/throttling-check` - Budget protection status
+
+#### Educational Efficiency Metrics
+- **Target**: 85+ learning points per £1 spent
+- **Calculation**: Based on learning objectives, active time, safety scores
+- **Optimization**: ML recommendations for maximizing educational value
+- **Transparency**: Cost-per-learning-outcome for schools and parents
+
+## 🔐 Authentication System (Original Implementation)
 date: 2025-01-08
 estimated_hours: 8
 actual_hours: 8
@@ -78,20 +120,80 @@ Configured for UK educational data residency requirements:
 
 **Educational Impact**: Ensures compliance with UK education sector data protection requirements.
 
-### 💰 Per-User Cost Tracking (£0.08/User/Day)
+### 💰 Enhanced Azure Cost Management & Per-User Attribution
 
-Implemented granular cost attribution across Azure services:
+Implemented comprehensive cost management system with real-time monitoring and educational efficiency scoring:
 
 ```csharp
-public async Task<UserCostSummaryDto> TrackUsageAsync(Guid userId, string serviceType, decimal estimatedCost)
+/// Enhanced real-time cost tracker with educational metrics
+public class PerUserCostTracker : IRealTimeCostTracker
 {
-    // Track AI, Speech, and Content Moderation costs separately
-    // Enforce daily limit of £0.08 per user
-    // Generate detailed cost breakdowns for administrators
+    public async Task<EnhancedCostSummaryDto> TrackRealTimeCostAsync(
+        Guid userId, 
+        string serviceType, 
+        decimal estimatedCost,
+        Dictionary<string, object>? educationalMetrics = null)
+    {
+        // Calculate educational efficiency score (target: 85+ points/£)
+        var educationalScore = await azureCostClient.CalculateEducationalEfficiencyAsync(
+            basicSummary.TotalCost, educationalMetrics);
+            
+        // Trigger budget alerts at 80% threshold (£0.064)
+        await CheckAndTriggerBudgetAlertAsync(userId, basicSummary.TotalCost);
+        
+        // Store real-time data for dashboard monitoring
+        var realTimeData = new RealTimeCostData(userId, DateTime.UtcNow, 
+            serviceType, estimatedCost, "UK South", educationalMetrics);
+    }
 }
 ```
 
-**Business Value**: Enables precise cost control for educational budgets while maintaining service quality.
+#### Cost Management Features Delivered
+- **Real-time Attribution**: £0.08/user/day with granular service breakdown
+- **Automated Alerts**: 80% threshold (£0.064) with educational context
+- **Emergency Throttling**: Graceful degradation maintaining learning continuity
+- **ML Forecasting**: Predictive budget planning for schools
+- **Efficiency Scoring**: 85+ learning points per £ spent target
+- **GDPR Compliance**: UK South data residency with privacy protection
+- **Transparency**: Parent/school dashboards with aggregated reporting
+
+#### Azure Cost Management Integration
+```csharp
+/// Azure Cost Management client for UK South educational pricing
+public class AzureCostManagementClient : IAzureCostManagementClient
+{
+    public async Task<AzureCostQueryResponse> QueryCostsAsync(AzureCostQueryRequest request)
+    {
+        // Query Azure Cost Management API with educational filters
+        // Apply UK South regional pricing in GBP
+        // Calculate educational efficiency metrics
+        return new AzureCostQueryResponse(totalCost, serviceBreakdown, DateTime.UtcNow, true);
+    }
+}
+```
+
+#### Educational Efficiency Calculation
+```csharp
+/// Calculate educational value per pound spent
+public async Task<decimal> CalculateEducationalEfficiencyAsync(
+    decimal costs, Dictionary<string, object> educationalMetrics)
+{
+    var baseEfficiency = 85m; // Target baseline
+    
+    // Bonus for learning objectives achieved (+5 points per objective)
+    if (educationalMetrics.TryGetValue("LearningObjectivesAchieved", out var objectives))
+        baseEfficiency += (int)objectives * 5m;
+        
+    // Bonus for active learning time (up to +20 points)
+    if (educationalMetrics.TryGetValue("ActiveLearningTimeMinutes", out var minutes))
+        baseEfficiency += Math.Min(20m, (int)minutes * 0.1m);
+        
+    // Calculate efficiency per pound spent
+    return baseEfficiency / Math.Max(costs, 0.001m);
+}
+```
+
+**Business Value**: Enables precise educational budget optimization while maximizing learning outcomes per pound spent.
 
 ### 🛡️ Child Safety Validation Framework
 

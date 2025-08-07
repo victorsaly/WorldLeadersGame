@@ -270,7 +270,139 @@ dotnet run --project src/WorldLeaders/WorldLeaders.AppHost
 # 3. Start Web: dotnet run --project src/WorldLeaders/WorldLeaders.Web
 ```
 
-### 🔐 Authentication Setup for UK Educational Deployment
+### 💰 Azure Cost Management & Per-User Attribution
+
+### Enhanced Cost Tracking for Educational Deployment
+
+The World Leaders Game includes **comprehensive Azure cost management** with per-user attribution designed specifically for UK educational institutions:
+
+#### 🎯 Key Features
+- **Real-time cost tracking** with £0.08/user/day limits
+- **Automated budget alerts** at 80% threshold (£0.064)
+- **Emergency throttling** to prevent cost overruns
+- **Educational efficiency scoring** targeting 85+ points per £ spent
+- **ML-powered cost forecasting** for predictive budget management
+- **UK South regional pricing** with GDPR-compliant data handling
+- **Parent/school transparency** dashboards and reporting
+
+#### 🔧 Cost Management Configuration
+
+Add the following sections to your `appsettings.json`:
+
+```json
+{
+  "CostTracking": {
+    "Enabled": true,
+    "DailyCostLimitGBP": 0.08,
+    "Currency": "GBP",
+    "BlockOnLimitExceeded": true,
+    "GracePeriodMinutes": 15,
+    "TimeZone": "GMT Standard Time"
+  },
+  "BudgetConfig": {
+    "DailyLimitGBP": 0.08,
+    "AlertThresholdPercentage": 0.80,
+    "EmergencyThrottlingEnabled": true,
+    "Region": "UK South",
+    "Currency": "GBP",
+    "EducationalCompliance": {
+      "TargetEducationalEfficiency": 85.0,
+      "RequireParentNotifications": true,
+      "RequireSchoolNotifications": true,
+      "EnableGdprCompliance": true,
+      "DataRetentionDays": 365,
+      "TrackEducationalOutcomes": true
+    },
+    "AlertConfiguration": {
+      "EnableRealTimeAlerts": true,
+      "NotificationEmails": ["admin@yourschool.edu"],
+      "MinimumAlertInterval": "00:15:00"
+    }
+  },
+  "AzureCostManagement": {
+    "Enabled": true,
+    "SubscriptionId": "your-azure-subscription-id",
+    "ResourceGroupName": "worldleaders-educational-rg",
+    "Region": "UK South",
+    "SyncInterval": "01:00:00",
+    "Credentials": {
+      "TenantId": "your-tenant-id",
+      "ClientId": "your-client-id",
+      "ClientSecret": "your-client-secret"
+    }
+  }
+}
+```
+
+#### 📊 Cost Management API Endpoints
+
+The enhanced cost management system provides comprehensive monitoring endpoints:
+
+```bash
+# Get enhanced real-time cost summary
+GET /api/cost-management/enhanced-summary
+Authorization: Bearer {your-jwt-token}
+
+# Monitor real-time cost data
+GET /api/cost-management/real-time
+Authorization: Bearer {your-jwt-token}
+
+# Check budget throttling status
+GET /api/cost-management/throttling-check
+Authorization: Bearer {your-jwt-token}
+
+# Get ML-powered cost forecasts (7-30 days)
+GET /api/cost-management/forecast?days=7
+Authorization: Bearer {your-jwt-token}
+
+# Calculate educational efficiency score
+GET /api/cost-management/educational-efficiency?timeframeDays=1
+Authorization: Bearer {your-jwt-token}
+
+# Track costs with educational context
+POST /api/cost-management/track
+Authorization: Bearer {your-jwt-token}
+Content-Type: application/json
+
+{
+  "serviceType": "AI",
+  "estimatedCostGBP": 0.02,
+  "educationalMetrics": {
+    "LearningObjectivesAchieved": 3,
+    "ActiveLearningTimeMinutes": 25,
+    "ChildSafetyScore": 95
+  }
+}
+```
+
+#### 🚨 Budget Alert System
+
+The system provides automated budget management:
+
+- **Warning Alert (80%)**: Triggered at £0.064 daily spend
+- **Limit Alert (100%)**: Triggered at £0.08 daily spend  
+- **Emergency Throttling**: Activates to prevent overspend while maintaining educational continuity
+- **Educational Impact Assessment**: Suggests alternative learning activities during throttling
+
+#### 📈 Educational Efficiency Metrics
+
+Cost tracking includes educational value measurement:
+
+- **Target**: 85+ learning points per £ spent
+- **Calculation**: Based on learning objectives achieved, active learning time, and safety scores
+- **Forecasting**: ML predictions for optimizing educational spend
+- **Transparency**: Parent and school dashboards showing cost-per-learning-outcome
+
+#### 🏫 UK Educational Compliance
+
+- **GDPR Compliance**: All cost data handled with UK data residency
+- **Educational Pricing**: Integration with Azure Education Hub
+- **Transparency**: Cost breakdowns available to parents and schools
+- **Privacy Protection**: Aggregated reporting without individual student identification
+
+---
+
+## 🔐 Authentication Setup for UK Educational Deployment
 
 The game includes comprehensive JWT authentication with child safety features:
 
