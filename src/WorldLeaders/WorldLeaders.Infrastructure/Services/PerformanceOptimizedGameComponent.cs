@@ -161,7 +161,25 @@ public class PerformanceOptimizedGameComponent(
             if (string.IsNullOrEmpty(cachedData))
                 return default;
 
-            return System.Text.Json.JsonSerializer.Deserialize<T>(cachedData);
+            try
+            {
+                return System.Text.Json.JsonSerializer.Deserialize<T>(cachedData);
+            }
+            catch (System.Text.Json.JsonException jsonEx)
+            {
+                // Handle JSON deserialization errors gracefully for educational platform
+                _telemetryClient.TrackException(jsonEx, new Dictionary<string, string>
+                {
+                    ["Operation"] = "DistributedCache.JsonDeserialize",
+                    ["Key"] = key,
+                    ["Region"] = Region,
+                    ["DataLength"] = cachedData.Length.ToString()
+                });
+                
+                // Remove corrupted cache entry
+                await _distributedCache.RemoveAsync($"{_config.DistributedCache.KeyPrefix}{key}");
+                return default;
+            }
         }
         catch (Exception ex)
         {
@@ -189,14 +207,30 @@ public class PerformanceOptimizedGameComponent(
             _memoryCache.Set(key, result, memoryCacheExpiration);
 
             // Cache in distributed cache (shared across instances)
-            var serializedData = System.Text.Json.JsonSerializer.Serialize(result);
-            var distributedCacheOptions = new DistributedCacheEntryOptions
+            try
             {
-                AbsoluteExpirationRelativeToNow = cacheExpiration,
-                SlidingExpiration = TimeSpan.FromMinutes(_config.DistributedCache.SlidingExpirationMinutes)
-            };
+                var serializedData = System.Text.Json.JsonSerializer.Serialize(result);
+                var distributedCacheOptions = new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = cacheExpiration,
+                    SlidingExpiration = TimeSpan.FromMinutes(_config.DistributedCache.SlidingExpirationMinutes)
+                };
 
-            await _distributedCache.SetStringAsync($"{_config.DistributedCache.KeyPrefix}{key}", serializedData, distributedCacheOptions);
+                await _distributedCache.SetStringAsync($"{_config.DistributedCache.KeyPrefix}{key}", serializedData, distributedCacheOptions);
+            }
+            catch (System.Text.Json.JsonException jsonEx)
+            {
+                // Handle JSON serialization errors gracefully for educational platform
+                _telemetryClient.TrackException(jsonEx, new Dictionary<string, string>
+                {
+                    ["Operation"] = "DistributedCache.JsonSerialize",
+                    ["Key"] = key,
+                    ["Region"] = Region,
+                    ["ResultType"] = typeof(T).Name
+                });
+                
+                // Continue with memory cache only if distributed cache serialization fails
+            }
         }
         catch (Exception ex)
         {

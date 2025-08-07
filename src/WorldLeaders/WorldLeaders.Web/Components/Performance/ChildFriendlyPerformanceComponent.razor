@@ -11,7 +11,7 @@ Safety Requirements: Child-friendly loading indicators with encouraging messages
 *@
 
 <div class="performance-optimized-container @(IsLoading ? "loading" : "loaded")" 
-     style="min-height: @(Config.UI.MinButtonSizePx)px;">
+     style="min-height: @(Config?.UI?.MinButtonSizePx ?? 48)px;">
     
     @if (IsLoading)
     {
@@ -37,7 +37,7 @@ Safety Requirements: Child-friendly loading indicators with encouraging messages
 <style>
     .performance-optimized-container {
         transition: opacity 0.3s ease-in-out;
-        min-height: @(Config.UI.MinButtonSizePx)px;
+        min-height: @(Config?.UI?.MinButtonSizePx ?? 48)px;
     }
 
     .performance-optimized-container.loading {
@@ -58,13 +58,13 @@ Safety Requirements: Child-friendly loading indicators with encouraging messages
     }
 
     .spinner-border {
-        width: @(Math.Max(32, Config.UI.MinButtonSizePx / 2))px;
-        height: @(Math.Max(32, Config.UI.MinButtonSizePx / 2))px;
+        width: @(Math.Max(32, (Config?.UI?.MinButtonSizePx ?? 48) / 2))px;
+        height: @(Math.Max(32, (Config?.UI?.MinButtonSizePx ?? 48) / 2))px;
         border-width: 4px;
     }
 
     .loading-message {
-        font-size: @(Config.UI.OptimizeForTouch ? "1.1rem" : "1rem");
+        font-size: @((Config?.UI?.OptimizeForTouch ?? true) ? "1.1rem" : "1rem");
         max-width: 300px;
     }
 
@@ -75,8 +75,8 @@ Safety Requirements: Child-friendly loading indicators with encouraging messages
         }
         
         .spinner-border {
-            width: @(Config.UI.MinButtonSizePx)px;
-            height: @(Config.UI.MinButtonSizePx)px;
+            width: @(Config?.UI?.MinButtonSizePx ?? 48)px;
+            height: @(Config?.UI?.MinButtonSizePx ?? 48)px;
         }
     }
 </style>
@@ -109,7 +109,7 @@ Safety Requirements: Child-friendly loading indicators with encouraging messages
         if (firstRender)
         {
             // Simulate minimum loading time for smooth UX
-            var minLoadingTime = Config.UI.OptimizeForTouch ? 300 : 200;
+            var minLoadingTime = (Config?.UI?.OptimizeForTouch ?? true) ? 300 : 200;
             var elapsed = _stopwatch?.ElapsedMilliseconds ?? 0;
             
             if (elapsed < minLoadingTime)
@@ -132,10 +132,11 @@ Safety Requirements: Child-friendly loading indicators with encouraging messages
         IsLoading = false;
         
         // Log performance for monitoring
-        if (ElapsedMs > Config.UI.InitialLoadTimeTargetMs)
+        var targetMs = Config?.UI?.InitialLoadTimeTargetMs ?? 2000;
+        if (ElapsedMs > targetMs)
         {
             Logger.LogWarning("Child-friendly component loaded slowly: {ElapsedMs}ms (target: {TargetMs}ms)", 
-                ElapsedMs, Config.UI.InitialLoadTimeTargetMs);
+                ElapsedMs, targetMs);
         }
         else
         {

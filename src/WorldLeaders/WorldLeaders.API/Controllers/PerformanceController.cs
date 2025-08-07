@@ -40,26 +40,18 @@ public class PerformanceController(
         {
             var stopwatch = Stopwatch.StartNew();
             
-            var metrics = await _performanceComponent.ExecuteWithPerformanceOptimization(
+                var metrics = await _performanceComponent.ExecuteWithPerformanceOptimization(
                 "GetPerformanceMetrics",
                 "performance:metrics:current",
-                async () =>
+                () =>
                 {
                     var performanceMetrics = _performanceComponent.GetPerformanceMetrics();
                     
-                    // Add real-time system metrics
-                    var process = Process.GetCurrentProcess();
-                    performanceMetrics = performanceMetrics with
-                    {
-                        Timestamp = DateTime.UtcNow
-                    };
-
-                    return performanceMetrics;
+                    // Create new record with updated timestamp for real-time metrics
+                    return Task.FromResult(performanceMetrics with { Timestamp = DateTime.UtcNow });
                 },
                 TimeSpan.FromMinutes(1) // Cache for 1 minute
-            );
-
-            stopwatch.Stop();
+            );            stopwatch.Stop();
 
             // Track API performance
             _telemetryClient.TrackMetric("API.Performance.GetMetrics.Duration", stopwatch.ElapsedMilliseconds);
@@ -93,7 +85,7 @@ public class PerformanceController(
             var healthStatus = await _performanceComponent.ExecuteWithPerformanceOptimization(
                 "GetHealthStatus",
                 "performance:health:current",
-                async () =>
+                () =>
                 {
                     var process = Process.GetCurrentProcess();
                     var memoryUsageMB = process.WorkingSet64 / (1024 * 1024);
@@ -102,7 +94,7 @@ public class PerformanceController(
                     var isHealthy = memoryUsageMB < 2048 && // Less than 2GB memory usage
                                    stopwatch.ElapsedMilliseconds < _performanceConfig.MaxResponseTimeMs;
 
-                    return new PerformanceHealthStatus
+                    return Task.FromResult(new PerformanceHealthStatus
                     {
                         Status = isHealthy ? "Healthy" : "Degraded",
                         Region = _performanceConfig.Region,
@@ -112,7 +104,7 @@ public class PerformanceController(
                         IsChildFriendlyPerformance = stopwatch.ElapsedMilliseconds <= _performanceConfig.UI.InitialLoadTimeTargetMs,
                         ConcurrentUsersSupported = isHealthy ? 1000 : 500, // Degraded performance estimate
                         Timestamp = DateTime.UtcNow
-                    };
+                    });
                 },
                 TimeSpan.FromSeconds(30) // Cache for 30 seconds
             );
