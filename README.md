@@ -310,10 +310,40 @@ The API provides comprehensive authentication endpoints:
 
 - `POST /api/auth/register` - Register new user (with child safety validation)
 - `POST /api/auth/login` - User authentication
+- `POST /api/auth/guest` - **NEW: Guest access without registration**
 - `POST /api/auth/logout` - Secure logout
 - `POST /api/auth/refresh` - Token refresh
 - `GET /api/auth/session` - Session information
 - `GET /api/auth/cost-summary` - Daily cost tracking (£0.08/user/day)
+
+#### 🎁 Guest Access Feature
+
+**NEW**: Users can now explore the system without registration!
+
+```bash
+# Create a guest session
+curl -X POST "https://localhost:7155/api/auth/guest" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "displayName": "Young Explorer",
+    "age": 12,
+    "hasParentalAwareness": true,
+    "sessionDurationMinutes": 15
+  }'
+```
+
+**Guest Session Features**:
+- 🔒 **Child Safety Always Enabled**: Maximum protection for young users
+- ⏱️ **Limited Duration**: 5-30 minutes (encourages registration for longer play)
+- 🎮 **Core Features**: Basic gameplay, country exploration, language learning
+- 🤖 **Safe AI Chat**: Educational interactions with content filtering
+- 👨‍👩‍👧‍👦 **Parental Awareness**: Option to indicate parental knowledge of session
+- 📈 **No Data Persistence**: Guest progress isn't saved (encourages account creation)
+
+**Perfect for**:
+- Parents evaluating the game for their children
+- Teachers exploring educational content
+- Children who want to try before committing to registration
 
 #### 4. Child Safety Features
 
