@@ -1,0 +1,40 @@
+# Production Configuration for docs.worldleadersgame.co.uk
+# This overrides _config.yml for production deployment
+
+# Site settings for custom domain
+url: "https://docs.worldleadersgame.co.uk"
+baseurl: ""
+
+# Ensure Rouge syntax highlighting is enabled
+markdown: kramdown
+highlighter: rouge
+
+# Rouge configuration for proper code highlighting
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: false
+      start_line: 1
+
+# Production-specific settings
+environment: production
+
+# Exclude development files
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - src/
+  - .vscode/
+  - start-game.sh
+  - README.md
+  - _test_site/
+  - .git/
+  - .github/
+  - scripts/
+  - infrastructure/

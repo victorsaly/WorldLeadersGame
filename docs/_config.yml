@@ -3,14 +3,25 @@ title: "World Leaders Game"
 description: "A father-son experiment in AI autonomy for educational software development - transforming a 12-year-old's voice memo into a production-ready game using 95% AI guidance."
 
 # Site settings
-url: "https://victorsaly.github.io"
-baseurl: "/WorldLeadersGame"
+url: "https://docs.worldleadersgame.co.uk"
+baseurl: ""
 author: "Victor & Oliver Saly"
 email: "info@victorsaly.com"
 
 # Build settings
 markdown: kramdown
 highlighter: rouge
+
+# Rouge configuration for proper syntax highlighting
+kramdown:
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: false
+      start_line: 1
 theme: minima
 plugins:
   - jekyll-feed
