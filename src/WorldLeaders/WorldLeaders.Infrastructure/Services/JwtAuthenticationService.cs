@@ -217,6 +217,103 @@ public class JwtAuthenticationService(
     }
 
     /// <summary>
+    /// Create a temporary guest session for exploring the system without registration
+    /// </summary>
+    public Task<GuestAuthenticationResponse> CreateGuestSessionAsync(GuestAccessRequest request)
+    {
+        try
+        {
+            logger.LogInformation("Creating guest session for display name: {DisplayName}, age: {Age}", 
+                request.DisplayName ?? "Anonymous", request.Age);
+
+            // Generate a unique guest ID
+            var guestId = Guid.NewGuid();
+            var now = DateTime.UtcNow;
+            
+            // Determine session duration (capped at 30 minutes for safety)
+            var sessionDuration = Math.Min(request.SessionDurationMinutes, 30);
+            var expiresAt = now.AddMinutes(sessionDuration);
+
+            // Create guest session claims
+            var claims = new List<Claim>
+            {
+                new("sub", guestId.ToString()),
+                new("jti", Guid.NewGuid().ToString()),
+                new(ClaimTypes.Role, UserRole.Guest.ToString()),
+                new("isGuest", "true"),
+                new("iat", new DateTimeOffset(now).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64)
+            };
+
+            // Add child safety claims
+            claims.Add(new("isChild", "true"));
+            claims.Add(new("requiresChildSafety", "true"));
+
+            if (request.Age.HasValue)
+            {
+                claims.Add(new("age", request.Age.Value.ToString()));
+            }
+
+            if (!string.IsNullOrEmpty(request.DisplayName))
+            {
+                claims.Add(new("displayName", request.DisplayName));
+            }
+
+            // Generate JWT token for guest session
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtOptions.SecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = expiresAt,
+                Issuer = _jwtOptions.Issuer,
+                Audience = _jwtOptions.Audience,
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            // Create guest user info
+            var guestUserInfo = new GuestUserInfoDto
+            {
+                GuestId = guestId,
+                DisplayName = request.DisplayName ?? "Guest Explorer",
+                Age = request.Age,
+                SessionStartedAt = now,
+                SessionExpiresAt = expiresAt,
+                HasParentalAwareness = request.HasParentalAwareness
+            };
+
+            // Create guest authentication response
+            var response = new GuestAuthenticationResponse
+            {
+                AccessToken = tokenString,
+                ExpiresAt = expiresAt,
+                Guest = guestUserInfo,
+                SessionTimeoutMinutes = sessionDuration,
+                AvailableFeatures = new List<string>
+                {
+                    "BasicGameplay",
+                    "CountryExploration", 
+                    "LanguageLearning",
+                    "SafeAIChat"
+                },
+                RegistrationEncouragement = "Create an account to save your progress and unlock more features!"
+            };
+
+            logger.LogInformation("Guest session created successfully: {GuestId}, expires: {ExpiresAt}", 
+                guestId, expiresAt);
+
+            return Task.FromResult(response);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error creating guest session");
+            throw;
+        }
+    }
+
+    /// <summary>
     /// Validate JWT token and return user information
     /// </summary>
     public async Task<UserInfoDto?> ValidateTokenAsync(string token)
