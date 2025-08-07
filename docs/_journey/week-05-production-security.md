@@ -1,7 +1,7 @@
 ---
-layout: journey
+layout: page
 title: "Week 5: Production Security & Authentication"
-date: 2025-08-08
+date: 2025-08-07
 week: 5
 estimated_hours: 8
 actual_hours: 8
