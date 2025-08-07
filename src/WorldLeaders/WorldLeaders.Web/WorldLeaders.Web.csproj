@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <ItemGroup>
     <ProjectReference Include="..\WorldLeaders.Shared\WorldLeaders.Shared.csproj" />
@@ -15,6 +15,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>375f82d8-f77e-4a46-9cf6-be974b342e3e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
