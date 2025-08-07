@@ -1,5 +1,6 @@
 using WorldLeaders.Web.Components;
 using WorldLeaders.Web.Services;
+using WorldLeaders.Web.Handlers;
 using WorldLeaders.Shared.Services;
 using Microsoft.AspNetCore.SignalR.Client;
 
@@ -33,6 +34,11 @@ builder.Services.AddHsts(options =>
 // Register HTTP-based client services for API communication
 builder.Services.AddScoped<ITerritoryService, TerritoryClientService>();
 builder.Services.AddScoped<ISpeechRecognitionService, SpeechRecognitionClientService>();
+builder.Services.AddScoped<IAuthenticationClientService, AuthenticationClientService>();
+builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
+
+// Register authentication handler
+builder.Services.AddTransient<JwtAuthenticationHandler>();
 
 // Add HttpClient for API communication with production-ready configuration
 var apiConfiguration = builder.Configuration.GetSection("ApiSettings");
@@ -52,7 +58,9 @@ builder.Services.AddHttpClient("GameAPI", client =>
     {
         client.DefaultRequestHeaders.Add("X-API-Key", apiKey);
     }
-}).ConfigurePrimaryHttpMessageHandler(() => 
+})
+.AddHttpMessageHandler<JwtAuthenticationHandler>() // Automatically add JWT tokens
+.ConfigurePrimaryHttpMessageHandler(() => 
 {
     var handler = new HttpClientHandler();
     

@@ -1,0 +1,417 @@
+@page "/register"
+@rendermode InteractiveServer
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Enums
+@using WorldLeaders.Web.Services
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Linq
+@inject IAuthenticationClientService AuthService
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+@*
+Context: Educational game registration for 12-year-old players
+Educational Objective: Safe user registration with age verification and child protection
+Safety Requirements: COPPA compliance, parental consent validation, age-appropriate content
+Real-World Connection: Secure identity creation for educational gaming
+*@
+
+<PageTitle>Join World Leaders Game - Safe Registration</PageTitle>
+
+<div class="min-h-screen bg-gradient-to-br from-purple-400 via-blue-500 to-green-400 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 border-4 border-opacity-20 border-white">
+        
+        @* Educational Header *@
+        <div class="text-center mb-8">
+            <div class="text-6xl mb-4">🌍</div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Join the Adventure!</h1>
+            <p class="text-lg text-gray-600">Create your account to become a world leader</p>
+            <div class="flex justify-center space-x-2 mt-3">
+                <span class="text-2xl">🎮</span>
+                <span class="text-2xl">📚</span>
+                <span class="text-2xl">🗺️</span>
+            </div>
+        </div>
+
+        @* Registration Form *@
+        <EditForm Model="@registerRequest" OnValidSubmit="@HandleRegistration" FormName="RegisterForm" class="space-y-6">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-red-600 text-sm font-medium bg-red-100 p-3 rounded-lg" />
+            
+            @* Error Messages *@
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="bg-red-100 border-2 border-red-300 text-red-700 px-4 py-3 rounded-xl" role="alert">
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">⚠️</span>
+                        <span class="font-medium">@errorMessage</span>
+                    </div>
+                </div>
+            }
+
+            @* Success Message *@
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="bg-green-100 border-2 border-green-300 text-green-700 px-4 py-3 rounded-xl" role="alert">
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-2">🎉</span>
+                        <span class="font-medium">@successMessage</span>
+                    </div>
+                </div>
+            }
+
+            @* Username Field *@
+            <div class="space-y-2">
+                <label for="username" class="block text-lg font-bold text-gray-700">
+                    🔑 Choose Your Login Username
+                </label>
+                <InputText id="username" 
+                          @bind-Value="registerRequest.Username" 
+                          class="input-child-friendly"
+                          placeholder="Enter your login username" 
+                          maxlength="50" />
+                <ValidationMessage For="@(() => registerRequest.Username)" class="text-red-600 text-sm font-medium" />
+                <p class="text-sm text-gray-500">This is for logging in (different from your leader name)</p>
+            </div>
+
+            @* Age Field *@
+            <div class="space-y-2">
+                <label for="age" class="block text-lg font-bold text-gray-700">
+                    🎂 How Old Are You?
+                </label>
+                <InputNumber id="age" 
+                            @bind-Value="registerRequest.Age" 
+                            class="input-child-friendly"
+                            min="8" 
+                            max="18" />
+                <ValidationMessage For="@(() => registerRequest.Age)" class="text-red-600 text-sm font-medium" />
+                <p class="text-sm text-gray-500">Must be between 8-18 years old to play</p>
+            </div>
+
+            @* Character Name Field *@
+            <div class="space-y-2">
+                <label for="displayName" class="block text-lg font-bold text-gray-700">
+                    👑 Your World Leader Name
+                </label>
+                <InputText id="displayName" 
+                          @bind-Value="registerRequest.DisplayName" 
+                          class="input-child-friendly"
+                          placeholder="Leader Sarah, President Alex, Prime Minister Jamie" 
+                          maxlength="50" />
+                <ValidationMessage For="@(() => registerRequest.DisplayName)" class="text-red-600 text-sm font-medium" />
+                <p class="text-sm text-gray-500">Your official title and name as a world leader (2-50 characters)</p>
+            </div>
+
+            @* Email Field *@
+            <div class="space-y-2">
+                <label for="email" class="block text-lg font-bold text-gray-700">
+                    📧 Email Address
+                </label>
+                <InputText id="email" 
+                          @bind-Value="registerRequest.Email" 
+                          type="email"
+                          class="input-child-friendly"
+                          placeholder="your.email@example.com" />
+                <ValidationMessage For="@(() => registerRequest.Email)" class="text-red-600 text-sm font-medium" />
+                <p class="text-sm text-gray-500">We'll use this to keep your account safe</p>
+            </div>
+
+            @* Parental Email Field (required for under 13) *@
+            @if (registerRequest.Age < 13)
+            {
+                <div class="space-y-2 bg-yellow-50 border-2 border-yellow-200 p-4 rounded-xl">
+                    <label for="parentalEmail" class="block text-lg font-bold text-orange-700">
+                        👨‍👩‍👧‍👦 Parent/Guardian Email (Required)
+                    </label>
+                    <InputText id="parentalEmail" 
+                              @bind-Value="registerRequest.ParentalEmail" 
+                              type="email"
+                              class="input-child-friendly"
+                              placeholder="parent@example.com" />
+                    <ValidationMessage For="@(() => registerRequest.ParentalEmail)" class="text-red-600 text-sm font-medium" />
+                    <p class="text-sm text-orange-600">
+                        ⚠️ Since you're under 13, we need a parent or guardian's email address for safety
+                    </p>
+                </div>
+            }
+
+            @* Password Field *@
+            <div class="space-y-2">
+                <label for="password" class="block text-lg font-bold text-gray-700">
+                    🔐 Create Password
+                </label>
+                <InputText id="password" 
+                          @bind-Value="registerRequest.Password" 
+                          type="password"
+                          class="input-child-friendly"
+                          placeholder="Create a strong password" />
+                <ValidationMessage For="@(() => registerRequest.Password)" class="text-red-600 text-sm font-medium" />
+                <p class="text-sm text-gray-500">Must be at least 8 characters with uppercase, lowercase, and numbers</p>
+            </div>
+
+            @* Confirm Password Field *@
+            <div class="space-y-2">
+                <label for="confirmPassword" class="block text-lg font-bold text-gray-700">
+                    🔐 Confirm Password
+                </label>
+                <InputText id="confirmPassword" 
+                          @bind-Value="registerRequest.ConfirmPassword" 
+                          type="password"
+                          class="input-child-friendly"
+                          placeholder="Type your password again" />
+                <ValidationMessage For="@(() => registerRequest.ConfirmPassword)" class="text-red-600 text-sm font-medium" />
+            </div>
+
+            @* Parental Consent Notice *@
+            <div class="bg-blue-50 border-2 border-blue-200 p-4 rounded-xl">
+                <div class="flex items-start space-x-3">
+                    <span class="text-2xl">👨‍👩‍👧‍👦</span>
+                    <div>
+                        <h3 class="font-bold text-blue-800 mb-1">Parent/Guardian Notice</h3>
+                        <p class="text-sm text-blue-700 mb-2">
+                            This is an educational game designed for children. By registering, you confirm that a parent or guardian 
+                            is aware of this account creation. We follow strict child safety guidelines.
+                        </p>
+                        @if (registerRequest.Age < 13)
+                        {
+                            <p class="text-sm text-orange-700 font-semibold">
+                                🔒 Additional Safety: Since you're under 13, we require a parent/guardian email for extra protection.
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            @* Terms Agreement *@
+            <div class="flex items-start space-x-3">
+                <InputCheckbox id="agreeTerms" 
+                              @bind-Value="agreeToTerms" 
+                              class="mt-1 h-5 w-5 text-blue-600 rounded border-2 border-gray-300" />
+                <label for="agreeTerms" class="text-sm text-gray-700">
+                    I understand this is an educational game and agree to play respectfully and safely. 
+                    A parent or guardian knows about this account.
+                </label>
+            </div>
+            @if (showTermsError)
+            {
+                <p class="text-red-600 text-sm font-medium">Please confirm you understand and agree to the terms</p>
+            }
+
+            @* Register Button *@
+            <button type="submit" 
+                    disabled="@isLoading" 
+                    class="btn-child-primary w-full">
+                @if (isLoading)
+                {
+                    <div class="flex items-center justify-center space-x-2">
+                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                        <span>Creating Your Account...</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="flex items-center justify-center space-x-2">
+                        <span class="text-2xl">🚀</span>
+                        <span>Start My Adventure!</span>
+                    </div>
+                }
+            </button>
+        </EditForm>
+
+        @* Login Link *@
+        <div class="mt-8 text-center">
+            <p class="text-gray-600">Already have an account?</p>
+            <a href="/login" class="text-blue-600 hover:text-blue-800 font-semibold text-lg">
+                Sign In Here
+            </a>
+        </div>
+
+        @* Educational Footer *@
+        <div class="mt-6 text-center">
+            <p class="text-xs text-gray-500">
+                🎓 Learn geography, economics, and languages while having fun!
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-child-friendly {
+        width: 100%;
+        padding: 12px 16px;
+        font-size: 18px;
+        border-radius: 12px;
+        border: 3px solid #d1d5db;
+        min-height: 48px;
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .input-child-friendly:focus {
+        border-color: #3b82f6;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn-child-primary {
+        padding: 16px 32px;
+        min-height: 56px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 12px;
+        background: linear-gradient(to right, #10b981, #3b82f6);
+        color: white;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        border: 4px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .btn-child-primary:hover:not(:disabled) {
+        transform: scale(1.05);
+        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        background: linear-gradient(to right, #059669, #2563eb);
+    }
+
+    .btn-child-primary:active:not(:disabled) {
+        transform: scale(0.95);
+    }
+
+    .btn-child-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .border-3 {
+        border-width: 3px;
+    }
+</style>
+
+@code {
+    private RegisterUserRequest registerRequest = new()
+    {
+        Username = "",
+        Email = "",
+        Password = "",
+        ConfirmPassword = "",
+        DisplayName = "",
+        DateOfBirth = DateTime.Today.AddYears(-12), // Default to 12 years ago
+        Age = 12, // Default to target age
+        Role = UserRole.Student, // Set appropriate role
+        HasGdprConsent = false, // Will be set when user agrees to terms
+        HasParentalConsent = false, // Will be set when user agrees to terms
+        ParentalEmail = null, // Optional field
+        SchoolName = null // Optional field
+    };
+
+    private bool agreeToTerms = false;
+    private bool showTermsError = false;
+    private bool isLoading = false;
+    private string errorMessage = "";
+    private string successMessage = "";
+
+    private async Task HandleRegistration()
+    {
+        Console.WriteLine("HandleRegistration started");
+        
+        errorMessage = "";
+        successMessage = "";
+        showTermsError = false;
+
+        // Validate terms agreement
+        if (!agreeToTerms)
+        {
+            showTermsError = true;
+            Console.WriteLine("Terms agreement failed");
+            return;
+        }
+
+        // Set consent fields based on user agreement
+        registerRequest.HasGdprConsent = agreeToTerms;
+        registerRequest.HasParentalConsent = agreeToTerms;
+
+        // Child safety age validation
+        if (registerRequest.Age < 8 || registerRequest.Age > 18)
+        {
+            errorMessage = "Age must be between 8 and 18 years old for this educational game.";
+            Console.WriteLine($"Age validation failed: {registerRequest.Age}");
+            return;
+        }
+
+        // Parental email validation for under 13
+        if (registerRequest.Age < 13 && string.IsNullOrWhiteSpace(registerRequest.ParentalEmail))
+        {
+            errorMessage = "A parent or guardian's email address is required for players under 13 years old.";
+            Console.WriteLine($"Parental email required for age: {registerRequest.Age}");
+            return;
+        }
+
+        // Password strength validation
+        if (string.IsNullOrEmpty(registerRequest.Password) || 
+            !registerRequest.Password.Any(char.IsUpper) ||
+            !registerRequest.Password.Any(char.IsLower) ||
+            !registerRequest.Password.Any(char.IsDigit))
+        {
+            errorMessage = "Password must contain at least one uppercase letter, one lowercase letter, and one number.";
+            return;
+        }
+
+        Console.WriteLine($"Starting registration for user: {registerRequest.Username}");
+        isLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            var response = await AuthService.RegisterAsync(registerRequest);
+
+            if (response != null && !string.IsNullOrEmpty(response.AccessToken))
+            {
+                successMessage = "🎉 Welcome to World Leaders Game! Your account has been created successfully!";
+                
+                // Show success message briefly, then redirect
+                await Task.Delay(2000);
+                Navigation.NavigateTo("/login?message=Registration successful! Please log in to start your adventure.");
+            }
+            else
+            {
+                errorMessage = response == null ? "Registration failed - no response from server." : "Registration failed - invalid response from server.";
+                Console.WriteLine($"Registration failed. Response: {response?.AccessToken ?? "null"}");
+            }
+        }
+        catch (HttpRequestException httpEx)
+        {
+            errorMessage = "Network error. Please check your connection and try again.";
+            Console.WriteLine($"Registration HTTP error: {httpEx.Message}");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Registration error: {ex.Message}";
+            Console.WriteLine($"Registration error: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Focus on username field for better UX
+            try
+            {
+                await JSRuntime.InvokeVoidAsync("eval", "document.getElementById('username')?.focus()");
+            }
+            catch
+            {
+                // Ignore focus errors
+            }
+        }
+    }
+}

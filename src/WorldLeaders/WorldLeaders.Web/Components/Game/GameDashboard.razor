@@ -8,6 +8,8 @@
 @inject IHttpClientFactory HttpClientFactory
 @inject ILogger<GameDashboard> Logger
 @inject IHubConnectionFactory HubConnectionFactory
+@inject IAuthenticationClientService AuthService
+@inject NavigationManager Navigation
 @implements IAsyncDisposable
 
 <PageTitle>World Leaders Game - Dashboard</PageTitle>
@@ -22,114 +24,192 @@
                     <p class="text-gray-600">Educational game for young leaders (Age 12+)</p>
                 </div>
                 <div class="text-right">
-                    @if (playerDashboard != null)
+                    @if (currentUser != null)
+                    {
+                        <h2 class="text-2xl font-bold text-blue-600">Welcome, @currentUser.Username!</h2>
+                        <p class="text-gray-500">@currentUser.Email</p>
+                        <p class="text-sm text-gray-400">Last login: @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
+                        <button @onclick="Logout" class="mt-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                            Logout
+                        </button>
+                    }
+                    else if (playerDashboard != null)
                     {
                         <h2 class="text-2xl font-bold text-blue-600">Welcome, @playerDashboard.Username!</h2>
                         <p class="text-gray-500">@playerDashboard.CurrentGameState</p>
+                    }
+                    else if (!isLoading)
+                    {
+                        <button @onclick="GoToLogin" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            Login to Play
+                        </button>
                     }
                 </div>
             </div>
         </div>
 
-        @if (playerDashboard != null)
+        @if (isAuthenticated && currentUser != null)
         {
-            <!-- Resource Management Framework -->
-            <ResourceManager Income="@playerDashboard.Income" 
-                           Reputation="@playerDashboard.Reputation" 
-                           Happiness="@playerDashboard.Happiness"
-                           RecentChanges="@recentResourceChanges" />
-
-            <!-- Interactive Dice Rolling System -->
-            <InteractiveDiceRoller PlayerId="@playerDashboard.Id" 
-                                 OnDiceRolled="@OnDiceRolled" />
-
-            <!-- Territory Explorer - World Geography Learning -->
-            <TerritoryExplorer PlayerId="@playerDashboard.Id" 
-                             PlayerReputation="@playerDashboard.Reputation"
-                             PlayerIncome="@playerDashboard.Income"
-                             OnTerritorySelected="@OnTerritoryPurchased" />
-
-            <!-- Language Learning Challenge - Speech Recognition -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-bold text-purple-800">🗣️ Language Learning</h3>
-                    <button @onclick="@(() => showLanguageChallenge = true)" 
-                            class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300">
-                        Practice Speaking
-                    </button>
-                </div>
-                <p class="text-gray-600">Practice pronouncing words from your territories and learn about different cultures!</p>
-            </div>
-
-            <!-- Language Learning Challenge Modal -->
-            <LanguageLearningChallenge IsVisible="@showLanguageChallenge" 
-                                     PlayerId="@playerDashboard.Id"
-                                     OnClose="@(() => showLanguageChallenge = false)" />
-
-            <!-- AI Learning Assistants -->
-            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-xl font-bold text-indigo-800">🤖 AI Learning Assistants</h3>
-                    <button @onclick="@(() => showAIChat = true)" 
-                            class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-2 px-4 rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all duration-300">
-                        Chat with AI Guides
-                    </button>
-                </div>
-                <p class="text-gray-600">Get personalized advice from AI mentors specializing in careers, territories, languages, and leadership strategy!</p>
-            </div>
-
-            <!-- AI Agent Chat Modal -->
-            <AIAgentChat IsVisible="@showAIChat" 
-                        PlayerId="@playerDashboard.Id"
-                        OnClose="@(() => showAIChat = false)" />
-
-            <!-- Game Events Section -->
-            @if (gameEvents.Any())
+            @if (playerDashboard != null)
             {
+                <!-- Resource Management Framework -->
+                <ResourceManager Income="@playerDashboard.Income" 
+                               Reputation="@playerDashboard.Reputation" 
+                               Happiness="@playerDashboard.Happiness"
+                               RecentChanges="@recentResourceChanges" />
+
+                <!-- Interactive Dice Rolling System -->
+                <InteractiveDiceRoller PlayerId="@playerDashboard.Id" 
+                                     OnDiceRolled="@OnDiceRolled" />
+
+                <!-- Territory Explorer - World Geography Learning -->
+                <TerritoryExplorer PlayerId="@playerDashboard.Id" 
+                                 PlayerReputation="@playerDashboard.Reputation"
+                                 PlayerIncome="@playerDashboard.Income"
+                                 OnTerritorySelected="@OnTerritoryPurchased" />
+
+                <!-- Language Learning Challenge - Speech Recognition -->
                 <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4">📰 Recent Events</h3>
-                    <div class="space-y-4">
-                        @foreach (var gameEvent in gameEvents.Take(3))
-                        {
-                            <div class="@GetEventCardClass(gameEvent.IsPositive) rounded-lg p-4">
-                                <div class="flex items-start">
-                                    <span class="text-2xl mr-3">@gameEvent.IconEmoji</span>
-                                    <div>
-                                        <h4 class="font-bold text-gray-800">@gameEvent.Title</h4>
-                                        <p class="text-gray-600 text-sm mb-2">@gameEvent.Description</p>
-                                        <div class="flex space-x-4 text-xs">
-                                            @if (gameEvent.IncomeEffect != 0)
-                                            {
-                                                <span class="@GetEffectClass(gameEvent.IncomeEffect)">
-                                                    💰 @FormatEffect(gameEvent.IncomeEffect)
-                                                </span>
-                                            }
-                                            @if (gameEvent.ReputationEffect != 0)
-                                            {
-                                                <span class="@GetEffectClass(gameEvent.ReputationEffect)">
-                                                    ⭐ @FormatEffect(gameEvent.ReputationEffect)
-                                                </span>
-                                            }
-                                            @if (gameEvent.HappinessEffect != 0)
-                                            {
-                                                <span class="@GetEffectClass(gameEvent.HappinessEffect)">
-                                                    😊 @FormatEffect(gameEvent.HappinessEffect)
-                                                </span>
-                                            }
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-purple-800">🗣️ Language Learning</h3>
+                        <button @onclick="@(() => showLanguageChallenge = true)" 
+                                class="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300">
+                            Practice Speaking
+                        </button>
+                    </div>
+                    <p class="text-gray-600">Practice pronouncing words from your territories and learn about different cultures!</p>
+                </div>
+
+                <!-- Language Learning Challenge Modal -->
+                <LanguageLearningChallenge IsVisible="@showLanguageChallenge" 
+                                         PlayerId="@playerDashboard.Id"
+                                         OnClose="@(() => showLanguageChallenge = false)" />
+
+                <!-- AI Learning Assistants -->
+                <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-indigo-800">🤖 AI Learning Assistants</h3>
+                        <button @onclick="@(() => showAIChat = true)" 
+                                class="bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-2 px-4 rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all duration-300">
+                            Chat with AI Guides
+                        </button>
+                    </div>
+                    <p class="text-gray-600">Get personalized advice from AI mentors specializing in careers, territories, languages, and leadership strategy!</p>
+                </div>
+
+                <!-- AI Agent Chat Modal -->
+                <AIAgentChat IsVisible="@showAIChat" 
+                            PlayerId="@playerDashboard.Id"
+                            OnClose="@(() => showAIChat = false)" />
+
+                <!-- Game Events Section -->
+                @if (gameEvents.Any())
+                {
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">📰 Recent Events</h3>
+                        <div class="space-y-4">
+                            @foreach (var gameEvent in gameEvents.Take(3))
+                            {
+                                <div class="@GetEventCardClass(gameEvent.IsPositive) rounded-lg p-4">
+                                    <div class="flex items-start">
+                                        <span class="text-2xl mr-3">@gameEvent.IconEmoji</span>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800">@gameEvent.Title</h4>
+                                            <p class="text-gray-600 text-sm mb-2">@gameEvent.Description</p>
+                                            <div class="flex space-x-4 text-xs">
+                                                @if (gameEvent.IncomeEffect != 0)
+                                                {
+                                                    <span class="@GetEffectClass(gameEvent.IncomeEffect)">
+                                                        💰 @FormatEffect(gameEvent.IncomeEffect)
+                                                    </span>
+                                                }
+                                                @if (gameEvent.ReputationEffect != 0)
+                                                {
+                                                    <span class="@GetEffectClass(gameEvent.ReputationEffect)">
+                                                        ⭐ @FormatEffect(gameEvent.ReputationEffect)
+                                                    </span>
+                                                }
+                                                @if (gameEvent.HappinessEffect != 0)
+                                                {
+                                                    <span class="@GetEffectClass(gameEvent.HappinessEffect)">
+                                                        😊 @FormatEffect(gameEvent.HappinessEffect)
+                                                    </span>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        }
+                            }
+                        </div>
                     </div>
+                }
+
+                <!-- Message Display -->
+                @if (!string.IsNullOrEmpty(gameMessage))
+                {
+                    <div class="bg-blue-100 border-l-4 border-blue-500 p-4 mb-6 rounded-lg">
+                        <p class="text-blue-800 font-medium">@gameMessage</p>
+                    </div>
+                }
+            }
+            else if (isLoading)
+            {
+                <div class="flex justify-center items-center h-64">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                    <span class="ml-4 text-xl text-gray-600">Loading your game...</span>
                 </div>
             }
-
-            <!-- Message Display -->
-            @if (!string.IsNullOrEmpty(gameMessage))
+            else
             {
-                <div class="bg-blue-100 border-l-4 border-blue-500 p-4 mb-6 rounded-lg">
-                    <p class="text-blue-800 font-medium">@gameMessage</p>
+                <!-- Authenticated User Game Profile Section -->
+                <div class="bg-white rounded-lg shadow-lg p-8 text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">🎮 Welcome to World Leaders Game!</h2>
+                    <p class="text-gray-600 mb-6">You're logged in as <strong>@currentUser.Username</strong>. Your educational leadership journey awaits!</p>
+                    
+                    <div class="bg-blue-50 rounded-lg p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-blue-800 mb-3">🎯 Your Learning Profile</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                            <div>
+                                <p><strong>Username:</strong> @currentUser.Username</p>
+                                <p><strong>Email:</strong> @currentUser.Email</p>
+                                <p><strong>Last Login:</strong> @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
+                            </div>
+                            <div>
+                                <p><strong>Game Status:</strong> Ready to Play</p>
+                                <p><strong>Learning Focus:</strong> Geography, Economics, Languages</p>
+                                <p><strong>Age Group:</strong> 12+ Educational Content</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="max-w-md mx-auto">
+                        <input @bind="newPlayerName" @bind:event="oninput" @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreateAuthenticatedPlayer(); })"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Enter your character name (2-20 characters)" maxlength="20" />
+                        
+                        @if (!string.IsNullOrEmpty(errorMessage))
+                        {
+                            <div class="mt-2 text-red-600 text-sm">@errorMessage</div>
+                        }
+                        
+                        <button @onclick="CreateAuthenticatedPlayer" 
+                                disabled="@(string.IsNullOrWhiteSpace(newPlayerName) || newPlayerName.Trim().Length < 2 || isLoading)"
+                                class="w-full mt-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                            @if (isLoading)
+                            {
+                                <span class="flex items-center justify-center">
+                                    <span class="animate-spin mr-2">⭐</span>
+                                    Creating your character...
+                                </span>
+                            }
+                            else
+                            {
+                                <span>🚀 Start My Leadership Journey</span>
+                            }
+                        </button>
+                        
+                        <p class="mt-3 text-xs text-gray-500">Create your character to begin learning about world leadership, geography, and languages!</p>
+                    </div>
                 </div>
             }
         }
@@ -137,43 +217,45 @@
         {
             <div class="flex justify-center items-center h-64">
                 <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-                <span class="ml-4 text-xl text-gray-600">Loading your game...</span>
+                <span class="ml-4 text-xl text-gray-600">Loading...</span>
             </div>
         }
         else
         {
-            <!-- Create Player Section -->
+            <!-- Not Authenticated - Show Login Prompt -->
             <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">🎮 Start Your Journey to Leadership!</h2>
-                <p class="text-gray-600 mb-6">Begin your educational adventure and learn about world leadership, geography, and languages!</p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">🔐 Authentication Required</h2>
+                <p class="text-gray-600 mb-6">Please log in to access the World Leaders Game and start your educational journey!</p>
                 
-                <div class="max-w-md mx-auto">
-                    <input @bind="newPlayerName" @bind:event="oninput" @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreatePlayer(); })"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           placeholder="Enter your name (2-20 characters)" maxlength="20" />
-                    
-                    @if (!string.IsNullOrEmpty(errorMessage))
-                    {
-                        <div class="mt-2 text-red-600 text-sm">@errorMessage</div>
-                    }
-                    
-                    <button @onclick="CreatePlayer" 
-                            disabled="@(string.IsNullOrWhiteSpace(newPlayerName) || newPlayerName.Trim().Length < 2 || isLoading)"
-                            class="w-full mt-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-                        @if (isLoading)
-                        {
-                            <span class="flex items-center justify-center">
-                                <span class="animate-spin mr-2">⭐</span>
-                                Creating your character...
-                            </span>
-                        }
-                        else
-                        {
-                            <span>🚀 Start Game</span>
-                        }
+                <div class="bg-yellow-50 rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-yellow-800 mb-3">🎯 What You'll Learn</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                        <div class="text-center">
+                            <div class="text-2xl mb-2">🌍</div>
+                            <strong>Geography</strong>
+                            <p class="text-sm text-gray-600">Learn about countries, capitals, and cultures</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl mb-2">💰</div>
+                            <strong>Economics</strong>
+                            <p class="text-sm text-gray-600">Understand GDP, resources, and strategy</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl mb-2">🗣️</div>
+                            <strong>Languages</strong>
+                            <p class="text-sm text-gray-600">Practice pronunciation and cultural awareness</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <button @onclick="GoToLogin" class="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300 transform hover:scale-105">
+                        🚀 Login to Start Playing
                     </button>
                     
-                    <p class="mt-3 text-xs text-gray-500">Enter a name between 2-20 characters to begin your leadership journey!</p>
+                    <p class="text-sm text-gray-500">
+                        New to the game? <button @onclick="GoToLogin" class="text-blue-600 hover:text-blue-800 font-medium">Create an account</button> to begin your educational adventure!
+                    </p>
                 </div>
             </div>
         }
@@ -182,6 +264,8 @@
 
 @code {
     private PlayerDashboardDto? playerDashboard;
+    private UserInfoDto? currentUser;
+    private bool isAuthenticated = false;
     private List<GameEventDto> gameEvents = new();
     private List<ResourceChangeRecord> recentResourceChanges = new();
     private string newPlayerName = "";
@@ -194,6 +278,20 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Check authentication first
+        isAuthenticated = await AuthService.IsAuthenticatedAsync();
+        
+        if (isAuthenticated)
+        {
+            // Load current user information
+            currentUser = await AuthService.GetCurrentUserAsync();
+            
+            if (currentUser != null)
+            {
+                gameMessage = $"Welcome back, {currentUser.Username}! Ready to continue your leadership journey? 🎉";
+            }
+        }
+        
         await LoadGameEvents();
         
         // Set up SignalR connection
@@ -216,6 +314,88 @@
         {
             // SignalR connection failed - continue without real-time updates
             Logger.LogWarning(ex, "SignalR connection failed, continuing without real-time updates");
+        }
+    }
+
+    private async Task CreateAuthenticatedPlayer()
+    {
+        // Clear previous errors
+        errorMessage = "";
+        
+        // Validate input
+        if (string.IsNullOrWhiteSpace(newPlayerName))
+        {
+            errorMessage = "Please enter your character name to start the game.";
+            return;
+        }
+
+        var trimmedName = newPlayerName.Trim();
+        if (trimmedName.Length < 2)
+        {
+            errorMessage = "Character name must be at least 2 characters long.";
+            return;
+        }
+
+        if (trimmedName.Length > 20)
+        {
+            errorMessage = "Character name must be 20 characters or less.";
+            return;
+        }
+
+        isLoading = true;
+        try
+        {
+            // Use authenticated HTTP client to create player linked to user account
+            var httpClient = await AuthService.GetAuthenticatedHttpClientAsync();
+            var request = new CreatePlayerRequest(trimmedName);
+            
+            var response = await httpClient.PostAsJsonAsync("api/Game/players", request);
+            if (response.IsSuccessStatusCode)
+            {
+                playerDashboard = await response.Content.ReadFromJsonAsync<PlayerDashboardDto>();
+                if (playerDashboard != null)
+                {
+                    gameMessage = $"Welcome, {playerDashboard.Username}! Your authenticated leadership journey begins now! 🎉";
+                    try
+                    {
+                        if (hubConnection != null)
+                        {
+                            await hubConnection.SendAsync("JoinGameSession", playerDashboard.Id.ToString());
+                        }
+                    }
+                    catch
+                    {
+                        // SignalR connection failed, but player creation succeeded
+                        // Continue without real-time updates
+                    }
+                }
+                else
+                {
+                    errorMessage = "Failed to create your character. Please try again.";
+                }
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                errorMessage = response.StatusCode == System.Net.HttpStatusCode.Unauthorized 
+                    ? "Your login session has expired. Please login again."
+                    : $"Failed to create character: {response.StatusCode}";
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            errorMessage = "Cannot connect to the game server. Please make sure the game is running.";
+            Logger.LogWarning(ex, "Failed to connect to game server while creating authenticated player");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An unexpected error occurred. Please try again.";
+            Logger.LogError(ex, "Unexpected error while creating authenticated player");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
         }
     }
 
@@ -296,6 +476,28 @@
             isLoading = false;
             StateHasChanged();
         }
+    }
+
+    private async Task Logout()
+    {
+        try
+        {
+            await AuthService.LogoutAsync();
+            currentUser = null;
+            isAuthenticated = false;
+            playerDashboard = null;
+            gameMessage = "You have been logged out. Thanks for playing! 👋";
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error during logout");
+        }
+    }
+
+    private void GoToLogin()
+    {
+        Navigation.NavigateTo("/login");
     }
 
     private async Task RollForNewJob()

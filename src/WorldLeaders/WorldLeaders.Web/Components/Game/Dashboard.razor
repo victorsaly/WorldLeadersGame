@@ -1,0 +1,366 @@
+@page "/dashboard"
+@layout GameLayout
+@rendermode InteractiveServer
+@using WorldLeaders.Web.Services
+@using WorldLeaders.Shared.DTOs
+@using System.Net.Http
+@using System.Text.Json
+@inject IAuthenticationClientService AuthService
+@inject NavigationManager Navigation
+@inject IHttpClientFactory HttpClientFactory
+
+<PageTitle>Dashboard - World Leaders Game</PageTitle>
+
+<div class="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-green-400 p-4">
+    <div class="max-w-6xl mx-auto">
+    @if (isLoading)
+    {
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg p-8 shadow-xl">
+                <div class="flex items-center space-x-3">
+                    <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Loading your educational dashboard...</span>
+                </div>
+            </div>
+        </div>
+    }
+    else if (currentUser != null)
+    {
+        <div class="max-w-6xl mx-auto">
+            <!-- Welcome Header -->
+            <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border-4 border-blue-200">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+                    🌍 Welcome to Your Learning Dashboard, @currentUser.DisplayName!
+                </h1>
+                <p class="text-xl text-gray-600">
+                    Ready to explore the world and learn about geography, economics, and languages?
+                </p>
+            </div>
+
+            <!-- User Info Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- User Profile Card -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">👤 Your Profile</h3>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Username:</strong> @currentUser.Username</p>
+                        <p><strong>Email:</strong> @currentUser.Email</p>
+                        <p><strong>Age:</strong> @currentUser.Age years old</p>
+                        <p><strong>Role:</strong> @(currentUser.Role == 0 ? "Student" : "Teacher")</p>
+                        <p><strong>Child Safety:</strong> @(currentUser.IsChild ? "Enabled" : "Standard")</p>
+                    </div>
+                </div>
+
+                <!-- Game Stats Card -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">🎮 Game Progress</h3>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Status:</strong> Active Player</p>
+                        <p><strong>Territories:</strong> 0 owned</p>
+                        <p><strong>Income:</strong> $0</p>
+                        <p><strong>Reputation:</strong> Starting level</p>
+                        <p><strong>Last Login:</strong> @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
+                    </div>
+                </div>
+
+                <!-- Learning Journey Card -->
+                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">📚 Learning Journey</h3>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Countries Learned:</strong> 0</p>
+                        <p><strong>Languages Practiced:</strong> 0</p>
+                        <p><strong>Economic Concepts:</strong> Starting</p>
+                        <p><strong>Achievement Level:</strong> Beginner Explorer</p>
+                        <p><strong>Safety Score:</strong> 100% Protected</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <button @onclick="GoToGame" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105">
+                    🗺️ Explore Territories
+                </button>
+                <button @onclick="GoToGame" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105">
+                    🎲 Roll Career Dice
+                </button>
+                <button @onclick="GoToGame" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105">
+                    🗣️ Practice Languages
+                </button>
+                <button @onclick="GoToGame" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105">
+                    🤖 AI Tutors
+                </button>
+            </div>
+
+            <!-- Character Creation Section -->
+            @if (!hasGameCharacter)
+            {
+                <div class="bg-gradient-to-r from-purple-100 to-blue-100 rounded-xl shadow-lg p-8 mb-8 border-4 border-purple-300">
+                    <h3 class="text-2xl font-bold text-purple-800 mb-4">🎭 Create Your World Leader Character</h3>
+                    <p class="text-purple-700 mb-6">Choose your character name to begin your educational leadership journey!</p>
+                    
+                    <div class="max-w-md mx-auto">
+                        <div class="space-y-4">
+                            <div>
+                                <label for="characterName" class="block text-lg font-bold text-purple-700 mb-2">
+                                    👑 Your World Leader Name
+                                </label>
+                                <input id="characterName"
+                                       @bind="characterName" 
+                                       @bind:event="oninput" 
+                                       @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreateCharacter(); })"
+                                       class="w-full px-4 py-3 text-lg border-3 border-purple-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                                       placeholder="Leader Sarah, President Alex, etc." 
+                                       maxlength="50" />
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(characterCreationError))
+                            {
+                                <div class="bg-red-100 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg">
+                                    <span class="font-medium">@characterCreationError</span>
+                                </div>
+                            }
+                            
+                            @if (!string.IsNullOrEmpty(characterCreationSuccess))
+                            {
+                                <div class="bg-green-100 border-2 border-green-300 text-green-700 px-4 py-3 rounded-lg">
+                                    <span class="font-medium">@characterCreationSuccess</span>
+                                </div>
+                            }
+                            
+                            <button @onclick="CreateCharacter" 
+                                    disabled="@(string.IsNullOrWhiteSpace(characterName) || isCreatingCharacter)"
+                                    class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                @if (isCreatingCharacter)
+                                {
+                                    <span class="flex items-center justify-center">
+                                        <span class="animate-spin mr-2">⭐</span>
+                                        Creating your character...
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>🚀 Create My Character</span>
+                                }
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl shadow-lg p-8 mb-8 border-4 border-green-300">
+                    <h3 class="text-2xl font-bold text-green-800 mb-4">🎉 Your Character is Ready!</h3>
+                    <p class="text-green-700 mb-4">Great! You have a game character. Click below to start your adventure!</p>
+                    <button @onclick="GoToGame" 
+                            class="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:from-green-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105">
+                        🌍 Start My Adventure
+                    </button>
+                </div>
+            }
+
+            <!-- API Test Section -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-4 border-yellow-200">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🔧 API Connection Test</h3>
+                <div class="flex space-x-4 mb-4">
+                    <button @onclick="TestTerritories" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200">
+                        Test Territories API
+                    </button>
+                    <button @onclick="TestAuthProfile" 
+                            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-200">
+                        Test Auth Profile
+                    </button>
+                </div>
+                
+                @if (!string.IsNullOrEmpty(apiTestResult))
+                {
+                    <div class="bg-gray-100 rounded p-4 mt-4">
+                        <h4 class="font-semibold mb-2">API Test Result:</h4>
+                        <pre class="text-sm overflow-auto">@apiTestResult</pre>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="bg-white rounded-lg p-8 shadow-xl text-center">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">🔒 Authentication Required</h2>
+                <p class="text-gray-600 mb-6">Please log in to access your educational dashboard.</p>
+                <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition duration-200">
+                    Go to Login
+                </a>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+
+@code {
+    private bool isLoading = true;
+    private UserInfoDto? currentUser = null;
+    private string apiTestResult = "";
+    private string characterName = "";
+    private string characterCreationError = "";
+    private string characterCreationSuccess = "";
+    private bool isCreatingCharacter = false;
+    private bool hasGameCharacter = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var isAuthenticated = await AuthService.IsAuthenticatedAsync();
+            
+            if (!isAuthenticated)
+            {
+                Navigation.NavigateTo("/login");
+                return;
+            }
+
+            currentUser = await AuthService.GetCurrentUserAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Dashboard initialization error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task TestTerritories()
+    {
+        try
+        {
+            apiTestResult = "Testing territories API with authentication...";
+            StateHasChanged();
+            
+            var authenticatedClient = await AuthService.GetAuthenticatedHttpClientAsync();
+            var response = await authenticatedClient.GetAsync("api/game/territories");
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var territories = await response.Content.ReadAsStringAsync();
+                apiTestResult = $"✅ Territories API test successful!\nStatus: {response.StatusCode}\nData preview: {territories[..Math.Min(200, territories.Length)]}...";
+            }
+            else
+            {
+                apiTestResult = $"❌ Territories API test failed!\nStatus: {response.StatusCode}\nReason: {response.ReasonPhrase}";
+            }
+            
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            apiTestResult = $"❌ Territories API test failed: {ex.Message}";
+            StateHasChanged();
+        }
+    }
+
+    private async Task TestAuthProfile()
+    {
+        try
+        {
+            apiTestResult = "Testing authenticated profile API...";
+            StateHasChanged();
+            
+            var token = await AuthService.GetTokenAsync();
+            if (!string.IsNullOrEmpty(token))
+            {
+                apiTestResult = $"✅ Authentication working!\nToken: {token[..50]}...\nUser: {currentUser?.DisplayName}";
+            }
+            else
+            {
+                apiTestResult = "❌ No authentication token found";
+            }
+            
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            apiTestResult = $"❌ Auth profile test failed: {ex.Message}";
+            StateHasChanged();
+        }
+    }
+
+    private async Task CreateCharacter()
+    {
+        characterCreationError = "";
+        characterCreationSuccess = "";
+        
+        if (string.IsNullOrWhiteSpace(characterName))
+        {
+            characterCreationError = "Please enter a character name.";
+            return;
+        }
+
+        var trimmedName = characterName.Trim();
+        if (trimmedName.Length < 2)
+        {
+            characterCreationError = "Character name must be at least 2 characters long.";
+            return;
+        }
+
+        if (trimmedName.Length > 50)
+        {
+            characterCreationError = "Character name must be 50 characters or less.";
+            return;
+        }
+
+        isCreatingCharacter = true;
+        try
+        {
+            var httpClient = await AuthService.GetAuthenticatedHttpClientAsync();
+            var request = new { username = trimmedName };
+            
+            var response = await httpClient.PostAsJsonAsync("api/game/players", request);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                characterCreationSuccess = $"🎉 Character '{trimmedName}' created successfully!";
+                hasGameCharacter = true;
+                
+                // Wait a moment to show success message, then navigate to game
+                await Task.Delay(2000);
+                Navigation.NavigateTo("/game");
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                characterCreationError = response.StatusCode == System.Net.HttpStatusCode.Unauthorized 
+                    ? "Your login session has expired. Please login again."
+                    : $"Failed to create character: {response.StatusCode}";
+                
+                Console.WriteLine($"Character creation failed: {response.StatusCode} - {errorContent}");
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            characterCreationError = "Cannot connect to the game server. Please make sure the game is running.";
+            Console.WriteLine($"HTTP error during character creation: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            characterCreationError = "An unexpected error occurred. Please try again.";
+            Console.WriteLine($"Unexpected error during character creation: {ex.Message}");
+        }
+        finally
+        {
+            isCreatingCharacter = false;
+            StateHasChanged();
+        }
+    }
+
+    private void GoToGame()
+    {
+        Navigation.NavigateTo("/game");
+    }
+}

@@ -17,71 +17,64 @@ public record RegisterUserRequest
     /// <summary>
     /// Username for the account (must be appropriate for children)
     /// </summary>
-    [Required]
+    [Required(ErrorMessage = "Username is required")]
     [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
-    public required string Username { get; init; }
-
-    /// <summary>
+    public required string Username { get; set; }    /// <summary>
     /// Email address (for teacher/admin accounts or parental contact)
     /// </summary>
-    [Required]
-    [EmailAddress]
-    [StringLength(255)]
-    public required string Email { get; init; }
-
-    /// <summary>
+    [Required(ErrorMessage = "Email is required")]
+    [EmailAddress(ErrorMessage = "Invalid email format")]
+    [StringLength(254, ErrorMessage = "Email address is too long")]
+    public required string Email { get; set; }    /// <summary>
     /// Secure password (minimum requirements enforced)
     /// </summary>
-    [Required]
+    [Required(ErrorMessage = "Password is required")]
     [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters")]
-    public required string Password { get; init; }
-
-    /// <summary>
+    public required string Password { get; set; }    /// <summary>
     /// Password confirmation
     /// </summary>
-    [Required]
+    [Required(ErrorMessage = "Password confirmation is required")]
     [Compare("Password", ErrorMessage = "Passwords do not match")]
-    public required string ConfirmPassword { get; init; }
-
-    /// <summary>
+    public required string ConfirmPassword { get; set; }    /// <summary>
     /// Display name for the game (child-friendly identifier)
     /// </summary>
-    [Required]
+    [Required(ErrorMessage = "Display name is required")]
     [StringLength(50, MinimumLength = 2, ErrorMessage = "Display name must be between 2 and 50 characters")]
-    public required string DisplayName { get; init; }
+    public required string DisplayName { get; set; }    /// Child safety: Date of birth for age verification and COPPA compliance
+    [Required(ErrorMessage = "Date of birth is required")]
+    public required DateTime DateOfBirth { get; set; }
+    
+    /// Computed age for convenience (calculated from DateOfBirth)
+    public int Age 
+    { 
+        get 
+        {
+            var today = DateTime.Today;
+            var age = today.Year - DateOfBirth.Year;
+            if (DateOfBirth.Date > today.AddYears(-age)) age--;
+            return age;
+        }
+        set
+        {
+            // Set DateOfBirth based on age for form binding convenience
+            DateOfBirth = DateTime.Today.AddYears(-value);
+        }
+    }
 
-    /// <summary>
-    /// Date of birth for COPPA compliance
-    /// </summary>
-    [Required]
-    public required DateTime DateOfBirth { get; init; }
+    /// User role (defaulted to Student for educational context)
+    public UserRole Role { get; set; } = UserRole.Student;
 
-    /// <summary>
-    /// User role in the educational context
-    /// </summary>
-    public UserRole Role { get; init; } = UserRole.Student;
+    /// Optional: Parental email for additional safety measures
+    public string? ParentalEmail { get; set; }
 
-    /// <summary>
-    /// Parental email (required for child accounts under 13)
-    /// </summary>
-    [EmailAddress]
-    public string? ParentalEmail { get; init; }
+    /// Optional: School name for educational context
+    public string? SchoolName { get; set; }
 
-    /// <summary>
-    /// School name (for teacher accounts)
-    /// </summary>
-    [StringLength(200)]
-    public string? SchoolName { get; init; }
+    /// GDPR compliance consent
+    public bool HasGdprConsent { get; set; }
 
-    /// <summary>
-    /// GDPR consent for data processing
-    /// </summary>
-    public bool HasGdprConsent { get; init; }
-
-    /// <summary>
-    /// Parental consent (required for children under 13)
-    /// </summary>
-    public bool HasParentalConsent { get; init; }
+    /// Child safety: Parental consent for users under 18
+    public bool HasParentalConsent { get; set; }
 }
 
 /// <summary>
@@ -93,13 +86,13 @@ public record LoginRequest
     /// Username or email address
     /// </summary>
     [Required]
-    public required string UsernameOrEmail { get; init; }
+    public required string UsernameOrEmail { get; set; }
 
     /// <summary>
     /// Password
     /// </summary>
     [Required]
-    public required string Password { get; init; }
+    public required string Password { get; set; }
 
     /// <summary>
     /// Remember login for extended session (not recommended for child accounts)

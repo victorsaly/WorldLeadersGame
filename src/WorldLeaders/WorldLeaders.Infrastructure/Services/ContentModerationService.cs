@@ -52,8 +52,8 @@ public class ContentModerationService : IContentModerationService
             concerns.Add("Content lacks educational value");
         }
 
-        // Layer 3: Age appropriateness for 12-year-olds
-        var isAgeAppropriate = await IsAgeAppropriateAsync(content);
+        // Layer 3: Age appropriateness for 12-year-olds (context-sensitive)
+        var isAgeAppropriate = await IsAgeAppropriateAsync(content, context);
         if (!isAgeAppropriate)
         {
             concerns.Add("Content may be too complex or inappropriate for 12-year-olds");
@@ -120,7 +120,7 @@ public class ContentModerationService : IContentModerationService
     }
 
     /// <summary>
-    /// Educational appropriateness validation
+    /// Educational appropriateness validation with context-sensitive rules
     /// </summary>
     public async Task<bool> IsEducationallyAppropriateAsync(string content, string educationalContext)
     {
@@ -129,7 +129,14 @@ public class ContentModerationService : IContentModerationService
 
         var contentLower = content.ToLowerInvariant();
 
-        // Check for educational keywords
+        // For display names and usernames, we're more lenient - just check they're not inappropriate
+        if (string.IsNullOrEmpty(educationalContext) || educationalContext.ToLowerInvariant().Contains("display") || educationalContext.ToLowerInvariant().Contains("name"))
+        {
+            // For display names, just ensure they're appropriate for children
+            return ValidateDisplayNameAppropriate(contentLower);
+        }
+
+        // For AI-generated content, apply stricter educational validation
         var hasEducationalContent = AIAgentConstants.EducationalKeywords
             .Any(keyword => contentLower.Contains(keyword));
 
@@ -143,9 +150,9 @@ public class ContentModerationService : IContentModerationService
     }
 
     /// <summary>
-    /// Age appropriateness validation for 12-year-old comprehension
+    /// Age appropriateness validation for 12-year-old comprehension with context awareness
     /// </summary>
-    public async Task<bool> IsAgeAppropriateAsync(string content)
+    public async Task<bool> IsAgeAppropriateAsync(string content, string context = "")
     {
         if (string.IsNullOrWhiteSpace(content))
             return false;
@@ -162,11 +169,27 @@ public class ContentModerationService : IContentModerationService
         if (complexWords > words.Length * 0.1) // More than 10% complex words
             return false;
 
-        // Check for age-appropriate concepts
         var contentLower = content.ToLowerInvariant();
+
+        // For display names and usernames, use more lenient validation
+        if (!string.IsNullOrEmpty(context) && (context.ToLowerInvariant().Contains("display") || context.ToLowerInvariant().Contains("name")))
+        {
+            // For display names, just ensure they're simple and child-appropriate
+            return ValidateDisplayNameAgeAppropriate(contentLower);
+        }
+
+        // For other content, check for age-appropriate educational concepts
         var hasAgeAppropriateContent = ValidateAgeAppropriateConcepts(contentLower);
 
         return await Task.FromResult(hasAgeAppropriateContent);
+    }
+
+    /// <summary>
+    /// Age appropriateness validation for 12-year-old comprehension (interface compatibility)
+    /// </summary>
+    public async Task<bool> IsAgeAppropriateAsync(string content)
+    {
+        return await IsAgeAppropriateAsync(content, "");
     }
 
     #region Private Helper Methods
@@ -258,6 +281,52 @@ public class ContentModerationService : IContentModerationService
         };
 
         return appropriateConcepts.Any(concept => content.Contains(concept));
+    }
+
+    private bool ValidateDisplayNameAppropriate(string content)
+    {
+        // For display names, we're more lenient - just ensure they're child-friendly
+        // Check it's not inappropriate language
+        if (ContainsInappropriateLanguage(content))
+            return false;
+
+        // Check it's not scary content
+        if (ContainsScaryContent(content))
+            return false;
+
+        // Check it's not negative messaging
+        if (ContainsNegativeMessaging(content))
+            return false;
+
+        // Allow common child-friendly terms even if not explicitly educational
+        var childFriendlyTerms = new[] {
+            "student", "learner", "explorer", "young", "little", "kid", "child",
+            "world", "star", "bright", "smart", "cool", "awesome", "amazing",
+            "geography", "history", "science", "math", "art", "music",
+            "leader", "captain", "champion", "hero", "friend", "buddy"
+        };
+
+        // If it contains any child-friendly terms OR is very short (like "Alex"), it's OK
+        return childFriendlyTerms.Any(term => content.Contains(term)) || content.Length <= 10;
+    }
+
+    private bool ValidateDisplayNameAgeAppropriate(string content)
+    {
+        // For display names, age appropriateness is much more lenient
+        // Just check basic criteria
+        
+        // Not too long for a display name
+        if (content.Length > 50)
+            return false;
+
+        // No complex words for display names
+        var words = content.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Any(word => word.Length > 15)) // Very long words not appropriate for display names
+            return false;
+
+        // Allow any reasonable display name that passes safety checks
+        // (safety checks are already done in other validation layers)
+        return true;
     }
 
     private double CalculateConfidenceScore(bool isSafe, bool isEducational, bool isAgeAppropriate, bool isPositive, bool isAppropriateLength)

@@ -1,0 +1,95 @@
+@using WorldLeaders.Web.Services
+@using WorldLeaders.Shared.DTOs
+@inject IAuthenticationClientService AuthService
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<div class="auth-status">
+    @if (isAuthenticated)
+    {
+        <div class="flex items-center space-x-4">
+            <span class="text-sm font-medium text-gray-700">
+                Welcome, @currentUser?.DisplayName! 👋
+            </span>
+            <button @onclick="HandleLogout" 
+                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-200">
+                Logout
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="flex items-center space-x-2">
+            <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition duration-200">
+                Login
+            </a>
+            <a href="/register" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition duration-200">
+                Register
+            </a>
+        </div>
+    }
+</div>
+
+@code {
+    private bool isAuthenticated = false;
+    private UserInfoDto? currentUser = null;
+    private System.Threading.Timer? authCheckTimer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CheckAuthenticationStatus();
+        
+        // Check authentication status every 30 seconds
+        authCheckTimer = new System.Threading.Timer(async _ => await InvokeAsync(CheckAuthenticationStatus), 
+                                                   null, 
+                                                   TimeSpan.FromSeconds(30), 
+                                                   TimeSpan.FromSeconds(30));
+    }
+
+    private async Task CheckAuthenticationStatus()
+    {
+        try
+        {
+            isAuthenticated = await AuthService.IsAuthenticatedAsync();
+            
+            if (isAuthenticated)
+            {
+                currentUser = await AuthService.GetCurrentUserAsync();
+            }
+            else
+            {
+                currentUser = null;
+            }
+            
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Auth status check failed: {ex.Message}");
+            isAuthenticated = false;
+            currentUser = null;
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleLogout()
+    {
+        try
+        {
+            await AuthService.LogoutAsync();
+            isAuthenticated = false;
+            currentUser = null;
+            StateHasChanged();
+            Navigation.NavigateTo("/login");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Logout failed: {ex.Message}");
+        }
+    }
+
+    public void Dispose()
+    {
+        authCheckTimer?.Dispose();
+    }
+}
