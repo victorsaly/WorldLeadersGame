@@ -1,6 +1,8 @@
 # 🎮 World Leaders Game
 
-### An AI-First Father-Son Ed## 📖 Table of Contents
+### An AI-First Father-Son Educational Software Development Experiment
+
+## 📖 Table of Contents
 
 - [🚀 The Revolutionary Experiment](#-the-revolutionary-experiment)
 - [🎯 What We're Building](#-what-were-building)
@@ -13,7 +15,8 @@
 - [🌟 Why This Matters](#-why-this-matters)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
-- [📞 Connect With Us](#-connect-with-us)tware Development Experiment
+- [📞 Connect With Us](#-connect-with-us)
+- [🔗 Educational Impact](#-educational-impact)
 
 <div align="center">
 
