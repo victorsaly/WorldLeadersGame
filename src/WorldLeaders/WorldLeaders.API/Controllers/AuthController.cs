@@ -104,10 +104,6 @@ public class AuthController(
     }
 
     /// <summary>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 0f5990e (🔐 Address PR feedback: Add guest access & remove hardcoded secrets)
     /// Create a guest session for exploring the system without registration
     /// </summary>
     /// <param name="request">Guest access request</param>
@@ -152,11 +148,6 @@ public class AuthController(
     }
 
     /// <summary>
-<<<<<<< HEAD
-=======
->>>>>>> c291e29 (Implement comprehensive authentication system with JWT, child safety, and cost tracking)
-=======
->>>>>>> 0f5990e (🔐 Address PR feedback: Add guest access & remove hardcoded secrets)
     /// Logout user and invalidate session
     /// </summary>
     /// <returns>Success status</returns>
