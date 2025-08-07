@@ -102,15 +102,37 @@ features:
     original_file_size: 1013
     condensed_file_size: 166
     
-  educational_feature_templates:
+  features:
+  cost_dashboard:
     implemented: true
     technical_documented: true
-    journey_updated: false
+    journey_updated: true
+    blog_post_created: true
+    educational_validated: true
+    child_safety_verified: true
+    accessibility_tested: true
+    mermaid_diagrams_added: true
+    social_media_version_ready: true
+    last_updated: "2025-08-08"
+    ai_autonomy_percentage: 90
+    
+  dice_rolling:
+    implemented: true
+    documented: true
+    journey_updated: true
+    blog_post: true
+    educational_validated: true
+    last_updated: "2025-08-03"
+    
+  ai_agents:
+    implemented: true
+    technical_documented: true
+    journey_updated: true
     educational_validated: true
     child_safety_verified: true
     accessibility_tested: false
     blog_post_created: false
-    last_updated: "2025-08-03"
+    last_updated: "2025-08-02"
     ai_autonomy_percentage: 90
     
   documentation_automation_process:
