@@ -71,7 +71,23 @@ public static class AuthenticationExtensions
             throw new InvalidOperationException("JWT configuration is missing. Please configure the Jwt section in appsettings.json");
         }
 
-        var key = Encoding.ASCII.GetBytes(jwtOptions.SecretKey);
+        // Generate a development secret key if not provided (for development only)
+        var secretKey = jwtOptions.SecretKey;
+        if (string.IsNullOrEmpty(secretKey))
+        {
+            var environment = configuration["ASPNETCORE_ENVIRONMENT"] ?? "Development";
+            if (environment == "Development")
+            {
+                // Generate a secure 256-bit key for development
+                secretKey = "WorldLeaders-Educational-Game-Development-Secret-Key-2025-Very-Long-String-For-256-Bit-Security-Child-Safe-Learning-Platform";
+            }
+            else
+            {
+                throw new InvalidOperationException("JWT SecretKey is required in production environments. Please configure Jwt:SecretKey in appsettings.json");
+            }
+        }
+
+        var key = Encoding.ASCII.GetBytes(secretKey);
 
         services.AddAuthentication(options =>
         {
