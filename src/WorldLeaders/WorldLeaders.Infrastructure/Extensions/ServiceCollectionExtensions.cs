@@ -84,6 +84,12 @@ public static class ServiceCollectionExtensions
         services.Configure<AzureAIOptions>(configuration.GetSection(AzureAIOptions.SectionName));
         services.Configure<ContentModeratorOptions>(configuration.GetSection(ContentModeratorOptions.SectionName));
         services.Configure<SpeechServicesOptions>(configuration.GetSection(SpeechServicesOptions.SectionName));
+        
+        // Configure performance optimization settings
+        services.Configure<PerformanceConfig>(configuration.GetSection(PerformanceConfig.SectionName));
+        
+        // Add performance optimization services
+        services.AddPerformanceOptimization(configuration);
 
         // Register AI services - Cloud service takes priority, falls back to local service
         var azureEndpoint = configuration.GetValue<string>("AzureOpenAI:Endpoint");
@@ -176,5 +182,63 @@ public static class ServiceCollectionExtensions
 
         // Apply any pending migrations
         await context.Database.MigrateAsync();
+    }
+
+    /// <summary>
+    /// Adds performance optimization services for 1000+ concurrent users
+    /// Includes multi-layer caching, Application Insights monitoring, and performance metrics
+    /// </summary>
+    /// <param name="services">The service collection</param>
+    /// <param name="configuration">Application configuration</param>
+    /// <returns>The service collection for method chaining</returns>
+    public static IServiceCollection AddPerformanceOptimization(this IServiceCollection services, IConfiguration configuration)
+    {
+        // Add Application Insights for performance monitoring
+        var applicationInsightsConnectionString = configuration.GetValue<string>("ApplicationInsights:ConnectionString");
+        if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
+        {
+            services.AddApplicationInsightsTelemetry(options =>
+            {
+                options.ConnectionString = applicationInsightsConnectionString;
+                options.EnableAdaptiveSampling = true;
+                options.EnableQuickPulseMetricStream = true;
+                options.EnablePerformanceCounterCollectionModule = true;
+            });
+        }
+
+        // Add Redis distributed cache for multi-instance scaling
+        var redisConnectionString = configuration.GetConnectionString("Redis");
+        if (!string.IsNullOrEmpty(redisConnectionString))
+        {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = redisConnectionString;
+                options.InstanceName = "WorldLeadersGame";
+                
+                // Performance optimization for child-friendly responsiveness
+                options.ConfigurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
+                options.ConfigurationOptions.ConnectTimeout = 5000; // 5 seconds
+                options.ConfigurationOptions.SyncTimeout = 2000; // 2 seconds for child attention span
+                options.ConfigurationOptions.AbortOnConnectFail = false; // Graceful degradation
+            });
+        }
+        else
+        {
+            // Fallback to in-memory cache for development
+            services.AddMemoryCache(options =>
+            {
+                var performanceConfig = configuration.GetSection(PerformanceConfig.SectionName).Get<PerformanceConfig>() 
+                    ?? PerformanceConfig.UKEducationalDefaults;
+                
+                options.SizeLimit = performanceConfig.MemoryCache.SizeLimit;
+                options.CompactionPercentage = performanceConfig.MemoryCache.CompactionPercentage;
+                options.ExpirationScanFrequency = TimeSpan.FromMinutes(performanceConfig.MemoryCache.ExpirationScanFrequencyMinutes);
+            });
+        }
+
+        // Register performance optimization component
+        services.AddScoped<PerformanceOptimizedGameComponent>();
+
+        return services;
     }
 }

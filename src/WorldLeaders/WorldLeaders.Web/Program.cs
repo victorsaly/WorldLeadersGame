@@ -2,6 +2,7 @@ using WorldLeaders.Web.Components;
 using WorldLeaders.Web.Services;
 using WorldLeaders.Web.Handlers;
 using WorldLeaders.Shared.Services;
+using WorldLeaders.Infrastructure.Configuration;
 using Microsoft.AspNetCore.SignalR.Client;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -101,6 +102,38 @@ builder.Services.AddLogging(logging =>
 
 // Add memory caching for performance
 builder.Services.AddMemoryCache();
+
+// Add performance optimization configuration
+builder.Services.Configure<PerformanceConfig>(builder.Configuration.GetSection(PerformanceConfig.SectionName));
+
+// Add Application Insights for Web application monitoring
+var applicationInsightsConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:ConnectionString");
+if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
+{
+    builder.Services.AddApplicationInsightsTelemetry(options =>
+    {
+        options.ConnectionString = applicationInsightsConnectionString;
+        options.EnableAdaptiveSampling = true;
+        options.EnableQuickPulseMetricStream = true;
+    });
+}
+
+// Add Redis distributed cache for multi-instance scaling
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
+if (!string.IsNullOrEmpty(redisConnectionString))
+{
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisConnectionString;
+        options.InstanceName = "WorldLeadersGame.Web";
+        
+        // Performance optimization for child-friendly responsiveness
+        options.ConfigurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
+        options.ConfigurationOptions.ConnectTimeout = 5000; // 5 seconds
+        options.ConfigurationOptions.SyncTimeout = 1500; // 1.5 seconds for child attention span
+        options.ConfigurationOptions.AbortOnConnectFail = false; // Graceful degradation
+    });
+}
 
 // Add service defaults (Aspire) - includes health checks
 builder.AddServiceDefaults();
