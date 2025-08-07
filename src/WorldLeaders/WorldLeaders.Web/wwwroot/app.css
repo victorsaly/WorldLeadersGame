@@ -20,6 +20,37 @@ a, .btn-link {
     padding-top: 1.1rem;
 }
 
+/* Cost Dashboard Animations */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive styles for cost dashboard */
+@media (max-width: 768px) {
+    .cost-dashboard-container .dashboard-header {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 1rem !important;
+    }
+    
+    .cost-dashboard-container .dashboard-title {
+        font-size: 2rem !important;
+    }
+    
+    .cost-dashboard-container .cost-progress-card {
+        grid-column: span 1 !important;
+    }
+    
+    .cost-dashboard-container .header-stats {
+        justify-content: center !important;
+    }
+}
+
+.content {
+    padding-top: 1.1rem;
+}
+
 h1:focus {
     outline: none;
 }
