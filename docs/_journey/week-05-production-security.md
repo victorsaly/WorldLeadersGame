@@ -1,9 +1,8 @@
 ---
 layout: page
 title: "Week 5: Production Security & Authentication"
-date: 2025-08-07
+date: 2025-08-08
 week: 5
-date: 2025-01-08
 estimated_hours: 8
 actual_hours: 8
 ai_autonomy_level: 95
