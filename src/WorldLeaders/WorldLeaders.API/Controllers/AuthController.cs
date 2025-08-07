@@ -104,6 +104,50 @@ public class AuthController(
     }
 
     /// <summary>
+    /// Create a guest session for exploring the system without registration
+    /// </summary>
+    /// <param name="request">Guest access request</param>
+    /// <returns>Guest authentication response with limited access</returns>
+    [HttpPost("guest")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(GuestAuthenticationResponse), 200)]
+    [ProducesResponseType(typeof(string), 400)]
+    [ProducesResponseType(typeof(string), 500)]
+    public async Task<IActionResult> CreateGuestSession([FromBody] GuestAccessRequest request)
+    {
+        try
+        {
+            logger.LogInformation("Guest access request for display name: {DisplayName}, age: {Age}", 
+                request.DisplayName ?? "Anonymous", request.Age);
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage);
+                
+                return BadRequest($"Validation failed: {string.Join(", ", errors)}");
+            }
+
+            var response = await authenticationService.CreateGuestSessionAsync(request);
+            
+            logger.LogInformation("Guest session created successfully for: {DisplayName}, duration: {Duration}min", 
+                response.Guest.DisplayName, request.SessionDurationMinutes);
+            return Ok(response);
+        }
+        catch (InvalidOperationException ex)
+        {
+            logger.LogWarning("Guest session creation failed: {Error}", ex.Message);
+            return BadRequest(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error during guest session creation");
+            return StatusCode(500, "An error occurred creating guest session. Please try again.");
+        }
+    }
+
+    /// <summary>
     /// Logout user and invalidate session
     /// </summary>
     /// <returns>Success status</returns>

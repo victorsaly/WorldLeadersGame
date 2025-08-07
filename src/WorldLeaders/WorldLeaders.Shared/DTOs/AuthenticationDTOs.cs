@@ -101,6 +101,35 @@ public record LoginRequest
 }
 
 /// <summary>
+/// Guest access request for exploring the system without registration
+/// </summary>
+public record GuestAccessRequest
+{
+    /// <summary>
+    /// Optional display name for the guest session (child-friendly identifier)
+    /// </summary>
+    [StringLength(50, MinimumLength = 2, ErrorMessage = "Display name must be between 2 and 50 characters")]
+    public string? DisplayName { get; set; }
+
+    /// <summary>
+    /// Age for appropriate content filtering (optional for exploration)
+    /// </summary>
+    [Range(5, 18, ErrorMessage = "Age must be between 5 and 18 for educational game access")]
+    public int? Age { get; set; }
+
+    /// <summary>
+    /// Whether parental permission has been indicated (not required for guest mode)
+    /// </summary>
+    public bool HasParentalAwareness { get; set; } = false;
+
+    /// <summary>
+    /// Session duration preference in minutes (limited for guest access)
+    /// </summary>
+    [Range(5, 30, ErrorMessage = "Guest session duration must be between 5 and 30 minutes")]
+    public int SessionDurationMinutes { get; set; } = 15;
+}
+
+/// <summary>
 /// Successful authentication response
 /// </summary>
 public record AuthenticationResponse
@@ -129,6 +158,47 @@ public record AuthenticationResponse
     /// Session timeout in minutes (shorter for children)
     /// </summary>
     public required int SessionTimeoutMinutes { get; init; }
+}
+
+/// <summary>
+/// Guest access authentication response for temporary exploration
+/// </summary>
+public record GuestAuthenticationResponse
+{
+    /// <summary>
+    /// Temporary JWT access token for guest session
+    /// </summary>
+    public required string AccessToken { get; init; }
+
+    /// <summary>
+    /// Token expiration time (limited for guest access)
+    /// </summary>
+    public required DateTime ExpiresAt { get; init; }
+
+    /// <summary>
+    /// Guest session information
+    /// </summary>
+    public required GuestUserInfoDto Guest { get; init; }
+
+    /// <summary>
+    /// Child safety features are always enabled for guest access
+    /// </summary>
+    public bool ChildSafetyEnabled { get; init; } = true;
+
+    /// <summary>
+    /// Session timeout in minutes (limited for guest sessions)
+    /// </summary>
+    public required int SessionTimeoutMinutes { get; init; }
+
+    /// <summary>
+    /// Available features for guest users (limited subset)
+    /// </summary>
+    public List<string> AvailableFeatures { get; init; } = new();
+
+    /// <summary>
+    /// Encouragement message to register for full access
+    /// </summary>
+    public string? RegistrationEncouragement { get; init; }
 }
 
 /// <summary>
@@ -185,6 +255,52 @@ public record UserInfoDto
     /// Last login timestamp
     /// </summary>
     public required DateTime LastLoginAt { get; init; }
+}
+
+/// <summary>
+/// Guest user information DTO for temporary exploration sessions
+/// </summary>
+public record GuestUserInfoDto
+{
+    /// <summary>
+    /// Temporary guest session ID
+    /// </summary>
+    public required Guid GuestId { get; init; }
+
+    /// <summary>
+    /// Display name for guest session (if provided)
+    /// </summary>
+    public string DisplayName { get; init; } = "Guest Explorer";
+
+    /// <summary>
+    /// Guest session type (always guest)
+    /// </summary>
+    public UserRole Role { get; init; } = UserRole.Guest;
+
+    /// <summary>
+    /// Age for content filtering (if provided)
+    /// </summary>
+    public int? Age { get; init; }
+
+    /// <summary>
+    /// Whether this is a child guest (child safety always enabled)
+    /// </summary>
+    public bool IsChild { get; init; } = true;
+
+    /// <summary>
+    /// Guest session start time
+    /// </summary>
+    public required DateTime SessionStartedAt { get; init; }
+
+    /// <summary>
+    /// When guest session expires
+    /// </summary>
+    public required DateTime SessionExpiresAt { get; init; }
+
+    /// <summary>
+    /// Whether parental awareness was indicated
+    /// </summary>
+    public required bool HasParentalAwareness { get; init; }
 }
 
 /// <summary>

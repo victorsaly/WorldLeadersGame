@@ -67,6 +67,11 @@ public enum GameState
 public enum UserRole
 {
     /// <summary>
+    /// Guest user (temporary exploration without registration, enhanced safety features)
+    /// </summary>
+    Guest = 0,
+    
+    /// <summary>
     /// Student (typically 12+ years old, requires enhanced safety features)
     /// </summary>
     Student = 1,
