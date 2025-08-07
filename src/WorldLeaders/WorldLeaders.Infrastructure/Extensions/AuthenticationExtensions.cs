@@ -1,4 +1,6 @@
 using System.Text;
+using Azure.Identity;
+using Azure.ResourceManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -231,7 +233,26 @@ public static class AuthenticationExtensions
         // Register authentication services
         services.AddScoped<IAuthenticationService, JwtAuthenticationService>();
         services.AddScoped<IChildSafetyValidator, ChildSafetyValidator>();
+        
+        // Add enhanced cost tracking services
         services.AddScoped<IPerUserCostTracker, PerUserCostTracker>();
+        services.AddScoped<IRealTimeCostTracker, PerUserCostTracker>();
+        
+        // Add Azure Cost Management integration
+        services.AddScoped<IAzureCostManagementClient, AzureCostManagementClient>();
+        
+        // Add Azure Resource Manager client for cost management
+        services.AddSingleton<ArmClient>(provider =>
+        {
+            // For MVP, create a default ArmClient with default credentials
+            // In production, this would use Azure CLI or managed identity
+            return new ArmClient(new DefaultAzureCredential());
+        });
+        
+        // Configure cost management options
+        services.Configure<CostTrackingOptions>(configuration.GetSection(CostTrackingOptions.SectionName));
+        services.Configure<BudgetConfig>(configuration.GetSection("BudgetConfig"));
+        services.Configure<AzureCostManagementConfig>(configuration.GetSection(AzureCostManagementConfig.SectionName));
 
         // Register user management service
         services.AddScoped<IUserManagerService, UserManagerService>();
