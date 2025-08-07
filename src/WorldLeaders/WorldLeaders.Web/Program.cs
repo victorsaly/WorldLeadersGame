@@ -128,10 +128,24 @@ if (!string.IsNullOrEmpty(redisConnectionString))
         options.InstanceName = "WorldLeadersGame.Web";
         
         // Performance optimization for child-friendly responsiveness
-        options.ConfigurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
-        options.ConfigurationOptions.ConnectTimeout = 5000; // 5 seconds
-        options.ConfigurationOptions.SyncTimeout = 1500; // 1.5 seconds for child attention span
-        options.ConfigurationOptions.AbortOnConnectFail = false; // Graceful degradation
+        try
+        {
+            options.ConfigurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
+            options.ConfigurationOptions.ConnectTimeout = 5000; // 5 seconds
+            options.ConfigurationOptions.SyncTimeout = 1500; // 1.5 seconds for child attention span
+            options.ConfigurationOptions.AbortOnConnectFail = false; // Graceful degradation
+        }
+        catch (Exception)
+        {
+            // Use safe default configuration for educational platform if parsing fails
+            options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
+            {
+                EndPoints = { "localhost:6379" },
+                ConnectTimeout = 5000,
+                SyncTimeout = 1500,
+                AbortOnConnectFail = false
+            };
+        }
     });
 }
 

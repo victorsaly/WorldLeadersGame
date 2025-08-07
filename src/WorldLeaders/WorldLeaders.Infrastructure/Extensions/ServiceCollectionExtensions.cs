@@ -229,7 +229,7 @@ public static class ServiceCollectionExtensions
                 // Performance optimization for child-friendly responsiveness
                 options.ConfigurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
                 options.ConfigurationOptions.ConnectTimeout = 5000; // 5 seconds
-                options.ConfigurationOptions.SyncTimeout = 2000; // 2 seconds for child attention span
+                options.ConfigurationOptions.SyncTimeout = 1500; // 1.5 seconds for child attention span (consistent with Program.cs)
                 options.ConfigurationOptions.AbortOnConnectFail = false; // Graceful degradation
             });
         }
