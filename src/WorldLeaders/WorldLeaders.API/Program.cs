@@ -25,7 +25,16 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("EducationalGamePolicy", policy =>
     {
-        policy.WithOrigins("https://localhost:7060", "http://localhost:5122") // Blazor app URLs
+        policy.WithOrigins(
+            "https://localhost:7155",          // API default port
+            "http://localhost:5203",           // API actual port  
+            "https://localhost:7060", 
+            "http://localhost:5122",           // Blazor Web app
+            "http://localhost:4000",           // Jekyll docs site  
+            "https://localhost:4000",          // Jekyll docs site (HTTPS)
+            "https://docs.worldleadersgame.co.uk", // Production docs
+            "https://worldleadersgame.co.uk"   // Production game
+        )
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // Required for SignalR

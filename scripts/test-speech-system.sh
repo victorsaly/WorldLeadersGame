@@ -5,17 +5,17 @@ echo ""
 
 # Test API Health
 echo "1. Testing API Health..."
-curl -s http://localhost:5203/health | jq '.'
+curl -s https://localhost:7155/health | jq '.'
 echo ""
 
 # Test Language Challenges Endpoint Structure
 echo "2. Testing Language Challenges API endpoint structure..."
-curl -s "http://localhost:5203/api/Territory/language-challenges/550e8400-e29b-41d4-a716-446655440000" | jq '.'
+curl -s "https://localhost:7155/api/Territory/language-challenges/550e8400-e29b-41d4-a716-446655440000" | jq '.'
 echo ""
 
 # Test Territories with Language Data
 echo "3. Sample territories with multiple languages for speech recognition..."
-curl -s "http://localhost:5203/api/Territory/available/550e8400-e29b-41d4-a716-446655440000" | jq '.[:3] | .[] | {countryName, officialLanguages}' 
+curl -s "https://localhost:7155/api/Territory/available/550e8400-e29b-41d4-a716-446655440000" | jq '.[:3] | .[] | {countryName, officialLanguages}' 
 echo ""
 
 # Test Web Application

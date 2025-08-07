@@ -431,4 +431,289 @@ Remember: You're helping a young person learn about the world through an excitin
         var lowerResponse = response.ToLowerInvariant();
         return educationalKeywords.Any(keyword => lowerResponse.Contains(keyword));
     }
+
+    /// <summary>
+    /// Generate educational code explanation using Azure OpenAI
+    /// Creates child-friendly explanations that connect programming to real-world learning
+    /// </summary>
+    public async Task<CodeExplanationResult> GenerateCodeExplanationAsync(string code, string context, string language)
+    {
+        try
+        {
+            // If Azure OpenAI is available, use it for dynamic explanations
+            if (_openAIClient != null && !string.IsNullOrEmpty(_aiOptions.DeploymentName))
+            {
+                var prompt = BuildEducationalCodePrompt(code, context, language);
+                
+                var chatCompletionsOptions = new ChatCompletionsOptions()
+                {
+                    DeploymentName = _aiOptions.DeploymentName,
+                    Messages =
+                    {
+                        new ChatRequestSystemMessage(GetSystemPromptForCodeExplanation()),
+                        new ChatRequestUserMessage(prompt)
+                    },
+                    MaxTokens = 800,
+                    Temperature = 0.7f,
+                    NucleusSamplingFactor = 0.9f
+                };
+
+                var response = await _openAIClient.GetChatCompletionsAsync(chatCompletionsOptions);
+                var explanation = response.Value.Choices[0].Message.Content;
+
+                // Parse and structure the response
+                return ParseAICodeExplanation(explanation);
+            }
+            else
+            {
+                _logger.LogInformation("Azure OpenAI not configured, using local analysis");
+                // Fall back to local analysis (same as AIAgentService)
+                return CreateLocalCodeExplanation(code, language);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating code explanation with Azure OpenAI");
+            // Return safe fallback
+            return CreateFallbackCodeExplanation();
+        }
+    }
+
+    private string GetSystemPromptForCodeExplanation()
+    {
+        return @"You are a friendly helper explaining code to 12-year-old kids reading a blog.
+
+Your response should be:
+- ONE short, simple sentence that explains what the code does
+- Use words a 12-year-old understands
+- Include one emoji that fits
+- NO markdown formatting, NO headers, NO sections
+- Think of it like explaining to a younger sibling
+
+Examples:
+- 'This code is like a magic button that makes the computer do something! ✨'
+- 'This code helps the computer make decisions! 🤔'
+- 'This code tells the computer to repeat something! 🔄'
+
+Just give ONE simple, friendly sentence with an emoji. Nothing else.";
+    }
+
+    private string BuildEducationalCodePrompt(string code, string context, string language)
+    {
+        return $@"Please explain this {language} code in a way that a 12-year-old can understand. This code is part of our educational World Leaders Game that teaches geography and economics.
+
+Code to explain:
+```{language}
+{code}
+```
+
+Context: {context}
+
+Please provide:
+1. A simple summary of what the code does (1-2 sentences)
+2. Step-by-step breakdown of key parts (max 5 steps)
+3. Why this matters for learning programming
+4. A real-world analogy a 12-year-old would understand
+5. How this connects to learning geography/economics
+6. Next steps for continued learning
+
+Remember: Be encouraging, use simple language, and make it fun!";
+    }
+
+    private CodeExplanationResult ParseAICodeExplanation(string explanation)
+    {
+        // For now, create a structured response from the AI text
+        // In the future, could request structured JSON from the AI
+        return new CodeExplanationResult
+        {
+            Summary = ExtractSummaryFromText(explanation),
+            Breakdown = ExtractBreakdownFromText(explanation),
+            EducationalValue = ExtractEducationalValueFromText(explanation),
+            RealWorldApplication = ExtractRealWorldApplicationFromText(explanation),
+            NextSteps = ExtractNextStepsFromText(explanation),
+            ComplexityLevel = "beginner", // Default for 12-year-olds
+            ProgrammingConcepts = ExtractConceptsFromText(explanation),
+            ChildFriendlyTips = GenerateChildFriendlyTips()
+        };
+    }
+
+    private string ExtractSummaryFromText(string text)
+    {
+        // Simple extraction - take first few sentences
+        var sentences = text.Split('.', '!', '?').Take(2);
+        return string.Join(". ", sentences).Trim() + (sentences.Count() > 0 ? "!" : "");
+    }
+
+    private List<CodeLineExplanationResult> ExtractBreakdownFromText(string text)
+    {
+        // Create a simple breakdown structure
+        return new List<CodeLineExplanationResult>
+        {
+            new CodeLineExplanationResult
+            {
+                Line = "// AI-generated explanation",
+                Explanation = text.Length > 200 ? text.Substring(0, 200) + "..." : text,
+                LineNumber = 1
+            }
+        };
+    }
+
+    private EducationalValueResult ExtractEducationalValueFromText(string text)
+    {
+        return new EducationalValueResult
+        {
+            LearningObjective = "Understand programming concepts through our educational game",
+            AgeAppropriateConcepts = new List<string>
+            {
+                "This code helps create fun learning experiences 🎮",
+                "Programming is like giving step-by-step instructions 📝"
+            },
+            LifeSkills = new List<string>
+            {
+                "Logical thinking and problem-solving 🧠",
+                "Understanding how technology works 💻"
+            }
+        };
+    }
+
+    private string ExtractRealWorldApplicationFromText(string text)
+    {
+        return "Like following a recipe to create something amazing - each step helps you reach your goal! 👨‍🍳";
+    }
+
+    private List<string> ExtractNextStepsFromText(string text)
+    {
+        return new List<string>
+        {
+            "Try changing small parts of the code to see what happens! 🧪",
+            "Ask questions about what each part does 🤔",
+            "Keep exploring our educational game to see more examples! 🌍"
+        };
+    }
+
+    private List<string> ExtractConceptsFromText(string text)
+    {
+        var concepts = new List<string>();
+        var lowerText = text.ToLowerInvariant();
+        
+        if (lowerText.Contains("class")) concepts.Add("classes");
+        if (lowerText.Contains("function")) concepts.Add("functions");
+        if (lowerText.Contains("if") || lowerText.Contains("condition")) concepts.Add("conditionals");
+        if (lowerText.Contains("loop") || lowerText.Contains("repeat")) concepts.Add("loops");
+        
+        return concepts.Any() ? concepts : new List<string> { "basic-programming" };
+    }
+
+    private CodeExplanationResult CreateLocalCodeExplanation(string code, string language)
+    {
+        // Simple explanations for non-technical 12-year-old blog readers
+        var concepts = new List<string>();
+        if (code.Contains("class ")) concepts.Add("classes");
+        if (code.Contains("function ") || code.Contains("def ") || code.Contains("public ")) concepts.Add("functions");
+        if (code.Contains("if ")) concepts.Add("conditionals");
+        if (code.Contains("for ") || code.Contains("while ")) concepts.Add("loops");
+
+        // Get simple explanation based on main concept
+        var simpleExplanations = new Dictionary<string, string>
+        {
+            ["classes"] = "This code is like a recipe that tells the computer how to make something! 📝",
+            ["functions"] = "This code is like a magic button that makes the computer do a task! ✨",
+            ["conditionals"] = "This code helps the computer make choices, like 'if this, then do that!' 🤔",
+            ["loops"] = "This code tells the computer to repeat something over and over! 🔄"
+        };
+
+        var mainConcept = concepts.FirstOrDefault() ?? "programming";
+        var summary = simpleExplanations.GetValueOrDefault(mainConcept, 
+            "This code gives instructions to the computer to make something work! 💻");
+        
+        return new CodeExplanationResult
+        {
+            Summary = summary,
+            Breakdown = new List<CodeLineExplanationResult>
+            {
+                new CodeLineExplanationResult
+                {
+                    Line = code.Split('\n').FirstOrDefault()?.Trim() ?? "// Code",
+                    Explanation = "This line helps make the website work! ✨",
+                    LineNumber = 1
+                }
+            },
+            EducationalValue = new EducationalValueResult
+            {
+                LearningObjective = "Learn how programming creates fun things",
+                AgeAppropriateConcepts = new List<string>
+                {
+                    "Programming is like giving instructions 💻",
+                    "Code helps create websites and games 🎮"
+                },
+                LifeSkills = new List<string>
+                {
+                    "Problem-solving 🧠",
+                    "Understanding technology 💻"
+                }
+            },
+            RealWorldApplication = "Like following directions to get somewhere! 🗺️",
+            NextSteps = new List<string>
+            {
+                "Try changing small parts to see what happens! 🧪",
+                "Ask questions about what each part does 🤔"
+            },
+            ComplexityLevel = "beginner",
+            ProgrammingConcepts = concepts.Any() ? concepts : new List<string> { "basic-programming" },
+            ChildFriendlyTips = GenerateChildFriendlyTips()
+        };
+    }
+
+    private CodeExplanationResult CreateFallbackCodeExplanation()
+    {
+        return new CodeExplanationResult
+        {
+            Summary = "This code helps our educational game teach you about geography and economics while having fun! 🌍",
+            Breakdown = new List<CodeLineExplanationResult>
+            {
+                new CodeLineExplanationResult
+                {
+                    Line = "// Code explanation temporarily unavailable",
+                    Explanation = "Don't worry - learning is a journey with ups and downs! 🌟",
+                    LineNumber = 1
+                }
+            },
+            EducationalValue = new EducationalValueResult
+            {
+                LearningObjective = "Learn that programming helps create educational experiences",
+                AgeAppropriateConcepts = new List<string>
+                {
+                    "Programming is like giving instructions to a computer 💻",
+                    "Code helps create fun learning games 🎮"
+                },
+                LifeSkills = new List<string>
+                {
+                    "Problem-solving and persistence 💪",
+                    "Learning from challenges 🌟"
+                }
+            },
+            RealWorldApplication = "Like following directions to get somewhere new - each step helps you reach your goal! 🗺️",
+            NextSteps = new List<string>
+            {
+                "Ask a parent, teacher, or friend to help explain this code 👨‍👩‍👧‍👦",
+                "Try our simpler coding activities to build understanding 📚",
+                "Keep playing our educational game to see programming in action! 🎮"
+            },
+            ComplexityLevel = "beginner",
+            ProgrammingConcepts = new List<string> { "basic-programming" },
+            ChildFriendlyTips = GenerateChildFriendlyTips()
+        };
+    }
+
+    private List<string> GenerateChildFriendlyTips()
+    {
+        return new List<string>
+        {
+            "💡 Don't worry if coding seems confusing at first - even expert programmers started as beginners!",
+            "🚀 Every programmer makes mistakes - that's how we learn and get better!",
+            "🎯 Start with small, simple projects and build up to bigger ones!",
+            "👨‍👩‍👧‍👦 Ask parents, teachers, or friends to help when you get stuck!",
+            "📚 Reading code is just as important as writing code!"
+        };
+    }
 }

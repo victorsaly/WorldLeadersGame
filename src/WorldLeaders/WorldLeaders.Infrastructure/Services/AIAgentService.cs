@@ -329,5 +329,248 @@ public class AIAgentService : IAIAgentService
         return contexts[0]; // Default to first context
     }
 
+    /// <summary>
+    /// Generate educational code explanation for 12-year-old learners
+    /// Creates child-friendly explanations that connect programming to real-world learning
+    /// </summary>
+    public Task<CodeExplanationResult> GenerateCodeExplanationAsync(string code, string context, string language)
+    {
+        try
+        {
+            // For now, return a structured educational explanation
+            // In the future, this could integrate with Azure OpenAI for dynamic explanations
+            var analysis = AnalyzeCodeForEducation(code, language);
+            
+            var result = new CodeExplanationResult
+            {
+                Summary = GenerateChildFriendlySummary(analysis, language),
+                Breakdown = GenerateStepByStepBreakdown(code, analysis),
+                EducationalValue = GenerateEducationalValue(analysis),
+                RealWorldApplication = GenerateRealWorldExample(analysis),
+                NextSteps = GenerateNextSteps(analysis),
+                ComplexityLevel = AssessComplexityForAge(code),
+                ProgrammingConcepts = analysis.Concepts,
+                ChildFriendlyTips = GenerateChildFriendlyTips()
+            };
+
+            return Task.FromResult(result);
+        }
+        catch (Exception)
+        {
+            // Return safe fallback explanation
+            return Task.FromResult(CreateFallbackExplanation());
+        }
+    }
+
+    #region Code Analysis Helper Methods
+
+    private CodeAnalysis AnalyzeCodeForEducation(string code, string language)
+    {
+        var concepts = new List<string>();
+        var complexity = "beginner";
+        
+        // Basic concept detection
+        if (code.Contains("class ")) concepts.Add("classes");
+        if (code.Contains("function ") || code.Contains("def ") || code.Contains("public ")) concepts.Add("functions");
+        if (code.Contains("if ") || code.Contains("else")) concepts.Add("conditionals");
+        if (code.Contains("for ") || code.Contains("while ")) concepts.Add("loops");
+        if (code.Contains("async ") || code.Contains("await ")) concepts.Add("async-programming");
+        if (code.Contains("public class")) concepts.Add("object-oriented-programming");
+        if (code.Contains("Territory") || code.Contains("Player") || code.Contains("Game")) concepts.Add("game-programming");
+        
+        // Assess complexity
+        var lines = code.Split('\n').Length;
+        if (lines > 50 || concepts.Count > 4) complexity = "advanced";
+        else if (lines > 20 || concepts.Count > 2) complexity = "intermediate";
+        
+        return new CodeAnalysis
+        {
+            Language = language,
+            Concepts = concepts,
+            Complexity = complexity,
+            LineCount = lines
+        };
+    }
+
+    private string GenerateChildFriendlySummary(CodeAnalysis analysis, string language)
+    {
+        // Simple, non-technical explanations for 12-year-old blog readers
+        var simpleExplanations = new Dictionary<string, string>
+        {
+            ["classes"] = "This code is like a recipe that tells the computer how to make something! 📝",
+            ["functions"] = "This code is like a magic button that makes the computer do a task! ✨",
+            ["conditionals"] = "This code helps the computer make choices, like 'if this, then do that!' 🤔",
+            ["loops"] = "This code tells the computer to repeat something over and over! 🔄",
+            ["game-programming"] = "This code helps create our educational game! 🎮",
+            ["web-development"] = "This code helps build websites like this one! 🌐",
+            ["data-structures"] = "This code organizes information, like putting things in boxes! 📦"
+        };
+
+        // Get the main concept or use a default simple explanation
+        var mainConcept = analysis.Concepts.FirstOrDefault() ?? "programming";
+        
+        return simpleExplanations.GetValueOrDefault(mainConcept, 
+            "This code gives instructions to the computer to make something work! 💻");
+    }
+
+    private List<CodeLineExplanationResult> GenerateStepByStepBreakdown(string code, CodeAnalysis analysis)
+    {
+        var lines = code.Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).Take(5).ToList();
+        var breakdown = new List<CodeLineExplanationResult>();
+
+        for (int i = 0; i < lines.Count; i++)
+        {
+            var line = lines[i].Trim();
+            string explanation = "This line helps our educational game work! ✨";
+
+            if (line.Contains("public class"))
+                explanation = "This creates a new part of our game - like making a new type of game piece! 🎲";
+            else if (line.Contains("public") && (line.Contains("Task") || line.Contains("void")))
+                explanation = "This creates a task our game can do - like calculating country costs or updating player scores! 📊";
+            else if (line.Contains("if (") || line.Contains("if("))
+                explanation = "This helps our game make decisions - like checking if a player can afford a country! 🤔";
+            else if (line.Contains("return "))
+                explanation = "This gives back a result - like telling the player their final score! 🏆";
+
+            breakdown.Add(new CodeLineExplanationResult
+            {
+                Line = line,
+                Explanation = explanation,
+                LineNumber = i + 1
+            });
+        }
+
+        return breakdown;
+    }
+
+    private EducationalValueResult GenerateEducationalValue(CodeAnalysis analysis)
+    {
+        return new EducationalValueResult
+        {
+            LearningObjective = "Learn how programming creates educational games that teach real-world concepts",
+            AgeAppropriateConcepts = new List<string>
+            {
+                "Programming is like giving step-by-step instructions to a computer 📝",
+                "Code helps create interactive learning games 🎮",
+                "Good programming makes educational games fun and engaging ✨",
+                "Each line of code has a specific purpose in making the game work 🔧"
+            },
+            LifeSkills = new List<string>
+            {
+                "Problem-solving by breaking big tasks into smaller steps 🧩",
+                "Logical thinking and planning ahead 🧠",
+                "Attention to detail and following instructions carefully 🔍",
+                "Learning from mistakes and trying again 💪"
+            }
+        };
+    }
+
+    private string GenerateRealWorldExample(CodeAnalysis analysis)
+    {
+        var examples = new Dictionary<string, string>
+        {
+            ["classes"] = "Like having a recipe for making different types of cookies - each recipe tells you exactly how to make that type! 🍪",
+            ["functions"] = "Like having different buttons on a remote control - each button does one specific thing when you press it! 📺",
+            ["conditionals"] = "Like the rules in a board game - 'if you roll a 6, then you get an extra turn!' 🎲",
+            ["loops"] = "Like doing jumping jacks - you repeat the same action over and over until you reach your goal! 🤸",
+            ["game-programming"] = "Like creating the rules for a new board game that teaches players about different countries! 🎯"
+        };
+
+        var mainConcept = analysis.Concepts.FirstOrDefault() ?? "programming";
+        return examples.GetValueOrDefault(mainConcept,
+            "Like following a recipe to cook something delicious - each step is important and leads to a great result! 👨‍🍳");
+    }
+
+    private List<string> GenerateNextSteps(CodeAnalysis analysis)
+    {
+        var steps = new List<string>
+        {
+            "Try creating simple code with our interactive coding activities 💻",
+            "Explore how different parts of the World Leaders Game work together 🔗",
+            "Practice problem-solving with our educational programming puzzles 🧩",
+            "Learn more about the countries featured in our game 🌍"
+        };
+
+        if (analysis.Concepts.Contains("functions"))
+            steps.Add("Create your own simple functions in our coding playground! 🛠️");
+        
+        if (analysis.Concepts.Contains("game-programming"))
+            steps.Add("Design your own educational mini-game idea! 🎨");
+
+        return steps;
+    }
+
+    private string AssessComplexityForAge(string code)
+    {
+        var lines = code.Split('\n').Length;
+        if (lines > 50) return "advanced";
+        if (lines > 20) return "intermediate";
+        return "beginner";
+    }
+
+    private List<string> GenerateChildFriendlyTips()
+    {
+        return new List<string>
+        {
+            "💡 Don't worry if coding seems confusing at first - even expert programmers started as beginners!",
+            "🚀 Every programmer makes mistakes - that's how we learn and get better!",
+            "🎯 Start with small, simple projects and build up to bigger ones!",
+            "👨‍👩‍👧‍👦 Ask parents, teachers, or friends to help when you get stuck!",
+            "📚 Reading code is just as important as writing code!"
+        };
+    }
+
+    private CodeExplanationResult CreateFallbackExplanation()
+    {
+        return new CodeExplanationResult
+        {
+            Summary = "This code helps our educational game teach you about geography and economics while having fun! 🌍",
+            Breakdown = new List<CodeLineExplanationResult>
+            {
+                new CodeLineExplanationResult
+                {
+                    Line = "// Code explanation temporarily unavailable",
+                    Explanation = "Don't worry - learning is a journey with ups and downs! 🌟",
+                    LineNumber = 1
+                }
+            },
+            EducationalValue = new EducationalValueResult
+            {
+                LearningObjective = "Learn that programming helps create educational experiences",
+                AgeAppropriateConcepts = new List<string>
+                {
+                    "Programming is like giving instructions to a computer 💻",
+                    "Code helps create fun learning games 🎮"
+                },
+                LifeSkills = new List<string>
+                {
+                    "Problem-solving and persistence 💪",
+                    "Learning from challenges 🌟"
+                }
+            },
+            RealWorldApplication = "Like following directions to get somewhere new - each step helps you reach your goal! 🗺️",
+            NextSteps = new List<string>
+            {
+                "Ask a parent, teacher, or friend to help explain this code 👨‍👩‍👧‍👦",
+                "Try our simpler coding activities to build understanding 📚",
+                "Keep playing our educational game to see programming in action! 🎮"
+            },
+            ComplexityLevel = "beginner",
+            ProgrammingConcepts = new List<string> { "basic-programming" },
+            ChildFriendlyTips = GenerateChildFriendlyTips()
+        };
+    }
+
+    // Helper class for code analysis
+    private class CodeAnalysis
+    {
+        public string Language { get; set; } = string.Empty;
+        public List<string> Concepts { get; set; } = new();
+        public string Complexity { get; set; } = string.Empty;
+        public int LineCount { get; set; }
+    }
+
+    #endregion
+
     #endregion
 }

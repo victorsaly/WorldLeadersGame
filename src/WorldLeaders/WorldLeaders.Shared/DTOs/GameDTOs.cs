@@ -168,3 +168,39 @@ public record AgentPersonalityInfo(
     string IconEmoji,
     List<string> ExampleResponses
 );
+
+/// <summary>
+/// Result DTO for code explanation generation
+/// Educational focus: Child-friendly programming explanations for 12-year-old learners
+/// </summary>
+public record CodeExplanationResult
+{
+    public string Summary { get; init; } = string.Empty;
+    public List<CodeLineExplanationResult> Breakdown { get; init; } = new();
+    public EducationalValueResult EducationalValue { get; init; } = new();
+    public string RealWorldApplication { get; init; } = string.Empty;
+    public List<string> NextSteps { get; init; } = new();
+    public string ComplexityLevel { get; init; } = string.Empty;
+    public List<string> ProgrammingConcepts { get; init; } = new();
+    public List<string> ChildFriendlyTips { get; init; } = new();
+}
+
+/// <summary>
+/// Individual code line explanation for educational purposes
+/// </summary>
+public record CodeLineExplanationResult
+{
+    public string Line { get; init; } = string.Empty;
+    public string Explanation { get; init; } = string.Empty;
+    public int LineNumber { get; init; }
+}
+
+/// <summary>
+/// Educational value explanation for child learners
+/// </summary>
+public record EducationalValueResult
+{
+    public string LearningObjective { get; init; } = string.Empty;
+    public List<string> AgeAppropriateConcepts { get; init; } = new();
+    public List<string> LifeSkills { get; init; } = new();
+}
