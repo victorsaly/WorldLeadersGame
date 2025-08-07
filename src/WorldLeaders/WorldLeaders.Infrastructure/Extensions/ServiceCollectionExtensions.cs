@@ -193,6 +193,17 @@ public static class ServiceCollectionExtensions
     /// <returns>The service collection for method chaining</returns>
     public static IServiceCollection AddPerformanceOptimization(this IServiceCollection services, IConfiguration configuration)
     {
+        // Add memory cache first (required for PerformanceOptimizedGameComponent)
+        services.AddMemoryCache(options =>
+        {
+            var performanceConfig = configuration.GetSection(PerformanceConfig.SectionName).Get<PerformanceConfig>() 
+                ?? PerformanceConfig.UKEducationalDefaults;
+            
+            options.SizeLimit = performanceConfig.MemoryCache.SizeLimit;
+            options.CompactionPercentage = performanceConfig.MemoryCache.CompactionPercentage;
+            options.ExpirationScanFrequency = TimeSpan.FromMinutes(performanceConfig.MemoryCache.ExpirationScanFrequencyMinutes);
+        });
+
         // Add Application Insights for performance monitoring
         var applicationInsightsConnectionString = configuration.GetValue<string>("ApplicationInsights:ConnectionString");
         if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
@@ -224,16 +235,8 @@ public static class ServiceCollectionExtensions
         }
         else
         {
-            // Fallback to in-memory cache for development
-            services.AddMemoryCache(options =>
-            {
-                var performanceConfig = configuration.GetSection(PerformanceConfig.SectionName).Get<PerformanceConfig>() 
-                    ?? PerformanceConfig.UKEducationalDefaults;
-                
-                options.SizeLimit = performanceConfig.MemoryCache.SizeLimit;
-                options.CompactionPercentage = performanceConfig.MemoryCache.CompactionPercentage;
-                options.ExpirationScanFrequency = TimeSpan.FromMinutes(performanceConfig.MemoryCache.ExpirationScanFrequencyMinutes);
-            });
+            // Fallback to in-memory cache only (no distributed cache)
+            // Memory cache already added above
         }
 
         // Register performance optimization component
