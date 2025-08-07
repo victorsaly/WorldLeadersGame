@@ -17,7 +17,6 @@ namespace WorldLeaders.Infrastructure.Services;
 /// </summary>
 public class AzureCostManagementClient(
     IOptions<AzureCostManagementConfig> costManagementOptions,
-    ArmClient armClient,
     ILogger<AzureCostManagementClient> logger) : IAzureCostManagementClient
 {
     private readonly AzureCostManagementConfig _config = costManagementOptions.Value;
@@ -244,7 +243,7 @@ public class AzureCostManagementClient(
     /// <summary>
     /// Get cost forecasts using Azure ML and historical data
     /// </summary>
-    public async Task<List<CostForecastData>> GetCostForecastsAsync(Guid userId, int forecastDays = 7)
+    public Task<List<CostForecastData>> GetCostForecastsAsync(Guid userId, int forecastDays = 7)
     {
         try
         {
@@ -287,7 +286,7 @@ public class AzureCostManagementClient(
             }
 
             logger.LogInformation("Generated {ForecastCount} cost forecasts for user {UserId}", forecasts.Count, userId);
-            return forecasts;
+            return Task.FromResult(forecasts);
         }
         catch (Exception ex)
         {
