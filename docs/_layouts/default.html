@@ -99,10 +99,10 @@
     // Note: These images were created using AI text-to-image generation
     // for the World Leaders Game project - educational gaming visuals
     const backgroundImages = [
-      '/assets/game-ai-prompt.png',
-      '/assets/game-block-ai-image.png',
-      '/assets/game-block-ai-image2.jpg',
-      '/assets/game-block-ai-image3.jpg'
+      '{{ "/assets/game-ai-prompt.png" | relative_url }}',
+      '{{ "/assets/game-block-ai-image.png" | relative_url }}',
+      '{{ "/assets/game-block-ai-image2.jpg" | relative_url }}',
+      '{{ "/assets/game-block-ai-image3.jpg" | relative_url }}'
     ];
 
     // Select random background on page load
@@ -120,6 +120,42 @@
       }
     `;
     document.head.appendChild(style);
+  </script>
+
+  <!-- Initialize secure proxy and educational explainer on page load -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize secure OpenAI proxy (if not already done)
+      if (typeof SecureAzureProxy !== 'undefined' && !window.secureAzureProxy) {
+        // The secure proxy should already be initialized from its own DOMContentLoaded
+        // But ensure it's available on the window object
+        setTimeout(function() {
+          if (!window.secureAzureProxy && window.secureConfigHelper) {
+            window.secureAzureProxy = window.secureConfigHelper.secureProxy;
+          }
+          console.log('🔒 Secure OpenAI proxy status:', window.secureAzureProxy ? 'Available' : 'Not available');
+        }, 100);
+      }
+      
+      // Make EducationalCodeExplanationAPI available globally
+      if (typeof EducationalCodeExplanationAPI !== 'undefined' && !window.EducationalCodeExplanationAPI) {
+        window.EducationalCodeExplanationAPI = EducationalCodeExplanationAPI;
+        console.log('📚 Educational API made available globally');
+      }
+      
+      // Initialize code explainer only on pages with code
+      if (document.querySelector('pre code, .highlight code')) {
+        // Ensure the class is available before initializing
+        if (typeof EducationalCodeExplainer !== 'undefined') {
+          if (!window.educationalCodeExplainer) {
+            window.educationalCodeExplainer = new EducationalCodeExplainer();
+            console.log('🧑‍🏫 Educational Code Explainer initialized for young learners!');
+          }
+        } else {
+          console.log('⚠️ EducationalCodeExplainer class not available');
+        }
+      }
+    });
   </script>
 </body>
 </html>

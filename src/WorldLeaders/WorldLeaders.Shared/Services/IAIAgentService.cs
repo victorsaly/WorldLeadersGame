@@ -43,4 +43,14 @@ public interface IAIAgentService
     /// <param name="agentType">The agent type that generated the response</param>
     /// <returns>True if response is safe and appropriate</returns>
     Task<bool> ValidateResponseSafetyAsync(string response, AgentType agentType);
+
+    /// <summary>
+    /// Generate educational code explanation for 12-year-old learners
+    /// Uses child-safe AI to explain programming concepts in age-appropriate language
+    /// </summary>
+    /// <param name="code">The code to explain</param>
+    /// <param name="context">Educational context for the explanation</param>
+    /// <param name="language">Programming language (optional)</param>
+    /// <returns>Structured educational explanation</returns>
+    Task<CodeExplanationResult> GenerateCodeExplanationAsync(string code, string context, string language);
 }

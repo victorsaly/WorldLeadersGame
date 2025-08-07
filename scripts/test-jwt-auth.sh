@@ -7,7 +7,7 @@ echo "🧪 Testing JWT Authentication for World Leaders Educational Game"
 echo "==============================================================="
 echo ""
 
-API_BASE="http://localhost:5203"
+API_BASE="https://localhost:7155"
 
 echo "🔍 1. Testing API Health"
 echo "========================"

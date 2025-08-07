@@ -504,6 +504,179 @@ graph LR
     style S1 fill:#e8f5e8
 ```
 
+---
+
+## 🧑‍🏫 Interactive Code Learning: Educational Code Explainer
+
+### Bringing Code Explanations to Young Learners
+
+Inspired by DataCamp's interactive code explanation tool, we've implemented our own educational code explainer specifically designed for 12-year-old learners. This feature transforms our technical blog into an interactive learning platform!
+
+### How It Works
+
+Every code block in our educational blog now includes an **"Explain code"** button that provides:
+
+```javascript
+// Example: Educational Authentication Service
+public class EducationalAuthenticationService : IAuthenticationService
+{
+    private readonly IChildSafetyValidator _childSafetyValidator;
+    
+    public async Task<AuthenticationResult> AuthenticateChildAsync(
+        string username, 
+        string password)
+    {
+        // Child-specific safety validation
+        if (!await _childSafetyValidator.ValidateChildSafetyAsync(username))
+        {
+            return AuthenticationResult.SafetyValidationFailed();
+        }
+        
+        // Standard authentication with educational context
+        var result = await authenticator.AuthenticateAsync(username, password);
+        
+        if (result.IsSuccess)
+        {
+            // Create educational session with time limits
+            await sessionManager.CreateEducationalSessionAsync(
+                result.UserId, 
+                maxDurationMinutes: 30
+            );
+        }
+        
+        return result;
+    }
+}
+```
+
+### Educational Features
+
+#### 🎯 Age-Appropriate Explanations
+- **Simple vocabulary** suitable for 12-year-olds
+- **Real-world analogies** (LEGO instructions, recipe steps, game rules)
+- **Encouraging messaging** that builds confidence
+- **Visual learning** with emojis and clear structure
+
+#### 🌍 Subject Integration
+- **Geography connections** when code relates to countries/territories
+- **Economics concepts** when dealing with game mechanics
+- **Digital citizenship** lessons embedded in security explanations
+- **Problem-solving skills** development through code understanding
+
+#### 👨‍👩‍👧‍👦 Parent & Teacher Support
+- **Educational context** for each explanation
+- **Learning objectives** clearly stated
+- **Next steps** for continued learning
+- **Safety notes** for appropriate supervision
+
+### Technical Implementation
+
+Our educational code explainer uses:
+
+```javascript
+class EducationalCodeExplainer {
+    constructor() {
+        this.targetAge = 12;
+        this.isEducationalMode = true;
+        this.educationalContext = 'world-leaders-geography-economics-game';
+    }
+    
+    async explainCode(codeContent) {
+        const analysis = this.analyzeCodeForEducation(codeContent);
+        return this.generateChildFriendlyExplanation(analysis);
+    }
+    
+    generateChildFriendlyExplanation(analysis) {
+        return {
+            summary: this.createSimpleSummary(analysis),
+            stepByStep: this.breakDownForKids(analysis),
+            realWorldExample: this.findKidFriendlyAnalogy(analysis),
+            educationalValue: this.connectToLearning(analysis),
+            nextSteps: this.suggestNextActivities(analysis)
+        };
+    }
+}
+```
+
+### Learning Benefits
+
+#### For Students (Age 12):
+- **Code literacy** through interactive exploration
+- **Logical thinking** development
+- **Geography & economics** learning through code
+- **Confidence building** in technology
+
+#### For Educators:
+- **Curriculum integration** opportunities
+- **Assessment tools** for understanding
+- **Differentiated learning** support
+- **Cross-curricular connections**
+
+#### For Parents:
+- **Family learning** opportunities
+- **Digital literacy** support for children
+- **Understanding** of child's educational progress
+- **Safe exploration** of programming concepts
+
+### Future Enhancements
+
+```mermaid
+graph TD
+    A[Current: Basic Code Explanations] --> B[Phase 2: Interactive Coding]
+    B --> C[Phase 3: Student Code Creation]
+    C --> D[Phase 4: Peer Learning Platform]
+    
+    B --> E[Coding Challenges]
+    B --> F[Visual Programming]
+    
+    C --> G[Student Portfolios]
+    C --> H[Project Sharing]
+    
+    D --> I[Collaborative Learning]
+    D --> J[Mentorship Program]
+    
+    style A fill:#e3f2fd
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+```
+
+### Implementation Status
+
+✅ **Completed:**
+- Interactive code explanation buttons on all code blocks
+- Child-friendly explanation generation
+- Educational context integration
+- Real-world analogies and examples
+- Parent/teacher guidance notes
+
+🚧 **In Progress:**
+- Azure OpenAI integration for dynamic explanations
+- Advanced concept detection and age-appropriate adaptation
+- Multi-language support for international learners
+
+🔮 **Planned:**
+- Interactive coding playground
+- Student-created explanation sharing
+- Gamified learning progression
+- Teacher dashboard for monitoring progress
+
+### Educational Impact
+
+This code explanation feature transforms our technical documentation into an interactive learning experience that:
+
+- **Demystifies programming** for young learners
+- **Builds confidence** in approaching technical concepts
+- **Connects coding** to real-world educational objectives
+- **Supports diverse learning styles** through visual and textual explanations
+- **Encourages exploration** while maintaining educational focus
+
+By making code explanations accessible and engaging for 12-year-olds, we're creating the next generation of digitally literate global citizens who understand both technology and world geography/economics!
+
+---
+
+*Try clicking the "Explain code" button on any code block above to see our educational code explainer in action! 🚀*
+
 ### What AI Excels At
 1. **Comprehensive Security Analysis**: Identified security gaps we missed
 2. **Standards Compliance**: Automatically incorporated COPPA/GDPR requirements
