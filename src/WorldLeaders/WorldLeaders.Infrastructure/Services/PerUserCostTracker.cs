@@ -214,20 +214,20 @@ public class PerUserCostTracker(
     /// <summary>
     /// Trigger budget alert if thresholds are exceeded
     /// </summary>
-    public async Task<BudgetAlertNotification?> CheckAndTriggerBudgetAlertAsync(Guid userId, decimal currentCost)
+    public Task<BudgetAlertNotification?> CheckAndTriggerBudgetAlertAsync(Guid userId, decimal currentCost)
     {
         try
         {
             if (!_budgetConfig.AlertConfiguration.EnableRealTimeAlerts)
             {
-                return null;
+                return Task.FromResult<BudgetAlertNotification?>(null);
             }
 
             // Check if we're within alert cooldown period
             var alertCacheKey = $"alert_cooldown_{userId}";
             if (memoryCache.TryGetValue(alertCacheKey, out _))
             {
-                return null; // Still in cooldown
+                return Task.FromResult<BudgetAlertNotification?>(null); // Still in cooldown
             }
 
             var alertThreshold = _budgetConfig.AlertThresholdGBP;
@@ -290,12 +290,12 @@ public class PerUserCostTracker(
                     userId, alert.AlertType, currentCost, dailyLimit);
             }
 
-            return alert;
+            return Task.FromResult(alert);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error checking budget alerts for user {UserId}", userId);
-            return null;
+            return Task.FromResult<BudgetAlertNotification?>(null);
         }
     }
 
