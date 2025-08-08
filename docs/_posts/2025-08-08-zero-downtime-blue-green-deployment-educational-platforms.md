@@ -60,32 +60,44 @@ Instead of stopping and starting applications, Blue-Green deployment works like 
 
 ### Traditional vs Blue-Green Deployment Comparison
 
+#### ❌ Traditional Deployment Issues
+
 ```mermaid
-graph TB
-    subgraph "❌ Traditional Deployment Problems"
-        T1[🏫 Active Learning Session<br/>30 Students Online]
-        T2[⏹️ Stop Application]
-        T3[📦 Deploy New Version]
-        T4[❌ 5-15 Minutes Downtime<br/>Students Disconnected]
-        T5[😞 Students Lost Focus<br/>Learning Momentum Gone]
-        
-        T1 --> T2 --> T3 --> T4 --> T5
-    end
+graph TD
+    A[🏫 Active Learning Session<br/><br/>📊 30 Students Online<br/>🎯 Geography Lesson in Progress<br/>⏰ Peak Learning Hours] 
     
-    subgraph "✅ Blue-Green Deployment Solution"
-        B1[🔵 Production Environment<br/>Students Learning Continuously]
-        B2[🟢 Staging Environment<br/>New Version Ready]
-        B3[⚡ Instant Switch<br/>300ms Traffic Swap]
-        B4[🎓 Zero Learning Disruption<br/>Seamless Experience]
-        
-        B1 --> B2 --> B3 --> B4
-    end
+    A --> B[⏹️ Application Shutdown<br/><br/>� Service Interruption<br/>📉 Students Disconnected<br/>⚠️ Learning Session Halted]
     
-    classDef traditional fill:#ffebee,stroke:#f44336,stroke-width:2px
-    classDef bluegreen fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
+    B --> C[📦 New Version Deployment<br/><br/>⏳ 5-15 Minutes Process<br/>🔧 Database Updates<br/>🛠️ Configuration Changes]
     
-    class T1,T2,T3,T4,T5 traditional
-    class B1,B2,B3,B4 bluegreen
+    C --> D[❌ Educational Impact<br/><br/>😞 Students Lost Focus<br/>📚 Learning Momentum Gone<br/>👨‍🏫 Teacher Frustration<br/>⏰ Valuable Time Wasted]
+    
+    style A fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+    style B fill:#ffebee,stroke:#f44336,stroke-width:3px
+    style C fill:#fce4ec,stroke:#e91e63,stroke-width:3px
+    style D fill:#ffebee,stroke:#f44336,stroke-width:3px
+```
+
+#### ✅ Blue-Green Deployment Solution
+
+```mermaid
+graph TD
+    P[🔵 Production Environment<br/><br/>👨‍🎓 Students Learning Continuously<br/>📈 High Engagement Levels<br/>🎯 Zero Interruption]
+    
+    S[🟢 Staging Environment<br/><br/>✨ New Educational Features<br/>🛡️ Safety Validated<br/>⚡ Performance Tested]
+    
+    SW[⚡ Instant Switch<br/><br/>🔄 300ms Traffic Swap<br/>🎭 Seamless Transition<br/>👁️ Invisible to Students]
+    
+    R[🎓 Perfect Learning Experience<br/><br/>✅ Zero Disruption<br/>🚀 Enhanced Features Live<br/>😊 Continuous Engagement<br/>🏆 Educational Excellence]
+    
+    P --> S
+    S --> SW
+    SW --> R
+    
+    style P fill:#e3f2fd,stroke:#2196f3,stroke-width:3px
+    style S fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
+    style SW fill:#fff3e0,stroke:#ff9800,stroke-width:3px
+    style R fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
 ```
 
 ### Blue-Green Deployment Architecture Flow
@@ -147,50 +159,23 @@ graph TB
 ### Zero-Downtime Deployment Timeline
 
 ```mermaid
-timeline
-    title Educational Platform Zero-Downtime Deployment Timeline
+graph TD
+    A["🕐 11:00 AM<br/>Students Learning<br/>30+ Geography Sessions"] --> B["🕐 11:05 AM<br/>Pipeline Triggered<br/>New Content Ready"]
+    B --> C["🕕 11:06 AM<br/>Deploy to Staging<br/>Zero Impact"]
+    C --> D["🕗 11:08 AM<br/>Health Checks<br/>Safety Validated"]
+    D --> E["🕙 11:10 AM<br/>Instant Switch<br/>300ms Swap"]
+    E --> F["🕙 11:10 AM<br/>New Features Live<br/>Enhanced Learning"]
+    F --> G["🕐 11:11 AM<br/>Monitoring Active<br/>Students Engaged"]
+    G --> H["🕒 11:15 AM<br/>Mission Complete<br/>Zero Disruption"]
     
-    section Pre-Deployment
-        11:00 AM    : Students actively learning
-                    : 30 concurrent geography sessions
-                    : High engagement levels
-        
-        11:05 AM    : CI/CD Pipeline Triggered
-                    : New educational content ready
-                    : Safety validation starts
-    
-    section Green Environment Setup
-        11:06 AM    : Deploy to Staging Slot
-                    : Students continue learning
-                    : Zero impact on live sessions
-        
-        11:08 AM    : Health Checks Complete
-                    : Child safety validated
-                    : Educational content reviewed
-                    : Performance verified (<1.5s)
-                    : UK compliance confirmed
-    
-    section The Switch
-        11:10 AM    : Instant Traffic Switch
-                    : 300ms slot swap completed
-                    : Students experience no disruption
-                    : Learning continues seamlessly
-        
-        11:10 AM    : New Features Live
-                    : Enhanced geography content
-                    : Improved AI tutoring
-                    : Better performance metrics
-    
-    section Post-Deployment
-        11:11 AM    : Monitoring Active
-                    : All students still engaged
-                    : Zero learning disruption
-                    : Teacher satisfaction confirmed
-        
-        11:15 AM    : Mission Complete
-                    : 100% learning continuity achieved
-                    : Zero educational impact
-                    : Rollback capability maintained
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+    style D fill:#fff3e0
+    style E fill:#ffebee
+    style F fill:#e1f5fe
+    style G fill:#f3e5f5
+    style H fill:#e8f5e8
 ```
 
 ### Azure Infrastructure Architecture
