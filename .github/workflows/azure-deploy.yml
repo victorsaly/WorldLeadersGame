@@ -30,8 +30,8 @@ on:
 
 env:
   AZURE_RESOURCE_GROUP: worldleaders-prod-rg
-  AZURE_WEB_APP_NAME: worldleaders-web-prod
-  AZURE_API_APP_NAME: worldleaders-api-prod
+  AZURE_WEB_APP_NAME: worldleaders-production-uksouth-web
+  AZURE_API_APP_NAME: worldleaders-production-uksouth-api
   DOTNET_VERSION: '8.0.x'
   DEPLOYMENT_REGION: 'uksouth'
   ENABLE_BLUE_GREEN_DEPLOYMENT: 'true'
@@ -209,6 +209,27 @@ jobs:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        
+    - name: 🏗️ Deploy Infrastructure with Blue-Green Slots
+      run: |
+        echo "🚀 Deploying infrastructure with blue-green deployment capabilities..."
+        
+        # Deploy the enhanced infrastructure template
+        az deployment group create \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --template-file infrastructure/azure/uk-south/main-enhanced.bicep \
+          --parameters \
+            environment=production \
+            region=uksouth \
+            projectName=worldleaders \
+            enableBlueGreenDeployment=true \
+            enableAutomatedRollback=true \
+            targetResponseTimeMs=${{ env.TARGET_RESPONSE_TIME_MS }} \
+            dailyCostLimitGBP=200 \
+            minInstances=2 \
+            maxInstances=10
+        
+        echo "✅ Infrastructure deployment completed with staging slots"
         
     - name: 📥 Download Web App artifact
       uses: actions/download-artifact@v4
