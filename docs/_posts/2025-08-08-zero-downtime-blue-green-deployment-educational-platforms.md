@@ -58,195 +58,206 @@ Instead of stopping and starting applications, Blue-Green deployment works like 
 
 **Result**: Zero downtime, instant rollback capability, and **preserved learning continuity**.
 
-### Blue-Green Deployment Flow for Educational Platforms
+### Traditional vs Blue-Green Deployment Comparison
 
 ```mermaid
 graph TB
-    subgraph "Traditional Deployment Problem"
+    subgraph "❌ Traditional Deployment Problems"
         T1[🏫 Active Learning Session<br/>30 Students Online]
         T2[⏹️ Stop Application]
         T3[📦 Deploy New Version]
         T4[❌ 5-15 Minutes Downtime<br/>Students Disconnected]
-        T5[🤞 Hope Everything Works]
-        T6[😞 Students Lost Focus<br/>Learning Momentum Gone]
+        T5[😞 Students Lost Focus<br/>Learning Momentum Gone]
         
-        T1 --> T2 --> T3 --> T4 --> T5 --> T6
+        T1 --> T2 --> T3 --> T4 --> T5
     end
     
-    subgraph "Blue-Green Deployment Solution"
-        subgraph "Blue Environment (Production)"
-            B1[🔵 Current Version v1.0<br/>Serving 30 Students]
-            B2[🎓 Continuous Learning<br/>Zero Interruption]
-        end
+    subgraph "✅ Blue-Green Deployment Solution"
+        B1[🔵 Production Environment<br/>Students Learning Continuously]
+        B2[🟢 Staging Environment<br/>New Version Ready]
+        B3[⚡ Instant Switch<br/>300ms Traffic Swap]
+        B4[🎓 Zero Learning Disruption<br/>Seamless Experience]
         
-        subgraph "Green Environment (Staging)"
-            G1[🟢 New Version v1.1<br/>Ready for Testing]
-            G2[🧪 Health Validation<br/>✅ Child Safety<br/>✅ Performance<br/>✅ Educational Content]
-            G3[⚡ Instant Switch Ready<br/>300ms Traffic Swap]
-        end
-        
-        subgraph "Load Balancer / Azure Front Door"
-            LB[🔄 Traffic Router<br/>Instant Switch Capability]
-        end
-        
-        subgraph "Students"
-            S1[👨‍🎓 Student A<br/>Learning Geography]
-            S2[👩‍🎓 Student B<br/>Playing Economics Game]
-            S3[👨‍🎓 Student C<br/>Practicing Languages]
-        end
-        
-        B1 --> LB
-        G1 --> G2 --> G3
-        LB --> S1
-        LB --> S2
-        LB --> S3
-        
-        %% The magic moment
-        G3 -.->|Instant Switch<br/>Zero Downtime| LB
-        B1 -.->|Becomes Rollback<br/>Safety Net| B2
+        B1 --> B2 --> B3 --> B4
+    end
+    
+    classDef traditional fill:#ffebee,stroke:#f44336,stroke-width:2px
+    classDef bluegreen fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
+    
+    class T1,T2,T3,T4,T5 traditional
+    class B1,B2,B3,B4 bluegreen
+```
+
+### Blue-Green Deployment Architecture Flow
+
+```mermaid
+graph TB
+    subgraph "Student Traffic Flow"
+        S1[👨‍🎓 Student A<br/>Learning Geography]
+        S2[👩‍🎓 Student B<br/>Economics Game]
+        S3[👨‍🎓 Student C<br/>Language Practice]
+    end
+    
+    subgraph "Load Balancer"
+        LB[🔄 Azure Traffic Manager<br/>Instant Switch Capability]
+    end
+    
+    subgraph "Blue Environment (Production)"
+        BLUE[🔵 Current Version v1.0<br/>Serving Students]
+        BLUE_FEATURES[✅ Geography Module<br/>✅ Economics Games<br/>✅ Language Tools]
+    end
+    
+    subgraph "Green Environment (Staging)"
+        GREEN[🟢 New Version v1.1<br/>Ready for Switch]
+        GREEN_TESTS[🧪 Health Validation<br/>✅ Child Safety<br/>✅ Performance<br/>✅ Educational Content]
     end
     
     subgraph "Educational Benefits"
         E1[✅ 100% Learning Continuity]
         E2[✅ Zero Student Impact]
-        E3[✅ Instant Rollback Capability]
+        E3[✅ Instant Rollback]
         E4[✅ Teacher Confidence]
-        E5[✅ Seamless Feature Updates]
-        
-        G3 --> E1
-        E1 --> E2 --> E3 --> E4 --> E5
     end
     
-    classDef traditional fill:#ffebee,stroke:#f44336,stroke-width:2px
+    S1 --> LB
+    S2 --> LB
+    S3 --> LB
+    LB --> BLUE
+    BLUE --> BLUE_FEATURES
+    
+    GREEN --> GREEN_TESTS
+    GREEN_TESTS -.->|Instant Switch<br/>Zero Downtime| LB
+    
+    LB --> E1
+    E1 --> E2 --> E3 --> E4
+    
+    classDef students fill:#fff3e0,stroke:#ff9800,stroke-width:2px
     classDef blue fill:#e3f2fd,stroke:#2196f3,stroke-width:2px
     classDef green fill:#e8f5e8,stroke:#4caf50,stroke-width:2px
-    classDef students fill:#fff3e0,stroke:#ff9800,stroke-width:2px
     classDef benefits fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
+    classDef balancer fill:#f1f8e9,stroke:#689f38,stroke-width:2px
     
-    class T1,T2,T3,T4,T5,T6 traditional
-    class B1,B2 blue
-    class G1,G2,G3 green
     class S1,S2,S3 students
-    class E1,E2,E3,E4,E5 benefits
+    class BLUE,BLUE_FEATURES blue
+    class GREEN,GREEN_TESTS green
+    class E1,E2,E3,E4 benefits
+    class LB balancer
 ```
 
 ### Zero-Downtime Deployment Timeline
 
 ```mermaid
 timeline
-    title Educational Platform Zero-Downtime Deployment Journey
+    title Educational Platform Zero-Downtime Deployment Timeline
     
     section Pre-Deployment
-        11:00 AM : Students actively learning
-                 : 30 concurrent geography sessions
-                 : High engagement levels
+        11:00 AM    : Students actively learning
+                    : 30 concurrent geography sessions
+                    : High engagement levels
         
-        11:05 AM : CI/CD Pipeline Triggered
-                 : New educational content ready
-                 : Safety validation starts
+        11:05 AM    : CI/CD Pipeline Triggered
+                    : New educational content ready
+                    : Safety validation starts
     
-    section Green Environment Deployment
-        11:06 AM : Deploy to Staging Slot
-                 : Students continue learning
-                 : Zero impact on live sessions
+    section Green Environment Setup
+        11:06 AM    : Deploy to Staging Slot
+                    : Students continue learning
+                    : Zero impact on live sessions
         
-        11:08 AM : Comprehensive Health Checks
-                 : ✅ Child safety validation
-                 : ✅ Educational content review
-                 : ✅ Performance testing (<1.5s)
-                 : ✅ UK compliance verification
+        11:08 AM    : Health Checks Complete
+                    : Child safety validated
+                    : Educational content reviewed
+                    : Performance verified (<1.5s)
+                    : UK compliance confirmed
     
-    section The Magic Moment
-        11:10 AM : Instant Traffic Switch
-                 : 300ms slot swap
-                 : Students don't notice
-                 : Learning continues seamlessly
+    section The Switch
+        11:10 AM    : Instant Traffic Switch
+                    : 300ms slot swap completed
+                    : Students experience no disruption
+                    : Learning continues seamlessly
         
-        11:10 AM : New Features Live
-                 : Enhanced geography content
-                 : Improved AI tutoring
-                 : Better performance
+        11:10 AM    : New Features Live
+                    : Enhanced geography content
+                    : Improved AI tutoring
+                    : Better performance metrics
     
     section Post-Deployment
-        11:11 AM : Monitoring & Validation
-                 : All students still engaged
-                 : No learning disruption
-                 : Teacher reports success
+        11:11 AM    : Monitoring Active
+                    : All students still engaged
+                    : Zero learning disruption
+                    : Teacher satisfaction confirmed
         
-        11:15 AM : Deployment Complete
-                 : 100% learning continuity
-                 : Zero educational impact
-                 : Ready for instant rollback
+        11:15 AM    : Mission Complete
+                    : 100% learning continuity achieved
+                    : Zero educational impact
+                    : Rollback capability maintained
 ```
 
 ### Azure Infrastructure Architecture
 
 ```mermaid
 graph TB
-    subgraph "UK South Region - Educational Compliance"
-        subgraph "Azure App Service Plan"
-            subgraph "Production Web App"
-                PROD[🔵 Production Slot<br/>worldleaders-web<br/>Current Version]
-                STAGE[🟢 Staging Slot<br/>New Version Testing]
-            end
-            
-            subgraph "API Service"
-                API_PROD[🔵 API Production<br/>Educational Content API]
-                API_STAGE[🟢 API Staging<br/>New Features Testing]
-            end
-        end
-        
-        subgraph "Supporting Services"
-            KV[🔐 Azure Key Vault<br/>Child Data Protection]
-            AI[📊 Application Insights<br/>Educational Analytics]
-            REDIS[⚡ Redis Cache<br/>Performance Optimization]
-        end
-        
-        subgraph "Monitoring & Alerts"
-            LOG[📝 Log Analytics<br/>Educational Context Logging]
-            ALERT[🚨 Action Groups<br/>Educational Safety Alerts]
-            HEALTH[🏥 Health Checks<br/>Child-Friendly Validation]
-        end
-    end
-    
-    subgraph "Global Services"
-        FD[🌍 Azure Front Door<br/>Global Load Balancing]
-        TM[🔄 Traffic Manager<br/>Multi-Region Failover]
-    end
-    
     subgraph "Educational Users"
         STUDENTS[👨‍🎓👩‍🎓 Students<br/>12-year-old Learners<br/>UK Schools]
         TEACHERS[👨‍🏫👩‍🏫 Teachers<br/>Classroom Management]
     end
     
+    subgraph "Global Services"
+        FD[🌍 Azure Front Door<br/>Global Load Balancing]
+    end
+    
+    subgraph "UK South Region - GDPR Compliant"
+        subgraph "Production Environment"
+            PROD[🔵 Production Web App<br/>worldleaders-web-prod]
+            API_PROD[� API Production<br/>Educational Content API]
+        end
+        
+        subgraph "Staging Environment"
+            STAGE[� Staging Web App<br/>New Version Testing]
+            API_STAGE[🟢 API Staging<br/>New Features Testing]
+        end
+        
+        subgraph "Supporting Services"
+            KV[🔐 Azure Key Vault<br/>Child Data Protection]
+            AI[📊 Application Insights<br/>Educational Analytics]
+            REDIS[⚡ Redis Cache<br/>Performance Boost]
+        end
+        
+        subgraph "Monitoring"
+            HEALTH[🏥 Health Checks<br/>Child-Safe Validation]
+            ALERT[🚨 Action Groups<br/>Safety Alerts]
+        end
+    end
+    
+    STUDENTS --> FD
+    TEACHERS --> FD
     FD --> PROD
     FD --> API_PROD
+    
     PROD --> KV
     PROD --> REDIS
     API_PROD --> KV
+    API_PROD --> AI
     
     STAGE -.->|Health Check Pass<br/>Instant Swap| PROD
     API_STAGE -.->|Validation Complete<br/>Zero Downtime| API_PROD
     
-    PROD --> AI
-    API_PROD --> LOG
-    LOG --> ALERT
     HEALTH --> ALERT
+    AI --> ALERT
     
-    STUDENTS --> FD
-    TEACHERS --> FD
-    
+    classDef users fill:#ffebee,stroke:#f44336,stroke-width:2px
+    classDef global fill:#f1f8e9,stroke:#689f38,stroke-width:2px
     classDef production fill:#e3f2fd,stroke:#2196f3,stroke-width:3px
     classDef staging fill:#e8f5e8,stroke:#4caf50,stroke-width:3px
     classDef services fill:#fff3e0,stroke:#ff9800,stroke-width:2px
     classDef monitoring fill:#f3e5f5,stroke:#9c27b0,stroke-width:2px
-    classDef users fill:#ffebee,stroke:#f44336,stroke-width:2px
     
+    class STUDENTS,TEACHERS users
+    class FD global
     class PROD,API_PROD production
     class STAGE,API_STAGE staging
-    class KV,AI,REDIS,FD,TM services
-    class LOG,ALERT,HEALTH monitoring
-    class STUDENTS,TEACHERS users
+    class KV,AI,REDIS services
+    class HEALTH,ALERT monitoring
 ```
 
 ## Our Implementation: Azure-Powered Educational Excellence
