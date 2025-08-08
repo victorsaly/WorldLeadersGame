@@ -222,7 +222,7 @@ jobs:
         name: api
         path: api-publish/
         
-    - name: 🎯 Step 1: Deploy to Staging Slots (Blue-Green)
+    - name: "🎯 Step 1: Deploy to Staging Slots (Blue-Green)"
       run: |
         echo "🔄 Starting blue-green deployment to staging slots..."
         
@@ -246,13 +246,13 @@ jobs:
           
         echo "✅ Deployment to staging slots completed"
         
-    - name: ⏳ Step 2: Wait for Staging Deployment Stabilization
+    - name: "⏳ Step 2: Wait for Staging Deployment Stabilization"
       run: |
         echo "⏳ Waiting for staging deployments to stabilize..."
         sleep 30
         echo "✅ Stabilization period completed"
         
-    - name: 🏥 Step 3: Comprehensive Staging Health Checks
+    - name: "🏥 Step 3: Comprehensive Staging Health Checks"
       run: |
         echo "🔍 Starting comprehensive health checks on staging slots..."
         
@@ -308,7 +308,7 @@ jobs:
         
         echo "✅ All staging health checks passed successfully"
         
-    - name: 🔄 Step 4: Zero-Downtime Slot Swap (Blue-Green Switch)
+    - name: "🔄 Step 4: Zero-Downtime Slot Swap (Blue-Green Switch)"
       run: |
         echo "🔄 Starting zero-downtime slot swap..."
         SWAP_START_TIME=$(date +%s)
@@ -340,13 +340,13 @@ jobs:
           echo "⚠️ Swap took longer than 30-second target but still successful"
         fi
         
-    - name: ⏳ Step 5: Post-Swap Stabilization
+    - name: "⏳ Step 5: Post-Swap Stabilization"
       run: |
         echo "⏳ Allowing post-swap stabilization..."
         sleep 15
         echo "✅ Post-swap stabilization completed"
 
-    - name: 🏥 Step 6: Production Health Validation with Automated Rollback
+    - name: "🏥 Step 6: Production Health Validation with Automated Rollback"
       run: |
         echo "🔍 Starting production health validation with rollback capability..."
         VALIDATION_START_TIME=$(date +%s)
