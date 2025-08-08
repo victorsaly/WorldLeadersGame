@@ -137,11 +137,13 @@ public class AzureKeyVaultClient(
     {
         try
         {
-        if (string.IsNullOrEmpty(_options.VaultUrl))
-        {
-            logger.LogInformation("Azure Key Vault not configured (development mode)");
-            return false;
-        }            var keyClient = new KeyClient(new Uri(_options.VaultUrl), new DefaultAzureCredential());
+            if (string.IsNullOrEmpty(_options.VaultUrl))
+            {
+                logger.LogInformation("Azure Key Vault not configured (development mode)");
+                return false;
+            }
+
+            var keyClient = new KeyClient(new Uri(_options.VaultUrl), new DefaultAzureCredential());
             
             // Try to list keys to validate connection
             await foreach (var keyProperties in keyClient.GetPropertiesOfKeysAsync())
