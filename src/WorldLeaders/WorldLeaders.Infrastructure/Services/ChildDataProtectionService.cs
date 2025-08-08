@@ -635,9 +635,8 @@ public class ChildDataProtectionService(
 
     private static string GenerateSecureToken()
     {
-        using var rng = RandomNumberGenerator.Create();
         var bytes = new byte[32];
-        rng.GetBytes(bytes);
+        RandomNumberGenerator.Fill(bytes);
         return Convert.ToBase64String(bytes);
     }
 
