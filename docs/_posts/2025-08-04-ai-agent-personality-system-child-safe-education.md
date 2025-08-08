@@ -303,9 +303,10 @@ public class ContentModerationService : IContentModerationService
 ### Child Safety Metrics
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title Safety Validation Success Rate
-    "Responses Approved (98%)" : 98
-    "Safe Fallbacks Used (2%)" : 2
+    "Approved: 98%" : 98
+    "Fallbacks: 2%" : 2
 ```
 
 - **98% Response Approval Rate**: AI-generated content passes all safety layers

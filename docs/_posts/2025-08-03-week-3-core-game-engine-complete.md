@@ -261,12 +261,13 @@ The Resource Manager component exemplifies this approach—complex economic conc
 Our AI autonomy breakdown for Week 3 demonstrates unprecedented collaboration between human educational expertise and AI technical implementation:
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title Week 3 AI Autonomy Distribution
-    "Architecture Design" : 98
-    "Code Generation" : 95
-    "UI Implementation" : 92
-    "Educational Content" : 90
-    "Human Oversight" : 8
+    "Architecture: 98%" : 98
+    "Code Gen: 95%" : 95
+    "UI Impl: 92%" : 92
+    "Education: 90%" : 90
+    "Human: 8%" : 8
 ```
 
 **Human intervention focused on three strategic areas:**

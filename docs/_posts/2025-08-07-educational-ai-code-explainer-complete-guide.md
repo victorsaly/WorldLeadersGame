@@ -329,11 +329,12 @@ graph TD
 ### Success Metrics Dashboard
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title Educational Effectiveness Metrics
-    "Successful Explanations" : 85
-    "Fallback Responses Used" : 10
-    "Content Safety Blocks" : 3
-    "Technical Errors" : 2
+    "Success: 85%" : 85
+    "Fallback: 10%" : 10
+    "Safety Block: 3%" : 3
+    "Errors: 2%" : 2
 ```
 
 ## 🧹 System Optimization & Cleanup

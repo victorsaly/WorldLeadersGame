@@ -400,11 +400,12 @@ done
 ### Cost Efficiency Analysis
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title Cost Comparison per Image
-    "OpenAI Direct API" : 8
-    "Adobe Firefly (if available)" : 20
-    "Professional Designer" : 100
-    "Azure OpenAI (with overhead)" : 15
+    "OpenAI Direct: $8" : 8
+    "Adobe Firefly: $20" : 20
+    "Professional: $100" : 100
+    "Azure OpenAI: $15" : 15
 ```
 
 ### Final Results Summary

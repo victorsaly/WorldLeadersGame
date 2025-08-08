@@ -297,11 +297,12 @@ After implementing this system:
 | **Parental Trust** | Basic email notifications | Comprehensive consent management | Enhanced parent confidence |
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title Authentication Security Improvements
-    "Automated Safety Validation" : 40
-    "Enhanced Session Management" : 25
-    "Cost Transparency" : 20
-    "Compliance Automation" : 15
+    "Auto Safety: 40%" : 40
+    "Session Mgmt: 25%" : 25
+    "Cost Clarity: 20%" : 20
+    "Compliance: 15%" : 15
 ```
 
 ## 🚀 Implementation Lessons: What We Learned

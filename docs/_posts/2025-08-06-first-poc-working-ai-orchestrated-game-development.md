@@ -203,12 +203,13 @@ graph TD
 Working with AI as a technical product manager revealed unprecedented development capabilities:
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title "AI vs Human Contribution"
-    "Claude Sonnet 3.5 Architecture" : 35
-    "GitHub Copilot Implementation" : 30
-    "Azure OpenAI Content Generation" : 25
-    "Human Creative Direction" : 5
-    "Child Design Input" : 5
+    "Claude Architecture: 35%" : 35
+    "Copilot Code: 30%" : 30
+    "Azure AI Content: 25%" : 25
+    "Human Direction: 5%" : 5
+    "Child Input: 5%" : 5
 ```
 
 ### What AI Accomplished Independently

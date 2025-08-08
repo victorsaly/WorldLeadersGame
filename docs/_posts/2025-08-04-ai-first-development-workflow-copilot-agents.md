@@ -407,11 +407,12 @@ graph LR
 While AI handles 95% of the development, humans focus on critical educational validation:
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title Human Review Focus Areas
-    "Educational Effectiveness" : 40
-    "Child Safety Compliance" : 30
-    "Creative Direction Alignment" : 20
-    "Real-World Data Accuracy" : 10
+    "Education: 40%" : 40
+    "Safety: 30%" : 30
+    "Direction: 20%" : 20
+    "Data: 10%" : 10
 ```
 
 ### Human Review Checklist

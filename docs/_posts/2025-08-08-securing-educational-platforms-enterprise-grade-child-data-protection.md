@@ -48,8 +48,16 @@ graph TB
         K --> L
     end
     
-    style A fill:#ff9999
-    style L fill:#99ff99
+    %% Enhanced styling for security context
+    classDef learners fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#000
+    classDef challenge fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
+    classDef requirements fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
+    classDef solution fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px,color:#000
+    
+    class A learners
+    class B,C,D,E,F challenge
+    class G,H,I,J,K requirements
+    class L solution
 ```
 
 ## 🏗️ The Solution: ChildDataProtectionService with .NET 8 Primary Constructors
@@ -93,16 +101,31 @@ sequenceDiagram
     participant KV as Azure Key Vault UK South
     participant DB as Encrypted Database
     
-    C->>A: Submit Educational Data
-    A->>KV: Request Child-Specific Key
-    KV->>A: Return Encryption Key
+    C->>+A: Submit Educational Data
+    A->>+KV: Request Child-Specific Key
+    KV->>-A: Return Encryption Key
     A->>A: Encrypt Data with Child Key
-    A->>DB: Store Encrypted Data
+    A->>+DB: Store Encrypted Data
+    DB->>-A: Confirm Storage
     A->>KV: Log Encryption Event
-    A->>C: Confirm Data Protected
+    A->>-C: Confirm Data Protected
     
     Note over A,KV: All operations in UK South region
     Note over C,DB: Child data never leaves UK
+    
+    %% Enhanced styling for security sequence
+    %%{init: {'theme':'base', 'themeVariables': {
+        'actorBkg': '#e3f2fd',
+        'actorBorder': '#1565c0',
+        'actorTextColor': '#000000',
+        'activationBkgColor': '#e8f5e8',
+        'activationBorderColor': '#2e7d32',
+        'sequenceNumberColor': '#ffffff',
+        'sectionBkgColor': '#f5f5f5',
+        'altBkgColor': '#fff3e0',
+        'noteBkgColor': '#ffebee',
+        'noteBorderColor': '#c62828'
+    }}}%%
 ```
 
 ```csharp
@@ -292,11 +315,12 @@ After implementing this system, we've seen remarkable results:
 | **Cost Efficiency** | £0.08/user/day | Predictable budget management |
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title Security Implementation Results
-    "Automated Compliance (98.7%)" : 40
-    "Parent Satisfaction (99.2%)" : 35
-    "Zero Security Incidents" : 20
-    "Sub-300ms Response Time" : 5
+    "Compliance: 98.7%" : 40
+    "Parent Satisfaction: 99.2%" : 35
+    "Zero Incidents" : 20
+    "Response <300ms" : 5
 ```
 
 ## 🎓 Lessons Learned: Best Practices for Educational Security
