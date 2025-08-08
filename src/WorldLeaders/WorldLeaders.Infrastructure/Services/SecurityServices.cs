@@ -6,6 +6,7 @@ using Azure.Security.KeyVault.Keys.Cryptography;
 using WorldLeaders.Infrastructure.Configuration;
 using WorldLeaders.Shared.Services;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace WorldLeaders.Infrastructure.Services;
 
@@ -175,32 +176,54 @@ public class AzureKeyVaultClient(
 
     private async Task<string> EncryptLocallyAsync(string data, string keyName)
     {
-        // Simple development encryption - NOT for production use
-        var dataBytes = Encoding.UTF8.GetBytes(data);
-        var keyBytes = Encoding.UTF8.GetBytes(keyName.PadRight(32)[..32]); // Simple key derivation
-        
-        for (int i = 0; i < dataBytes.Length; i++)
+        // Development-only AES encryption fallback. DO NOT USE IN PRODUCTION.
+        // Key derivation using PBKDF2 with a fixed salt for dev only.
+        var salt = Encoding.UTF8.GetBytes("WorldLeadersDevSalt"); // Should be unique per deployment in real use
+        using var keyDerivation = new Rfc2898DeriveBytes(keyName, salt, 10000, HashAlgorithmName.SHA256);
+        using var aes = Aes.Create();
+        aes.Key = keyDerivation.GetBytes(32); // 256-bit key
+        aes.GenerateIV();
+        var iv = aes.IV;
+        using var encryptor = aes.CreateEncryptor(aes.Key, iv);
+        var plainBytes = Encoding.UTF8.GetBytes(data);
+        byte[] cipherBytes;
+        using (var ms = new MemoryStream())
         {
-            dataBytes[i] ^= keyBytes[i % keyBytes.Length];
+            using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+            {
+                cs.Write(plainBytes, 0, plainBytes.Length);
+                cs.FlushFinalBlock();
+            }
+            cipherBytes = ms.ToArray();
         }
-        
+        // Prepend IV to ciphertext
+        var result = new byte[iv.Length + cipherBytes.Length];
+        Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
+        Buffer.BlockCopy(cipherBytes, 0, result, iv.Length, cipherBytes.Length);
         await Task.Delay(10); // Simulate async operation
-        return Convert.ToBase64String(dataBytes);
+        return Convert.ToBase64String(result);
     }
 
     private async Task<string> DecryptLocallyAsync(string encryptedData, string keyName)
     {
-        // Simple development decryption - NOT for production use
-        var dataBytes = Convert.FromBase64String(encryptedData);
-        var keyBytes = Encoding.UTF8.GetBytes(keyName.PadRight(32)[..32]); // Simple key derivation
-        
-        for (int i = 0; i < dataBytes.Length; i++)
-        {
-            dataBytes[i] ^= keyBytes[i % keyBytes.Length];
-        }
-        
+        // Development-only AES decryption fallback. DO NOT USE IN PRODUCTION.
+        var salt = Encoding.UTF8.GetBytes("WorldLeadersDevSalt");
+        using var keyDerivation = new Rfc2898DeriveBytes(keyName, salt, 10000, HashAlgorithmName.SHA256);
+        using var aes = Aes.Create();
+        aes.Key = keyDerivation.GetBytes(32);
+        var allBytes = Convert.FromBase64String(encryptedData);
+        var iv = new byte[aes.BlockSize / 8];
+        Buffer.BlockCopy(allBytes, 0, iv, 0, iv.Length);
+        aes.IV = iv;
+        var cipherBytes = new byte[allBytes.Length - iv.Length];
+        Buffer.BlockCopy(allBytes, iv.Length, cipherBytes, 0, cipherBytes.Length);
+        using var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+        using var ms = new MemoryStream(cipherBytes);
+        using var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
+        using var reader = new StreamReader(cs);
+        var plainText = await reader.ReadToEndAsync();
         await Task.Delay(10); // Simulate async operation
-        return Encoding.UTF8.GetString(dataBytes);
+        return plainText;
     }
 
     #endregion
@@ -214,7 +237,9 @@ public class AzureKeyVaultClient(
 public class ComplianceAuditLogger(
     ILogger<ComplianceAuditLogger> logger) : IAuditLogger
 {
-    private readonly List<AuditEvent> _auditEvents = new(); // In-memory for demo; use database in production
+    // Persistent file-based storage for audit events (replace with database in production)
+    private static readonly string AuditLogFilePath = Path.Combine(AppContext.BaseDirectory, "audit-events.jsonl");
+    private readonly List<AuditEvent> _auditEvents = new(); // In-memory cache; persisted to file
 
     /// <summary>
     /// Log security or compliance event
@@ -234,8 +259,11 @@ public class ComplianceAuditLogger(
 
             _auditEvents.Add(auditEvent);
             
+            // Persist to file for durability (use database in production)
+            var logEntry = System.Text.Json.JsonSerializer.Serialize(auditEvent);
+            await File.AppendAllTextAsync(AuditLogFilePath, logEntry + Environment.NewLine);
+            
             logger.LogInformation("Audit event logged: {EventType} - {Message}", eventType, message);
-            await Task.CompletedTask;
         }
         catch (Exception ex)
         {
