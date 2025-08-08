@@ -9,7 +9,7 @@ tags:
 excerpt: "We've successfully built a complete .NET Aspire foundation for an educational strategy game using GitHub Copilot with 93% AI autonomy. Here's what we learned about AI-driven software development."
 image:
   path: /assets/linkedin-images/week-2-foundation-complete-linkedin.png
-  alt: Professional LinkedIn image - Week 2 Foundation Complete
+  alt: "Professional LinkedIn image - Week 2 Foundation Complete"
 ---
 
 After two weeks of AI-first development, we've successfully completed the foundational architecture for the World Leaders Game. Working primarily with GitHub Copilot, we achieved 93% AI autonomy while building a complete .NET Aspire solution that transforms a 12-year-old's creative vision into production-ready code.

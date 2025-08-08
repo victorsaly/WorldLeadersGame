@@ -15,7 +15,7 @@ tags:
 author: "Victor Saly"
 image:
   path: /assets/linkedin-images/ai-first-development-linkedin.png
-  alt: Professional LinkedIn image - AI-First Development Methodology
+  alt: "Professional LinkedIn image - AI-First Development Methodology"
 educational_objective: "Demonstrates systematic approach to AI-led educational software development with high autonomy"
 child_safety_verified: true
 ---

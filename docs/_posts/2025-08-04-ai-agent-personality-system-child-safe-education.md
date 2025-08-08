@@ -15,7 +15,7 @@ author: "Victor Saly"
 excerpt: "Implementing six distinct AI personalities with comprehensive child safety validation for educational game mentorship - achieving 92% AI autonomy while maintaining 100% child protection."
 image:
   path: /assets/linkedin-images/ai-agent-personality-linkedin.png
-  alt: Professional LinkedIn image - AI Agent Personality System Child-Safe Education
+  alt: "Professional LinkedIn image - AI Agent Personality System Child-Safe Education"
 ---
 
 **How we created 6 AI personalities that safely teach 12-year-olds geography, economics, and languages**

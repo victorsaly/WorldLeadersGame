@@ -21,7 +21,7 @@ medium_style: true
 code_review_ready: true
 image:
   path: /assets/linkedin-images/ai-linkedin-image-generation-professional-marketing-linkedin.png
-  alt: Professional LinkedIn image - AI-Powered LinkedIn Image Generation Journey
+  alt: "Professional LinkedIn image - AI-Powered LinkedIn Image Generation Journey"
 ---
 
 ## The Challenge: Professional Marketing Images at Scale

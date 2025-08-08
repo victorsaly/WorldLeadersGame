@@ -270,6 +270,27 @@ dotnet run --project src/WorldLeaders/WorldLeaders.AppHost
 # 3. Start Web: dotnet run --project src/WorldLeaders/WorldLeaders.Web
 ```
 
+### 🎨 Quick Blog Image Generation
+
+Generate professional LinkedIn images for your blog posts with a single command:
+
+```bash
+# Generate professional LinkedIn image with AI
+./generate-blog-image.sh my-blog-post-name electric-blue
+
+# Available themes: electric-blue, royal-purple, educational-green, warm-orange, 
+#                  pink, ocean-blue, gold, teal
+```
+
+**What it does:**
+- Analyzes your blog post content automatically
+- Generates AI prompt optimized for DALL-E 3
+- Creates professional 1792x1024px LinkedIn image (~$0.08)
+- Updates Jekyll front matter with image reference
+- Ready for social media sharing in 2-3 minutes
+
+📚 **Documentation:** [Quick Guide](docs/_technical/quick-blog-image-generation.md) | [Complete System](docs/_technical/auto-blog-image-generation.md)
+
 ### 💰 Azure Cost Management & Per-User Attribution
 
 ### Enhanced Cost Tracking for Educational Deployment

@@ -21,7 +21,7 @@ medium_style: true
 code_review_ready: true
 image:
   path: /assets/linkedin-images/first-poc-working-ai-orchestrated-game-development-linkedin.png
-  alt: Professional LinkedIn image - AI-First Development POC Success
+  alt: "Professional LinkedIn image - AI-First Development POC Success"
 ---
 
 # From Voice Memo to Production: How AI Built an Educational Game

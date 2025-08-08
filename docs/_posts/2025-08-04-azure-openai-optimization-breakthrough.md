@@ -8,7 +8,7 @@ author: "Victor Saly"
 reading_time: "8 minutes"
 image:
   path: /assets/linkedin-images/azure-openai-optimization-linkedin.png
-  alt: Professional LinkedIn image - Azure OpenAI Optimization Breakthrough
+  alt: "Professional LinkedIn image - Azure OpenAI Optimization Breakthrough"
 ---
 
 **Breakthrough Achievement**: Successfully resolved Azure OpenAI integration challenges, transitioning from safety fallback responses to genuine AI-generated educational content for 12-year-old learners.
