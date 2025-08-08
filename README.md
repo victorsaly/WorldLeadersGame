@@ -270,27 +270,6 @@ dotnet run --project src/WorldLeaders/WorldLeaders.AppHost
 # 3. Start Web: dotnet run --project src/WorldLeaders/WorldLeaders.Web
 ```
 
-### 🎨 Quick Blog Image Generation
-
-Generate professional LinkedIn images for your blog posts with a single command:
-
-```bash
-# Generate professional LinkedIn image with AI
-./generate-blog-image.sh my-blog-post-name electric-blue
-
-# Available themes: electric-blue, royal-purple, educational-green, warm-orange, 
-#                  pink, ocean-blue, gold, teal
-```
-
-**What it does:**
-- Analyzes your blog post content automatically
-- Generates AI prompt optimized for DALL-E 3
-- Creates professional 1792x1024px LinkedIn image (~$0.08)
-- Updates Jekyll front matter with image reference
-- Ready for social media sharing in 2-3 minutes
-
-📚 **Documentation:** [Quick Guide](docs/_technical/quick-blog-image-generation.md) | [Complete System](docs/_technical/auto-blog-image-generation.md)
-
 ### 💰 Azure Cost Management & Per-User Attribution
 
 ### Enhanced Cost Tracking for Educational Deployment
@@ -298,6 +277,7 @@ Generate professional LinkedIn images for your blog posts with a single command:
 The World Leaders Game includes **comprehensive Azure cost management** with per-user attribution designed specifically for UK educational institutions:
 
 #### 🎯 Key Features
+
 - **Real-time cost tracking** with £0.08/user/day limits
 - **Automated budget alerts** at 80% threshold (£0.064)
 - **Emergency throttling** to prevent cost overruns
@@ -322,7 +302,7 @@ Add the following sections to your `appsettings.json`:
   },
   "BudgetConfig": {
     "DailyLimitGBP": 0.08,
-    "AlertThresholdPercentage": 0.80,
+    "AlertThresholdPercentage": 0.8,
     "EmergencyThrottlingEnabled": true,
     "Region": "UK South",
     "Currency": "GBP",
@@ -401,7 +381,7 @@ Content-Type: application/json
 The system provides automated budget management:
 
 - **Warning Alert (80%)**: Triggered at £0.064 daily spend
-- **Limit Alert (100%)**: Triggered at £0.08 daily spend  
+- **Limit Alert (100%)**: Triggered at £0.08 daily spend
 - **Emergency Throttling**: Activates to prevent overspend while maintaining educational continuity
 - **Educational Impact Assessment**: Suggests alternative learning activities during throttling
 
@@ -656,6 +636,7 @@ infrastructure/
 #### 🔧 Quick Infrastructure Setup
 
 ##### 1. Prerequisites
+
 ```bash
 # Install Azure CLI
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
@@ -671,6 +652,7 @@ az account set --subscription "your-subscription-id"
 ```
 
 ##### 2. Deploy Enhanced UK South Infrastructure
+
 ```bash
 # Create resource group
 az group create \
@@ -700,6 +682,7 @@ az deployment group show \
 ```
 
 ##### 3. Setup GitHub Actions Deployment Pipeline
+
 ```bash
 # Create service principal for GitHub Actions
 az ad sp create-for-rbac \
@@ -713,6 +696,7 @@ az ad sp create-for-rbac \
 ```
 
 ##### 4. Deploy Application with Blue-Green Strategy
+
 ```bash
 # Trigger deployment via GitHub Actions
 git push origin main
@@ -740,6 +724,7 @@ az webapp deployment slot swap \
 #### 🔍 Production Monitoring & Health Checks
 
 ##### Automated Health Validation
+
 Our deployment pipeline includes comprehensive health checks:
 
 - **🌐 Web App Health**: `/health` endpoint validation with <1.5s response time target
@@ -749,6 +734,7 @@ Our deployment pipeline includes comprehensive health checks:
 - **📊 Performance**: Response time monitoring and auto-scaling validation
 
 ##### Real-Time Monitoring Dashboard
+
 ```bash
 # View Application Insights dashboard
 az monitor app-insights component show \
@@ -763,12 +749,14 @@ az monitor autoscale list \
 #### ⚡ Performance Optimization Features
 
 ##### .NET 8 AOT Optimizations
+
 - **Ready-to-Run Images**: Faster startup times for child attention spans
 - **Trimmed Deployments**: Reduced memory footprint and faster cold starts
 - **Compression**: Optimized bundle sizes for UK South region delivery
 - **Native AOT**: Available for API components requiring sub-second startup
 
 ##### Auto-Scaling for Educational Usage Patterns
+
 - **UK School Hours (9 AM - 4 PM GMT)**: Aggressive scaling for peak learning times
 - **Off-Peak Hours**: Conservative scaling with cost optimization
 - **Weekend Scaling**: Minimal instances with rapid scale-out capability
@@ -777,6 +765,7 @@ az monitor autoscale list \
 #### 🚨 Automated Rollback & Disaster Recovery
 
 ##### 30-Second Rollback Capability
+
 ```bash
 # Automatic rollback is built into the pipeline, but manual rollback available:
 az webapp deployment slot swap \
@@ -787,6 +776,7 @@ az webapp deployment slot swap \
 ```
 
 ##### Disaster Recovery Features
+
 - **Zone-Redundant Storage**: High availability across UK South availability zones
 - **Automated Backups**: Daily database and configuration backups
 - **Geographic Redundancy**: UK West region failover capability
@@ -795,12 +785,14 @@ az webapp deployment slot swap \
 #### 📊 Cost Management & Budget Control
 
 ##### Educational Budget Optimization
+
 - **Daily Cost Limit**: £200/day (configurable) with automatic alerts at 80%
 - **Per-User Tracking**: £0.08/user/day target with educational efficiency scoring
 - **Reserved Instances**: Cost optimization for predictable educational workloads
 - **Spot Instances**: Development and testing cost reduction
 
 ##### Cost Monitoring Dashboard
+
 ```bash
 # Check current costs
 az consumption usage list \
@@ -818,12 +810,14 @@ az consumption budget create \
 #### 🔧 Infrastructure as Code Benefits
 
 ##### Enhanced UK Educational Compliance
+
 - **✅ GDPR Compliance**: All resources deployed in UK South with data residency validation
 - **✅ Child Data Protection**: Key Vault encryption and secure configuration management
 - **✅ Educational Standards**: DfE compliance validation built into deployment pipeline
 - **✅ Audit Trails**: Comprehensive logging for compliance and safety investigations
 
 ##### Production-Grade Reliability
+
 - **✅ 99.9% Uptime Target**: Zone-redundant deployment with health monitoring
 - **✅ Zero-Downtime Deployments**: Blue-green strategy preserves educational continuity
 - **✅ Sub-2 Second Response Times**: Child-friendly performance with auto-scaling
@@ -842,6 +836,7 @@ Our educational platform implements **enterprise-grade security** specifically d
 #### 🛡️ Production Security Checklist
 
 ##### Core Security Implementation
+
 - [x] **Child Data Protection Service**: .NET 8 primary constructor pattern with UK South data residency
 - [x] **End-to-End Encryption**: Azure Key Vault UK South with AES-256-GCM for child data
 - [x] **Multi-Layer Content Moderation**: AI + Custom educational validators for 12-year-old safety
@@ -849,6 +844,7 @@ Our educational platform implements **enterprise-grade security** specifically d
 - [x] **Cost Monitoring**: £0.08/user/day limits with emergency throttling
 
 ##### UK Educational Compliance
+
 - [x] **COPPA Compliance**: Parental consent management with transparency controls
 - [x] **GDPR Compliance**: UK data residency, automated consent tracking, data minimization
 - [x] **DfE Standards**: Safeguarding requirements, educational purpose validation
@@ -856,6 +852,7 @@ Our educational platform implements **enterprise-grade security** specifically d
 - [x] **Compliance Monitoring**: Real-time violation detection and reporting
 
 ##### Production Security Features
+
 - [x] **Azure Security Integration**: Key Vault, Application Insights, Security Center
 - [x] **Authentication**: JWT with child-specific security policies
 - [x] **Audit Logging**: Comprehensive trail for compliance and safety events
@@ -865,6 +862,7 @@ Our educational platform implements **enterprise-grade security** specifically d
 #### 🏫 UK Educational Deployment Guide
 
 ##### Prerequisites for Production
+
 ```yaml
 Azure Services (UK South Region):
   - Azure Key Vault (child data encryption)
@@ -880,6 +878,7 @@ UK Compliance Requirements:
 ```
 
 ##### Configuration for UK Educational Use
+
 ```json
 {
   "AzureKeyVault": {
@@ -908,12 +907,14 @@ UK Compliance Requirements:
 #### 🚨 24/7 Security Monitoring
 
 ##### Child Safety Alerts
+
 - **Content Violations**: Automatic flagging with immediate intervention
 - **Session Anomalies**: Unusual usage patterns or extended sessions
 - **Parental Notifications**: Real-time alerts for safety events
 - **Compliance Breaches**: COPPA/GDPR violations with automatic reporting
 
 ##### Security Incident Response
+
 1. **Detection**: Automated monitoring with child safety prioritization
 2. **Assessment**: Risk evaluation with educational context
 3. **Response**: Immediate containment with minimal learning disruption
@@ -924,12 +925,14 @@ UK Compliance Requirements:
 #### 📊 Compliance Reporting
 
 ##### Automated Reports
+
 - **Daily Safety Summary**: Child account activity and safety metrics
 - **Weekly Compliance Report**: COPPA/GDPR adherence with violation tracking
 - **Monthly Safeguarding Review**: DfE standards compliance and incident analysis
 - **Quarterly Security Assessment**: Penetration testing and vulnerability review
 
 ##### Parent & School Dashboards
+
 - **Transparency Controls**: Real-time visibility into child data processing
 - **Consent Management**: Easy renewal and modification of permissions
 - **Educational Progress**: Learning outcomes with privacy protection
@@ -938,12 +941,14 @@ UK Compliance Requirements:
 #### 🔧 Security Maintenance
 
 ##### Regular Security Tasks
+
 - **Key Rotation**: 90-day encryption key renewal (automated)
 - **Security Patches**: Monthly updates with zero-downtime deployment
 - **Compliance Audits**: Quarterly external assessments
 - **Staff Training**: Ongoing child protection and security awareness
 
 ##### Monitoring & Alerting
+
 - **Security Health Checks**: Continuous monitoring of critical components
 - **Penetration Testing**: Bi-annual third-party security assessments
 - **Vulnerability Scanning**: Weekly automated security scans
@@ -952,11 +957,13 @@ UK Compliance Requirements:
 #### 📞 Emergency Contacts
 
 **Child Safety Concerns**:
+
 - Emergency Hotline: [School Administrator]
 - Safeguarding Lead: [Designated Officer]
 - Technical Support: security@worldleadersgame.co.uk
 
 **Compliance Issues**:
+
 - DPO Contact: dpo@worldleadersgame.co.uk
 - ICO Registration: [Registration Number]
 - Legal Compliance: legal@worldleadersgame.co.uk

@@ -20,13 +20,26 @@ public class EducationalDeploymentService(
 {
     public required UKComplianceConfig ComplianceConfig { get; init; } = UKComplianceConfig.Educational;
     public required string Region { get; init; } = "UK South";
+    
+    // Configuration settings for educational deployment
+    private string DeploymentRegion => configuration.GetValue<string>("Deployment:Region") ?? Region;
+    private int HealthCheckTimeoutSeconds => configuration.GetValue<int>("Deployment:HealthCheckTimeoutSeconds", 300);
+    private int RollbackTimeoutSeconds => configuration.GetValue<int>("Deployment:RollbackTimeoutSeconds", 30);
+    private bool EnableDetailedLogging => configuration.GetValue<bool>("Deployment:EnableDetailedLogging", true);
 
     /// <summary>
     /// Deploy educational platform with child safety validation and UK compliance
     /// </summary>
     public async Task<DeploymentResult> DeployAsync(DeploymentConfiguration config, CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("🚀 Starting educational platform deployment to {Region} with child safety validation", Region);
+        var effectiveRegion = !string.IsNullOrEmpty(config.Region) ? config.Region : DeploymentRegion;
+        logger.LogInformation("🚀 Starting educational platform deployment to {Region} with child safety validation", effectiveRegion);
+        
+        if (EnableDetailedLogging)
+        {
+            logger.LogInformation("📊 Deployment configuration: HealthCheckTimeout={HealthCheckTimeout}s, RollbackTimeout={RollbackTimeout}s", 
+                HealthCheckTimeoutSeconds, RollbackTimeoutSeconds);
+        }
         
         var deploymentId = Guid.NewGuid().ToString();
         var startTime = DateTime.UtcNow;
@@ -227,19 +240,22 @@ public class EducationalDeploymentService(
         try
         {
             var rollbackStartTime = DateTime.UtcNow;
+            var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(RollbackTimeoutSeconds));
+            var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
             
-            // Restore previous blue environment
-            await provisioner.RestorePreviousEnvironmentAsync(deploymentId, cancellationToken);
+            // Restore previous blue environment with configured timeout
+            await provisioner.RestorePreviousEnvironmentAsync(deploymentId, combinedCts.Token);
             
             var rollbackDuration = DateTime.UtcNow - rollbackStartTime;
             
-            if (rollbackDuration.TotalSeconds <= 30)
+            if (rollbackDuration.TotalSeconds <= RollbackTimeoutSeconds)
             {
                 logger.LogInformation("✅ Automatic rollback completed successfully in {Duration} seconds", rollbackDuration.TotalSeconds);
             }
             else
             {
-                logger.LogWarning("⚠️ Automatic rollback took {Duration} seconds - exceeds 30-second target", rollbackDuration.TotalSeconds);
+                logger.LogWarning("⚠️ Automatic rollback took {Duration} seconds - exceeds {Target}-second target", 
+                    rollbackDuration.TotalSeconds, RollbackTimeoutSeconds);
             }
         }
         catch (Exception ex)
@@ -382,6 +398,8 @@ public record DeploymentConfiguration
     public bool EnableContentValidation { get; init; } = true;
     public bool EnableChildSafety { get; init; } = true;
     public TimeSpan HealthCheckTimeout { get; init; } = TimeSpan.FromMinutes(5);
+    public int MaxRetryAttempts { get; init; } = 3;
+    public bool EnableBlueGreenDeployment { get; init; } = true;
 }
 
 public record DeploymentResult
