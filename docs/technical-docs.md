@@ -24,6 +24,8 @@ permalink: /technical-docs/
 ### Azure AI Services
 
 - [**Azure AI Security Guide**]({{ '/technical/azure-ai-security-guide/' | relative_url }}) - Safe credential management and secure Azure AI integration
+- [**Auto Blog Image Generation System**]({{ '/technical/auto-blog-image-generation/' | relative_url }}) - Complete AI-powered image generation system for professional blog marketing
+- [**Quick Blog Image Generation Guide**]({{ '/technical/quick-blog-image-generation/' | relative_url }}) - One-command professional image generation for content creators
 
 ---
 

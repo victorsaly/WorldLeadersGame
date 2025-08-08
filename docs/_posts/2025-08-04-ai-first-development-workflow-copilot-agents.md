@@ -8,7 +8,7 @@ author: "Victor Saly"
 excerpt: "A comprehensive guide to our revolutionary AI-first development workflow - from AI-generated issues to automated pull requests using GitHub Copilot agents."
 image:
   path: /assets/linkedin-images/ai-workflow-copilot-agents-linkedin.png
-  alt: Professional LinkedIn image - AI-First Development Workflow with GitHub Copilot
+  alt: "Professional LinkedIn image - AI-First Development Workflow with GitHub Copilot"
 ---
 
 **How we achieve 95% AI autonomy in educational software development**

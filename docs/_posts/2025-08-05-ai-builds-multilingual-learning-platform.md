@@ -17,7 +17,7 @@ tags:
 excerpt: "Week 4 concludes with our most ambitious achievement yet: a complete multilingual speech recognition system that emerged from AI collaboration, transforming our educational game into a sophisticated language learning platform while maintaining strict child safety standards."
 image:
   path: /assets/images/blog/week-4-ai-builds-multilingual-learning-platform.png
-  alt: Week 4 AI Development Journey - Multilingual Learning Platform
+  alt: "Week 4 AI Development Journey - Multilingual Learning Platform"
 ---
 
 This week marked a pivotal moment in our AI-first development journey. What started as exploring speech recognition possibilities evolved into implementing a comprehensive multilingual learning system that teaches 12-year-olds pronunciation across 12 world languages—all through collaborative AI development that maintained our educational mission and child safety standards.

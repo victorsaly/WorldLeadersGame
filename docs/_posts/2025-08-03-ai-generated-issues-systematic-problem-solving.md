@@ -19,7 +19,7 @@ medium_style: true
 code_review_ready: true
 image:
   path: /assets/linkedin-images/ai-generated-issues-linkedin.png
-  alt: Professional LinkedIn image - AI-Generated Issues Systematic Problem-Solving
+  alt: "Professional LinkedIn image - AI-Generated Issues Systematic Problem-Solving"
 ---
 
 ![World Leaders Game Logo]({{ '/assets/world-leaders-logo.svg' | relative_url }})
