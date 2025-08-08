@@ -361,6 +361,11 @@ public record AzureKeyVaultOptions
     public bool UseManagedIdentity { get; init; } = true;
 
     /// <summary>
+    /// Master key for local encryption fallback (development/testing only)
+    /// </summary>
+    public string MasterKey { get; init; } = "WorldLeadersEducationalGame2025!";
+
+    /// <summary>
     /// Default configuration for UK educational deployment
     /// </summary>
     public static AzureKeyVaultOptions UKEducationalDefaults => new()
@@ -370,6 +375,7 @@ public record AzureKeyVaultOptions
         Enabled = false, // Enabled when vault is configured
         DefaultKeyName = "child-data-encryption",
         KeyRotationDays = 90,
-        UseManagedIdentity = true
+        UseManagedIdentity = true,
+        MasterKey = "WorldLeadersEducationalGame2025!"
     };
 }

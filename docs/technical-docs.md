@@ -71,6 +71,7 @@ permalink: /technical-docs/
 
 ### Local Development Setup
 
+- [**LiteDB Integration Implementation**]({{ '/technical/litedb-integration-implementation/' | relative_url }}) - Secure, persistent database solution with child data protection and audit logging
 - Complete Development Environment Setup (Coming Soon)
 - Docker & PostgreSQL Configuration (Coming Soon)
 - VS Code Extensions & AI Tools (Coming Soon)

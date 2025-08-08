@@ -234,9 +234,9 @@ public static class AuthenticationExtensions
         services.AddScoped<IAuthenticationService, JwtAuthenticationService>();
         services.AddScoped<IChildSafetyValidator, ChildSafetyValidator>();
         
-        // Register child data protection dependencies
-        services.AddScoped<IKeyVaultClient, AzureKeyVaultClient>();
-        services.AddScoped<IAuditLogger, ComplianceAuditLogger>();
+        // Register child data protection dependencies with LiteDB persistence
+        services.AddScoped<IKeyVaultClient, LiteDbKeyVaultClient>();
+        services.AddScoped<IAuditLogger, LiteDbAuditLogger>();
         services.AddScoped<IComplianceValidator, UkEducationalComplianceValidator>();
         services.AddScoped<IChildDataProtectionService, ChildDataProtectionService>();
         
