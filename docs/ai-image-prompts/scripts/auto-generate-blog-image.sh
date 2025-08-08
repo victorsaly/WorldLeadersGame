@@ -106,28 +106,29 @@ cat > "$PROMPT_FILE" << EOF
 
 ## 📝 Azure OpenAI DALL-E 3 Optimized Prompt
 
-Create a professional LinkedIn article image with a child-friendly cartoon illustration style in retro monochromatic design.
+Create a professional LinkedIn article image with a modern, vibrant educational technology design.
 
 VISUAL STYLE REQUIREMENTS:
-- Retro monochromatic color scheme: primarily grayscale/black and white with ONE vibrant accent color: $COLOR_THEME $COLOR_VALUE
-- Child-friendly cartoon/illustration aesthetic (NOT photorealistic)
-- Clean, modern typography for any text elements
+- Modern professional design with vibrant colors and gradients
+- Primary color scheme: $COLOR_THEME $COLOR_VALUE with complementary colors
+- Clean, readable typography for any text elements
 - Professional LinkedIn article header format (1792x1024px)
-- Subtle texture or vintage paper background effect
+- Modern gradient backgrounds and sophisticated color combinations
+- High contrast for excellent readability
 
 CONSISTENT ELEMENTS TO INCLUDE:
-- Educational technology symbols (books, screens, gears, lightbulbs)
-- AI/technology indicators (circuit patterns, robot elements, code symbols)
-- Gaming elements (dice, game controllers, progress bars, achievement badges)
-- Father-son collaboration hints (two figures of different sizes working together)
-- Geographic/world elements (globe, maps, countries) when relevant
+- Modern cloud infrastructure symbols (servers, databases, deployment pipelines)
+- DevOps and deployment indicators (blue/green environments, arrows, switches)
+- Educational technology elements (digital classrooms, learning interfaces, student devices)
+- Professional development symbols (code, APIs, monitoring dashboards)
+- Network and connectivity patterns (flowing data, seamless connections)
 
 MOOD & ATMOSPHERE:
-- Professional yet approachable
-- Innovation-focused but family-friendly
-- Educational and inspiring
-- Modern technology with retro design charm
-- Collaborative and partnership-oriented
+- Professional and modern technology aesthetic
+- Innovation-focused with vibrant energy
+- Educational and inspiring with dynamic visuals
+- Modern technology with sophisticated design elements
+- Collaborative and cutting-edge technology showcase
 
 TEXT PLACEMENT:
 - Leave space for article title overlay (top third of image)
@@ -162,7 +163,7 @@ TECHNICAL ELEMENTS TO HIGHLIGHT:
 
 TARGET AUDIENCE: Educational Technology Directors, Developers, Teachers, AI Enthusiasts
 
-COLOR SCHEME: $COLOR_THEME $COLOR_VALUE accent on retro monochromatic base
+COLOR SCHEME: Vibrant $COLOR_THEME $COLOR_VALUE with modern gradients and complementary colors
 EOF
 
 echo "  ✅ Prompt generated: $PROMPT_FILE"

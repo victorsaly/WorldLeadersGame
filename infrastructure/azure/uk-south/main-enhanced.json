@@ -1,0 +1,767 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.37.4.10188",
+      "templateHash": "14670334129262919139"
+    }
+  },
+  "parameters": {
+    "environment": {
+      "type": "string",
+      "defaultValue": "production",
+      "allowedValues": [
+        "dev",
+        "staging",
+        "production"
+      ],
+      "metadata": {
+        "description": "Environment for deployment (dev, staging, production)"
+      }
+    },
+    "region": {
+      "type": "string",
+      "defaultValue": "uksouth",
+      "allowedValues": [
+        "uksouth",
+        "ukwest"
+      ],
+      "metadata": {
+        "description": "Azure region for UK compliance and data residency"
+      }
+    },
+    "projectName": {
+      "type": "string",
+      "defaultValue": "worldleaders",
+      "metadata": {
+        "description": "Project name prefix for consistent resource naming"
+      }
+    },
+    "enableBlueGreenDeployment": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable blue-green deployment slots for zero-downtime deployments"
+      }
+    },
+    "enableAutomatedRollback": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable automated health monitoring and rollback"
+      }
+    },
+    "dailyCostLimitGBP": {
+      "type": "int",
+      "defaultValue": 200,
+      "minValue": 50,
+      "maxValue": 1000,
+      "metadata": {
+        "description": "Daily cost limit in GBP for educational budget control"
+      }
+    },
+    "targetResponseTimeMs": {
+      "type": "int",
+      "defaultValue": 1500,
+      "minValue": 500,
+      "maxValue": 5000,
+      "metadata": {
+        "description": "Target response time in milliseconds for child-friendly performance"
+      }
+    },
+    "minInstances": {
+      "type": "int",
+      "defaultValue": 2,
+      "minValue": 2,
+      "maxValue": 10,
+      "metadata": {
+        "description": "Minimum number of instances for high availability"
+      }
+    },
+    "maxInstances": {
+      "type": "int",
+      "defaultValue": 10,
+      "minValue": 5,
+      "maxValue": 50,
+      "metadata": {
+        "description": "Maximum number of instances for auto-scaling"
+      }
+    }
+  },
+  "variables": {
+    "namePrefix": "[format('{0}-{1}-{2}', parameters('projectName'), parameters('environment'), parameters('region'))]",
+    "appServicePlanName": "[format('{0}-asp', variables('namePrefix'))]",
+    "webAppName": "[format('{0}-web', variables('namePrefix'))]",
+    "apiAppName": "[format('{0}-api', variables('namePrefix'))]",
+    "stagingSlotName": "staging",
+    "storageAccountName": "[replace(format('{0}{1}{2}', parameters('projectName'), parameters('environment'), parameters('region')), '-', '')]",
+    "keyVaultName": "[format('{0}-kv', variables('namePrefix'))]",
+    "appInsightsName": "[format('{0}-insights', variables('namePrefix'))]",
+    "redisCacheName": "[format('{0}-redis', variables('namePrefix'))]",
+    "actionGroupName": "[format('{0}-alerts', variables('namePrefix'))]",
+    "logAnalyticsName": "[format('{0}-logs', variables('namePrefix'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('appServicePlanName')]",
+      "location": "[parameters('region')]",
+      "kind": "linux",
+      "properties": {
+        "reserved": true,
+        "targetWorkerCount": "[parameters('minInstances')]",
+        "zoneRedundant": "[if(equals(parameters('environment'), 'production'), true(), false())]"
+      },
+      "sku": {
+        "name": "[if(equals(parameters('environment'), 'production'), 'P2v3', 'P1v3')]",
+        "tier": "PremiumV3",
+        "capacity": "[parameters('minInstances')]"
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Project": "World Leaders Educational Game",
+        "Compliance": "UK-GDPR-COPPA",
+        "TargetAudience": "12-year-old learners",
+        "UpTimeTarget": "99.9%",
+        "CostCenter": "Education"
+      }
+    },
+    {
+      "type": "Microsoft.Insights/autoscalesettings",
+      "apiVersion": "2022-10-01",
+      "name": "[format('{0}-autoscale', variables('appServicePlanName'))]",
+      "location": "[parameters('region')]",
+      "properties": {
+        "enabled": true,
+        "targetResourceUri": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "profiles": [
+          {
+            "name": "UK School Hours (9 AM - 4 PM GMT)",
+            "capacity": {
+              "minimum": "[string(parameters('minInstances'))]",
+              "maximum": "[string(parameters('maxInstances'))]",
+              "default": "[string(add(parameters('minInstances'), 1))]"
+            },
+            "rules": [
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT5M",
+                  "timeAggregation": "Average",
+                  "operator": "GreaterThan",
+                  "threshold": 70
+                },
+                "scaleAction": {
+                  "direction": "Increase",
+                  "type": "ChangeCount",
+                  "value": "2",
+                  "cooldown": "PT5M"
+                }
+              },
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT5M",
+                  "timeAggregation": "Average",
+                  "operator": "LessThan",
+                  "threshold": 30
+                },
+                "scaleAction": {
+                  "direction": "Decrease",
+                  "type": "ChangeCount",
+                  "value": "1",
+                  "cooldown": "PT10M"
+                }
+              }
+            ],
+            "recurrence": {
+              "frequency": "Week",
+              "schedule": {
+                "timeZone": "GMT Standard Time",
+                "days": [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday"
+                ],
+                "hours": [
+                  9
+                ],
+                "minutes": [
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "name": "Off-Peak Hours",
+            "capacity": {
+              "minimum": "[string(parameters('minInstances'))]",
+              "maximum": "[string(max(4, add(parameters('minInstances'), 2)))]",
+              "default": "[string(parameters('minInstances'))]"
+            },
+            "rules": [
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricResourceUri": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT10M",
+                  "timeAggregation": "Average",
+                  "operator": "GreaterThan",
+                  "threshold": 85
+                },
+                "scaleAction": {
+                  "direction": "Increase",
+                  "type": "ChangeCount",
+                  "value": "1",
+                  "cooldown": "PT10M"
+                }
+              }
+            ],
+            "recurrence": {
+              "frequency": "Week",
+              "schedule": {
+                "timeZone": "GMT Standard Time",
+                "days": [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday"
+                ],
+                "hours": [
+                  16
+                ],
+                "minutes": [
+                  0
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Educational Auto-scaling"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2023-07-01",
+      "name": "[variables('keyVaultName')]",
+      "location": "[parameters('region')]",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "tenantId": "[tenant().tenantId]",
+        "accessPolicies": [],
+        "enableRbacAuthorization": true,
+        "enableSoftDelete": true,
+        "softDeleteRetentionInDays": 90,
+        "enablePurgeProtection": true,
+        "networkAcls": {
+          "defaultAction": "Allow",
+          "bypass": "AzureServices"
+        }
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Child Data Protection",
+        "Compliance": "UK-GDPR"
+      }
+    },
+    {
+      "type": "Microsoft.Cache/redis",
+      "apiVersion": "2023-08-01",
+      "name": "[variables('redisCacheName')]",
+      "location": "[parameters('region')]",
+      "properties": {
+        "sku": {
+          "name": "[if(equals(parameters('environment'), 'production'), 'Standard', 'Basic')]",
+          "family": "[if(equals(parameters('environment'), 'production'), 'C', 'C')]",
+          "capacity": "[if(equals(parameters('environment'), 'production'), 2, 1)]"
+        },
+        "redisConfiguration": {
+          "maxmemory-policy": "allkeys-lru"
+        },
+        "enableNonSslPort": false,
+        "minimumTlsVersion": "1.2",
+        "redisVersion": "6"
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Performance Optimization"
+      }
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2023-09-01",
+      "name": "[variables('logAnalyticsName')]",
+      "location": "[parameters('region')]",
+      "properties": {
+        "sku": {
+          "name": "PerGB2018"
+        },
+        "retentionInDays": "[if(equals(parameters('environment'), 'production'), 90, 30)]",
+        "features": {
+          "enableLogAccessUsingOnlyResourcePermissions": true
+        }
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Educational Platform Monitoring"
+      }
+    },
+    {
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+      "name": "[variables('appInsightsName')]",
+      "location": "[parameters('region')]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "IngestionMode": "ApplicationInsights",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]",
+        "SamplingPercentage": 100
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Child-Friendly Performance Monitoring"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('storageAccountName')]",
+      "location": "[parameters('region')]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_ZRS"
+      },
+      "properties": {
+        "accessTier": "Hot",
+        "allowBlobPublicAccess": false,
+        "minimumTlsVersion": "TLS1_2",
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "blob": {
+              "enabled": true,
+              "keyType": "Account"
+            },
+            "file": {
+              "enabled": true,
+              "keyType": "Account"
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        }
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Educational Content Storage",
+        "DataClassification": "Child-Safe"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('webAppName')]",
+      "location": "[parameters('region')]",
+      "kind": "app,linux",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "httpsOnly": true,
+        "siteConfig": {
+          "linuxFxVersion": "DOTNETCORE|8.0",
+          "alwaysOn": true,
+          "http20Enabled": true,
+          "minTlsVersion": "1.2",
+          "ftpsState": "Disabled",
+          "healthCheckPath": "/health",
+          "appSettings": [
+            {
+              "name": "ASPNETCORE_ENVIRONMENT",
+              "value": "[parameters('environment')]"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').InstrumentationKey]"
+            },
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').ConnectionString]"
+            },
+            {
+              "name": "KeyVault__VaultUri",
+              "value": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName')), '2023-07-01').vaultUri]"
+            },
+            {
+              "name": "RedisCache__ConnectionString",
+              "value": "[format('{0}.redis.cache.windows.net:6380,password={1},ssl=True,abortConnect=False', variables('redisCacheName'), listKeys(resourceId('Microsoft.Cache/redis', variables('redisCacheName')), '2023-08-01').primaryKey)]"
+            },
+            {
+              "name": "ChildSafety__Enabled",
+              "value": "true"
+            },
+            {
+              "name": "UKCompliance__DataResidency",
+              "value": "true"
+            },
+            {
+              "name": "UKCompliance__Region",
+              "value": "[parameters('region')]"
+            },
+            {
+              "name": "Performance__TargetResponseTimeMs",
+              "value": "[string(parameters('targetResponseTimeMs'))]"
+            },
+            {
+              "name": "CostManagement__DailyCostLimitGBP",
+              "value": "[string(parameters('dailyCostLimitGBP'))]"
+            }
+          ]
+        }
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Component": "Educational Web Application",
+        "TargetAudience": "12-year-old learners"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/components', variables('appInsightsName'))]",
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+        "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]"
+      ]
+    },
+    {
+      "condition": "[parameters('enableBlueGreenDeployment')]",
+      "type": "Microsoft.Web/sites/slots",
+      "apiVersion": "2023-01-01",
+      "name": "[format('{0}/{1}', variables('webAppName'), variables('stagingSlotName'))]",
+      "location": "[parameters('region')]",
+      "kind": "app,linux",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "httpsOnly": true,
+        "siteConfig": {
+          "linuxFxVersion": "DOTNETCORE|8.0",
+          "alwaysOn": true,
+          "http20Enabled": true,
+          "minTlsVersion": "1.2",
+          "ftpsState": "Disabled",
+          "healthCheckPath": "/health",
+          "appSettings": "[reference(resourceId('Microsoft.Web/sites', variables('webAppName')), '2023-01-01').siteConfig.appSettings]"
+        }
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Component": "Staging Slot for Zero-Downtime Deployment"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('apiAppName')]",
+      "location": "[parameters('region')]",
+      "kind": "app,linux",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "httpsOnly": true,
+        "siteConfig": {
+          "linuxFxVersion": "DOTNETCORE|8.0",
+          "alwaysOn": true,
+          "http20Enabled": true,
+          "minTlsVersion": "1.2",
+          "ftpsState": "Disabled",
+          "healthCheckPath": "/health",
+          "cors": {
+            "allowedOrigins": [
+              "[format('https://{0}.azurewebsites.net', variables('webAppName'))]",
+              "https://localhost:7154"
+            ],
+            "supportCredentials": true
+          },
+          "appSettings": [
+            {
+              "name": "ASPNETCORE_ENVIRONMENT",
+              "value": "[parameters('environment')]"
+            },
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').InstrumentationKey]"
+            },
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').ConnectionString]"
+            },
+            {
+              "name": "KeyVault__VaultUri",
+              "value": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName')), '2023-07-01').vaultUri]"
+            },
+            {
+              "name": "RedisCache__ConnectionString",
+              "value": "[format('{0}.redis.cache.windows.net:6380,password={1},ssl=True,abortConnect=False', variables('redisCacheName'), listKeys(resourceId('Microsoft.Cache/redis', variables('redisCacheName')), '2023-08-01').primaryKey)]"
+            },
+            {
+              "name": "ChildSafety__Enabled",
+              "value": "true"
+            },
+            {
+              "name": "UKCompliance__DataResidency",
+              "value": "true"
+            },
+            {
+              "name": "AllowedOrigins__Web",
+              "value": "[format('https://{0}.azurewebsites.net', variables('webAppName'))]"
+            }
+          ]
+        }
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Component": "Educational Game API"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/components', variables('appInsightsName'))]",
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+        "[resourceId('Microsoft.Cache/redis', variables('redisCacheName'))]"
+      ]
+    },
+    {
+      "condition": "[parameters('enableBlueGreenDeployment')]",
+      "type": "Microsoft.Web/sites/slots",
+      "apiVersion": "2023-01-01",
+      "name": "[format('{0}/{1}', variables('apiAppName'), variables('stagingSlotName'))]",
+      "location": "[parameters('region')]",
+      "kind": "app,linux",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "httpsOnly": true,
+        "siteConfig": {
+          "linuxFxVersion": "DOTNETCORE|8.0",
+          "alwaysOn": true,
+          "http20Enabled": true,
+          "minTlsVersion": "1.2",
+          "ftpsState": "Disabled",
+          "healthCheckPath": "/health",
+          "cors": "[reference(resourceId('Microsoft.Web/sites', variables('apiAppName')), '2023-01-01').siteConfig.cors]",
+          "appSettings": "[reference(resourceId('Microsoft.Web/sites', variables('apiAppName')), '2023-01-01').siteConfig.appSettings]"
+        }
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Component": "API Staging Slot"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', variables('apiAppName'))]",
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Insights/actionGroups",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('actionGroupName')]",
+      "location": "Global",
+      "properties": {
+        "groupShortName": "[substring(format('{0}{1}', parameters('projectName'), parameters('environment')), 0, 12)]",
+        "enabled": true,
+        "emailReceivers": [],
+        "smsReceivers": [],
+        "webhookReceivers": [],
+        "azureFunctionReceivers": []
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Educational Platform Alerts"
+      }
+    },
+    {
+      "condition": "[parameters('enableAutomatedRollback')]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "apiVersion": "2018-03-01",
+      "name": "[format('{0}-response-time-alert', variables('namePrefix'))]",
+      "location": "Global",
+      "properties": {
+        "severity": 2,
+        "enabled": true,
+        "scopes": [
+          "[resourceId('Microsoft.Web/sites', variables('webAppName'))]",
+          "[resourceId('Microsoft.Web/sites', variables('apiAppName'))]"
+        ],
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT5M",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "name": "ResponseTimeHigh",
+              "metricName": "HttpResponseTime",
+              "metricNamespace": "Microsoft.Web/sites",
+              "operator": "GreaterThan",
+              "threshold": "[parameters('targetResponseTimeMs')]",
+              "timeAggregation": "Average",
+              "criterionType": "StaticThresholdCriterion"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('actionGroupName'))]"
+          }
+        ]
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Child-Friendly Performance Monitoring"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/actionGroups', variables('actionGroupName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('apiAppName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+      ]
+    },
+    {
+      "condition": "[parameters('enableAutomatedRollback')]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "apiVersion": "2018-03-01",
+      "name": "[format('{0}-availability-alert', variables('namePrefix'))]",
+      "location": "Global",
+      "properties": {
+        "severity": 1,
+        "enabled": true,
+        "scopes": [
+          "[resourceId('Microsoft.Web/sites', variables('webAppName'))]",
+          "[resourceId('Microsoft.Web/sites', variables('apiAppName'))]"
+        ],
+        "evaluationFrequency": "PT1M",
+        "windowSize": "PT5M",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "name": "AvailabilityLow",
+              "metricName": "AvailabilityResults/availabilityPercentage",
+              "metricNamespace": "Microsoft.Insights/components",
+              "operator": "LessThan",
+              "threshold": 99,
+              "timeAggregation": "Average",
+              "criterionType": "StaticThresholdCriterion"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('actionGroupName'))]"
+          }
+        ]
+      },
+      "tags": {
+        "Environment": "[parameters('environment')]",
+        "Purpose": "Educational Continuity Monitoring"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/actionGroups', variables('actionGroupName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('apiAppName'))]",
+        "[resourceId('Microsoft.Web/sites', variables('webAppName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "deploymentConfiguration": {
+      "type": "object",
+      "value": {
+        "webApp": {
+          "name": "[variables('webAppName')]",
+          "url": "[format('https://{0}', reference(resourceId('Microsoft.Web/sites', variables('webAppName')), '2023-01-01').defaultHostName)]",
+          "stagingUrl": "[if(parameters('enableBlueGreenDeployment'), format('https://{0}-{1}.azurewebsites.net', variables('webAppName'), variables('stagingSlotName')), '')]"
+        },
+        "apiApp": {
+          "name": "[variables('apiAppName')]",
+          "url": "[format('https://{0}', reference(resourceId('Microsoft.Web/sites', variables('apiAppName')), '2023-01-01').defaultHostName)]",
+          "stagingUrl": "[if(parameters('enableBlueGreenDeployment'), format('https://{0}-{1}.azurewebsites.net', variables('apiAppName'), variables('stagingSlotName')), '')]"
+        },
+        "infrastructure": {
+          "resourceGroupName": "[resourceGroup().name]",
+          "region": "[parameters('region')]",
+          "appServicePlanName": "[variables('appServicePlanName')]",
+          "keyVaultName": "[variables('keyVaultName')]",
+          "keyVaultUri": "[reference(resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName')), '2023-07-01').vaultUri]",
+          "storageAccountName": "[variables('storageAccountName')]",
+          "redisCacheName": "[variables('redisCacheName')]",
+          "appInsightsName": "[variables('appInsightsName')]",
+          "appInsightsInstrumentationKey": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').InstrumentationKey]",
+          "appInsightsConnectionString": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2020-02-02').ConnectionString]"
+        },
+        "monitoring": {
+          "logAnalyticsWorkspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]",
+          "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', variables('actionGroupName'))]",
+          "responseTimeAlertId": "[if(parameters('enableAutomatedRollback'), resourceId('Microsoft.Insights/metricAlerts', format('{0}-response-time-alert', variables('namePrefix'))), null())]",
+          "availabilityAlertId": "[if(parameters('enableAutomatedRollback'), resourceId('Microsoft.Insights/metricAlerts', format('{0}-availability-alert', variables('namePrefix'))), null())]"
+        },
+        "compliance": {
+          "ukRegion": "[parameters('region')]",
+          "dataResidency": true,
+          "gdprCompliant": true,
+          "childSafetyEnabled": true,
+          "encryptionEnabled": true
+        },
+        "performance": {
+          "targetResponseTimeMs": "[parameters('targetResponseTimeMs')]",
+          "minInstances": "[parameters('minInstances')]",
+          "maxInstances": "[parameters('maxInstances')]",
+          "autoScalingEnabled": true,
+          "blueGreenDeploymentEnabled": "[parameters('enableBlueGreenDeployment')]"
+        },
+        "costManagement": {
+          "dailyCostLimitGBP": "[parameters('dailyCostLimitGBP')]",
+          "budgetAlertsEnabled": true,
+          "costOptimizationEnabled": true
+        }
+      }
+    },
+    "quickDeploymentGuide": {
+      "type": "object",
+      "value": {
+        "steps": [
+          "[format('1. Deploy to staging slot using: az webapp deployment source config-zip --resource-group {0} --name {1} --slot {2} --src <package>', resourceGroup().name, variables('webAppName'), variables('stagingSlotName'))]",
+          "2. Validate staging deployment health checks",
+          "[format('3. Swap staging to production for zero-downtime: az webapp deployment slot swap --resource-group {0} --name {1} --slot {2} --target-slot production', resourceGroup().name, variables('webAppName'), variables('stagingSlotName'))]",
+          "4. Monitor Application Insights for performance validation",
+          "[format('5. Automatic rollback available via: az webapp deployment slot swap --resource-group {0} --name {1} --slot production --target-slot {2}', resourceGroup().name, variables('webAppName'), variables('stagingSlotName'))]"
+        ],
+        "healthCheckEndpoints": [
+          "[format('https://{0}/health', reference(resourceId('Microsoft.Web/sites', variables('webAppName')), '2023-01-01').defaultHostName)]",
+          "[format('https://{0}/health', reference(resourceId('Microsoft.Web/sites', variables('apiAppName')), '2023-01-01').defaultHostName)]"
+        ],
+        "monitoringDashboard": "[format('https://portal.azure.com/#@{0}/resource{1}/overview', tenant().tenantId, resourceId('Microsoft.Insights/components', variables('appInsightsName')))]"
+      }
+    }
+  }
+}
