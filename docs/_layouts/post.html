@@ -4,6 +4,48 @@ layout: default
 
 <!-- Mermaid.js support for diagrams -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+<style>
+  /* Enhanced pie chart spacing and text handling */
+  .mermaid {
+    margin: 20px 0;
+    padding: 10px;
+    max-width: 100%;
+    overflow: visible;
+  }
+  
+  /* Pie chart specific styling */
+  .mermaid[data-processed="true"] svg {
+    max-width: 100%;
+    height: auto;
+    min-height: 400px; /* Ensure enough space for labels */
+  }
+  
+  /* Legend text improvements */
+  .mermaid .legend text {
+    font-size: 12px !important;
+    word-wrap: break-word;
+  }
+  
+  /* Pie chart container improvements */
+  .pie-chart-container {
+    width: 100%;
+    min-height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+  }
+  
+  /* Mobile responsiveness for pie charts */
+  @media (max-width: 768px) {
+    .mermaid[data-processed="true"] svg {
+      min-height: 350px;
+    }
+    .mermaid .legend text {
+      font-size: 10px !important;
+    }
+  }
+</style>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     try {
@@ -33,7 +75,29 @@ layout: default
           clusterBorder: '#000000',
           defaultLinkColor: '#000000',
           titleColor: '#000000',
-          edgeColor: '#000000'
+          edgeColor: '#000000',
+          // Enhanced pie chart colors for better accessibility and distinctness
+          pie1: '#2563eb', // Blue - primary
+          pie2: '#dc2626', // Red - secondary  
+          pie3: '#16a34a', // Green - success
+          pie4: '#ea580c', // Orange - warning
+          pie5: '#7c3aed', // Purple - accent
+          pie6: '#0891b2', // Cyan - info
+          pie7: '#be185d', // Pink - highlight
+          pie8: '#374151', // Gray - neutral
+          pie9: '#059669', // Emerald - positive
+          pie10: '#b45309', // Amber - attention
+          pie11: '#4338ca', // Indigo - deep
+          pie12: '#be123c', // Rose - contrast
+          pieSectionTextColor: '#ffffff',
+          pieSectionTextSize: '14px', // Smaller text for better fit
+          pieTitleTextSize: '18px',   // Smaller title for more space
+          pieStrokeColor: '#ffffff',
+          pieStrokeWidth: '2px',
+          pieOuterStrokeWidth: '2px',
+          pieOuterStrokeColor: '#000000',
+          pieLegendTextSize: '12px',  // Smaller legend text
+          pieTextPosition: 0.8        // Position text further out for more space
         }
       });
       

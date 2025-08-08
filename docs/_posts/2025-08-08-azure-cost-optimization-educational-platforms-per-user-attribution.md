@@ -59,8 +59,16 @@ graph TB
         M --> N
     end
     
-    style A fill:#ff9999
-    style N fill:#99ff99
+    %% Enhanced styling for better visual appeal
+    classDef challenge fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
+    classDef solution fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef technical fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
+    classDef result fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#000
+    
+    class A,B,C,D,E challenge
+    class F,G,H,I solution
+    class J,K,L,M technical
+    class N result
 ```
 
 ## 🚀 The Solution: Real-Time Cost Attribution with Educational Context
@@ -181,27 +189,43 @@ sequenceDiagram
     participant ML as ML Forecaster
     participant E as Emergency Handler
     
-    U->>A: Request AI Feature
-    A->>C: Check Current Costs
-    C->>Az: Get Real-Time Usage
-    Az->>C: Return Cost Data (GBP)
-    C->>ML: Request Cost Forecast
-    ML->>C: Return Prediction
+    U->>+A: Request AI Feature
+    A->>+C: Check Current Costs
+    C->>+Az: Get Real-Time Usage
+    Az->>-C: Return Cost Data (GBP)
+    C->>+ML: Request Cost Forecast
+    ML->>-C: Return Prediction
     
     alt Cost Under Threshold (£0.08/day)
         C->>A: Approved
-        A->>U: Full AI Features
+        A->>-U: Full AI Features
     else Cost Near Threshold (80% alert)
         C->>A: Warning
-        A->>U: Reduced AI Features + Warning
+        A->>-U: Reduced AI Features + Warning
     else Cost Over Threshold
-        C->>E: Emergency Protocol
+        C->>+E: Emergency Protocol
         E->>A: Fallback Mode
-        A->>U: Alternative Learning Activities
+        A->>-U: Alternative Learning Activities
+        E->>-C: Protocol Complete
     end
     
     Note over A,ML: All operations <300ms for seamless UX
     Note over U,E: Educational continuity maintained
+    
+    %% Enhanced styling for participants
+    %%{init: {'theme':'base', 'themeVariables': {
+        'actorBkg': '#e3f2fd',
+        'actorBorder': '#1565c0',
+        'actorTextColor': '#000000',
+        'activationBkgColor': '#e8f5e8',
+        'activationBorderColor': '#2e7d32',
+        'sequenceNumberColor': '#ffffff',
+        'sectionBkgColor': '#f5f5f5',
+        'altBkgColor': '#fff3e0',
+        'optBkgColor': '#fce4ec',
+        'noteBkgColor': '#fffde7',
+        'noteBorderColor': '#f57f17'
+    }}}%%
 ```
 
 ```csharp
@@ -327,9 +351,20 @@ graph LR
         H --> I[Budget Planning Tools]
     end
     
-    style A fill:#ffcdd2
-    style E fill:#c8e6c9
-    style I fill:#c8e6c9
+    %% Enhanced styling for better visual appeal
+    classDef privacy fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
+    classDef anonymize fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
+    classDef aggregated fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    classDef metrics fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef dashboard fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#000
+    classDef transparency fill:#e0f2f1,stroke:#00695c,stroke-width:2px,color:#000
+    
+    class A privacy
+    class B anonymize
+    class C aggregated
+    class D,G,H metrics
+    class E,I dashboard
+    class F transparency
 ```
 
 ## 🤖 Machine Learning Cost Forecasting
@@ -385,6 +420,20 @@ public class CostForecastingService
 Understanding that educational usage patterns vary significantly:
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+    'primaryColor': '#e3f2fd',
+    'primaryTextColor': '#000000',
+    'primaryBorderColor': '#1565c0',
+    'lineColor': '#1565c0',
+    'secondaryColor': '#fff3e0',
+    'tertiaryColor': '#e8f5e8',
+    'background': '#ffffff',
+    'taskBkgColor': '#e3f2fd',
+    'taskTextColor': '#000000',
+    'todayLineColor': '#c62828',
+    'sectionBkgColor': '#f5f5f5',
+    'altSectionBkgColor': '#e8f5e8'
+}}}%%
 gantt
     title Educational Cost Patterns Throughout Academic Year
     dateFormat  YYYY-MM-DD
@@ -413,11 +462,12 @@ After implementing this comprehensive cost optimization system, the results exce
 | **GDPR Compliance** | 100% compliant reporting | Full privacy protection |
 
 ```mermaid
+%%{init: {'pie': {'textPosition': 0.85}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '14px', 'pieTitleTextSize': '18px', 'pieLegendTextSize': '12px'}}}%%
 pie title Cost Optimization Results
-    "Under Budget (£0.08/day)" : 78
-    "On Budget (±5%)" : 15
-    "Slight Overrun (<10%)" : 6
-    "Significant Overrun (>10%)" : 1
+    "Under Budget: 78%" : 78
+    "On Target: 15%" : 15
+    "Minor Over: 6%" : 6
+    "Major Over: 1%" : 1
 ```
 
 ### Educational Value Breakdown
@@ -439,8 +489,16 @@ graph TD
     H --> J
     I --> J
     
-    style A fill:#e1f5fe
-    style J fill:#c8e6c9
+    %% Enhanced styling for better visual appeal
+    classDef budget fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#000
+    classDef services fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
+    classDef outcomes fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    classDef result fill:#e8f5e8,stroke:#2e7d32,stroke-width:3px,color:#000
+    
+    class A budget
+    class B,C,D,E services
+    class F,G,H,I outcomes
+    class J result
 ```
 
 ## 💡 Implementation Lessons: What We Learned
@@ -616,10 +674,23 @@ flowchart TD
     I --> K
     J --> K
     
-    style C fill:#c8e6c9
-    style D fill:#fff9c4
-    style E fill:#ffcc02
-    style F fill:#ffab91
+    %% Enhanced styling for better visual appeal
+    classDef userAction fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#000
+    classDef decision fill:#fff3e0,stroke:#ef6c00,stroke-width:3px,color:#000
+    classDef fullFeatures fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef coreFeatures fill:#fffde7,stroke:#f57f17,stroke-width:2px,color:#000
+    classDef basicFeatures fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    classDef offline fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
+    classDef outcomes fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    classDef tracking fill:#e0f2f1,stroke:#00695c,stroke-width:3px,color:#000
+    
+    class A userAction
+    class B decision
+    class C,G fullFeatures
+    class D,H coreFeatures
+    class E,I basicFeatures
+    class F,J offline
+    class K tracking
 ```
 
 ## 🔮 Future Enhancements: The Cost Optimization Roadmap
@@ -656,8 +727,16 @@ graph TB
         F --> I[School C - Standard Usage: £400]
     end
     
-    style D fill:#e1f5fe
-    style F fill:#c8e6c9
+    %% Enhanced styling for collaboration theme
+    classDef schools fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef pool fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#000
+    classDef allocation fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#000
+    classDef usage fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    
+    class A,B,C schools
+    class D,E pool
+    class F allocation
+    class G,H,I usage
 ```
 
 ### 3. Carbon Footprint Cost Integration
@@ -682,14 +761,24 @@ public record EnvironmentalCostData(
 Schools using our cost optimization system report:
 
 ```mermaid
-bar
-    title Monthly Budget Comparison (Before vs After Implementation)
+%%{init: {'theme':'base', 'themeVariables': {
+    'primaryColor': '#e3f2fd',
+    'primaryTextColor': '#000000',
+    'primaryBorderColor': '#1565c0',
+    'lineColor': '#1565c0',
+    'secondaryColor': '#e8f5e8',
+    'tertiaryColor': '#fff3e0',
+    'background': '#ffffff',
+    'barLabelColor': '#000000'
+}}}%%
+xychart-beta
+    title "Monthly Budget Comparison (Before vs After Implementation)"
     x-axis [Jan, Feb, Mar, Apr, May, Jun]
-    y-axis "Cost (£)" 0 --> 800
+    y-axis "Cost (£)" 0 --> 1200
     
-    "Before Optimization" [750, 920, 650, 1100, 850, 720]
-    "After Optimization" [480, 520, 480, 500, 510, 460]
-    "Budget Target" [500, 500, 500, 500, 500, 500]
+    bar [750, 920, 650, 1100, 850, 720]
+    bar [480, 520, 480, 500, 510, 460]
+    line [500, 500, 500, 500, 500, 500]
 ```
 
 - **36% cost reduction** while maintaining educational quality
