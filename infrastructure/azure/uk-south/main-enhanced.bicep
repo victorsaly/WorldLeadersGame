@@ -114,20 +114,20 @@ resource autoScaleSettings 'Microsoft.Insights/autoscalesettings@2022-10-01' = {
           }
           {
             metricTrigger: {
-              metricName: 'ResponseTime'
-              metricResourceUri: webApp.id
+              metricName: 'CpuPercentage'
+              metricResourceUri: appServicePlan.id
               timeGrain: 'PT1M'
               statistic: 'Average'
-              timeWindow: 'PT3M'
+              timeWindow: 'PT5M'
               timeAggregation: 'Average'
-              operator: 'GreaterThan'
-              threshold: targetResponseTimeMs
+              operator: 'LessThan'
+              threshold: 30
             }
             scaleAction: {
-              direction: 'Increase'
+              direction: 'Decrease'
               type: 'ChangeCount'
               value: '1'
-              cooldown: 'PT3M'
+              cooldown: 'PT10M'
             }
           }
         ]
@@ -506,7 +506,7 @@ resource actionGroup 'Microsoft.Insights/actionGroups@2023-01-01' = {
 }
 
 // Performance alert for child-friendly response times
-resource responseTimeAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+resource responseTimeAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = if (enableAutomatedRollback) {
   name: '${namePrefix}-response-time-alert'
   location: 'Global'
   properties: {
@@ -545,7 +545,7 @@ resource responseTimeAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
 }
 
 // Availability alert for 99.9% uptime target
-resource availabilityAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+resource availabilityAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = if (enableAutomatedRollback) {
   name: '${namePrefix}-availability-alert'
   location: 'Global'
   properties: {
@@ -610,8 +610,8 @@ output deploymentConfiguration object = {
   monitoring: {
     logAnalyticsWorkspaceId: logAnalytics.id
     actionGroupId: actionGroup.id
-    responseTimeAlertId: responseTimeAlert.id
-    availabilityAlertId: availabilityAlert.id
+    responseTimeAlertId: enableAutomatedRollback ? responseTimeAlert.id : null
+    availabilityAlertId: enableAutomatedRollback ? availabilityAlert.id : null
   }
   compliance: {
     ukRegion: region
