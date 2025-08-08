@@ -8,8 +8,6 @@ category: "devops"
 tags: ["blue-green-deployment", "zero-downtime", "education", "cloud-deployment", "azure", "devops", "learning-continuity"]
 image:
   path: /assets/linkedin-images/2025-08-08-zero-downtime-blue-green-deployment-educational-platforms-linkedin.png
-  alt: "Professional LinkedIn image - Zero-Downtime Blue-Green Deployment: Revolutionizing Cloud Deployment for Educational Platforms"  path: /assets/linkedin-images/2025-08-08-zero-downtime-blue-green-deployment-educational-platforms-linkedin.png
-  alt: "Professional LinkedIn image - Zero-Downtime Blue-Green Deployment: Revolutionizing Cloud Deployment for Educational Platforms"  path: /assets/linkedin-images/2025-08-08-zero-downtime-blue-green-deployment-educational-platforms-linkedin.png
   alt: "Professional LinkedIn image - Zero-Downtime Blue-Green Deployment: Revolutionizing Cloud Deployment for Educational Platforms"
 linkedin_ready: true
 estimated_read_time: "10 minutes"
