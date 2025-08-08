@@ -32,18 +32,41 @@ builder.Services.AddCors(options =>
     options.AddPolicy("EducationalGamePolicy", policy =>
     {
         policy.WithOrigins(
+            // Development URLs
             "https://localhost:7155",          // API default port
             "http://localhost:5203",           // API actual port  
             "https://localhost:7060", 
             "http://localhost:5122",           // Blazor Web app
             "http://localhost:4000",           // Jekyll docs site  
             "https://localhost:4000",          // Jekyll docs site (HTTPS)
-            "https://docs.worldleadersgame.co.uk", // Production docs
-            "https://worldleadersgame.co.uk"   // Production game
+            
+            // Production URLs
+            "https://docs.worldleadersgame.co.uk",    // Production docs (GitHub Pages)
+            "https://worldleadersgame.co.uk",         // Production game web app
+            "https://api.worldleadersgame.co.uk",     // Production API (self-reference)
+            "https://worldleadersgame.azurewebsites.net",  // Azure default domain
+            "https://worldleaders-web-prod.azurewebsites.net",  // Web app Azure domain
+            "https://worldleaders-api-prod.azurewebsites.net"   // API Azure domain
         )
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials(); // Required for SignalR
+              .AllowCredentials() // Required for SignalR
+              .SetIsOriginAllowed(origin =>
+              {
+                  // Allow all localhost for development
+                  if (origin?.Contains("localhost") == true || origin?.Contains("127.0.0.1") == true)
+                      return true;
+                  
+                  // Allow specific production domains
+                  var allowedDomains = new[] {
+                      "worldleadersgame.co.uk",
+                      "docs.worldleadersgame.co.uk", 
+                      "api.worldleadersgame.co.uk",
+                      "azurewebsites.net"
+                  };
+                  
+                  return allowedDomains.Any(domain => origin?.EndsWith(domain) == true);
+              });
     });
 });
 

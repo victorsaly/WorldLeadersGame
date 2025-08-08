@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using WorldLeaders.Shared.DTOs;
 using WorldLeaders.Shared.Enums;
 using WorldLeaders.Shared.Services;
@@ -13,6 +14,7 @@ namespace WorldLeaders.API.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[EnableCors("EducationalGamePolicy")]
 public class AIController : ControllerBase
 {
     private readonly IAIAgentService _aiAgentService;
