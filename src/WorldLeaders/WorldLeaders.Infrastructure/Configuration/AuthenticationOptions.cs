@@ -320,3 +320,56 @@ public record AuthenticationOptions
         RequireAuthentication = true
     };
 }
+
+/// <summary>
+/// Azure Key Vault configuration for UK South region
+/// Context: Educational game child data protection
+/// Safety Requirements: UK data residency, encryption key management
+/// </summary>
+public record AzureKeyVaultOptions
+{
+    public const string SectionName = "AzureKeyVault";
+
+    /// <summary>
+    /// Azure Key Vault URL (must be UK South region)
+    /// </summary>
+    public string VaultUrl { get; init; } = string.Empty;
+
+    /// <summary>
+    /// Azure region for compliance verification
+    /// </summary>
+    public string Region { get; init; } = "UK South";
+
+    /// <summary>
+    /// Whether Key Vault integration is enabled
+    /// </summary>
+    public bool Enabled { get; init; } = false;
+
+    /// <summary>
+    /// Default encryption key name for child data
+    /// </summary>
+    public string DefaultKeyName { get; init; } = "child-data-encryption";
+
+    /// <summary>
+    /// Key rotation interval in days
+    /// </summary>
+    public int KeyRotationDays { get; init; } = 90;
+
+    /// <summary>
+    /// Whether to use managed identity for authentication
+    /// </summary>
+    public bool UseManagedIdentity { get; init; } = true;
+
+    /// <summary>
+    /// Default configuration for UK educational deployment
+    /// </summary>
+    public static AzureKeyVaultOptions UKEducationalDefaults => new()
+    {
+        VaultUrl = "https://your-vault-name.vault.azure.net/",
+        Region = "UK South",
+        Enabled = false, // Enabled when vault is configured
+        DefaultKeyName = "child-data-encryption",
+        KeyRotationDays = 90,
+        UseManagedIdentity = true
+    };
+}
