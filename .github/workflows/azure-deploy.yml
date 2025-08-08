@@ -306,36 +306,83 @@ jobs:
         name: api
         path: api-publish/
         
-    - name: "🎯 Step 1: Deploy to Staging Slots (Blue-Green)"
+    - name: "🎯 Step 1: Deploy to Staging Slots (Blue-Green with Retry Logic)"
       run: |
-        echo "🔄 Starting blue-green deployment to staging slots..."
+        echo "🔄 Starting blue-green deployment to staging slots with retry logic..."
         
-        # Deploy Web App to staging slot
-        echo "📦 Deploying Web App to staging slot..."
-        cd web-app-publish && zip -r ../web-app.zip . && cd ..
-        az webapp deployment source config-zip \
-          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          --name ${{ env.AZURE_WEB_APP_NAME }} \
-          --slot staging \
-          --src web-app.zip
-        
-        # Deploy API to staging slot
-        echo "📦 Deploying API to staging slot..."
-        cd api-publish && zip -r ../api.zip . && cd ..
-        az webapp deployment source config-zip \
-          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          --name ${{ env.AZURE_API_APP_NAME }} \
-          --slot staging \
-          --src api.zip
+        # Function to deploy with retry logic
+        deploy_with_retry() {
+          local app_name=$1
+          local slot=$2
+          local zip_file=$3
+          local max_attempts=3
+          local attempt=1
           
-        echo "✅ Deployment to staging slots completed"
+          while [ $attempt -le $max_attempts ]; do
+            echo "📦 Deploying $app_name to $slot slot (attempt $attempt/$max_attempts)..."
+            
+            if az webapp deployment source config-zip \
+              --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+              --name "$app_name" \
+              --slot "$slot" \
+              --src "$zip_file" \
+              --timeout 600; then
+              echo "✅ $app_name deployment successful on attempt $attempt"
+              return 0
+            else
+              echo "⚠️ $app_name deployment failed on attempt $attempt"
+              if [ $attempt -eq $max_attempts ]; then
+                echo "❌ $app_name deployment failed after $max_attempts attempts"
+                return 1
+              fi
+              echo "⏳ Waiting 30 seconds before retry..."
+              sleep 30
+            fi
+            attempt=$((attempt + 1))
+          done
+        }
         
-    - name: "⏳ Step 2: Wait for Staging Deployment Stabilization"
+        # Prepare Web App deployment
+        echo "📦 Preparing Web App deployment package..."
+        cd web-app-publish && zip -r ../web-app.zip . && cd ..
+        
+        # Prepare API deployment  
+        echo "📦 Preparing API deployment package..."
+        cd api-publish && zip -r ../api.zip . && cd ..
+        
+        # Deploy Web App with retry logic
+        if ! deploy_with_retry "${{ env.AZURE_WEB_APP_NAME }}" "staging" "web-app.zip"; then
+          echo "❌ Web App deployment failed after all retry attempts"
+          exit 1
+        fi
+        
+        # Add delay between deployments to avoid management operation conflicts
+        echo "⏳ Adding 15-second delay between deployments to avoid Azure conflicts..."
+        sleep 15
+        
+        # Deploy API with retry logic
+        if ! deploy_with_retry "${{ env.AZURE_API_APP_NAME }}" "staging" "api.zip"; then
+          echo "❌ API deployment failed after all retry attempts"
+          exit 1
+        fi
+        
+        echo "✅ All staging slot deployments completed successfully"
+        
+    - name: "⏳ Step 2: Enhanced Staging Deployment Stabilization"
       run: |
-        echo "⏳ Waiting for staging deployments to stabilize and warm up..."
-        echo "🔥 Azure App Service needs time to initialize .NET runtime..."
-        sleep 120  # 2 minutes for proper Azure startup
-        echo "✅ Extended stabilization period completed"
+        echo "⏳ Enhanced staging deployment stabilization period..."
+        echo "🔥 Azure App Service needs extended time for proper container initialization..."
+        echo "📊 Allowing for SCM restart completion and .NET runtime warmup..."
+        
+        # Extended stabilization for container recycling and SCM operations
+        echo "⏳ Phase 1: Container recycling stabilization (60 seconds)..."
+        sleep 60
+        
+        echo "⏳ Phase 2: .NET runtime initialization (60 seconds)..."
+        sleep 60
+        
+        echo "✅ Enhanced stabilization period completed (120 seconds total)"
+        echo "🎯 Azure containers should now be fully stable and ready for health checks"
         
     - name: "🏥 Step 3: Comprehensive Staging Health Checks"
       run: |
