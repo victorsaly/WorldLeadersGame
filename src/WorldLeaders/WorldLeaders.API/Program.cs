@@ -125,10 +125,54 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Initialize database with educational content
-await app.Services.EnsureDatabaseCreatedAsync();
-
-// Configure the HTTP request pipeline
+// Database initialization for educational game data
+try
+{
+    // Only try to create database if not using in-memory provider
+    var databaseProvider = app.Configuration.GetValue<string>("Database:Provider") ?? "InMemory";
+    
+    if (databaseProvider.ToLowerInvariant() == "inmemory")
+    {
+        // For in-memory database, just ensure the context is created
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<WorldLeadersDbContext>();
+        await context.Database.EnsureCreatedAsync();
+        app.Logger.LogInformation("Educational game in-memory database initialized successfully");
+    }
+    else
+    {
+        // For persistent databases, use the existing method
+        await app.Services.EnsureDatabaseCreatedAsync();
+        app.Logger.LogInformation("Educational game database initialized successfully");
+    }
+}
+catch (Exception ex)
+{
+    app.Logger.LogError(ex, "Failed to initialize educational game database. Provider: {Provider}", 
+        app.Configuration.GetValue<string>("Database:Provider"));
+    
+    // For production, gracefully degrade to in-memory if database creation fails
+    if (app.Environment.IsProduction())
+    {
+        app.Logger.LogWarning("Attempting fallback to in-memory database for production deployment");
+        try
+        {
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<WorldLeadersDbContext>();
+            await context.Database.EnsureCreatedAsync();
+            app.Logger.LogInformation("Fallback to in-memory database successful");
+        }
+        catch (Exception fallbackEx)
+        {
+            app.Logger.LogCritical(fallbackEx, "Failed to initialize fallback in-memory database");
+            throw; // Re-throw to prevent startup with invalid database
+        }
+    }
+    else
+    {
+        throw; // Re-throw to prevent startup with invalid database in development
+    }
+}
 
 // Enable Swagger in all environments (with security considerations for production)
 app.UseSwagger();
