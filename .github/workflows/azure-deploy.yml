@@ -242,6 +242,58 @@ jobs:
         
         echo "✅ All staging slots ready for blue-green deployment"
         
+    - name: 🔐 Configure Production JWT Settings
+      run: |
+        echo "🔐 Configuring JWT authentication settings for production environment..."
+        
+        # Generate a secure JWT secret key (256-bit for HS256)
+        JWT_SECRET=$(openssl rand -base64 32)
+        
+        # Configure JWT settings for Web App production
+        echo "🌐 Configuring Web App JWT settings..."
+        az webapp config appsettings set \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --name ${{ env.AZURE_WEB_APP_NAME }} \
+          --settings "Jwt__SecretKey=$JWT_SECRET" \
+                     "Jwt__Issuer=WorldLeadersGame" \
+                     "Jwt__Audience=WorldLeadersUsers" \
+                     "Jwt__ExpirationMinutes=60"
+        
+        # Configure JWT settings for Web App staging slot
+        echo "🌐 Configuring Web App staging slot JWT settings..."
+        az webapp config appsettings set \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --name ${{ env.AZURE_WEB_APP_NAME }} \
+          --slot staging \
+          --settings "Jwt__SecretKey=$JWT_SECRET" \
+                     "Jwt__Issuer=WorldLeadersGame" \
+                     "Jwt__Audience=WorldLeadersUsers" \
+                     "Jwt__ExpirationMinutes=60"
+        
+        # Configure JWT settings for API production
+        echo "🔧 Configuring API JWT settings..."
+        az webapp config appsettings set \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --name ${{ env.AZURE_API_APP_NAME }} \
+          --settings "Jwt__SecretKey=$JWT_SECRET" \
+                     "Jwt__Issuer=WorldLeadersGame" \
+                     "Jwt__Audience=WorldLeadersUsers" \
+                     "Jwt__ExpirationMinutes=60"
+        
+        # Configure JWT settings for API staging slot
+        echo "🔧 Configuring API staging slot JWT settings..."
+        az webapp config appsettings set \
+          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+          --name ${{ env.AZURE_API_APP_NAME }} \
+          --slot staging \
+          --settings "Jwt__SecretKey=$JWT_SECRET" \
+                     "Jwt__Issuer=WorldLeadersGame" \
+                     "Jwt__Audience=WorldLeadersUsers" \
+                     "Jwt__ExpirationMinutes=60"
+        
+        echo "✅ JWT authentication configured for all production and staging environments"
+        echo "🔒 Using secure 256-bit secret key for HS256 JWT signing"
+        
     - name: 📥 Download Web App artifact
       uses: actions/download-artifact@v4
       with:
