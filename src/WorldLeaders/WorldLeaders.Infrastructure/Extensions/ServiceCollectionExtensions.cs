@@ -17,6 +17,69 @@ namespace WorldLeaders.Infrastructure.Extensions;
 public static class ServiceCollectionExtensions
 {
     /// <summary>
+    /// Smart database provider selection based on environment and available connection strings
+    /// Priority: Azure SQL > PostgreSQL > SQLite-Temp (Azure) > SQLite (Local) > InMemory (Fallback)
+    /// </summary>
+    private static string DetermineBestDatabaseProvider(IConfiguration configuration)
+    {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")?.ToLowerInvariant();
+        var isAzure = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
+        
+        // Manual override from configuration (highest priority)
+        var configuredProvider = configuration.GetValue<string>("Database:Provider");
+        if (!string.IsNullOrEmpty(configuredProvider) && configuredProvider.ToLowerInvariant() != "litedb")
+        {
+            Console.WriteLine($"[DatabaseSelection] Using configured provider: {configuredProvider}");
+            return configuredProvider;
+        }
+
+        // Check for Azure SQL connection string
+        var azureSqlConnection = configuration.GetConnectionString("AzureSQL") ?? 
+                               configuration.GetConnectionString("DefaultConnection_Production");
+        if (!string.IsNullOrEmpty(azureSqlConnection) && azureSqlConnection.Contains("database.windows.net"))
+        {
+            Console.WriteLine("[DatabaseSelection] Found Azure SQL connection string");
+            return "AzureSQL";
+        }
+
+        // Check for PostgreSQL connection string
+        var postgresConnection = configuration.GetConnectionString("DefaultConnection") ?? 
+                               configuration.GetConnectionString("PostgreSQL");
+        if (!string.IsNullOrEmpty(postgresConnection) && 
+            (postgresConnection.Contains("Host=") || postgresConnection.Contains("Server=")) &&
+            !postgresConnection.Contains("localhost"))
+        {
+            Console.WriteLine("[DatabaseSelection] Found PostgreSQL connection string");
+            return "PostgreSQL";
+        }
+
+        // Azure App Service specific logic
+        if (isAzure)
+        {
+            Console.WriteLine("[DatabaseSelection] Running in Azure App Service - using SQLite in temp directory");
+            return "SQLite-Temp";
+        }
+
+        // Local development
+        if (environment == "development")
+        {
+            Console.WriteLine("[DatabaseSelection] Development environment - using SQLite");
+            return "SQLite";
+        }
+
+        // Test environment
+        if (environment == "test" || environment == "testing")
+        {
+            Console.WriteLine("[DatabaseSelection] Test environment - using InMemory");
+            return "InMemory";
+        }
+
+        // Fallback
+        Console.WriteLine("[DatabaseSelection] No suitable database found - falling back to InMemory");
+        return "InMemory";
+    }
+
+    /// <summary>
     /// Adds Entity Framework infrastructure services to the DI container
     /// Configured for educational game with child safety considerations
     /// Supports PostgreSQL, SQLite, and In-Memory databases for different environments
@@ -26,30 +89,40 @@ public static class ServiceCollectionExtensions
     /// <returns>The service collection for method chaining</returns>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        // Determine database provider from configuration
-        var databaseProvider = configuration.GetValue<string>("Database:Provider") ?? "InMemory";
+        // Smart database provider selection based on environment and available connection strings
+        var databaseProvider = DetermineBestDatabaseProvider(configuration);
+        
+        Console.WriteLine($"[Infrastructure] Selected database provider: '{databaseProvider}' for environment: {Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}");
 
         // Add Entity Framework with appropriate provider
         services.AddDbContext<WorldLeadersDbContext>(options =>
         {
             switch (databaseProvider.ToLowerInvariant())
             {
+                case "azuresql":
+                    Console.WriteLine("[Infrastructure] Configuring Azure SQL Database");
+                    ConfigureAzureSQL(options, configuration);
+                    break;
+
                 case "postgresql":
                 case "postgres":
+                    Console.WriteLine("[Infrastructure] Configuring PostgreSQL database");
                     ConfigurePostgreSQL(options, configuration);
                     break;
 
                 case "sqlite":
+                    Console.WriteLine("[Infrastructure] Configuring SQLite database");
                     ConfigureSQLite(options, configuration);
                     break;
 
-                case "litedb":
-                    // LiteDB doesn't use Entity Framework, but we still configure EF for Identity
-                    ConfigureSQLite(options, configuration); // Use SQLite for Identity entities
+                case "sqlite-temp":
+                    Console.WriteLine("[Infrastructure] Configuring SQLite database in temp directory (Azure-compatible)");
+                    ConfigureSQLiteTemp(options, configuration);
                     break;
 
                 case "inmemory":
                 default:
+                    Console.WriteLine("[Infrastructure] Configuring InMemory database (fallback)");
                     ConfigureInMemory(options, configuration);
                     break;
             }
@@ -115,6 +188,97 @@ public static class ServiceCollectionExtensions
         }
 
         return services;
+    }
+
+    /// <summary>
+    /// Configures Azure SQL Database provider (requires Microsoft.EntityFrameworkCore.SqlServer package)
+    /// </summary>
+    private static void ConfigureAzureSQL(DbContextOptionsBuilder options, IConfiguration configuration)
+    {
+        // TODO: Add Microsoft.EntityFrameworkCore.SqlServer package reference
+        // For now, fall back to PostgreSQL for cost effectiveness
+        Console.WriteLine("[AzureSQL] Package not available, falling back to PostgreSQL");
+        ConfigurePostgreSQL(options, configuration);
+    }
+
+    /// <summary>
+    /// Configures SQLite database provider for Azure App Service (using temp directory)
+    /// Enhanced with robust directory detection and permission validation
+    /// </summary>
+    private static void ConfigureSQLiteTemp(DbContextOptionsBuilder options, IConfiguration configuration)
+    {
+        // Enhanced Azure temp directory detection with multiple fallbacks
+        var tempPath = GetAzureTempDirectory();
+        var dbPath = Path.Combine(tempPath, "worldleaders.db");
+        var connectionString = $"Data Source={dbPath}";
+
+        Console.WriteLine($"[SQLiteTemp] Using database path: {dbPath}");
+        Console.WriteLine($"[SQLiteTemp] Directory exists: {Directory.Exists(tempPath)}");
+        Console.WriteLine($"[SQLiteTemp] Directory writable: {IsDirectoryWritable(tempPath)}");
+
+        options.UseSqlite(connectionString, sqliteOptions =>
+        {
+            sqliteOptions.CommandTimeout(30);
+        });
+    }
+
+    /// <summary>
+    /// Gets the best available temporary directory for Azure App Service
+    /// Tries multiple Azure-specific paths in order of preference
+    /// </summary>
+    private static string GetAzureTempDirectory()
+    {
+        // Azure App Service temp directories (in order of preference)
+        var azureTempPaths = new[]
+        {
+            Environment.GetEnvironmentVariable("TEMP"),           // Primary Azure temp
+            Environment.GetEnvironmentVariable("TMP"),            // Alternative Azure temp
+            @"D:\local\Temp",                                     // Azure Windows temp
+            @"D:\home\data\tmp",                                  // Azure persistent temp
+            "/tmp",                                               // Linux fallback
+            Path.GetTempPath()                                    // System fallback
+        };
+
+        foreach (var path in azureTempPaths)
+        {
+            if (!string.IsNullOrEmpty(path) && Directory.Exists(path) && IsDirectoryWritable(path))
+            {
+                Console.WriteLine($"[AzureTemp] Using temp directory: {path}");
+                return path;
+            }
+        }
+
+        // Last resort - create temp directory in current directory
+        var fallbackTemp = Path.Combine(Directory.GetCurrentDirectory(), "temp");
+        try
+        {
+            Directory.CreateDirectory(fallbackTemp);
+            Console.WriteLine($"[AzureTemp] Created fallback temp directory: {fallbackTemp}");
+            return fallbackTemp;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[AzureTemp] Failed to create fallback directory: {ex.Message}");
+            throw new InvalidOperationException("No writable directory found for SQLite database in Azure App Service", ex);
+        }
+    }
+
+    /// <summary>
+    /// Tests if a directory is writable by attempting to create and delete a test file
+    /// </summary>
+    private static bool IsDirectoryWritable(string dirPath)
+    {
+        try
+        {
+            var testFile = Path.Combine(dirPath, $"test_{Guid.NewGuid()}.tmp");
+            File.WriteAllText(testFile, "test");
+            File.Delete(testFile);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
