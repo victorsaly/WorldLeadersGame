@@ -424,7 +424,8 @@ jobs:
         echo "📊 Web App response time: ${WEB_RESPONSE_TIME}ms (target: ${{ env.TARGET_RESPONSE_TIME_MS }}ms)"
         echo "📊 API response time: ${API_RESPONSE_TIME}ms (target: ${{ env.TARGET_RESPONSE_TIME_MS }}ms)"
         
-        if [ $WEB_RESPONSE_TIME -gt ${{ env.TARGET_RESPONSE_TIME_MS }} ] || [ $API_RESPONSE_TIME -gt ${{ env.TARGET_RESPONSE_TIME_MS }} ]; then
+        TARGET_MS=${{ env.TARGET_RESPONSE_TIME_MS }}
+        if [ $WEB_RESPONSE_TIME -gt $TARGET_MS ] || [ $API_RESPONSE_TIME -gt $TARGET_MS ]; then
           echo "❌ Response time exceeds target - initiating rollback"
           perform_rollback
         fi
@@ -526,7 +527,7 @@ jobs:
         echo "📚 Educational Value: All learning objectives preserved"
         echo "🌍 Real-World Learning: Geography and economics features deployed"
         echo "🇬🇧 UK Compliance: Data residency and GDPR requirements met"
-        echo "⚡ Performance: Sub-${TARGET_RESPONSE_TIME_MS}ms response times achieved"
+        echo "⚡ Performance: Sub-${{ env.TARGET_RESPONSE_TIME_MS }}ms response times achieved"
         echo "📊 Monitoring: Enhanced alerts and 99.9% uptime tracking active"
         echo ""
         echo "🎊 Ready for 12-year-old learners with production-grade reliability! 🌟"
@@ -553,7 +554,7 @@ jobs:
         echo "- Zero-downtime blue-green deployments" >> $GITHUB_STEP_SUMMARY
         echo "- Automated rollback within 30 seconds" >> $GITHUB_STEP_SUMMARY
         echo "- 99.9% uptime target with comprehensive monitoring" >> $GITHUB_STEP_SUMMARY
-        echo "- Child-friendly performance targets (sub-${TARGET_RESPONSE_TIME_MS}ms)" >> $GITHUB_STEP_SUMMARY
+        echo "- Child-friendly performance targets (sub-${{ env.TARGET_RESPONSE_TIME_MS }}ms)" >> $GITHUB_STEP_SUMMARY
         echo "- .NET 8 AOT optimizations for faster startup" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### 🌍 Ready for Global Educational Impact!" >> $GITHUB_STEP_SUMMARY
