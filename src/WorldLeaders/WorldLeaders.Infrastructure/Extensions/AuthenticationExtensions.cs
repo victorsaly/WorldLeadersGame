@@ -234,6 +234,12 @@ public static class AuthenticationExtensions
         services.AddScoped<IAuthenticationService, JwtAuthenticationService>();
         services.AddScoped<IChildSafetyValidator, ChildSafetyValidator>();
         
+        // Register child data protection dependencies
+        services.AddScoped<IKeyVaultClient, AzureKeyVaultClient>();
+        services.AddScoped<IAuditLogger, ComplianceAuditLogger>();
+        services.AddScoped<IComplianceValidator, UkEducationalComplianceValidator>();
+        services.AddScoped<IChildDataProtectionService, ChildDataProtectionService>();
+        
         // Add enhanced cost tracking services
         services.AddScoped<IPerUserCostTracker, PerUserCostTracker>();
         services.AddScoped<IRealTimeCostTracker, PerUserCostTracker>();

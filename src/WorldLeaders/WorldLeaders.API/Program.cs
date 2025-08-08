@@ -1,4 +1,5 @@
 using WorldLeaders.API.Hubs;
+using WorldLeaders.API.HealthChecks;
 using WorldLeaders.Infrastructure.Data;
 using WorldLeaders.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,11 @@ if (File.Exists("appsettings.local.json"))
 
 // Add services to the container
 builder.Services.AddControllers();
+
+// Add .NET built-in health checks for educational platform
+builder.Services.AddHealthChecks()
+    .AddCheck<ChildSafetyHealthCheck>("child_safety", tags: new[] { "critical", "child_protection" })
+    .AddCheck<DatabaseHealthCheck>("database", tags: new[] { "ready", "data" });
 
 // Add Infrastructure services (EF Core + Game Services + Authentication)
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -140,6 +146,81 @@ app.UseAuthorization();
 
 // Map controllers
 app.MapControllers();
+
+// Map .NET built-in health check endpoints for educational platform monitoring
+app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var response = new
+        {
+            Status = report.Status.ToString(),
+            Service = "World Leaders Game API",
+            Environment = "Educational Platform",
+            Timestamp = DateTime.UtcNow,
+            Message = "Educational game API health status",
+            Checks = report.Entries.Select(entry => new
+            {
+                Name = entry.Key,
+                Status = entry.Value.Status.ToString(),
+                Description = entry.Value.Description,
+                Data = entry.Value.Data,
+                Duration = entry.Value.Duration.TotalMilliseconds
+            })
+        };
+        await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions 
+        { 
+            WriteIndented = true 
+        }));
+    }
+});
+
+// Basic health check for load balancers
+app.MapHealthChecks("/alive");
+
+// Readiness check for Kubernetes/container orchestration
+app.MapHealthChecks("/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+
+// Detailed health check for monitoring systems
+app.MapHealthChecks("/health/detailed", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var response = new
+        {
+            Status = report.Status.ToString(),
+            Service = "World Leaders Game API",
+            Environment = "Educational Platform",
+            Timestamp = DateTime.UtcNow,
+            TotalDuration = report.TotalDuration.TotalMilliseconds,
+            Configuration = new
+            {
+                ChildSafetyMode = true,
+                TargetAge = "12 years",
+                EducationalContext = "Geography, Economics, Language Learning",
+                ComplianceFrameworks = new[] { "COPPA", "GDPR", "UK Educational Standards" }
+            },
+            Components = report.Entries.Select(entry => new
+            {
+                Name = entry.Key,
+                Status = entry.Value.Status.ToString(),
+                Description = entry.Value.Description,
+                Data = entry.Value.Data,
+                Duration = entry.Value.Duration.TotalMilliseconds,
+                Exception = entry.Value.Exception?.Message
+            })
+        };
+        await context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(response, new System.Text.Json.JsonSerializerOptions 
+        { 
+            WriteIndented = true 
+        }));
+    }
+});
 
 // Map SignalR hubs
 app.MapHub<GameHub>("/gamehub");
