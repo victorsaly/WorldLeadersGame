@@ -43,6 +43,11 @@ public static class ServiceCollectionExtensions
                     ConfigureSQLite(options, configuration);
                     break;
 
+                case "litedb":
+                    // LiteDB doesn't use Entity Framework, but we still configure EF for Identity
+                    ConfigureSQLite(options, configuration); // Use SQLite for Identity entities
+                    break;
+
                 case "inmemory":
                 default:
                     ConfigureInMemory(options, configuration);
@@ -64,6 +69,9 @@ public static class ServiceCollectionExtensions
 
         // Add educational authentication services
         services.AddEducationalAuthentication(configuration);
+
+        // Configure LiteDB options
+        services.Configure<LiteDbOptions>(configuration.GetSection(LiteDbOptions.SectionName));
 
         // Add game engine services
         services.AddScoped<IGameEngine, GameEngine>();

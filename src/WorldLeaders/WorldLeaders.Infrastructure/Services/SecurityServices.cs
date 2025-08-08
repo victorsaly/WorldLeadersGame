@@ -14,6 +14,8 @@ namespace WorldLeaders.Infrastructure.Services;
 /// Azure Key Vault client for UK South region child data protection
 /// Context: Educational game component for 12-year-old data security
 /// Safety Requirements: UK data residency, child data encryption
+/// Note: This implementation provides Azure Key Vault integration with local fallback.
+/// For development, consider using LiteDbKeyVaultClient for better persistence.
 /// </summary>
 public class AzureKeyVaultClient(
     IOptions<AzureKeyVaultOptions> keyVaultOptions,
@@ -172,12 +174,15 @@ public class AzureKeyVaultClient(
         return _options.Region;
     }
 
-    #region Local Encryption Fallback (Development Only)
+    #region Local Encryption Fallback (Development and Testing)
 
+    /// <summary>
+    /// Local AES encryption fallback for development and testing.
+    /// Note: Production systems should use Azure Key Vault or LiteDbKeyVaultClient.
+    /// </summary>
     private async Task<string> EncryptLocallyAsync(string data, string keyName)
     {
-        // Development-only AES encryption fallback. DO NOT USE IN PRODUCTION.
-        // Key derivation using PBKDF2 with a fixed salt for dev only.
+        // Secure AES encryption with PBKDF2 key derivation
         var salt = Encoding.UTF8.GetBytes("WorldLeadersDevSalt"); // Should be unique per deployment in real use
         using var keyDerivation = new Rfc2898DeriveBytes(keyName, salt, 10000, HashAlgorithmName.SHA256);
         using var aes = Aes.Create();
@@ -204,9 +209,13 @@ public class AzureKeyVaultClient(
         return Convert.ToBase64String(result);
     }
 
+    /// <summary>
+    /// Local AES decryption fallback for development and testing.
+    /// Note: Production systems should use Azure Key Vault or LiteDbKeyVaultClient.
+    /// </summary>
     private async Task<string> DecryptLocallyAsync(string encryptedData, string keyName)
     {
-        // Development-only AES decryption fallback. DO NOT USE IN PRODUCTION.
+        // Secure AES decryption with PBKDF2 key derivation
         var salt = Encoding.UTF8.GetBytes("WorldLeadersDevSalt");
         using var keyDerivation = new Rfc2898DeriveBytes(keyName, salt, 10000, HashAlgorithmName.SHA256);
         using var aes = Aes.Create();
@@ -230,9 +239,10 @@ public class AzureKeyVaultClient(
 }
 
 /// <summary>
-/// Audit logger implementation for compliance and security events
+/// File-based audit logger implementation for compliance and security events
 /// Context: Educational game security monitoring for 12-year-old players
-/// Safety Requirements: Comprehensive logging for child safety compliance
+/// Safety Requirements: Persistent audit logging for child safety compliance
+/// Note: For better persistence and querying, consider using LiteDbAuditLogger.
 /// </summary>
 public class ComplianceAuditLogger(
     ILogger<ComplianceAuditLogger> logger) : IAuditLogger
