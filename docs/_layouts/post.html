@@ -6,33 +6,41 @@ layout: default
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Mermaid with production-safe configuration
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'base',
-      securityLevel: 'loose',
-      fontFamily: 'Inter, sans-serif',
-      themeVariables: {
-        primaryColor: '#ffffff',
-        primaryTextColor: '#000000',
-        primaryBorderColor: '#000000',
-        lineColor: '#000000',
-        secondaryColor: '#f8f9fa',
-        tertiaryColor: '#ffffff',
-        background: '#ffffff',
-        mainBkg: '#ffffff',
-        secondBkg: '#f8f9fa',
-        tertiaryBkg: '#ffffff',
-        nodeTextColor: '#000000',
-        textColor: '#000000',
-        edgeLabelBackground: '#ffffff',
-        clusterBkg: '#f8f9fa',
-        clusterBorder: '#000000',
-        defaultLinkColor: '#000000',
-        titleColor: '#000000',
-        edgeColor: '#000000'
-      }
-    });
+    try {
+      // Initialize Mermaid with production-safe configuration and error handling
+      mermaid.initialize({
+        startOnLoad: false, // We'll control initialization manually
+        theme: 'base',
+        securityLevel: 'loose',
+        fontFamily: 'Inter, sans-serif',
+        logLevel: 'error', // Reduce console noise
+        suppressErrors: true, // Handle errors gracefully
+        themeVariables: {
+          primaryColor: '#ffffff',
+          primaryTextColor: '#000000',
+          primaryBorderColor: '#000000',
+          lineColor: '#000000',
+          secondaryColor: '#f8f9fa',
+          tertiaryColor: '#ffffff',
+          background: '#ffffff',
+          mainBkg: '#ffffff',
+          secondBkg: '#f8f9fa',
+          tertiaryBkg: '#ffffff',
+          nodeTextColor: '#000000',
+          textColor: '#000000',
+          edgeLabelBackground: '#ffffff',
+          clusterBkg: '#f8f9fa',
+          clusterBorder: '#000000',
+          defaultLinkColor: '#000000',
+          titleColor: '#000000',
+          edgeColor: '#000000'
+        }
+      });
+      
+      console.log('✅ Mermaid.js initialized successfully for educational diagrams');
+    } catch (error) {
+      console.warn('⚠️ Mermaid initialization failed:', error);
+    }
     
     // Enhanced Mermaid diagram detection and conversion
     function processMermaidDiagrams() {
@@ -68,25 +76,47 @@ layout: default
     // Process diagrams
     processMermaidDiagrams();
     
-    // Run Mermaid rendering
+    // Run Mermaid rendering with error handling
     try {
-      mermaid.run();
+      console.log('🎯 Starting Mermaid diagram rendering...');
+      mermaid.run().then(() => {
+        console.log('✅ All Mermaid diagrams rendered successfully');
+      }).catch(error => {
+        console.warn('⚠️ Some Mermaid diagrams failed to render:', error);
+        // Attempt individual diagram rendering as fallback
+        renderDiagramsIndividually();
+      });
     } catch (error) {
-      console.warn('Mermaid rendering error (non-critical):', error);
-      // Fallback: try to render individual diagrams
-      setTimeout(() => {
-        document.querySelectorAll('.mermaid').forEach(element => {
-          if (!element.getAttribute('data-processed')) {
-            try {
-              mermaid.render('mermaid-' + Date.now(), element.textContent, (svgCode) => {
-                element.innerHTML = svgCode;
+      console.warn('⚠️ Mermaid rendering error (attempting fallback):', error);
+      renderDiagramsIndividually();
+    }
+    
+    // Fallback function to render diagrams individually
+    function renderDiagramsIndividually() {
+      console.log('🔄 Attempting individual diagram rendering...');
+      document.querySelectorAll('.mermaid').forEach((element, index) => {
+        if (!element.getAttribute('data-processed')) {
+          try {
+            const content = element.textContent.trim();
+            if (content) {
+              const id = 'mermaid-fallback-' + index + '-' + Date.now();
+              mermaid.render(id, content).then((result) => {
+                element.innerHTML = result.svg;
+                element.setAttribute('data-processed', 'true');
+                console.log('✅ Individual diagram rendered:', id);
+              }).catch(diagramError => {
+                console.warn('❌ Failed to render diagram:', diagramError);
+                element.innerHTML = '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 5px; color: #856404;"><strong>⚠️ Diagram Error:</strong> Unable to render this diagram. Please check the syntax.</div>';
+                element.setAttribute('data-processed', 'error');
               });
-            } catch (e) {
-              console.warn('Individual mermaid render failed:', e);
             }
+          } catch (individualError) {
+            console.warn('❌ Individual diagram error:', individualError);
+            element.innerHTML = '<div style="background: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px; color: #721c24;"><strong>❌ Critical Error:</strong> Diagram could not be processed.</div>';
+            element.setAttribute('data-processed', 'critical-error');
           }
-        });
-      }, 1000);
+        }
+      });
     }
   });
 </script>

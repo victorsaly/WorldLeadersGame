@@ -187,11 +187,23 @@ Remember: Be encouraging, use simple language, and make it fun!`
             
         } catch (error) {
             console.error('Server API explanation failed:', error);
-            console.log('⚡ Falling back to local analysis');
             
-            // Fallback to local analysis
+            // Provide specific feedback for CORS issues
+            if (error.message.includes('CORS') || error.message.includes('Failed to fetch')) {
+                console.log('🌐 CORS/Network issue detected - API may not be deployed yet');
+                console.log('⚡ Using local educational analysis as fallback');
+            } else {
+                console.log('⚡ Falling back to local analysis due to server error');
+            }
+            
+            // Fallback to local analysis with educational context
             const analysis = this.analyzeCode(codeContent);
-            return this.createEducationalExplanation(analysis, codeContent);
+            const fallbackExplanation = this.createEducationalExplanation(analysis, codeContent);
+            
+            // Add a note about the fallback for transparency
+            fallbackExplanation.fallback_notice = "Note: Using local analysis. Full AI-powered explanations available when API is deployed.";
+            
+            return fallbackExplanation;
         }
     }
 
