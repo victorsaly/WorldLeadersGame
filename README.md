@@ -622,6 +622,217 @@ Optimized for UK educational deployment:
 
 ---
 
+## 🏗️ Infrastructure as Code & Deployment Pipeline - UK Platform
+
+### 🎯 Enhanced .NET 8 DevOps Pipeline with UK South Focus
+
+Our educational platform features a **bulletproof deployment pipeline** designed specifically for UK educational institutions with **99.9% uptime target** and **child safety validation**.
+
+#### 🚀 Zero-Downtime Blue-Green Deployment Features
+
+- **🔄 Blue-Green Strategy**: Seamless slot-based deployments with zero downtime for educational continuity
+- **⚡ 30-Second Rollback**: Automated rollback capability within 30 seconds on health check failure
+- **📊 Real-Time Monitoring**: Application Insights with child-friendly performance targets (<1.5s response time)
+- **🛡️ Child Safety Validation**: Every deployment validates educational content and safety measures
+- **🇬🇧 UK Compliance**: GDPR data residency and educational compliance validation
+
+#### 📁 Infrastructure Components
+
+```
+infrastructure/
+├── azure/
+│   ├── uk-south/
+│   │   ├── main-enhanced.bicep          # Complete UK infrastructure
+│   │   ├── app-service-plan.bicep       # Auto-scaling for 1000+ users
+│   │   └── README.md                    # Deployment documentation
+│   ├── azure-deploy.bicep               # Core infrastructure template
+│   └── azure-appgateway.bicep           # Application Gateway setup
+├── .github/workflows/
+│   └── azure-deploy.yml                 # Enhanced CI/CD pipeline
+└── src/WorldLeaders/WorldLeaders.Infrastructure/Services/
+    └── EducationalDeploymentService.cs  # Deployment automation service
+```
+
+#### 🔧 Quick Infrastructure Setup
+
+##### 1. Prerequisites
+```bash
+# Install Azure CLI
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# Install .NET 8 SDK
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
+
+# Login to Azure
+az login
+az account set --subscription "your-subscription-id"
+```
+
+##### 2. Deploy Enhanced UK South Infrastructure
+```bash
+# Create resource group
+az group create \
+  --name "worldleaders-prod-uksouth-rg" \
+  --location "uksouth" \
+  --tags Environment=production Project="World Leaders Educational Game"
+
+# Deploy enhanced infrastructure with blue-green deployment
+az deployment group create \
+  --resource-group "worldleaders-prod-uksouth-rg" \
+  --template-file "infrastructure/azure/uk-south/main-enhanced.bicep" \
+  --parameters \
+    environment=production \
+    region=uksouth \
+    enableBlueGreenDeployment=true \
+    enableAutomatedRollback=true \
+    dailyCostLimitGBP=200 \
+    targetResponseTimeMs=1500 \
+    minInstances=2 \
+    maxInstances=10
+
+# Verify deployment
+az deployment group show \
+  --resource-group "worldleaders-prod-uksouth-rg" \
+  --name "main-enhanced" \
+  --query "properties.outputs"
+```
+
+##### 3. Setup GitHub Actions Deployment Pipeline
+```bash
+# Create service principal for GitHub Actions
+az ad sp create-for-rbac \
+  --name "worldleaders-github-actions" \
+  --role "Contributor" \
+  --scopes "/subscriptions/{subscription-id}/resourceGroups/worldleaders-prod-uksouth-rg" \
+  --sdk-auth
+
+# Add required GitHub Secrets:
+# AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
+```
+
+##### 4. Deploy Application with Blue-Green Strategy
+```bash
+# Trigger deployment via GitHub Actions
+git push origin main
+
+# Or deploy manually to staging slots
+cd src/WorldLeaders
+dotnet publish WorldLeaders.Web/WorldLeaders.Web.csproj -c Release -o ../../web-publish
+dotnet publish WorldLeaders.API/WorldLeaders.API.csproj -c Release -o ../../api-publish
+
+# Deploy to staging slots
+az webapp deployment source config-zip \
+  --resource-group "worldleaders-prod-uksouth-rg" \
+  --name "worldleaders-web-prod-uksouth" \
+  --slot staging \
+  --src web-publish.zip
+
+# Health check and swap to production
+az webapp deployment slot swap \
+  --resource-group "worldleaders-prod-uksouth-rg" \
+  --name "worldleaders-web-prod-uksouth" \
+  --slot staging \
+  --target-slot production
+```
+
+#### 🔍 Production Monitoring & Health Checks
+
+##### Automated Health Validation
+Our deployment pipeline includes comprehensive health checks:
+
+- **🌐 Web App Health**: `/health` endpoint validation with <1.5s response time target
+- **🔧 API Health**: `/health` endpoint with educational content validation
+- **🛡️ Child Safety**: Content moderation and safety service validation
+- **📚 Educational Content**: Game mechanics and learning objective verification
+- **📊 Performance**: Response time monitoring and auto-scaling validation
+
+##### Real-Time Monitoring Dashboard
+```bash
+# View Application Insights dashboard
+az monitor app-insights component show \
+  --resource-group "worldleaders-prod-uksouth-rg" \
+  --app "worldleaders-prod-uksouth-insights"
+
+# Check auto-scaling status
+az monitor autoscale list \
+  --resource-group "worldleaders-prod-uksouth-rg"
+```
+
+#### ⚡ Performance Optimization Features
+
+##### .NET 8 AOT Optimizations
+- **Ready-to-Run Images**: Faster startup times for child attention spans
+- **Trimmed Deployments**: Reduced memory footprint and faster cold starts
+- **Compression**: Optimized bundle sizes for UK South region delivery
+- **Native AOT**: Available for API components requiring sub-second startup
+
+##### Auto-Scaling for Educational Usage Patterns
+- **UK School Hours (9 AM - 4 PM GMT)**: Aggressive scaling for peak learning times
+- **Off-Peak Hours**: Conservative scaling with cost optimization
+- **Weekend Scaling**: Minimal instances with rapid scale-out capability
+- **Holiday Patterns**: Automated scaling adjustments for school calendars
+
+#### 🚨 Automated Rollback & Disaster Recovery
+
+##### 30-Second Rollback Capability
+```bash
+# Automatic rollback is built into the pipeline, but manual rollback available:
+az webapp deployment slot swap \
+  --resource-group "worldleaders-prod-uksouth-rg" \
+  --name "worldleaders-web-prod-uksouth" \
+  --slot production \
+  --target-slot staging
+```
+
+##### Disaster Recovery Features
+- **Zone-Redundant Storage**: High availability across UK South availability zones
+- **Automated Backups**: Daily database and configuration backups
+- **Geographic Redundancy**: UK West region failover capability
+- **Point-in-Time Recovery**: Educational data protection with 90-day retention
+
+#### 📊 Cost Management & Budget Control
+
+##### Educational Budget Optimization
+- **Daily Cost Limit**: £200/day (configurable) with automatic alerts at 80%
+- **Per-User Tracking**: £0.08/user/day target with educational efficiency scoring
+- **Reserved Instances**: Cost optimization for predictable educational workloads
+- **Spot Instances**: Development and testing cost reduction
+
+##### Cost Monitoring Dashboard
+```bash
+# Check current costs
+az consumption usage list \
+  --billing-period-name "202401" \
+  --resource-group "worldleaders-prod-uksouth-rg"
+
+# Set up budget alerts
+az consumption budget create \
+  --resource-group "worldleaders-prod-uksouth-rg" \
+  --budget-name "educational-platform-budget" \
+  --amount 6000 \
+  --time-grain "Monthly"
+```
+
+#### 🔧 Infrastructure as Code Benefits
+
+##### Enhanced UK Educational Compliance
+- **✅ GDPR Compliance**: All resources deployed in UK South with data residency validation
+- **✅ Child Data Protection**: Key Vault encryption and secure configuration management
+- **✅ Educational Standards**: DfE compliance validation built into deployment pipeline
+- **✅ Audit Trails**: Comprehensive logging for compliance and safety investigations
+
+##### Production-Grade Reliability
+- **✅ 99.9% Uptime Target**: Zone-redundant deployment with health monitoring
+- **✅ Zero-Downtime Deployments**: Blue-green strategy preserves educational continuity
+- **✅ Sub-2 Second Response Times**: Child-friendly performance with auto-scaling
+- **✅ Automated Recovery**: 30-second rollback capability with health validation
+
+For detailed technical documentation, see our [Infrastructure Documentation →](./infrastructure/azure/uk-south/README.md)
+
+---
+
 ## 🔐 Production Security & Compliance
 
 ### 🎯 UK Educational Production Security Framework
