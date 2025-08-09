@@ -189,3 +189,101 @@ public enum SafetyEventSeverity
     /// </summary>
     Critical = 5
 }
+
+/// <summary>
+/// Zoom levels for the interactive pixel world map
+/// </summary>
+public enum ZoomLevel
+{
+    /// <summary>
+    /// Global view showing all continents
+    /// </summary>
+    World = 1,
+
+    /// <summary>
+    /// Continental view showing countries in a continent
+    /// </summary>
+    Continent = 2,
+
+    /// <summary>
+    /// Regional view showing neighboring countries
+    /// </summary>
+    Region = 3,
+
+    /// <summary>
+    /// Country view showing landmarks and cities
+    /// </summary>
+    Country = 4
+}
+
+/// <summary>
+/// Status of territories on the interactive map
+/// </summary>
+public enum TerritoryStatus
+{
+    /// <summary>
+    /// Territory is locked and cannot be acquired yet
+    /// </summary>
+    Locked = 1,
+
+    /// <summary>
+    /// Territory is available for acquisition
+    /// </summary>
+    Available = 2,
+
+    /// <summary>
+    /// Territory is owned by the current player
+    /// </summary>
+    Owned = 3,
+
+    /// <summary>
+    /// Territory is owned by another player (multiplayer mode)
+    /// </summary>
+    OtherPlayer = 4,
+
+    /// <summary>
+    /// Territory is being contested (future feature)
+    /// </summary>
+    Contested = 5
+}
+
+/// <summary>
+/// Types of landmarks for educational discovery
+/// </summary>
+public enum LandmarkType
+{
+    /// <summary>
+    /// Historical monuments and structures
+    /// </summary>
+    Monument = 1,
+
+    /// <summary>
+    /// Natural wonders and geographical features
+    /// </summary>
+    NaturalWonder = 2,
+
+    /// <summary>
+    /// Museums and cultural sites
+    /// </summary>
+    Museum = 3,
+
+    /// <summary>
+    /// Religious or spiritual sites
+    /// </summary>
+    Religious = 4,
+
+    /// <summary>
+    /// Modern architectural marvels
+    /// </summary>
+    Modern = 5,
+
+    /// <summary>
+    /// Parks and recreational areas
+    /// </summary>
+    Park = 6,
+
+    /// <summary>
+    /// UNESCO World Heritage sites
+    /// </summary>
+    WorldHeritage = 7
+}

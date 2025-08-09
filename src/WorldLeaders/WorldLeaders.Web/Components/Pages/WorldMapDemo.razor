@@ -1,0 +1,340 @@
+@page "/world-map-demo"
+@*
+Interactive Pixel Art World Map Demo Page
+Context: Educational demo showcasing the new 32-bit pixel art world map for 12-year-old geography learning
+Educational Objective: Demonstrate interactive map features and child-friendly design
+Safety Requirements: Age-appropriate content and safe interaction patterns
+*@
+@using WorldLeaders.Shared.Models
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Enums
+@inject ILogger<WorldMapDemo> Logger
+
+<PageTitle>🗺️ Interactive World Map - World Leaders Game</PageTitle>
+
+<div class="retro-game-container min-h-screen p-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Demo Header -->
+        <div class="text-center mb-6">
+            <h1 class="retro-title text-3xl md:text-4xl mb-4">
+                🗺️ Interactive Pixel Art World Map
+            </h1>
+            <p class="retro-subtitle text-lg mb-2">
+                Week 6.3 Feature Demo
+            </p>
+            <p class="retro-body on-dark text-center max-w-2xl mx-auto">
+                Explore the world through our new 32-bit pixel art map! Click on countries to learn about geography, culture, and more. Designed for 12-year-old adventurers with mobile-friendly touch controls.
+            </p>
+        </div>
+
+        <!-- Player Status Demo -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="pixel-art-card green-theme text-center">
+                <h3 class="font-bold text-lg mb-2">👤 Player Stats</h3>
+                <div class="space-y-2">
+                    <p><strong>Income:</strong> $@playerIncome</p>
+                    <p><strong>Reputation:</strong> @playerReputation%</p>
+                    <p><strong>Territories:</strong> @playerTerritories.Count</p>
+                </div>
+            </div>
+            
+            <div class="pixel-art-card text-center">
+                <h3 class="font-bold text-lg mb-2">🎯 Learning Goals</h3>
+                <div class="space-y-1 text-sm">
+                    <p>✅ Country Recognition</p>
+                    <p>✅ Cultural Discovery</p>
+                    <p>✅ Geography Skills</p>
+                    <p>✅ Economic Understanding</p>
+                </div>
+            </div>
+            
+            <div class="pixel-art-card text-center">
+                <h3 class="font-bold text-lg mb-2">🎮 Controls</h3>
+                <div class="space-y-1 text-sm">
+                    <p>🖱️ Click countries to explore</p>
+                    <p>🔍 Use zoom buttons</p>
+                    <p>📱 Touch-friendly on mobile</p>
+                    <p>⚡ 44px minimum touch zones</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive World Map Component -->
+        <div class="mb-6">
+            <PixelWorldMap PlayerId="@demoPlayerId"
+                          PlayerTerritories="@playerTerritories"
+                          AvailableTerritories="@availableTerritories"
+                          OnTerritorySelected="OnTerritorySelected"
+                          OnZoomChanged="OnZoomChanged"
+                          IsMobile="@isMobile" />
+        </div>
+
+        <!-- Selected Territory Information -->
+        @if (selectedTerritory != null)
+        {
+            <div class="pixel-art-card green-theme mb-6">
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0">
+                        <img src="https://flagcdn.com/w80/@(selectedTerritory.CountryCode.ToLower()).png" 
+                             alt="@selectedTerritory.CountryName flag" 
+                             class="w-20 h-15 pixel-image border-2 border-black"/>
+                    </div>
+                    <div class="flex-grow">
+                        <h3 class="text-2xl font-bold mb-2">@selectedTerritory.CountryName</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <p><strong>Country Code:</strong> @selectedTerritory.CountryCode</p>
+                                <p><strong>GDP:</strong> $@selectedTerritory.GdpInBillions B</p>
+                                <p><strong>Cost:</strong> $@selectedTerritory.Cost</p>
+                                <p><strong>Monthly Income:</strong> $@selectedTerritory.MonthlyIncome</p>
+                            </div>
+                            <div>
+                                <p><strong>Tier:</strong> @selectedTerritory.Tier</p>
+                                <p><strong>Reputation Required:</strong> @selectedTerritory.ReputationRequired%</p>
+                                <p><strong>Languages:</strong> @string.Join(", ", selectedTerritory.OfficialLanguages.Take(3))</p>
+                            </div>
+                        </div>
+                        
+                        @if (selectedTerritory.IsAvailable && !selectedTerritory.IsOwned)
+                        {
+                            <div class="mt-4">
+                                <button @onclick="() => AcquireTerritory(selectedTerritory)" 
+                                        class="pixel-art-button"
+                                        disabled="@(!CanAffordTerritory(selectedTerritory))">
+                                    @if (CanAffordTerritory(selectedTerritory))
+                                    {
+                                        <span>🏴 Acquire Territory</span>
+                                    }
+                                    else
+                                    {
+                                        <span>💡 Need More Resources</span>
+                                    }
+                                </button>
+                            </div>
+                        }
+                        else if (selectedTerritory.IsOwned)
+                        {
+                            <div class="mt-4">
+                                <span class="pixel-art-button" style="opacity: 0.7; cursor: default;">
+                                    ✅ Territory Owned
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Feature Information -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="pixel-art-card">
+                <h3 class="text-xl font-bold mb-4">🎨 Design Features</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>✅ 32-bit pixel art aesthetics</li>
+                    <li>✅ 1280x640 resolution (16:10 aspect)</li>
+                    <li>✅ Child designer's green theme</li>
+                    <li>✅ Mobile-optimized touch zones (44px+)</li>
+                    <li>✅ SVG-based scalable graphics</li>
+                    <li>✅ Retro animations and effects</li>
+                    <li>✅ Accessibility-compliant design</li>
+                </ul>
+            </div>
+            
+            <div class="pixel-art-card">
+                <h3 class="text-xl font-bold mb-4">📚 Educational Value</h3>
+                <ul class="space-y-2 text-sm">
+                    <li>🌍 Real-world geography learning</li>
+                    <li>🏛️ Cultural discovery and facts</li>
+                    <li>💰 Economic concepts (GDP, trade)</li>
+                    <li>🗣️ Language exposure and learning</li>
+                    <li>🏴 Flag recognition and symbolism</li>
+                    <li>🏛️ Famous landmarks and monuments</li>
+                    <li>✨ Positive cultural representation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Implementation Status -->
+        <div class="pixel-art-card mb-6">
+            <h3 class="text-xl font-bold mb-4">⚡ Implementation Status</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <h4 class="font-bold text-green-700 mb-2">✅ Phase 1: Complete</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>✅ PixelWorldMap models</li>
+                        <li>✅ Interactive SVG component</li>
+                        <li>✅ Touch zone optimization</li>
+                        <li>✅ Zoom functionality</li>
+                        <li>✅ Mobile responsiveness</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-orange-600 mb-2">🔄 Phase 2: In Progress</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>🔄 Educational tooltips</li>
+                        <li>🔄 Real-world data integration</li>
+                        <li>🔄 Cultural information system</li>
+                        <li>⭐ Enhanced fact presentation</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-blue-600 mb-2">📋 Phase 3: Planned</h4>
+                    <ul class="text-sm space-y-1">
+                        <li>📋 16x12 pixel flags</li>
+                        <li>📋 24x24 landmarks</li>
+                        <li>📋 Smooth animations</li>
+                        <li>📋 Performance optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Zoom Level Display -->
+        <div class="text-center">
+            <div class="pixel-art-card inline-block">
+                <p><strong>Current Zoom:</strong> @currentZoom</p>
+                <p class="text-sm mt-1">Zoom levels: 🌍 World → 🌎 Continent → 🏞️ Region → 🏛️ Country</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Demo Configuration
+    private readonly Guid demoPlayerId = Guid.NewGuid();
+    private int playerIncome = 5000;
+    private int playerReputation = 75;
+    private bool isMobile = false;
+    
+    // Component State
+    private List<TerritoryDto> playerTerritories = new();
+    private List<TerritoryDto> availableTerritories = new();
+    private TerritoryDto? selectedTerritory;
+    private ZoomLevel currentZoom = ZoomLevel.World;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await InitializeDemoData();
+        Logger.LogInformation("Interactive Pixel Art World Map demo initialized for player {PlayerId}", demoPlayerId);
+    }
+
+    private async Task InitializeDemoData()
+    {
+        // Initialize player territories (owned)
+        playerTerritories = new List<TerritoryDto>
+        {
+            new TerritoryDto(
+                Id: Guid.NewGuid(),
+                CountryName: "Canada",
+                CountryCode: "CA",
+                OfficialLanguages: new List<string> { "English", "French" },
+                GdpInBillions: 2139,
+                Tier: TerritoryTier.Medium,
+                Cost: 1500,
+                ReputationRequired: 20,
+                MonthlyIncome: 150,
+                IsAvailable: false,
+                IsOwned: true
+            )
+        };
+
+        // Initialize available territories
+        availableTerritories = new List<TerritoryDto>
+        {
+            new TerritoryDto(
+                Id: Guid.NewGuid(),
+                CountryName: "United States",
+                CountryCode: "US",
+                OfficialLanguages: new List<string> { "English" },
+                GdpInBillions: 26854,
+                Tier: TerritoryTier.Major,
+                Cost: 5000,
+                ReputationRequired: 60,
+                MonthlyIncome: 500,
+                IsAvailable: true,
+                IsOwned: false
+            ),
+            new TerritoryDto(
+                Id: Guid.NewGuid(),
+                CountryName: "United Kingdom",
+                CountryCode: "GB",
+                OfficialLanguages: new List<string> { "English" },
+                GdpInBillions: 3131,
+                Tier: TerritoryTier.Major,
+                Cost: 3000,
+                ReputationRequired: 50,
+                MonthlyIncome: 300,
+                IsAvailable: true,
+                IsOwned: false
+            ),
+            new TerritoryDto(
+                Id: Guid.NewGuid(),
+                CountryName: "Australia",
+                CountryCode: "AU",
+                OfficialLanguages: new List<string> { "English" },
+                GdpInBillions: 1553,
+                Tier: TerritoryTier.Medium,
+                Cost: 2000,
+                ReputationRequired: 40,
+                MonthlyIncome: 200,
+                IsAvailable: true,
+                IsOwned: false
+            ),
+            new TerritoryDto(
+                Id: Guid.NewGuid(),
+                CountryName: "Japan",
+                CountryCode: "JP",
+                OfficialLanguages: new List<string> { "Japanese" },
+                GdpInBillions: 4940,
+                Tier: TerritoryTier.Major,
+                Cost: 4000,
+                ReputationRequired: 70,
+                MonthlyIncome: 400,
+                IsAvailable: playerReputation >= 70,
+                IsOwned: false
+            )
+        };
+
+        await Task.CompletedTask;
+    }
+
+    private async Task OnTerritorySelected(TerritoryDto territory)
+    {
+        selectedTerritory = territory;
+        Logger.LogInformation("Territory selected in demo: {CountryName} ({CountryCode})", 
+            territory.CountryName, territory.CountryCode);
+        await Task.CompletedTask;
+    }
+
+    private async Task OnZoomChanged(ZoomLevel zoomLevel)
+    {
+        currentZoom = zoomLevel;
+        Logger.LogInformation("Zoom level changed to: {ZoomLevel}", zoomLevel);
+        await Task.CompletedTask;
+    }
+
+    private async Task AcquireTerritory(TerritoryDto territory)
+    {
+        if (CanAffordTerritory(territory))
+        {
+            // Simulate territory acquisition
+            playerIncome -= territory.Cost;
+            playerIncome += territory.MonthlyIncome;
+            
+            // Create new territory with updated ownership status
+            var ownedTerritory = territory with { IsOwned = true, IsAvailable = false };
+            
+            playerTerritories.Add(ownedTerritory);
+            availableTerritories.Remove(territory);
+            
+            Logger.LogInformation("Territory acquired in demo: {CountryName}", territory.CountryName);
+            StateHasChanged();
+        }
+        await Task.CompletedTask;
+    }
+
+    private bool CanAffordTerritory(TerritoryDto territory)
+    {
+        return playerIncome >= territory.Cost && playerReputation >= territory.ReputationRequired;
+    }
+}
