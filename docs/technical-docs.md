@@ -9,6 +9,7 @@ permalink: /technical-docs/
 
 ### Development Environment
 
+- [**Command Scripts Reference**]({{ '/technical/command-scripts-reference/' | relative_url }}) - Comprehensive guide to all automation scripts and command-line tools
 - [**Command Line Development Guide**]({{ '/technical/command-line-guide/' | relative_url }}) - Essential CLI commands and workflows
 - [**Phase 1.2: NuGet Package Installation Summary**]({{ '/technical/package-installation-summary/' | relative_url }}) - Complete package installation guide and educational alignment
 
