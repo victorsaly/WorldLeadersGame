@@ -199,7 +199,7 @@ title: "World Leaders Game"
     <p>Follow our <strong><a href="{{ '/post/' | relative_url }}">latest blog posts</a></strong> for real-time updates, or dive into our <strong><a href="{{ '/journey/' | relative_url }}">complete development journey</a></strong> to see AI autonomy in action.</p>
     
     <div class="cta-buttons">
-      <a href="https://worldleadersgame.com" class="btn-primary large">🌐 Play the Game</a>
+      <a href="https://worldleadersgame.co.uk" class="btn-primary large">🌐 Play the Game</a>
       <a href="{{ '/post/' | relative_url }}" class="btn-secondary large">📖 Latest Posts</a>
     </div>
   </div>
@@ -973,8 +973,9 @@ Educational strategy game where **12-year-olds** learn geography, economics, and
 ## 🌟 **Why This Matters**
 
 **Revolutionary AI-First Development**: This project demonstrates:
+
 - **🤖 High AI autonomy** in educational software development
-- **👶 Child-centered design** with authentic user feedback  
+- **👶 Child-centered design** with authentic user feedback
 - **📚 Complete methodology** documentation for replication
 - **🎓 Real learning outcomes** for 12-year-old players
 
@@ -987,6 +988,6 @@ Educational strategy game where **12-year-olds** learn geography, economics, and
   <p>Follow our <strong><a href="{{ '/post/' | relative_url }}">latest blog posts</a></strong> for real-time updates, or dive into our <strong><a href="{{ '/journey/' | relative_url }}">complete development journey</a></strong> to see AI autonomy in action.</p>
   
   <div style="text-align: center; margin-top: 1rem;">
-    <a href="https://worldleadersgame.com" class="btn-primary">🌐 Play the Game</a>
+    <a href="https://worldleadersgame.co.uk" class="btn-primary">🌐 Play the Game</a>
   </div>
 </div>

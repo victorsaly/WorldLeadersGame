@@ -4,8 +4,8 @@
 
 <div align="center">
 
-[![🌐 Live Game](https://img.shields.io/badge/🌐_Play_Game-worldleadersgame.com-2ea44f?style=for-the-badge&logo=gamepad&logoColor=white)](https://worldleadersgame.com)
-[![📚 Documentation](https://img.shields.io/badge/📚_Documentation-docs.worldleadersgame.com-blue?style=for-the-badge&logo=gitbook&logoColor=white)](https://docs.worldleadersgame.com)
+[![🌐 Live Game](https://img.shields.io/badge/🌐_Play_Game-worldleadersgame.co.uk-2ea44f?style=for-the-badge&logo=gamepad&logoColor=white)](https://worldleadersgame.co.uk)
+[![📚 Documentation](https://img.shields.io/badge/📚_Documentation-docs.worldleadersgame.co.uk-blue?style=for-the-badge&logo=gitbook&logoColor=white)](https://docs.worldleadersgame.co.uk)
 
 **Status**: Week 6 Retro Transformation • **AI Autonomy**: 85% • **Target**: 12-year-old learners
 
@@ -49,11 +49,11 @@ dotnet run --project src/WorldLeaders/WorldLeaders.AppHost
 ## 🏗️ Technology Stack
 
 | Layer        | Technology                    | Purpose                    |
-|--------------|-------------------------------|----------------------------|
+| ------------ | ----------------------------- | -------------------------- |
 | **Frontend** | Blazor Server + TailwindCSS   | Child-friendly retro UI    |
-| **Backend**  | .NET 8 + ASP.NET Core        | Stable educational API     |
+| **Backend**  | .NET 8 + ASP.NET Core         | Stable educational API     |
 | **Database** | PostgreSQL + Entity Framework | Educational data storage   |
-| **AI**       | Azure OpenAI (GPT-4)         | Safe educational AI agents |
+| **AI**       | Azure OpenAI (GPT-4)          | Safe educational AI agents |
 | **Speech**   | Azure Speech Services         | Language learning          |
 | **Deploy**   | .NET Aspire + Azure UK South  | Production orchestration   |
 
@@ -63,11 +63,12 @@ dotnet run --project src/WorldLeaders/WorldLeaders.AppHost
 
 Our **12-year-old creative director** transformed this from modern UI to **retro 32-bit pixel art**:
 
-> *"Dad, this should look like those old games with pixel art and have a green background theme!"*
+> _"Dad, this should look like those old games with pixel art and have a green background theme!"_
 
 **Week 6 Transformation Includes**:
+
 - 🎨 **32-bit pixel art aesthetic** with green theme
-- 👤 **Character personas** replacing text usernames  
+- 👤 **Character personas** replacing text usernames
 - 🗺️ **Interactive world map** with pixel art countries
 - 📱 **Mobile-first retro UI** optimized for tablets
 
@@ -75,11 +76,11 @@ Our **12-year-old creative director** transformed this from modern UI to **retro
 
 ## 🤖 AI Collaboration Stats
 
-| AI System             | Role                     | Autonomy |
-|-----------------------|--------------------------|----------|
-| **Claude Sonnet 3.5** | Architecture & content   | 85%      |
-| **GitHub Copilot**    | Real-time coding         | 90%      |
-| **Azure OpenAI**      | Educational AI agents    | 85%      |
+| AI System             | Role                   | Autonomy |
+| --------------------- | ---------------------- | -------- |
+| **Claude Sonnet 3.5** | Architecture & content | 85%      |
+| **GitHub Copilot**    | Real-time coding       | 90%      |
+| **Azure OpenAI**      | Educational AI agents  | 85%      |
 
 **Human Oversight (15%)**: Creative vision, safety validation, educational alignment
 
@@ -87,15 +88,15 @@ Our **12-year-old creative director** transformed this from modern UI to **retro
 
 ## 📚 Documentation & Learning
 
-### 🌐 **[Complete Website & Documentation →](https://docs.worldleadersgame.com)**
+### 🌐 **[Complete Website & Documentation →](https://docs.worldleadersgame.co.uk)**
 
-| Section | Focus | Link |
-|---------|-------|------|
-| **🏠 Home** | Project overview | [Visit →](https://docs.worldleadersgame.com) |
-| **📅 Journey** | Week-by-week AI collaboration | [Follow →](https://docs.worldleadersgame.com/journey) |
-| **🔧 Technical** | Implementation guides | [Learn →](https://docs.worldleadersgame.com/technical-docs) |
-| **📝 Blog** | Educational insights | [Read →](https://docs.worldleadersgame.com/blog) |
-| **🏆 Stats** | Real-time progress metrics | [Track →](https://docs.worldleadersgame.com/milestones) |
+| Section          | Focus                         | Link                                                          |
+| ---------------- | ----------------------------- | ------------------------------------------------------------- |
+| **🏠 Home**      | Project overview              | [Visit →](https://docs.worldleadersgame.co.uk)                |
+| **📅 Journey**   | Week-by-week AI collaboration | [Follow →](https://docs.worldleadersgame.co.uk/journey)       |
+| **🔧 Technical** | Implementation guides         | [Learn →](https://docs.worldleadersgame.co.uk/technical-docs) |
+| **📝 Blog**      | Educational insights          | [Read →](https://docs.worldleadersgame.co.uk/blog)            |
+| **🏆 Stats**     | Real-time progress metrics    | [Track →](https://docs.worldleadersgame.co.uk/milestones)     |
 
 ---
 
@@ -112,6 +113,7 @@ Our **12-year-old creative director** transformed this from modern UI to **retro
 ## 🌟 Why This Matters
 
 **Revolutionary AI-First Development**: This project demonstrates:
+
 - **🤖 95% AI autonomy** in software development
 - **👶 Child-centered design** with authentic user feedback
 - **📚 Complete methodology documentation** for replication
@@ -130,7 +132,7 @@ All automation scripts are in `/scripts/` directory:
 ./scripts/start-game.sh                               # Start local game
 ./scripts/validate-documentation-completeness.sh     # Validate docs
 
-# Deployment  
+# Deployment
 ./scripts/fast-deploy.sh                             # Deploy to production
 ./scripts/restart-production.sh                     # Restart services
 
@@ -138,7 +140,7 @@ All automation scripts are in `/scripts/` directory:
 ./scripts/generate-blog-image.sh                    # AI blog images
 ```
 
-**[📖 Complete Command Reference →](https://docs.worldleadersgame.com/technical/command-scripts-reference/)**
+**[📖 Complete Command Reference →](https://docs.worldleadersgame.co.uk/technical/command-scripts-reference/)**
 
 ---
 
@@ -156,7 +158,7 @@ All automation scripts are in `/scripts/` directory:
 
 **Educational Use Welcome**: Adapt our methodology for your own parent-child learning projects or educational technology development.
 
-**[🌐 Start Exploring: worldleadersgame.com →](https://worldleadersgame.com)**
+**[🌐 Start Exploring: worldleadersgame.co.uk →](https://worldleadersgame.co.uk)**
 
 ---
 
@@ -164,6 +166,6 @@ All automation scripts are in `/scripts/` directory:
 
 **Built with ❤️ by father-son team + AI collaboration**
 
-*📖 [MIT License](LICENSE) • 🎓 Educational Focus • 🌍 12-year-old Creative Director*
+_📖 [MIT License](LICENSE) • 🎓 Educational Focus • 🌍 12-year-old Creative Director_
 
 </div>

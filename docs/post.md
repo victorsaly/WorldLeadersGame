@@ -5,25 +5,6 @@ subtitle: "Complete AI-Led Game Creation Journey Documentation"
 permalink: /post/
 ---
 
-## 🎯 Complete Post Archive
-
-<div class="quick-nav">
-  <div class="nav-card">
-    <h3>📅 Development Timeline</h3>
-    <p>Chronological journey from voice memo to production game, showing AI autonomy progression and collaboration patterns.</p>
-  </div>
-  
-  <div class="nav-card">
-    <h3>🤖 AI Collaboration Insights</h3>
-    <p>Deep analysis of prompt engineering, Copilot instruction development, and human-AI collaboration methodologies.</p>
-  </div>
-  
-  <div class="nav-card">
-    <h3>🎮 Technical Implementation</h3>
-    <p>Architecture decisions, educational game mechanics, and production deployment experiences.</p>
-  </div>
-</div>
-
 ## 📝 **All Posts** ({{ site.posts.size }} total)
 
 <div class="post-list">

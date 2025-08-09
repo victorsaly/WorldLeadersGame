@@ -25,7 +25,7 @@ echo ""
 # Get user input for domain
 if [ -z "$1" ]; then
     echo -e "${YELLOW}Please provide your custom domain name${NC}"
-    echo "Example: worldleadersgame.com"
+    echo "Example: worldleadersgame.co.uk"
     read -p "Enter your domain: " CUSTOM_DOMAIN
 else
     CUSTOM_DOMAIN=$1

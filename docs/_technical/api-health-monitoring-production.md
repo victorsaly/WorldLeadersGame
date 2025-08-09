@@ -204,10 +204,10 @@ public class EducationalGameHealthChecks
 
 ### Production
 
-- **Health Check**: `https://worldleadersgame.com/api/health`
-- **Liveness**: `https://worldleadersgame.com/api/alive`
-- **Swagger UI**: `https://worldleadersgame.com/api/docs`
-- **API Docs**: `https://worldleadersgame.com/api/swagger/v1/swagger.json`
+- **Health Check**: `https://worldleadersgame.co.uk/api/health`
+- **Liveness**: `https://worldleadersgame.co.uk/api/alive`
+- **Swagger UI**: `https://worldleadersgame.co.uk/api/docs`
+- **API Docs**: `https://worldleadersgame.co.uk/api/swagger/v1/swagger.json`
 
 ## 📊 Integration Examples
 

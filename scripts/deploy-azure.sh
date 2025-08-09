@@ -20,7 +20,7 @@ LOCATION="uksouth"
 RESOURCE_GROUP="${PROJECT_NAME}-${ENVIRONMENT}-rg"
 
 # Optional: Set your custom domain here
-CUSTOM_DOMAIN="" # e.g., "worldleadersgame.com"
+CUSTOM_DOMAIN="" # e.g., "worldleadersgame.co.uk"
 
 echo -e "${BLUE}🎮 World Leaders Game - Azure Deployment${NC}"
 echo -e "${BLUE}======================================${NC}"
