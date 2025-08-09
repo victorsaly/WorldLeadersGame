@@ -11,18 +11,118 @@
 
 <PageTitle>Dashboard - World Leaders Game</PageTitle>
 
-<div class="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-green-400 p-4">
-    <div class="max-w-6xl mx-auto">
+<div class="retro-game-container">
+    <div class="max-w-6xl mx-auto p-4">
     @if (isLoading)
     {
         <div class="flex items-center justify-center min-h-screen">
-            <div class="bg-white rounded-lg p-8 shadow-xl">
-                <div class="flex items-center space-x-3">
-                    <svg class="animate-spin h-6 w-6 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span>Loading your educational dashboard...</span>
+            <div class="pixel-art-card green-theme">
+                <div class="flex items-center space-x-3 p-8">
+                    <div class="retro-loading-spinner"></div>
+                    <span class="retro-body">Loading your educational dashboard...</span>
+                </div>
+            </div>
+        </div>
+    }
+    else if (currentUser != null)
+    {
+        <!-- Welcome Header -->
+        <div class="pixel-art-card green-theme mb-8">
+            <h1 class="retro-title text-2xl mb-4">
+                🌍 Welcome to Your Learning Dashboard, @currentUser.DisplayName!
+            </h1>
+            <p class="retro-body">
+                Ready to explore the world and learn about geography, economics, and languages?
+            </p>
+        </div>
+
+        <!-- User Info Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- User Profile Card -->
+            <div class="pixel-art-card" style="border-color: var(--retro-blue);">
+                <h3 class="retro-subtitle text-lg mb-3">👤 Your Profile</h3>
+                <div class="space-y-2">
+                    <p class="retro-body text-sm"><strong>Username:</strong> @currentUser.Username</p>
+                    <p class="retro-body text-sm"><strong>Email:</strong> @currentUser.Email</p>
+                    <p class="retro-body text-sm"><strong>Age:</strong> @currentUser.Age years old</p>
+                    <p class="retro-body text-sm"><strong>Role:</strong> @(currentUser.Role == 0 ? "Student" : "Teacher")</p>
+                    <p class="retro-body text-sm"><strong>Child Safety:</strong> @(currentUser.IsChild ? "Enabled" : "Standard")</p>
+                </div>
+            </div>
+
+            <!-- Game Stats Card -->
+            <div class="pixel-art-card" style="border-color: var(--retro-green-primary);">
+                <h3 class="retro-subtitle text-lg mb-3">🎮 Game Progress</h3>
+                <div class="space-y-2">
+                    <p class="retro-body text-sm"><strong>Status:</strong> Active Player</p>
+                    <p class="retro-body text-sm"><strong>Territories:</strong> 0 owned</p>
+                    <p class="retro-body text-sm"><strong>Income:</strong> $0</p>
+                    <p class="retro-body text-sm"><strong>Reputation:</strong> Starting level</p>
+                    <p class="retro-body text-sm"><strong>Last Login:</strong> @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
+                </div>
+            </div>
+
+            <!-- Learning Journey Card -->
+            <div class="pixel-art-card" style="border-color: var(--retro-purple);">
+                <h3 class="retro-subtitle text-lg mb-3">📚 Learning Journey</h3>
+                <div class="space-y-2">
+                    <p class="retro-body text-sm"><strong>Countries Learned:</strong> 0</p>
+                    <p class="retro-body text-sm"><strong>Languages Practiced:</strong> 0</p>
+                    <p class="retro-body text-sm"><strong>Economic Concepts:</strong> Starting</p>
+                    <p class="retro-body text-sm"><strong>Achievement Level:</strong> Beginner Explorer</p>
+                    <p class="retro-body text-sm"><strong>Safety Score:</strong> 100% Protected</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <button @onclick="GoToGame" 
+                    class="pixel-art-button"
+                    style="background-color: var(--retro-blue);">
+                🗺️ EXPLORE TERRITORIES
+            </button>
+            <button @onclick="GoToGame" 
+                    class="pixel-art-button"
+                    style="background-color: var(--retro-green-primary);">
+                🎲 ROLL CAREER DICE
+            </button>
+            <button @onclick="GoToGame" 
+                    class="pixel-art-button"
+                    style="background-color: var(--retro-purple);">
+                🗣️ PRACTICE LANGUAGES
+            </button>
+            <button @onclick="GoToGame" 
+                    class="pixel-art-button"
+                    style="background-color: var(--retro-orange);">
+                🤖 AI TUTORS
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="pixel-art-card green-theme text-center">
+                <h2 class="retro-title text-xl mb-4">🔒 Authentication Required</h2>
+                <p class="retro-body mb-6">Please log in to access your educational dashboard.</p>
+                <a href="/login" class="pixel-art-button">
+                    LOGIN TO CONTINUE
+                </a>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+
+<div class="retro-game-container">
+    <div class="max-w-6xl mx-auto p-4">
+    @if (isLoading)
+    {
+        <div class="flex items-center justify-center min-h-screen">
+            <div class="pixel-art-card green-theme">
+                <div class="flex items-center space-x-3 p-8">
+                    <div class="retro-loading-spinner"></div>
+                    <span class="retro-body">Loading your educational dashboard...</span>
                 </div>
             </div>
         </div>
@@ -31,11 +131,11 @@
     {
         <div class="max-w-6xl mx-auto">
             <!-- Welcome Header -->
-            <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border-4 border-blue-200">
-                <h1 class="text-4xl font-bold text-gray-800 mb-4">
+            <div class="pixel-art-card green-theme mb-8">
+                <h1 class="retro-title text-2xl mb-4">
                     🌍 Welcome to Your Learning Dashboard, @currentUser.DisplayName!
                 </h1>
-                <p class="text-xl text-gray-600">
+                <p class="retro-body">
                     Ready to explore the world and learn about geography, economics, and languages?
                 </p>
             </div>
@@ -43,64 +143,72 @@
             <!-- User Info Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <!-- User Profile Card -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">👤 Your Profile</h3>
-                    <div class="space-y-2 text-sm">
-                        <p><strong>Username:</strong> @currentUser.Username</p>
-                        <p><strong>Email:</strong> @currentUser.Email</p>
-                        <p><strong>Age:</strong> @currentUser.Age years old</p>
-                        <p><strong>Role:</strong> @(currentUser.Role == 0 ? "Student" : "Teacher")</p>
-                        <p><strong>Child Safety:</strong> @(currentUser.IsChild ? "Enabled" : "Standard")</p>
+                <div class="pixel-art-card" style="border-color: var(--retro-blue);">
+                    <h3 class="retro-subtitle text-lg mb-3">👤 Your Profile</h3>
+                    <div class="space-y-2">
+                        <p class="retro-body text-sm"><strong>Username:</strong> @currentUser.Username</p>
+                        <p class="retro-body text-sm"><strong>Email:</strong> @currentUser.Email</p>
+                        <p class="retro-body text-sm"><strong>Age:</strong> @currentUser.Age years old</p>
+                        <p class="retro-body text-sm"><strong>Role:</strong> @(currentUser.Role == 0 ? "Student" : "Teacher")</p>
+                        <p class="retro-body text-sm"><strong>Child Safety:</strong> @(currentUser.IsChild ? "Enabled" : "Standard")</p>
                     </div>
                 </div>
 
                 <!-- Game Stats Card -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">🎮 Game Progress</h3>
-                    <div class="space-y-2 text-sm">
-                        <p><strong>Status:</strong> Active Player</p>
-                        <p><strong>Territories:</strong> 0 owned</p>
-                        <p><strong>Income:</strong> $0</p>
-                        <p><strong>Reputation:</strong> Starting level</p>
-                        <p><strong>Last Login:</strong> @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
+                <div class="pixel-art-card" style="border-color: var(--retro-green-primary);">
+                    <h3 class="retro-subtitle text-lg mb-3">🎮 Game Progress</h3>
+                    <div class="space-y-2">
+                        <p class="retro-body text-sm"><strong>Status:</strong> Active Player</p>
+                        <p class="retro-body text-sm"><strong>Territories:</strong> 0 owned</p>
+                        <p class="retro-body text-sm"><strong>Income:</strong> $0</p>
+                        <p class="retro-body text-sm"><strong>Reputation:</strong> Starting level</p>
+                        <p class="retro-body text-sm"><strong>Last Login:</strong> @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
                     </div>
                 </div>
 
                 <!-- Learning Journey Card -->
-                <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-3">📚 Learning Journey</h3>
-                    <div class="space-y-2 text-sm">
-                        <p><strong>Countries Learned:</strong> 0</p>
-                        <p><strong>Languages Practiced:</strong> 0</p>
-                        <p><strong>Economic Concepts:</strong> Starting</p>
-                        <p><strong>Achievement Level:</strong> Beginner Explorer</p>
-                        <p><strong>Safety Score:</strong> 100% Protected</p>
+                <div class="pixel-art-card" style="border-color: var(--retro-purple);">
+                    <h3 class="retro-subtitle text-lg mb-3">📚 Learning Journey</h3>
+                    <div class="space-y-2">
+                        <p class="retro-body text-sm"><strong>Countries Learned:</strong> 0</p>
+                        <p class="retro-body text-sm"><strong>Languages Practiced:</strong> 0</p>
+                        <p class="retro-body text-sm"><strong>Economic Concepts:</strong> Starting</p>
+                        <p class="retro-body text-sm"><strong>Achievement Level:</strong> Beginner Explorer</p>
+                        <p class="retro-body text-sm"><strong>Safety Score:</strong> 100% Protected</p>
                     </div>
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <button @onclick="GoToGame" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105">
-                    🗺️ Explore Territories
+                <button @onclick="GoToGame" 
+                        class="pixel-art-button"
+                        style="background-color: var(--retro-blue);">
+                    🗺️ EXPLORE TERRITORIES
                 </button>
-                <button @onclick="GoToGame" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105">
-                    🎲 Roll Career Dice
+                <button @onclick="GoToGame" 
+                        class="pixel-art-button"
+                        style="background-color: var(--retro-green-primary);">
+                    🎲 ROLL CAREER DICE
                 </button>
-                <button @onclick="GoToGame" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105">
-                    🗣️ Practice Languages
+                <button @onclick="GoToGame" 
+                        class="pixel-art-button"
+                        style="background-color: var(--retro-purple);">
+                    🗣️ PRACTICE LANGUAGES
                 </button>
-                <button @onclick="GoToGame" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 transform hover:scale-105">
-                    🤖 AI Tutors
+                <button @onclick="GoToGame" 
+                        class="pixel-art-button"
+                        style="background-color: var(--retro-orange);">
+                    🤖 AI TUTORS
                 </button>
             </div>
 
             <!-- Character Creation Section -->
             @if (!hasGameCharacter)
             {
-                <div class="bg-gradient-to-r from-purple-100 to-blue-100 rounded-xl shadow-lg p-8 mb-8 border-4 border-purple-300">
-                    <h3 class="text-2xl font-bold text-purple-800 mb-4">🎭 Create Your World Leader Character</h3>
-                    <p class="text-purple-700 mb-6">Choose your character name to begin your educational leadership journey!</p>
+                <div class="pixel-art-card green-theme mb-8">
+                    <h3 class="retro-title text-xl mb-4">🎭 Create Your World Leader Character</h3>
+                    <p class="retro-body mb-6">Choose your character name to begin your educational leadership journey!</p>
                     
                     <div class="max-w-md mx-auto">
                         <div class="space-y-4">

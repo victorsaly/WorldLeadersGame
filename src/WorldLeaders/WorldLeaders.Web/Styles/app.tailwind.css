@@ -9,6 +9,7 @@
   /* Primary Green Theme (from README inspiration) */
   --retro-green-dark: #1a5a1a;
   --retro-green-main: #2ea44f;
+  --retro-green-primary: #2ea44f;  /* Added for compatibility */
   --retro-green-light: #4ade80;
   --retro-green-bright: #86efac;
   
@@ -25,6 +26,13 @@
   --pixel-gray: #6b7280;
   --pixel-light-gray: #d1d5db;
   --pixel-white: #ffffff;
+  
+  /* High Contrast Text Colors for Accessibility */
+  --text-on-light: #000000;
+  --text-on-dark: #ffffff;
+  --text-on-green: #ffffff;
+  --text-on-blue: #ffffff;
+  --text-on-red: #ffffff;
 }
 
 /* Custom child-friendly component classes */
@@ -76,6 +84,85 @@
       inset -2px -2px 0 var(--retro-green-light);
   }
 
+  /* Small Pixel Art Button for Navigation */
+  .pixel-art-button-small {
+    position: relative;
+    font-weight: bold;
+    color: var(--text-on-green);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    background: var(--retro-green-main);
+    border: 2px solid var(--pixel-white);
+    box-shadow: 
+      inset 1px 1px 0 var(--retro-green-light),
+      inset -1px -1px 0 var(--retro-green-dark),
+      2px 2px 0 var(--pixel-dark-gray);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    padding: 8px 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.1s ease;
+    image-rendering: pixelated;
+    min-height: 32px;
+    line-height: 1.2;
+  }
+
+  .pixel-art-button-small:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 
+      inset 1px 1px 0 var(--retro-green-light),
+      inset -1px -1px 0 var(--retro-green-dark),
+      1px 1px 0 var(--pixel-dark-gray);
+    color: var(--text-on-green);
+    text-decoration: none;
+  }
+
+  .pixel-art-button-small:active {
+    transform: translate(2px, 2px);
+    box-shadow: 
+      inset 1px 1px 0 var(--retro-green-dark),
+      inset -1px -1px 0 var(--retro-green-light);
+    color: var(--text-on-green);
+  }
+
+  /* Blue variant for login */
+  .pixel-art-button-small.blue {
+    background: var(--retro-blue);
+    color: var(--text-on-blue);
+    box-shadow: 
+      inset 1px 1px 0 #60a5fa,
+      inset -1px -1px 0 #1d4ed8,
+      2px 2px 0 var(--pixel-dark-gray);
+  }
+
+  .pixel-art-button-small.blue:hover {
+    color: var(--text-on-blue);
+    box-shadow: 
+      inset 1px 1px 0 #60a5fa,
+      inset -1px -1px 0 #1d4ed8,
+      1px 1px 0 var(--pixel-dark-gray);
+  }
+
+  /* Red variant for logout */
+  .pixel-art-button-small.red {
+    background: var(--retro-red);
+    color: var(--text-on-red);
+    box-shadow: 
+      inset 1px 1px 0 #f87171,
+      inset -1px -1px 0 #dc2626,
+      2px 2px 0 var(--pixel-dark-gray);
+  }
+
+  .pixel-art-button-small.red:hover {
+    color: var(--text-on-red);
+    box-shadow: 
+      inset 1px 1px 0 #f87171,
+      inset -1px -1px 0 #dc2626,
+      1px 1px 0 var(--pixel-dark-gray);
+  }
+
   /* Retro Pixel Art Card */
   .pixel-art-card {
     @apply relative p-6 bg-white;
@@ -101,6 +188,13 @@
     border-color: var(--retro-green-main);
   }
 
+  .pixel-art-card.red-theme {
+    background: linear-gradient(135deg, 
+      #fca5a5 0%, 
+      var(--pixel-white) 100%);
+    border-color: var(--retro-red);
+  }
+
   /* Retro Typography */
   .retro-title {
     font-family: 'Press Start 2P', monospace;
@@ -122,9 +216,53 @@
 
   .retro-body {
     font-family: 'Orbitron', 'Courier New', monospace;
-    color: var(--pixel-black);
-    font-weight: 500;
+    color: var(--text-on-light);
+    font-weight: 600;
     line-height: 1.6;
+  }
+
+  /* Text variants for different backgrounds */
+  .retro-body.on-dark {
+    color: var(--text-on-dark) !important;
+  }
+
+  .retro-body.on-green {
+    color: var(--text-on-green) !important;
+  }
+
+  .retro-body.on-blue {
+    color: var(--text-on-blue) !important;
+  }
+
+  /* Override common Tailwind color classes for retro-body */
+  .retro-body.text-white {
+    color: var(--text-on-dark) !important;
+  }
+
+  .retro-body.text-black {
+    color: var(--text-on-light) !important;
+  }
+
+  .retro-body.text-gray-600 {
+    color: #4b5563 !important;
+  }
+
+  .retro-body.text-green-700 {
+    color: #15803d !important;
+  }
+
+  .retro-body.text-orange-600 {
+    color: #ea580c !important;
+  }
+
+  .retro-body.text-orange-700 {
+    color: #c2410c !important;
+  }
+
+  /* For form labels - ensure they're always visible */
+  .retro-body.font-bold {
+    color: var(--pixel-black) !important;
+    font-weight: 800;
   }
 
   /* Pixel Art Image Rendering */
@@ -314,6 +452,22 @@
 
   .resource-update {
     animation: countUp 500ms ease-in;
+  }
+
+  /* Retro Loading Spinner */
+  .retro-loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 4px solid var(--pixel-black);
+    border-top: 4px solid var(--retro-green-main);
+    border-radius: 0;
+    animation: retro-spin 1s linear infinite;
+    image-rendering: pixelated;
+  }
+
+  @keyframes retro-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 }
 

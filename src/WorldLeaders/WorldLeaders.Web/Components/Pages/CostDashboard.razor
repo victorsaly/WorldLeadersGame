@@ -13,43 +13,47 @@ Safety Requirements: Child-friendly presentation, positive messaging, educationa
 
 <PageTitle>💰 My Learning Costs - World Leaders Game</PageTitle>
 
-<div class="cost-dashboard-container">
-    <!-- Header Section -->
-    <div class="dashboard-header">
-        <div class="header-content">
-            <h1 class="dashboard-title">
-                <span class="title-icon">💰</span>
-                My Learning Adventure Costs
-            </h1>
-            <p class="dashboard-subtitle">
-                See how much your world exploration and learning activities cost!
-            </p>
-        </div>
-        <div class="header-stats">
-            @if (costSummary != null)
-            {
-                <div class="quick-stat @(costSummary.IsOverDailyLimit ? "warning" : "success")">
-                    <div class="stat-value">£@costSummary.TotalCostGBP.ToString("F3")</div>
-                    <div class="stat-label">Today's Adventure Cost</div>
+<div class="retro-game-container">
+    <div class="max-w-6xl mx-auto p-4">
+        <!-- Header Section -->
+        <div class="pixel-art-card green-theme mb-6">
+            <div class="flex items-center justify-between flex-wrap">
+                <div>
+                    <h1 class="retro-title text-2xl mb-2">
+                        💰 MY LEARNING ADVENTURE COSTS
+                    </h1>
+                    <p class="retro-body">
+                        See how much your world exploration and learning activities cost!
+                    </p>
                 </div>
-                <div class="quick-stat success">
-                    <div class="stat-value">@costSummary.AverageEducationalScore.ToString("F0")%</div>
-                    <div class="stat-label">Learning Efficiency</div>
+                <div class="flex gap-4 flex-wrap">
+                    @if (costSummary != null)
+                    {
+                        <div class="pixel-art-card @(costSummary.IsOverDailyLimit ? "red-theme" : "green-theme")">
+                            <div class="retro-subtitle text-lg">£@costSummary.TotalCostGBP.ToString("F3")</div>
+                            <div class="retro-body text-xs">Today's Adventure Cost</div>
+                        </div>
+                        <div class="pixel-art-card green-theme">
+                            <div class="retro-subtitle text-lg">@costSummary.AverageEducationalScore.ToString("F0")%</div>
+                            <div class="retro-body text-xs">Learning Efficiency</div>
+                        </div>
+                    }
                 </div>
-            }
-        </div>
-    </div>
-
-    <!-- Loading State -->
-    @if (isLoading)
-    {
-        <div class="loading-container">
-            <div class="loading-spinner">
-                <div class="spinner"></div>
-                <p class="loading-text">🔍 Checking your learning costs...</p>
             </div>
         </div>
-    }
+
+        <!-- Loading State -->
+        @if (isLoading)
+        {
+            <div class="flex items-center justify-center p-8">
+                <div class="pixel-art-card green-theme">
+                    <div class="flex items-center space-x-3">
+                        <div class="retro-loading-spinner"></div>
+                        <p class="retro-body">🔍 Checking your learning costs...</p>
+                    </div>
+                </div>
+            </div>
+        }
     else if (costSummary != null)
     {
         <!-- Main Dashboard Content -->
@@ -193,11 +197,12 @@ Safety Requirements: Child-friendly presentation, positive messaging, educationa
             <div class="error-message">
                 <span class="error-icon">😅</span>
                 <h2>Oops! Can't load cost information right now</h2>
-                <p>Don't worry - your learning progress is still being tracked!</p>
-                <button class="retry-button" @onclick="LoadCostData">Try Again</button>
+                <p class="retro-body">Don't worry - your learning progress is still being tracked!</p>
+                <button class="pixel-art-button" @onclick="LoadCostData">TRY AGAIN</button>
             </div>
         </div>
     }
+    </div>
 </div>
 
 <style>
