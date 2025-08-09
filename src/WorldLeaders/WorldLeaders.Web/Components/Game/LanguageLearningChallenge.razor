@@ -506,9 +506,9 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 
     private async Task StartRecording()
     {
-        if (jsModule == null)
+        if (!CanPerformJSInterop())
         {
-            Logger.LogError("JavaScript module not loaded for speech recording");
+            Logger.LogError("JavaScript module not available for speech recording");
             feedbackMessage = "Speech recording not available. Please try typing your answer instead!";
             StateHasChanged();
             return;
@@ -524,7 +524,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             Logger.LogInformation("Starting real microphone recording for language challenge");
             
             // Start real microphone recording via JavaScript interop
-            var success = await jsModule.InvokeAsync<bool>("speechRecorderInterop.startRecording");
+            var success = await jsModule!.InvokeAsync<bool>("speechRecorderInterop.startRecording");
             
             if (!success)
             {
@@ -532,6 +532,13 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
                 feedbackMessage = "Could not start recording. Please check microphone permissions and try again!";
                 StateHasChanged();
             }
+        }
+        catch (JSDisconnectedException)
+        {
+            Logger.LogInformation("JavaScript circuit disconnected during recording start - this is normal");
+            isRecording = false;
+            feedbackMessage = "Recording unavailable. Please try typing your answer instead!";
+            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -544,7 +551,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
 
     private async Task StopRecording()
     {
-        if (jsModule == null || !isRecording)
+        if (!CanPerformJSInterop() || !isRecording)
         {
             return;
         }
@@ -554,7 +561,7 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             Logger.LogInformation("Stopping real microphone recording for language challenge");
             
             // Stop real microphone recording via JavaScript interop
-            var success = await jsModule.InvokeAsync<bool>("speechRecorderInterop.stopRecording");
+            var success = await jsModule!.InvokeAsync<bool>("speechRecorderInterop.stopRecording");
             
             if (!success)
             {
@@ -563,6 +570,13 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
             }
             
             // Note: isRecording will be set to false in OnAudioRecorded callback
+        }
+        catch (JSDisconnectedException)
+        {
+            Logger.LogInformation("JavaScript circuit disconnected during recording stop - this is normal");
+            isRecording = false;
+            feedbackMessage = "Recording stopped due to connection issue. Please try again!";
+            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -652,9 +666,9 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     {
         try
         {
-            if (currentChallenge?.Word == null)
+            if (currentChallenge?.Word == null || IsDisposed())
             {
-                Logger.LogWarning("No current challenge word to play audio for");
+                Logger.LogWarning("No current challenge word to play audio for or component disposed");
                 return;
             }
 
@@ -668,32 +682,55 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
                 volume = 1.0
             };
 
-            // Call JavaScript to use Speech Synthesis API
-            await JSRuntime.InvokeVoidAsync("speechSynthesis.speak", 
-                await JSRuntime.InvokeAsync<object>("createSpeechUtterance", utteranceOptions));
-
-            Logger.LogInformation("Playing audio pronunciation for word: {Word} in language: {Language}", 
-                currentChallenge.Word, currentChallenge.LanguageCode);
-
-            // Provide visual feedback that audio is playing
-            feedbackMessage = $"🔊 Listen carefully to the pronunciation of '{currentChallenge.Word}'!";
-            _isPlayingAudio = true;
-            StateHasChanged();
-            
-            // Clear feedback after a few seconds
-            await Task.Delay(FEEDBACK_DISPLAY_DURATION_MS);
-            if (_isPlayingAudio && !IsDisposed())
+            try
             {
-                feedbackMessage = "";
-                _isPlayingAudio = false;
-                StateHasChanged();
+                // Call JavaScript to use Speech Synthesis API
+                await JSRuntime.InvokeVoidAsync("speechSynthesis.speak", 
+                    await JSRuntime.InvokeAsync<object>("createSpeechUtterance", utteranceOptions));
+
+                Logger.LogInformation("Playing audio pronunciation for word: {Word} in language: {Language}", 
+                    currentChallenge.Word, currentChallenge.LanguageCode);
+
+                // Provide visual feedback that audio is playing
+                feedbackMessage = $"🔊 Listen carefully to the pronunciation of '{currentChallenge.Word}'!";
+                _isPlayingAudio = true;
+                if (!IsDisposed())
+                {
+                    StateHasChanged();
+                }
+                
+                // Clear feedback after a few seconds
+                await Task.Delay(FEEDBACK_DISPLAY_DURATION_MS, _cancellationTokenSource.Token);
+                if (_isPlayingAudio && !IsDisposed())
+                {
+                    feedbackMessage = "";
+                    _isPlayingAudio = false;
+                    StateHasChanged();
+                }
+            }
+            catch (JSDisconnectedException)
+            {
+                Logger.LogInformation("JavaScript circuit disconnected during audio playback - this is normal");
+                feedbackMessage = "Audio playback unavailable. Try the pronunciation challenge instead!";
+                if (!IsDisposed())
+                {
+                    StateHasChanged();
+                }
+            }
+            catch (OperationCanceledException)
+            {
+                // Component was disposed during delay - this is expected
+                return;
             }
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error playing audio for language challenge");
-            feedbackMessage = "Sorry, audio playback is not available on this device. Try the pronunciation challenge instead!";
-            StateHasChanged();
+            if (!IsDisposed())
+            {
+                feedbackMessage = "Sorry, audio playback is not available on this device. Try the pronunciation challenge instead!";
+                StateHasChanged();
+            }
         }
     }
 
@@ -868,25 +905,70 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
     // Helper method for consistent disposal checking
     private bool IsDisposed() => _disposed;
 
+    // Helper method to safely check if JavaScript interop is available
+    private bool CanPerformJSInterop()
+    {
+        return !_disposed && 
+               jsModule != null && 
+               !(_cancellationTokenSource?.Token.IsCancellationRequested ?? true);
+    }
+
     // IAsyncDisposable Implementation
     
     public async ValueTask DisposeAsync()
     {
+        if (_disposed) return; // Prevent multiple disposal calls
+        
         _disposed = true;
         
         try
         {
-            // Cancel any ongoing delays or async operations
+            // Cancel any ongoing delays or async operations first
             _cancellationTokenSource?.Cancel();
             
-            // Clean up JavaScript module and stop any ongoing recording
+            // Try to clean up JavaScript module, but handle disconnection gracefully
             if (jsModule != null)
             {
-                await jsModule.InvokeVoidAsync("speechRecorderInterop.dispose");
-                await jsModule.DisposeAsync();
+                try
+                {
+                    // Check if the circuit is still connected before calling JavaScript
+                    if (JSRuntime is IJSInProcessRuntime || !(_cancellationTokenSource?.Token.IsCancellationRequested ?? true))
+                    {
+                        // Use a short timeout for cleanup operations
+                        using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
+                        await jsModule!.InvokeVoidAsync("speechRecorderInterop.dispose").AsTask()
+                            .ConfigureAwait(false);
+                    }
+                }
+                catch (JSDisconnectedException)
+                {
+                    // This is expected when the circuit disconnects - log as info, not error
+                    Logger.LogInformation("JavaScript circuit disconnected during cleanup - this is normal");
+                }
+                catch (TaskCanceledException)
+                {
+                    // Also expected during shutdown
+                    Logger.LogInformation("JavaScript cleanup cancelled during disposal - this is normal");
+                }
+                catch (Exception jsEx)
+                {
+                    // Log other JS errors as warnings since cleanup can fail safely
+                    Logger.LogWarning(jsEx, "Non-critical error during JavaScript cleanup");
+                }
+                finally
+                {
+                    try
+                    {
+                        await jsModule.DisposeAsync().ConfigureAwait(false);
+                    }
+                    catch (Exception disposeEx)
+                    {
+                        Logger.LogDebug(disposeEx, "JavaScript module disposal completed with minor issues");
+                    }
+                }
             }
 
-            // Dispose .NET object reference
+            // Dispose .NET object reference (this is safe to do)
             dotNetRef?.Dispose();
             
             // Dispose cancellation token source
@@ -896,7 +978,8 @@ Safety Requirements: Age-appropriate vocabulary, positive encouragement, child-f
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error disposing language learning challenge component");
+            // Log as warning instead of error since disposal should be non-critical
+            Logger.LogWarning(ex, "Non-critical error during language learning challenge component disposal");
         }
     }
 }
