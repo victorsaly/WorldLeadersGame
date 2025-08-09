@@ -33,6 +33,132 @@ public class GameController : ControllerBase
     }
 
     /// <summary>
+    /// Get health status for educational game systems
+    /// </summary>
+    /// <returns>Game systems health status</returns>
+    [HttpGet("health")]
+    public async Task<ActionResult<GameHealthResponse>> GetHealthStatus()
+    {
+        try
+        {
+            var checks = new List<GameHealthCheck>();
+            var overallHealthy = true;
+
+            // Check game engine
+            var gameEngineHealthy = _gameEngine != null;
+            checks.Add(new GameHealthCheck
+            {
+                Name = "GameEngine",
+                IsHealthy = gameEngineHealthy,
+                Description = gameEngineHealthy 
+                    ? "Game engine is operational" 
+                    : "Game engine is not available"
+            });
+            if (!gameEngineHealthy) overallHealthy = false;
+
+            // Check player service
+            var playerServiceHealthy = _playerService != null;
+            checks.Add(new GameHealthCheck
+            {
+                Name = "PlayerService",
+                IsHealthy = playerServiceHealthy,
+                Description = playerServiceHealthy 
+                    ? "Player service is operational" 
+                    : "Player service is not available"
+            });
+            if (!playerServiceHealthy) overallHealthy = false;
+
+            // Check territory service
+            var territoryServiceHealthy = _territoryService != null;
+            checks.Add(new GameHealthCheck
+            {
+                Name = "TerritoryService",
+                IsHealthy = territoryServiceHealthy,
+                Description = territoryServiceHealthy 
+                    ? "Territory service is operational" 
+                    : "Territory service is not available"
+            });
+            if (!territoryServiceHealthy) overallHealthy = false;
+
+            // Test basic territory retrieval
+            if (territoryServiceHealthy)
+            {
+                try
+                {
+                    var territories = await _territoryService.GetAvailableTerritoriesAsync(Guid.Empty);
+                    var territoryDataHealthy = territories != null && territories.Any();
+                    checks.Add(new GameHealthCheck
+                    {
+                        Name = "TerritoryData",
+                        IsHealthy = territoryDataHealthy,
+                        Description = territoryDataHealthy 
+                            ? $"Territory data available ({territories?.Count ?? 0} territories)" 
+                            : "Territory data not available"
+                    });
+                    if (!territoryDataHealthy) overallHealthy = false;
+                }
+                catch (Exception ex)
+                {
+                    checks.Add(new GameHealthCheck
+                    {
+                        Name = "TerritoryData",
+                        IsHealthy = false,
+                        Description = $"Territory data check failed: {ex.Message}"
+                    });
+                    overallHealthy = false;
+                }
+            }
+
+            var response = new GameHealthResponse
+            {
+                Status = overallHealthy ? "Healthy" : "Unhealthy",
+                Timestamp = DateTime.UtcNow,
+                EducationalContext = "Geography, Economics, Language Learning for 12-year-olds",
+                GameMode = "Educational Strategy Game",
+                Checks = checks,
+                TotalChecks = checks.Count,
+                HealthyChecks = checks.Count(c => c.IsHealthy),
+                OverallScore = (double)checks.Count(c => c.IsHealthy) / checks.Count,
+                Message = overallHealthy 
+                    ? "Educational game systems are operational and ready for learning"
+                    : "Some educational game systems require attention"
+            };
+
+            var statusCode = overallHealthy ? StatusCodes.Status200OK : StatusCodes.Status503ServiceUnavailable;
+            
+            _logger.LogInformation("Game health check completed: {Status} ({HealthyChecks}/{TotalChecks} systems healthy)", 
+                response.Status, response.HealthyChecks, response.TotalChecks);
+
+            return StatusCode(statusCode, response);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Game health check failed with exception");
+            
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, new GameHealthResponse
+            {
+                Status = "Critical",
+                Timestamp = DateTime.UtcNow,
+                EducationalContext = "Geography, Economics, Language Learning for 12-year-olds",
+                GameMode = "Educational Strategy Game",
+                Checks = new List<GameHealthCheck>
+                {
+                    new GameHealthCheck
+                    {
+                        Name = "SystemCheck",
+                        IsHealthy = false,
+                        Description = $"Critical system error: {ex.Message}"
+                    }
+                },
+                TotalChecks = 1,
+                HealthyChecks = 0,
+                OverallScore = 0.0,
+                Message = "Critical educational game system failure"
+            });
+        }
+    }
+
+    /// <summary>
     /// Create a new player for the educational game
     /// </summary>
     /// <param name="request">Player creation request</param>
@@ -215,4 +341,30 @@ public class GameController : ControllerBase
             return StatusCode(500, "An error occurred while advancing the turn");
         }
     }
+}
+
+/// <summary>
+/// Game health response for educational platform monitoring
+/// </summary>
+public sealed record GameHealthResponse
+{
+    public string Status { get; init; } = string.Empty;
+    public DateTime Timestamp { get; init; }
+    public string EducationalContext { get; init; } = string.Empty;
+    public string GameMode { get; init; } = string.Empty;
+    public List<GameHealthCheck> Checks { get; init; } = new();
+    public int TotalChecks { get; init; }
+    public int HealthyChecks { get; init; }
+    public double OverallScore { get; init; }
+    public string Message { get; init; } = string.Empty;
+}
+
+/// <summary>
+/// Individual game health check result
+/// </summary>
+public sealed record GameHealthCheck
+{
+    public string Name { get; init; } = string.Empty;
+    public bool IsHealthy { get; init; }
+    public string Description { get; init; } = string.Empty;
 }
