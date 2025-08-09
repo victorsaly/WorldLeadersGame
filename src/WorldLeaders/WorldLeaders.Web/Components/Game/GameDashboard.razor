@@ -6,12 +6,15 @@
 @using WorldLeaders.Shared.Models
 @using WorldLeaders.Web.Services
 @using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.Components
+@using System.Web
 @inject IHttpClientFactory HttpClientFactory
 @inject ILogger<GameDashboard> Logger
 @inject IHubConnectionFactory HubConnectionFactory
 @inject IAuthenticationClientService AuthService
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigation
+@inject ICharacterPersonaService PersonaService
 @implements IAsyncDisposable
 
 <PageTitle>World Leaders Game - Dashboard</PageTitle>
@@ -315,24 +318,18 @@
         // Check authentication first
         isAuthenticated = await AuthService.IsAuthenticatedAsync();
         
-        // Try to load selected character persona from localStorage
-        try
+        // Try to load selected character persona from multiple sources
+        await LoadSelectedCharacterAsync();
+        
+        // If no character selected, redirect to character selection
+        if (selectedCharacterPersona == null)
         {
-            selectedCharacterPersona = await LocalStorage.GetItemAsync<CharacterPersona>("selectedCharacterPersona");
-            
-            // If no character selected, redirect to character selection
-            if (selectedCharacterPersona == null)
-            {
-                Navigation.NavigateTo("/character-select");
-                return;
-            }
-        }
-        catch
-        {
-            // If localStorage fails, redirect to character selection
+            Logger.LogInformation("No character selected, redirecting to character selection");
             Navigation.NavigateTo("/character-select");
             return;
         }
+        
+        Logger.LogInformation("Character loaded: {CharacterName} ({CharacterId})", selectedCharacterPersona.Name, selectedCharacterPersona.Id);
         
         if (isAuthenticated)
         {
@@ -564,6 +561,55 @@
         {
             gameMessage = "Failed to roll for new job. Please try again.";
             Logger.LogError(ex, "Error rolling for new job for player {PlayerId}", playerDashboard.Id);
+        }
+    }
+
+    private async Task LoadSelectedCharacterAsync()
+    {
+        try
+        {
+            // First, try to load from query parameter
+            var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
+            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            var characterIdParam = query["character"];
+            
+            if (!string.IsNullOrEmpty(characterIdParam) && Guid.TryParse(characterIdParam, out var characterId))
+            {
+                Logger.LogInformation("Loading character from query parameter: {CharacterId}", characterId);
+                
+                // Load character from service
+                var availablePersonas = await PersonaService.GetAvailablePersonasAsync();
+                selectedCharacterPersona = availablePersonas.FirstOrDefault(p => p.Id == characterId);
+                
+                if (selectedCharacterPersona != null)
+                {
+                    // Save to localStorage for future visits
+                    await LocalStorage.SetItemAsync("selectedCharacterPersona", selectedCharacterPersona);
+                    Logger.LogInformation("Character loaded from query parameter and saved to localStorage: {CharacterName}", selectedCharacterPersona.Name);
+                    return;
+                }
+                else
+                {
+                    Logger.LogWarning("Character with ID {CharacterId} not found in available personas", characterId);
+                }
+            }
+            
+            // Fallback: try to load from localStorage
+            selectedCharacterPersona = await LocalStorage.GetItemAsync<CharacterPersona>("selectedCharacterPersona");
+            
+            if (selectedCharacterPersona != null)
+            {
+                Logger.LogInformation("Character loaded from localStorage: {CharacterName}", selectedCharacterPersona.Name);
+            }
+            else
+            {
+                Logger.LogInformation("No character found in localStorage or query parameters");
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading selected character");
+            selectedCharacterPersona = null;
         }
     }
 
