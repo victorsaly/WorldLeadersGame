@@ -61,7 +61,7 @@ Map Source: AdobeStock_380033452.svg - Professional quality world map (6000x3000
     <div class="map-container" @onwheel="OnMapWheel" @onwheel:preventDefault="true">
         <!-- Background World Map Image -->
         <div class="world-map-background">
-            <img src="/assets/maps/AdobeStock_380033452.svg?v=@DateTime.Now.Ticks" 
+            <img src="/assets/maps/AdobeStock_380033452.svg" 
                  alt="Professional World Map" 
                  class="pixel-art world-map-image" 
                  style="transform: scale(@Viewport.ZoomScale) translate(@Viewport.Center.X px, @Viewport.Center.Y px)" />
@@ -73,13 +73,15 @@ Map Source: AdobeStock_380033452.svg - Professional quality world map (6000x3000
             <svg class="world-map-svg" 
                  viewBox="0 0 @MapWidth @MapHeight" 
                  width="@MapWidth" 
-                 height="@MapHeight"
+                 height="@MapHeight">
+                 @* Event handlers commented out until drag functionality is implemented
                  @onmousedown="OnMapMouseDown"
                  @onmousemove="OnMapMouseMove"
                  @onmouseup="OnMapMouseUp"
                  @ontouchstart="OnMapTouchStart"
                  @ontouchmove="OnMapTouchMove"
-                 @ontouchend="OnMapTouchEnd">
+                 @ontouchend="OnMapTouchEnd"
+                 *@
                 
                 <!-- Transparent background for interactions -->
                 <rect width="100%" height="100%" fill="transparent" class="interaction-layer"/>
@@ -489,13 +491,14 @@ Map Source: AdobeStock_380033452.svg - Professional quality world map (6000x3000
         HoveredTerritory = null;
     }
 
-    // Mouse and touch event handlers for map navigation
-    private void OnMapMouseDown(MouseEventArgs e) { /* TODO: Implement map dragging */ }
-    private void OnMapMouseUp(MouseEventArgs e) { /* TODO: Implement map dragging */ }
-    private void OnMapMouseMove(MouseEventArgs e) { /* Handle map dragging */ }
-    private void OnMapTouchStart(TouchEventArgs e) { /* TODO: Implement touch dragging */ }
-    private void OnMapTouchEnd(TouchEventArgs e) { /* TODO: Implement touch dragging */ }
-    private void OnMapTouchMove(TouchEventArgs e) { /* Handle touch dragging */ }
+    // Mouse and touch event handlers for map navigation - TODO: Implement dragging functionality
+    // private void OnMapMouseDown(MouseEventArgs e) { /* TODO: Implement map dragging */ }
+    // private void OnMapMouseUp(MouseEventArgs e) { /* TODO: Implement map dragging */ }
+    // private void OnMapMouseMove(MouseEventArgs e) { /* Handle map dragging */ }
+    // private void OnMapTouchStart(TouchEventArgs e) { /* TODO: Implement touch dragging */ }
+    // private void OnMapTouchEnd(TouchEventArgs e) { /* TODO: Implement touch dragging */ }
+    // private void OnMapTouchMove(TouchEventArgs e) { /* Handle touch dragging */ }
+    
     private void OnMapWheel(WheelEventArgs e)
     {
         // Handle zoom with mouse wheel
