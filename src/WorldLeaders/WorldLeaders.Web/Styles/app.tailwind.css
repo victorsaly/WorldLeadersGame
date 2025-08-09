@@ -184,6 +184,41 @@
     @apply pixel-art-button;
     background: var(--retro-green-bright);
   }
+
+  /* Retro Game Animations */
+  .retro-bounce {
+    animation: retro-bounce 1s ease-in-out infinite;
+  }
+
+  .retro-glow {
+    animation: retro-glow 2s ease-in-out infinite;
+  }
+
+  .retro-shimmer {
+    animation: pixel-shimmer 1.5s ease-in-out infinite;
+  }
+
+  /* Mobile Touch Optimization for Retro Interface */
+  .retro-touch-target {
+    @apply min-h-[56px] min-w-[56px];
+    touch-action: manipulation;
+    user-select: none;
+  }
+
+  /* Retro Progress Bar */
+  .retro-progress-bar {
+    @apply w-full h-6 border-4 border-black bg-gray-200;
+    image-rendering: pixelated;
+    box-shadow: inset 2px 2px 0 var(--pixel-gray);
+  }
+
+  .retro-progress-fill {
+    @apply h-full transition-all duration-1000 ease-out;
+    background: linear-gradient(135deg, 
+      var(--retro-green-main) 0%, 
+      var(--retro-green-bright) 100%);
+    box-shadow: inset 1px 1px 0 var(--retro-green-light);
+  }
   .btn-child-friendly {
     @apply px-8 py-4 min-h-[56px] min-w-[120px];
     @apply text-child-lg font-bold tracking-wide;
@@ -298,6 +333,28 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Retro Game Animations */
+@keyframes retro-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes retro-glow {
+  0%, 100% { 
+    box-shadow: 0 0 5px var(--retro-green-main);
+  }
+  50% { 
+    box-shadow: 0 0 20px var(--retro-green-main),
+                0 0 30px var(--retro-green-light);
+  }
+}
+
+@keyframes pixel-shimmer {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
 }
 
 /* Child-friendly accessibility improvements */
