@@ -321,11 +321,20 @@
         // Try to load selected character persona from multiple sources
         await LoadSelectedCharacterAsync();
         
-        // If no character selected, redirect to character selection
+        // If no character selected, redirect to character selection (prevent infinite loops)
         if (selectedCharacterPersona == null)
         {
             Logger.LogInformation("No character selected, redirecting to character selection");
-            Navigation.NavigateTo("/character-select");
+            var currentPath = Navigation.ToAbsoluteUri(Navigation.Uri).AbsolutePath;
+            if (currentPath != "/character-select")
+            {
+                Navigation.NavigateTo("/character-select");
+            }
+            else
+            {
+                Logger.LogWarning("Already on character selection page but no character loaded - preventing redirect loop");
+                errorMessage = "Please select a character to continue.";
+            }
             return;
         }
         
