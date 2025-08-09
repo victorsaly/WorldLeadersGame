@@ -12,6 +12,12 @@ permalink: /technical-docs/
 - [**Command Line Development Guide**]({{ '/technical/command-line-guide/' | relative_url }}) - Essential CLI commands and workflows
 - [**Phase 1.2: NuGet Package Installation Summary**]({{ '/technical/package-installation-summary/' | relative_url }}) - Complete package installation guide and educational alignment
 
+### Retro Design Transformation
+
+- [**🎨 Retro 32-Bit Design Implementation**]({{ '/technical/retro-32bit-design-implementation/' | relative_url }}) - Complete guide for implementing child designer's pixel art vision
+- [**📱 PWA Standards & Brand Validation**]({{ '/technical/pwa-standards-brand-validation/' | relative_url }}) - Progressive Web App compliance and branding consistency
+- [**🖼️ Pixel Art Asset Creation Guidelines**]({{ '/technical/pixel-art-asset-creation-guidelines/' | relative_url }}) - Comprehensive asset creation workflow and specifications for 32-bit style
+
 ---
 
 ## AI Integration Guides

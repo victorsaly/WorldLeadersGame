@@ -7,23 +7,24 @@ title: "World Leaders Game"
   <h1>🎮 World Leaders Game</h1>
   <p>An AI-first father-son experiment transforming a 12-year-old's voice memo into a production-ready educational game with 95% AI autonomy</p>
   <div style="margin-top: 2rem;">
-    <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;">Week 4 • 95% AI Autonomy • AI Agent Personalities</span>
+    <span style="background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem;">Week 6 • 32-Bit Retro Transformation • Child Designer Vision</span>
   </div>
 </div>
 
 <div style="text-align: center; margin: 2rem 0;">
   <img src="{{ '/assets/world-leaders-logo.svg' | relative_url }}" alt="World Leaders Game Logo" width="200" height="300" style="border-radius: 12px;">
   <br>
-  <em>🎨 Game logo designed independently by a 12-year-old using Figma</em>
+  <em>🎨 Game logo designed independently by a 12-year-old using Figma • Now becoming retro pixel art!</em>
 </div>
 
 ## 🚀 The Experiment
 
 <div class="educational-highlight">
-  <h3>📊 Current Status: Week 4</h3>
-  <div class="ai-progress" data-progress="95% AI Autonomy"></div>
-  <p><strong>AI Autonomy:</strong> Architecture, code generation, design, documentation, AI agent personalities</p>
-  <p><strong>Human Guidance:</strong> Educational validation, creative direction, safety oversight</p>
+  <h3>📊 Current Status: Week 6 - Retro Transformation</h3>
+  <div class="ai-progress" data-progress="93% AI Autonomy"></div>
+  <p><strong>Child Designer Focus:</strong> Implementing 12-year-old's retro pixel art vision with green theme</p>
+  <p><strong>AI Autonomy:</strong> Retro design systems, PWA validation, character personas, interactive world map</p>
+  <p><strong>Human Guidance:</strong> Creative vision honoring, educational validation, child safety oversight</p>
 </div>
 
 ### Key Highlights

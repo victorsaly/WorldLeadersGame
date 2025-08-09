@@ -7,13 +7,16 @@
 ### Project Identity
 **Educational Strategy Game** for **12-year-old players** learning geography, economics, and languages through AI-assisted gameplay.
 
+**Current Focus**: **Retro 32-Bit Transformation** - Implementing child designer vision with pixel art aesthetics, character personas, interactive world map, and green background theme while preserving educational value.
+
 ### Modular Instructions System
 | Task Type | Primary Modules | Use Case |
 |-----------|----------------|----------|
 | **Any Development** | [Core Principles](./copilot-instructions/core-principles.md) | Always active - fundamental guidelines |
 | **Game Features** | [Educational Game Development](./copilot-instructions/educational-game-development.md) | Game mechanics, AI agents, progression |
 | **Technical Work** | [Technical Architecture](./copilot-instructions/technical-architecture.md) | .NET Aspire, Blazor, Entity Framework |
-| **UI/UX Design** | [UI/UX Guidelines](./copilot-instructions/ui-ux-guidelines.md) | Child-friendly design, accessibility |
+| **Retro UI Design** | [UI/UX Guidelines](./copilot-instructions/ui-ux-guidelines.md) + [Retro Design Standards](./copilot-instructions/retro-design-standards.md) | 32-bit pixel art, character personas, green theme |
+| **PWA & Branding** | [PWA Standards](./copilot-instructions/pwa-standards.md) | Progressive Web App validation, icons, manifests |
 | **AI Content** | [AI Safety & Child Protection](./copilot-instructions/ai-safety-and-child-protection.md) | All AI interactions with children |
 | **Documentation** | [Documentation Standards](./copilot-instructions/documentation-standards.md) | Creating/updating docs, blogs, journey |
 | **New Features** | [Feature Development Process](./copilot-instructions/feature-development-process.md) | Complete feature implementation workflow |
@@ -144,9 +147,35 @@ public class EducationalComponent : ComponentBase { /* implementation */ }
 
 - **Child Safety First**: ALL AI content must be validated for 12-year-old appropriateness
 - **Educational Value**: Every feature must teach geography, economics, or language concepts
+- **Retro Aesthetic**: 32-bit pixel art with child designer's green theme vision
+- **PWA Compliance**: Progressive Web App standards with complete icon set and branding
 - **LTS Versions**: Use .NET 8 LTS packages only for stability
 - **Documentation**: Every feature triggers automatic documentation updates
 - **Real-World Data**: Connect game mechanics to actual GDP and country data
+
+## ✅ Feature Completion Validation
+
+Every feature MUST pass comprehensive validation:
+
+### Essential Validation Steps
+- [ ] **Educational Objective**: Clear learning outcome for 12-year-olds
+- [ ] **Child Safety**: Content appropriate and protective
+- [ ] **Retro Design**: 32-bit pixel art aesthetic implemented
+- [ ] **Green Theme**: Child designer's color vision honored
+- [ ] **PWA Standards**: Progressive Web App compliance verified
+- [ ] **Brand Consistency**: Logo and educational identity evident
+- [ ] **Mobile Optimization**: Tablet-friendly touch interface
+- [ ] **Performance**: Lighthouse PWA score > 90
+- [ ] **Accessibility**: WCAG 2.1 AA standards met
+- [ ] **Documentation**: Technical and journey docs updated
+
+### Validation Scripts
+```bash
+# Run comprehensive validation
+./docs/validate-pwa.sh          # PWA and branding check
+./docs/validate-retro.sh        # Retro design compliance
+./docs/validate-education.sh    # Educational value verification
+```
 
 ## 📚 Complete Instruction Modules
 
@@ -156,9 +185,11 @@ For detailed implementation guidance, see:
 2. **[Educational Game Development](./copilot-instructions/educational-game-development.md)** - Game mechanics and learning systems
 3. **[Technical Architecture](./copilot-instructions/technical-architecture.md)** - .NET Aspire, Blazor, Entity Framework patterns
 4. **[UI/UX Guidelines](./copilot-instructions/ui-ux-guidelines.md)** - Child-friendly design and accessibility
-5. **[AI Safety & Child Protection](./copilot-instructions/ai-safety-and-child-protection.md)** - Content moderation and child safety
-6. **[Documentation Standards](./copilot-instructions/documentation-standards.md)** - Documentation creation and maintenance
-7. **[Feature Development Process](./copilot-instructions/feature-development-process.md)** - Complete feature implementation workflow
+5. **[Retro Design Standards](./copilot-instructions/retro-design-standards.md)** - 32-bit pixel art and child designer vision
+6. **[PWA Standards](./copilot-instructions/pwa-standards.md)** - Progressive Web App, branding, and icon requirements
+7. **[AI Safety & Child Protection](./copilot-instructions/ai-safety-and-child-protection.md)** - Content moderation and child safety
+8. **[Documentation Standards](./copilot-instructions/documentation-standards.md)** - Documentation creation and maintenance
+9. **[Feature Development Process](./copilot-instructions/feature-development-process.md)** - Complete feature implementation workflow with validation
 
 ---
 

@@ -14,9 +14,44 @@ permalink: /issues/
 
 ## 🚀 Active Issues
 
-### Week 5: Production Security & Scalability (Current Focus)
+### Week 6: Retro 32-Bit Transformation (Current Focus) 🎨
 
-**Target Date**: August 13, 2025 • **Duration**: 1 week • **Focus**: Production security, API protection, authentication, and performance optimization
+**Target Date**: August 16, 2025 • **Duration**: 1 week • **Focus**: Child designer vision implementation - retro 32-bit aesthetics, character personas, interactive world map, and mobile-first design
+
+**Child Designer Led**: This week implements the creative vision of our 12-year-old designer, transforming the game into the retro pixel art style they envisioned.
+
+<div class="issues-grid">
+  {% assign week6_issues = site.issues | where: "week", 6 | sort: "issue_number" %}
+  {% for issue in week6_issues %}
+    <div class="issue-card shadcn-card week6-issue">
+      <div class="issue-header">
+        <h3><a href="{{ issue.url | relative_url }}">{{ issue.title }}</a></h3>
+        <div class="issue-meta">
+          <span class="issue-number">{{ issue.issue_number }}</span>
+          <span class="priority priority-{{ issue.priority }}">{{ issue.priority | upcase }}</span>
+          <span class="effort">{{ issue.estimated_hours }}h</span>
+          <span class="ai-autonomy">🤖 {{ issue.ai_autonomy_target }}</span>
+          <span class="child-vision">👦 CHILD DESIGN</span>
+        </div>
+      </div>
+      <div class="educational-focus">
+        <strong>Creative Focus:</strong>
+        {% for focus in issue.production_focus %}
+          <span class="creative-tag">{{ focus }}</span>
+        {% endfor %}
+      </div>
+      <div class="issue-description">
+        <p>{{ issue.excerpt | strip_html | truncatewords: 20 }}</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+---
+
+### Week 5: Production Security & Scalability (Completed ✅)
+
+**Completion Date**: August 10, 2025 • **Status**: Successfully implemented production security • **AI Autonomy**: 94% (6% human oversight required)
 
 <div class="issues-grid">
   {% assign week5_issues = site.issues | where: "week", 5 | sort: "issue_number" %}
@@ -87,7 +122,45 @@ permalink: /issues/
         </div>
       </div>
       <div class="educational-focus">
-        <strong>Educational Focus:</strong>
+        /* Week 6 - Child Designer Vision */
+.week6-issue {
+  background: linear-gradient(135deg, 
+    rgba(34, 197, 94, 0.1) 0%, 
+    rgba(59, 130, 246, 0.1) 100%);
+  border-left: 4px solid #22c55e;
+  position: relative;
+}
+
+.week6-issue::before {
+  content: "🎨";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  opacity: 0.7;
+}
+
+.child-vision {
+  background: linear-gradient(45deg, #22c55e, #10b981);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.creative-tag {
+  background: rgba(34, 197, 94, 0.1);
+  color: #047857;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  margin-right: 4px;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
         {% for focus in issue.educational_focus %}
           <span class="educational-tag">{{ focus }}</span>
         {% endfor %}
