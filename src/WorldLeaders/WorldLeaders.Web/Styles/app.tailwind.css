@@ -129,9 +129,10 @@
   /* Desktop (1025px+) */
   @media (min-width: 1025px) {
     .retro-mobile-container {
-      padding: var(--mobile-spacing-lg);
+      padding: 0; /* Full width on desktop */
       font-size: var(--mobile-text-lg);
-      max-width: 1200px;
+      max-width: none; /* Remove width constraint for full coverage */
+      width: 100vw; /* Full viewport width */
     }
   }
 
@@ -1263,17 +1264,25 @@
   }
 
   .retro-main-content {
-    padding: 0;
+    padding: var(--mobile-spacing-sm); /* Mobile padding */
     max-width: 100%;
     margin: 0 auto;
     position: relative;
     /* Ensure content doesn't go under mobile nav */
     padding-bottom: calc(var(--touch-target-medium) + var(--mobile-spacing-sm));
+    /* Fill remaining viewport height on desktop */
+    min-height: calc(100vh - var(--touch-target-medium));
+    min-height: calc(100dvh - var(--touch-target-medium));
   }
 
   @media (min-width: 1024px) {
     .retro-main-content {
-      padding-bottom: 0;
+      padding: var(--mobile-spacing-lg); /* Proper desktop padding for content */
+      /* Full height on desktop since no mobile nav */
+      min-height: calc(100vh - 60px); /* Subtract header height */
+      min-height: calc(100dvh - 60px);
+      width: 100%; /* Ensure full width usage */
+      margin: 0; /* Remove auto centering that could cause left alignment */
     }
   }
 
@@ -1789,5 +1798,34 @@
     overflow: hidden;
     position: fixed;
     width: 100%;
+  }
+
+  /* Page Content Centering Utilities */
+  .page-content-centered {
+    max-width: 56rem; /* Default max width for content pages (896px) */
+    margin: 0 auto; /* Center horizontally */
+    padding: 2rem; /* Consistent padding */
+  }
+
+  .page-content-narrow {
+    max-width: 28rem; /* For login, forms */
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-content-wide {
+    max-width: 80rem; /* For game dashboard */
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .page-content-centered,
+    .page-content-narrow,
+    .page-content-wide {
+      padding: 1rem;
+      margin: 0 auto;
+    }
   }
 }
