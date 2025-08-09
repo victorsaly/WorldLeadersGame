@@ -1,8 +1,9 @@
 @*
-Interactive Pixel Art World Map Component
-Context: Educational geography learning for 12-year-old players with 32-bit pixel art style
+Interactive Pixel Art World Map Component - Now using Adobe Stock Professional World Map
+Context: Educational geography learning for 12-year-old players with high-quality world map background
 Educational Objective: Visual world geography discovery through interactive map exploration
 Safety Requirements: Child-friendly interactions, positive cultural representation
+Map Source: AdobeStock_380033452.svg - Professional quality world map (6000x3000px)
 *@
 @using WorldLeaders.Shared.Models
 @using WorldLeaders.Shared.DTOs
@@ -58,9 +59,17 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
 
     <!-- Main Map Container -->
     <div class="map-container" @onwheel="OnMapWheel" @onwheel:preventDefault="true">
+        <!-- Background World Map Image -->
+        <div class="world-map-background">
+            <img src="/assets/maps/AdobeStock_380033452.svg?v=@DateTime.Now.Ticks" 
+                 alt="Professional World Map" 
+                 class="pixel-art world-map-image" 
+                 style="transform: scale(@Viewport.ZoomScale) translate(@Viewport.Center.X px, @Viewport.Center.Y px)" />
+        </div>
+        
         <div class="map-viewport" style="transform: scale(@Viewport.ZoomScale) translate(@Viewport.Center.X px, @Viewport.Center.Y px)">
             
-            <!-- SVG World Map -->
+            <!-- SVG Overlay for Interactive Elements -->
             <svg class="world-map-svg" 
                  viewBox="0 0 @MapWidth @MapHeight" 
                  width="@MapWidth" 
@@ -72,19 +81,8 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
                  @ontouchmove="OnMapTouchMove"
                  @ontouchend="OnMapTouchEnd">
                 
-                <!-- Background -->
-                <rect width="100%" height="100%" fill="@BackgroundColor" class="map-background"/>
-                
-                <!-- Grid Lines for Retro Effect -->
-                @if (ShowGrid)
-                {
-                    <defs>
-                        <pattern id="retro-grid" width="32" height="32" patternUnits="userSpaceOnUse">
-                            <path d="M 32 0 L 0 0 0 32" fill="none" stroke="@GridColor" stroke-width="0.5" opacity="0.3"/>
-                        </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="url(#retro-grid)"/>
-                }
+                <!-- Transparent background for interactions -->
+                <rect width="100%" height="100%" fill="transparent" class="interaction-layer"/>
                 
                 <!-- Interactive Territories -->
                 @foreach (var territory in InteractiveTerritories)
@@ -94,29 +92,16 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
                        @onmouseenter="() => OnTerritoryHover(territory)"
                        @onmouseleave="OnTerritoryLeave">
                         
-                        <!-- Territory Shape -->
-                        @if (territory.Boundaries.UsePolygon && territory.Boundaries.PolygonPoints.Any())
-                        {
-                            <polygon points="@GetPolygonPoints(territory.Boundaries.PolygonPoints)"
-                                     fill="@GetTerritoryColor(territory.Status)"
-                                     stroke="@GetTerritoryBorderColor(territory.Status)"
-                                     stroke-width="2"
-                                     class="territory-shape pixel-art"
-                                     data-country="@territory.CountryCode"/>
-                        }
-                        else
-                        {
-                            <!-- Simplified rectangular territories for demo -->
-                            <rect x="@territory.Boundaries.TopLeft.X" 
-                                  y="@territory.Boundaries.TopLeft.Y"
-                                  width="@(territory.Boundaries.BottomRight.X - territory.Boundaries.TopLeft.X)"
-                                  height="@(territory.Boundaries.BottomRight.Y - territory.Boundaries.TopLeft.Y)"
-                                  fill="@GetTerritoryColor(territory.Status)"
-                                  stroke="@GetTerritoryBorderColor(territory.Status)"
-                                  stroke-width="2"
-                                  class="territory-shape pixel-art"
-                                  data-country="@territory.CountryCode"/>
-                        }
+                        <!-- Territory Highlight Area (larger for better interaction) -->
+                        <circle cx="@territory.Position.X" 
+                                cy="@territory.Position.Y" 
+                                r="@(territory.TouchRadius + 10)"
+                                fill="@GetTerritoryColor(territory.Status)"
+                                stroke="@GetTerritoryBorderColor(territory.Status)"
+                                stroke-width="3"
+                                opacity="0.7"
+                                class="territory-highlight pixel-art"
+                                data-country="@territory.CountryCode"/>
                         
                         <!-- Touch Zone for Mobile -->
                         <circle cx="@territory.Position.X" 
@@ -126,12 +111,21 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
                                 class="touch-zone"
                                 style="pointer-events: all;"/>
                         
-                        <!-- Country Label -->
+                        <!-- Country Label with better visibility -->
+                        <rect x="@(territory.Position.X - territory.CountryName.Length * 3)" 
+                              y="@(territory.Position.Y + 15)"
+                              width="@(territory.CountryName.Length * 6)" 
+                              height="12"
+                              fill="rgba(55, 71, 79, 0.8)"
+                              stroke="#2E7D32"
+                              stroke-width="1"
+                              class="label-background pixel-art"/>
+                        
                         <text x="@territory.Position.X" 
-                              y="@(territory.Position.Y + 5)"
+                              y="@(territory.Position.Y + 25)"
                               text-anchor="middle"
                               class="territory-label retro-text"
-                              fill="@GetLabelColor(territory.Status)">
+                              fill="white">
                             @territory.CountryName
                         </text>
                         
@@ -145,6 +139,16 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
                                    href="@territory.Flag.SpritePath"
                                    class="flag-sprite pixel-art"/>
                         }
+                        
+                        <!-- Status Icon -->
+                        <text x="@territory.Position.X" 
+                              y="@(territory.Position.Y - 5)"
+                              text-anchor="middle"
+                              class="status-icon"
+                              fill="@GetStatusIconColor(territory.Status)"
+                              font-size="16">
+                            @GetStatusIcon(territory.Status)
+                        </text>
                         
                         <!-- Landmarks -->
                         @foreach (var landmark in territory.Landmarks.Take(3))
@@ -242,8 +246,8 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
     [Parameter] public bool IsMobile { get; set; } = false;
 
     // Map Configuration
-    private const int MapWidth = 1280;
-    private const int MapHeight = 640;
+    private const int MapWidth = 1600; // Scaled down from 6000 for better performance
+    private const int MapHeight = 800;  // Scaled down from 3000 for better performance
     private const string ThemeColor = "#2ea44f"; // Child designer's green theme
     private const string BackgroundColor = "#e6f3ff"; // Light blue ocean
     private const string GridColor = "#c0c0c0"; // Retro grid lines
@@ -256,7 +260,6 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
     private InteractiveTerritory? SelectedTerritory;
     private bool IsLoading = true;
     private bool ShowGrid = true;
-    private bool IsDragging = false;
     
     // Tooltip positioning
     private int TooltipX = 0;
@@ -300,18 +303,18 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
 
     private async Task InitializeSampleTerritories()
     {
-        // Sample territories with pixel coordinates (would be loaded from data in production)
+        // Sample territories with pixel coordinates adjusted for Adobe Stock map (would be loaded from data in production)
         var sampleTerritories = new List<InteractiveTerritory>
         {
             new InteractiveTerritory
             {
                 CountryCode = "US",
                 CountryName = "United States",
-                Position = new PixelCoordinate { X = 300, Y = 200 },
+                Position = new PixelCoordinate { X = 400, Y = 300 }, // Adjusted for Adobe Stock map
                 Boundaries = new PixelBounds 
                 { 
-                    TopLeft = new PixelCoordinate { X = 250, Y = 180 },
-                    BottomRight = new PixelCoordinate { X = 350, Y = 220 }
+                    TopLeft = new PixelCoordinate { X = 350, Y = 280 },
+                    BottomRight = new PixelCoordinate { X = 450, Y = 320 }
                 },
                 Status = TerritoryStatus.Available,
                 Education = new EducationalInfo
@@ -326,11 +329,11 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
             {
                 CountryCode = "CA",
                 CountryName = "Canada",
-                Position = new PixelCoordinate { X = 300, Y = 150 },
+                Position = new PixelCoordinate { X = 400, Y = 200 }, // Adjusted for Adobe Stock map
                 Boundaries = new PixelBounds 
                 { 
-                    TopLeft = new PixelCoordinate { X = 250, Y = 130 },
-                    BottomRight = new PixelCoordinate { X = 350, Y = 170 }
+                    TopLeft = new PixelCoordinate { X = 350, Y = 180 },
+                    BottomRight = new PixelCoordinate { X = 450, Y = 220 }
                 },
                 Status = TerritoryStatus.Owned,
                 Education = new EducationalInfo
@@ -345,11 +348,11 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
             {
                 CountryCode = "GB",
                 CountryName = "United Kingdom",
-                Position = new PixelCoordinate { X = 640, Y = 180 },
+                Position = new PixelCoordinate { X = 800, Y = 250 }, // Adjusted for Adobe Stock map
                 Boundaries = new PixelBounds 
                 { 
-                    TopLeft = new PixelCoordinate { X = 620, Y = 170 },
-                    BottomRight = new PixelCoordinate { X = 660, Y = 190 }
+                    TopLeft = new PixelCoordinate { X = 780, Y = 240 },
+                    BottomRight = new PixelCoordinate { X = 820, Y = 260 }
                 },
                 Status = TerritoryStatus.Available,
                 Education = new EducationalInfo
@@ -364,11 +367,11 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
             {
                 CountryCode = "JP",
                 CountryName = "Japan",
-                Position = new PixelCoordinate { X = 1000, Y = 250 },
+                Position = new PixelCoordinate { X = 1300, Y = 350 }, // Adjusted for Adobe Stock map
                 Boundaries = new PixelBounds 
                 { 
-                    TopLeft = new PixelCoordinate { X = 980, Y = 230 },
-                    BottomRight = new PixelCoordinate { X = 1020, Y = 270 }
+                    TopLeft = new PixelCoordinate { X = 1280, Y = 330 },
+                    BottomRight = new PixelCoordinate { X = 1320, Y = 370 }
                 },
                 Status = TerritoryStatus.Locked,
                 Education = new EducationalInfo
@@ -383,11 +386,11 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
             {
                 CountryCode = "AU",
                 CountryName = "Australia",
-                Position = new PixelCoordinate { X = 950, Y = 450 },
+                Position = new PixelCoordinate { X = 1250, Y = 600 }, // Adjusted for Adobe Stock map
                 Boundaries = new PixelBounds 
                 { 
-                    TopLeft = new PixelCoordinate { X = 900, Y = 420 },
-                    BottomRight = new PixelCoordinate { X = 1000, Y = 480 }
+                    TopLeft = new PixelCoordinate { X = 1200, Y = 580 },
+                    BottomRight = new PixelCoordinate { X = 1300, Y = 620 }
                 },
                 Status = TerritoryStatus.Available,
                 Education = new EducationalInfo
@@ -487,11 +490,11 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
     }
 
     // Mouse and touch event handlers for map navigation
-    private void OnMapMouseDown(MouseEventArgs e) => IsDragging = true;
-    private void OnMapMouseUp(MouseEventArgs e) => IsDragging = false;
+    private void OnMapMouseDown(MouseEventArgs e) { /* TODO: Implement map dragging */ }
+    private void OnMapMouseUp(MouseEventArgs e) { /* TODO: Implement map dragging */ }
     private void OnMapMouseMove(MouseEventArgs e) { /* Handle map dragging */ }
-    private void OnMapTouchStart(TouchEventArgs e) => IsDragging = true;
-    private void OnMapTouchEnd(TouchEventArgs e) => IsDragging = false;
+    private void OnMapTouchStart(TouchEventArgs e) { /* TODO: Implement touch dragging */ }
+    private void OnMapTouchEnd(TouchEventArgs e) { /* TODO: Implement touch dragging */ }
     private void OnMapTouchMove(TouchEventArgs e) { /* Handle touch dragging */ }
     private void OnMapWheel(WheelEventArgs e)
     {
@@ -508,26 +511,42 @@ Safety Requirements: Child-friendly interactions, positive cultural representati
     
     private string GetTerritoryColor(TerritoryStatus status) => status switch
     {
-        TerritoryStatus.Owned => "#86efac",      // Green
-        TerritoryStatus.Available => "#bfdbfe",  // Blue
-        TerritoryStatus.Locked => "#e5e7eb",     // Gray
+        TerritoryStatus.Owned => "#81C784",      // Light green
+        TerritoryStatus.Available => "#64B5F6",  // Light blue
+        TerritoryStatus.Locked => "#BDBDBD",     // Light gray
         _ => "#f3f4f6"
     };
     
     private string GetTerritoryBorderColor(TerritoryStatus status) => status switch
     {
-        TerritoryStatus.Owned => "#22c55e",      // Dark green
-        TerritoryStatus.Available => "#3b82f6",  // Dark blue
-        TerritoryStatus.Locked => "#9ca3af",     // Dark gray
+        TerritoryStatus.Owned => "#2E7D32",      // Dark green
+        TerritoryStatus.Available => "#1565C0",  // Dark blue
+        TerritoryStatus.Locked => "#616161",     // Dark gray
         _ => "#d1d5db"
     };
     
     private string GetLabelColor(TerritoryStatus status) => status switch
     {
-        TerritoryStatus.Owned => "#166534",      // Dark green
-        TerritoryStatus.Available => "#1e40af",  // Dark blue
-        TerritoryStatus.Locked => "#6b7280",     // Dark gray
+        TerritoryStatus.Owned => "#1B5E20",      // Very dark green
+        TerritoryStatus.Available => "#0D47A1",  // Very dark blue
+        TerritoryStatus.Locked => "#424242",     // Very dark gray
         _ => "#374151"
+    };
+    
+    private string GetStatusIcon(TerritoryStatus status) => status switch
+    {
+        TerritoryStatus.Owned => "🏴",
+        TerritoryStatus.Available => "✨",
+        TerritoryStatus.Locked => "🔒",
+        _ => "❓"
+    };
+    
+    private string GetStatusIconColor(TerritoryStatus status) => status switch
+    {
+        TerritoryStatus.Owned => "#2E7D32",
+        TerritoryStatus.Available => "#1565C0",
+        TerritoryStatus.Locked => "#616161",
+        _ => "#9E9E9E"
     };
     
     private string GetStatusDisplay(TerritoryStatus status) => status switch

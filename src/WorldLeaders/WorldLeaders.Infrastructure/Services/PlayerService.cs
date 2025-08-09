@@ -99,7 +99,7 @@ public class PlayerService : IPlayerService
             }
 
             // Update player data
-            existingPlayer.Username = player.Username;
+            existingPlayer.Username = player.Username ?? existingPlayer.Username;
             existingPlayer.Income = player.Income;
             existingPlayer.Reputation = Math.Clamp(player.Reputation, 0, 100);
             existingPlayer.Happiness = Math.Clamp(player.Happiness, 0, 100);

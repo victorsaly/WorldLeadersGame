@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" style="image-rendering: pixelated;">
+  <!-- Enhanced 64-bit Quality World Map for Educational Geography Learning -->
+  
+  <!-- Improved Pattern Definitions -->
+  <defs>
+    <!-- High-Quality Ocean Pattern -->
+    <pattern id="oceanPattern" patternUnits="userSpaceOnUse" width="8" height="8">
+      <rect width="8" height="8" fill="#2196F3"/>
+      <rect x="0" y="0" width="4" height="4" fill="#1976D2"/>
+      <rect x="4" y="4" width="4" height="4" fill="#1976D2"/>
+      <circle cx="2" cy="2" r="0.5" fill="#64B5F6" opacity="0.8"/>
+      <circle cx="6" cy="6" r="0.5" fill="#64B5F6" opacity="0.8"/>
+    </pattern>
+    
+    <!-- Deep Ocean Pattern -->
+    <pattern id="deepOcean" patternUnits="userSpaceOnUse" width="6" height="6">
+      <rect width="6" height="6" fill="#0D47A1"/>
+      <circle cx="3" cy="3" r="1" fill="#1565C0" opacity="0.6"/>
+    </pattern>
+    
+    <!-- Detailed Land Pattern -->
+    <pattern id="landPattern" patternUnits="userSpaceOnUse" width="4" height="4">
+      <rect width="4" height="4" fill="#4CAF50"/>
+      <rect x="0" y="0" width="2" height="2" fill="#388E3C"/>
+      <rect x="2" y="2" width="2" height="2" fill="#388E3C"/>
+    </pattern>
+    
+    <!-- Forest Pattern -->
+    <pattern id="forestPattern" patternUnits="userSpaceOnUse" width="6" height="6">
+      <rect width="6" height="6" fill="#2E7D32"/>
+      <circle cx="1.5" cy="1.5" r="1" fill="#388E3C"/>
+      <circle cx="4.5" cy="4.5" r="1" fill="#388E3C"/>
+    </pattern>
+    
+    <!-- Mountain Pattern -->
+    <pattern id="mountainPattern" patternUnits="userSpaceOnUse" width="8" height="8">
+      <rect width="8" height="8" fill="#5D4037"/>
+      <polygon points="4,1 7,7 1,7" fill="#6D4C41"/>
+      <polygon points="2,3 4,6 0,6" fill="#795548"/>
+    </pattern>
+    
+    <!-- Desert Pattern -->
+    <pattern id="desertPattern" patternUnits="userSpaceOnUse" width="6" height="6">
+      <rect width="6" height="6" fill="#FF9800"/>
+      <circle cx="1.5" cy="1.5" r="0.5" fill="#FFB74D"/>
+      <circle cx="4.5" cy="4.5" r="0.5" fill="#FFB74D"/>
+      <rect x="2" y="2" width="2" height="2" fill="#FFA726"/>
+    </pattern>
+    
+    <!-- Tundra Pattern -->
+    <pattern id="tundraPattern" patternUnits="userSpaceOnUse" width="4" height="4">
+      <rect width="4" height="4" fill="#90A4AE"/>
+      <rect x="1" y="1" width="2" height="2" fill="#B0BEC5"/>
+    </pattern>
+    
+    <!-- Ice Pattern -->
+    <pattern id="icePattern" patternUnits="userSpaceOnUse" width="4" height="4">
+      <rect width="4" height="4" fill="#E1F5FE"/>
+      <polygon points="2,0 4,2 2,4 0,2" fill="#B3E5FC"/>
+    </pattern>
+  </defs>
+  
+  <!-- Ocean Background -->
+  <rect width="1600" height="800" fill="url(#oceanPattern)"/>
+  
+  <!-- Deep Ocean Areas -->
+  <ellipse cx="800" cy="400" rx="700" ry="300" fill="url(#deepOcean)" opacity="0.7"/>
+  
+  <!-- NORTH AMERICA (More Detailed) -->
+  <!-- Canada -->
+  <path d="M80,100 L120,80 L200,70 L300,75 L400,85 L480,95 L520,110 L540,130 L520,150 L480,140 L400,145 L350,155 L300,160 L250,150 L200,145 L150,140 L100,135 L80,120 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Alaska -->
+  <path d="M20,120 L80,110 L100,130 L90,150 L60,160 L30,150 L20,130 Z" 
+        fill="url(#tundraPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- United States -->
+  <path d="M80,160 L150,150 L250,155 L350,165 L420,175 L480,185 L520,195 L540,210 L520,240 L480,250 L420,255 L350,250 L280,245 L220,240 L160,235 L100,230 L80,200 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Great Lakes -->
+  <ellipse cx="250" cy="180" rx="30" ry="15" fill="url(#oceanPattern)"/>
+  <ellipse cx="280" cy="185" rx="20" ry="12" fill="url(#oceanPattern)"/>
+  <ellipse cx="310" cy="190" rx="15" ry="10" fill="url(#oceanPattern)"/>
+  
+  <!-- Mexico -->
+  <path d="M160,260 L280,250 L350,255 L420,265 L400,300 L380,320 L340,330 L300,325 L260,315 L220,305 L180,295 L160,275 Z" 
+        fill="url(#desertPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Central America -->
+  <path d="M340,330 L380,325 L400,340 L390,360 L370,370 L350,365 L340,350 Z" 
+        fill="url(#forestPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- SOUTH AMERICA (Enhanced Detail) -->
+  <!-- Brazil -->
+  <path d="M400,380 L480,375 L560,385 L620,400 L640,450 L630,500 L600,540 L560,560 L520,555 L480,545 L450,530 L420,510 L400,480 L390,440 L395,400 Z" 
+        fill="url(#forestPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Amazon River -->
+  <path d="M420,440 L560,450 L600,460" fill="none" stroke="#2196F3" stroke-width="3"/>
+  
+  <!-- Argentina -->
+  <path d="M450,540 L520,535 L560,545 L580,580 L570,620 L540,660 L510,680 L480,675 L450,665 L430,645 L440,605 L445,570 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Chile -->
+  <path d="M430,580 L450,575 L460,620 L455,660 L445,700 L430,720 L420,700 L425,660 L428,620 Z" 
+        fill="url(#mountainPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- EUROPE (Much More Detailed) -->
+  <!-- Scandinavia -->
+  <path d="M640,80 L680,70 L720,75 L740,95 L735,120 L720,140 L700,135 L680,130 L660,125 L640,115 Z" 
+        fill="url(#forestPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- United Kingdom & Ireland -->
+  <path d="M580,140 L620,135 L635,155 L630,175 L615,185 L595,180 L580,165 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  <path d="M560,150 L580,145 L585,165 L575,175 L560,170 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- France -->
+  <path d="M620,180 L670,175 L690,195 L685,220 L670,235 L650,240 L630,235 L620,215 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Spain -->
+  <path d="M600,240 L670,235 L690,255 L685,275 L660,285 L630,280 L610,270 L600,255 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Italy -->
+  <path d="M690,220 L720,215 L730,240 L740,270 L735,300 L720,320 L710,305 L705,280 L700,250 L695,235 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Germany -->
+  <path d="M670,160 L720,155 L740,175 L735,200 L720,215 L695,210 L675,205 L670,180 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Eastern Europe -->
+  <path d="M740,140 L800,135 L840,145 L860,165 L850,190 L820,200 L780,195 L750,185 L740,165 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Russia (Massive Detail) -->
+  <path d="M800,80 L1200,70 L1300,85 L1350,105 L1380,130 L1370,160 L1340,185 L1300,200 L1200,210 L1100,205 L1000,200 L900,195 L850,185 L820,170 L800,145 L795,115 Z" 
+        fill="url(#tundraPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Siberian Forests -->
+  <path d="M900,200 L1200,195 L1300,205 L1320,230 L1300,250 L1200,255 L1100,250 L1000,245 L920,240 L900,220 Z" 
+        fill="url(#forestPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- AFRICA (Enhanced) -->
+  <!-- North Africa -->
+  <path d="M640,290 L780,285 L820,295 L840,315 L835,340 L820,360 L800,370 L760,365 L720,360 L680,355 L650,345 L640,320 Z" 
+        fill="url(#desertPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Central Africa -->
+  <path d="M680,370 L780,365 L820,375 L840,395 L835,425 L820,445 L800,455 L760,450 L720,445 L690,440 L680,410 Z" 
+        fill="url(#forestPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Southern Africa -->
+  <path d="M720,460 L800,455 L830,465 L845,485 L840,510 L825,530 L800,540 L770,535 L740,530 L720,515 L715,485 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Nile River -->
+  <path d="M760,320 L765,380 L770,440" fill="none" stroke="#2196F3" stroke-width="2"/>
+  
+  <!-- ASIA (Highly Detailed) -->
+  <!-- Middle East -->
+  <path d="M840,280 L900,275 L940,285 L960,305 L955,330 L940,350 L920,355 L890,350 L860,345 L840,325 Z" 
+        fill="url(#desertPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Central Asia -->
+  <path d="M900,240 L1000,235 L1080,245 L1100,265 L1095,290 L1080,310 L1060,315 L1020,310 L980,305 L940,300 L920,280 L905,260 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- China -->
+  <path d="M1080,250 L1180,245 L1250,255 L1280,275 L1285,305 L1270,335 L1250,355 L1220,365 L1180,360 L1140,355 L1100,345 L1080,315 L1075,280 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Himalayas -->
+  <path d="M1040,320 L1140,315 L1160,335 L1155,350 L1140,360 L1120,355 L1100,350 L1080,345 L1060,340 L1040,335 Z" 
+        fill="url(#mountainPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- India -->
+  <path d="M980,340 L1080,335 L1120,345 L1140,365 L1135,395 L1120,420 L1100,435 L1070,440 L1040,435 L1010,425 L990,410 L980,385 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Southeast Asia -->
+  <path d="M1140,380 L1200,375 L1240,385 L1260,405 L1255,425 L1240,440 L1220,445 L1190,440 L1160,435 L1140,415 Z" 
+        fill="url(#forestPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Indonesia -->
+  <path d="M1180,450 L1280,445 L1320,455 L1340,470 L1335,485 L1320,495 L1300,490 L1260,485 L1220,480 L1180,475 Z" 
+        fill="url(#forestPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Japan -->
+  <path d="M1320,280 L1360,275 L1375,295 L1370,315 L1355,325 L1340,320 L1325,310 L1320,295 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- Korea -->
+  <path d="M1280,285 L1310,280 L1320,300 L1315,315 L1305,320 L1290,315 L1280,300 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- OCEANIA -->
+  <!-- Australia -->
+  <path d="M1200,520 L1340,515 L1380,525 L1400,545 L1395,570 L1380,590 L1360,600 L1320,595 L1280,590 L1240,585 L1200,575 L1185,550 Z" 
+        fill="url(#desertPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- New Zealand -->
+  <path d="M1420,580 L1440,575 L1450,595 L1445,610 L1435,615 L1420,610 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  <path d="M1430,620 L1450,615 L1460,635 L1455,645 L1445,650 L1430,645 Z" 
+        fill="url(#landPattern)" stroke="#2E7D32" stroke-width="1"/>
+  
+  <!-- MAJOR RIVERS -->
+  <!-- Mississippi -->
+  <path d="M300,200 L310,300 L320,380" fill="none" stroke="#2196F3" stroke-width="2"/>
+  
+  <!-- Yangtze -->
+  <path d="M1100,320 L1220,325 L1260,330" fill="none" stroke="#2196F3" stroke-width="2"/>
+  
+  <!-- Ganges -->
+  <path d="M1050,360 L1120,365 L1140,370" fill="none" stroke="#2196F3" stroke-width="2"/>
+  
+  <!-- Volga -->
+  <path d="M780,180 L790,220 L800,260" fill="none" stroke="#2196F3" stroke-width="2"/>
+  
+  <!-- ENHANCED LANDMARKS -->
+  <!-- Great Wall of China -->
+  <path d="M1100,280 L1200,275 L1250,280" fill="none" stroke="#8D6E63" stroke-width="2" stroke-dasharray="4,2"/>
+  
+  <!-- Pyramids -->
+  <polygon points="740,340 745,330 750,340" fill="#FFB74D"/>
+  <polygon points="745,340 750,330 755,340" fill="#FFB74D"/>
+  <polygon points="750,340 755,330 760,340" fill="#FFB74D"/>
+  
+  <!-- Taj Mahal -->
+  <circle cx="1070" cy="380" r="3" fill="#F5F5F5"/>
+  <rect x="1068" y="382" width="4" height="6" fill="#F5F5F5"/>
+  
+  <!-- Statue of Liberty -->
+  <circle cx="300" cy="220" r="2" fill="#4CAF50"/>
+  <rect x="299" y="222" width="2" height="4" fill="#795548"/>
+  
+  <!-- Eiffel Tower -->
+  <polygon points="650,210 652,200 654,210" fill="#616161"/>
+  
+  <!-- CAPITAL CITIES (Enhanced) -->
+  <g id="capitals">
+    <!-- Washington DC -->
+    <circle cx="300" cy="210" r="3" fill="#FFD700"/>
+    <text x="285" y="205" font-family="monospace" font-size="8" fill="#F57C00">Washington</text>
+    
+    <!-- Ottawa -->
+    <circle cx="280" cy="160" r="3" fill="#FFD700"/>
+    <text x="265" y="155" font-family="monospace" font-size="8" fill="#F57C00">Ottawa</text>
+    
+    <!-- London -->
+    <circle cx="605" cy="160" r="3" fill="#FFD700"/>
+    <text x="590" y="155" font-family="monospace" font-size="8" fill="#F57C00">London</text>
+    
+    <!-- Paris -->
+    <circle cx="650" cy="200" r="3" fill="#FFD700"/>
+    <text x="635" y="195" font-family="monospace" font-size="8" fill="#F57C00">Paris</text>
+    
+    <!-- Berlin -->
+    <circle cx="700" cy="180" r="3" fill="#FFD700"/>
+    <text x="685" y="175" font-family="monospace" font-size="8" fill="#F57C00">Berlin</text>
+    
+    <!-- Moscow -->
+    <circle cx="820" cy="160" r="3" fill="#FFD700"/>
+    <text x="805" y="155" font-family="monospace" font-size="8" fill="#F57C00">Moscow</text>
+    
+    <!-- Beijing -->
+    <circle cx="1180" cy="300" r="3" fill="#FFD700"/>
+    <text x="1165" y="295" font-family="monospace" font-size="8" fill="#F57C00">Beijing</text>
+    
+    <!-- Tokyo -->
+    <circle cx="1350" cy="300" r="3" fill="#FFD700"/>
+    <text x="1335" y="295" font-family="monospace" font-size="8" fill="#F57C00">Tokyo</text>
+    
+    <!-- New Delhi -->
+    <circle cx="1060" cy="380" r="3" fill="#FFD700"/>
+    <text x="1045" y="375" font-family="monospace" font-size="8" fill="#F57C00">New Delhi</text>
+    
+    <!-- Cairo -->
+    <circle cx="750" cy="330" r="3" fill="#FFD700"/>
+    <text x="735" y="325" font-family="monospace" font-size="8" fill="#F57C00">Cairo</text>
+    
+    <!-- Brasília -->
+    <circle cx="520" cy="470" r="3" fill="#FFD700"/>
+    <text x="505" y="465" font-family="monospace" font-size="8" fill="#F57C00">Brasília</text>
+    
+    <!-- Canberra -->
+    <circle cx="1320" cy="560" r="3" fill="#FFD700"/>
+    <text x="1305" y="555" font-family="monospace" font-size="8" fill="#F57C00">Canberra</text>
+  </g>
+  
+  <!-- COMPASS ROSE (Enhanced) -->
+  <g transform="translate(80,60)">
+    <circle cx="0" cy="0" r="30" fill="#E8F5E8" stroke="#2E7D32" stroke-width="2"/>
+    <polygon points="0,-25 6,-8 0,-2 -6,-8" fill="#D32F2F"/>
+    <polygon points="25,0 8,-6 2,0 8,6" fill="#388E3C"/>
+    <polygon points="0,25 -6,8 0,2 6,8" fill="#388E3C"/>
+    <polygon points="-25,0 -8,6 -2,0 -8,-6" fill="#388E3C"/>
+    <text x="-4" y="-32" font-family="monospace" font-size="14" fill="#D32F2F" font-weight="bold">N</text>
+    <text x="28" y="5" font-family="monospace" font-size="10" fill="#388E3C">E</text>
+    <text x="-3" y="42" font-family="monospace" font-size="10" fill="#388E3C">S</text>
+    <text x="-35" y="5" font-family="monospace" font-size="10" fill="#388E3C">W</text>
+  </g>
+  
+  <!-- GRID LINES -->
+  <defs>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#4CAF50" stroke-width="0.5" opacity="0.2"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="800" fill="url(#grid)"/>
+  
+  <!-- LATITUDE LINES -->
+  <line x1="0" y1="200" x2="1600" y2="200" stroke="#FFC107" stroke-width="1" opacity="0.6" stroke-dasharray="5,5"/>
+  <text x="10" y="195" font-family="monospace" font-size="10" fill="#FFC107">Tropic of Cancer</text>
+  
+  <line x1="0" y1="400" x2="1600" y2="400" stroke="#FF5722" stroke-width="2" opacity="0.8"/>
+  <text x="10" y="395" font-family="monospace" font-size="12" fill="#FF5722" font-weight="bold">Equator</text>
+  
+  <line x1="0" y1="600" x2="1600" y2="600" stroke="#FFC107" stroke-width="1" opacity="0.6" stroke-dasharray="5,5"/>
+  <text x="10" y="595" font-family="monospace" font-size="10" fill="#FFC107">Tropic of Capricorn</text>
+  
+  <!-- SCALE (Enhanced) -->
+  <g transform="translate(1400,750)">
+    <rect x="0" y="0" width="150" height="25" fill="#E8F5E8" stroke="#2E7D32" stroke-width="2"/>
+    <line x1="0" y1="0" x2="0" y2="15" stroke="#2E7D32" stroke-width="2"/>
+    <line x1="50" y1="0" x2="50" y2="10" stroke="#2E7D32" stroke-width="1"/>
+    <line x1="100" y1="0" x2="100" y2="10" stroke="#2E7D32" stroke-width="1"/>
+    <line x1="150" y1="0" x2="150" y2="15" stroke="#2E7D32" stroke-width="2"/>
+    <text x="75" y="20" font-family="monospace" font-size="10" fill="#2E7D32" text-anchor="middle">10,000 km</text>
+  </g>
+  
+  <!-- TITLE -->
+  <text x="800" y="40" text-anchor="middle" font-family="monospace" font-size="28" fill="#2E7D32" font-weight="bold">
+    🌍 WORLD LEADERS EDUCATIONAL MAP 🌍
+  </text>
+  <text x="800" y="65" text-anchor="middle" font-family="monospace" font-size="14" fill="#388E3C">
+    64-bit Quality • Geographic Learning • Interactive Territories
+  </text>
+</svg>
