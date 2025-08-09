@@ -33,7 +33,7 @@ public static class CharacterPersonaSeeder
         {
             new CharacterPersonaEntity
             {
-                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                Id = Guid.Parse("a3b1c2d3-4e5f-6789-abcd-0123456789ab"),
                 Name = "Young Explorer",
                 Description = "Curious adventurer who loves discovering new places and cultures",
                 PersonalityTrait = "Curious & Adventurous",
@@ -50,7 +50,7 @@ public static class CharacterPersonaSeeder
             },
             new CharacterPersonaEntity
             {
-                Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                Id = Guid.Parse("b7f8e1d2-9c4a-5b6e-def0-123456789def"),
                 Name = "Brave Leader",
                 Description = "Confident leader who inspires others and makes tough decisions",
                 PersonalityTrait = "Confident & Inspiring",
@@ -67,7 +67,7 @@ public static class CharacterPersonaSeeder
             },
             new CharacterPersonaEntity
             {
-                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                Id = Guid.Parse("c5e9f3a1-7d2b-4c8f-9a12-3456789abc12"),
                 Name = "Wise Scholar",
                 Description = "Thoughtful learner who values knowledge and understanding",
                 PersonalityTrait = "Thoughtful & Wise",
@@ -84,7 +84,7 @@ public static class CharacterPersonaSeeder
             },
             new CharacterPersonaEntity
             {
-                Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
+                Id = Guid.Parse("d8a4b6e2-1f5c-4a9b-8e73-456789def456"),
                 Name = "Friendly Diplomat",
                 Description = "Peaceful negotiator who builds bridges between people",
                 PersonalityTrait = "Peaceful & Diplomatic",
@@ -101,7 +101,7 @@ public static class CharacterPersonaSeeder
             },
             new CharacterPersonaEntity
             {
-                Id = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                Id = Guid.Parse("e7c2f1a5-6b8d-4e9a-bc12-56789abcdef7"),
                 Name = "Creative Artist",
                 Description = "Imaginative creator who sees beauty and possibility everywhere",
                 PersonalityTrait = "Creative & Imaginative",
@@ -118,7 +118,7 @@ public static class CharacterPersonaSeeder
             },
             new CharacterPersonaEntity
             {
-                Id = Guid.Parse("66666666-6666-6666-6666-666666666666"),
+                Id = Guid.Parse("f1b5d8e3-2a6c-4f9e-8b12-6789abcdef89"),
                 Name = "Tech Inventor",
                 Description = "Smart innovator who loves solving problems with technology",
                 PersonalityTrait = "Innovative & Logical",
