@@ -21,7 +21,7 @@
             // Navigate to game - character will be loaded from storage
             Navigation.NavigateTo("/game");
         }
-        catch (Exception ex)
+        catch
         {
             // Fallback to query parameter if local storage fails
             Navigation.NavigateTo($"/game?character={selectedPersona.Id}");

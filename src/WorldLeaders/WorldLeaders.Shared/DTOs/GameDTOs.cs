@@ -5,7 +5,7 @@ namespace WorldLeaders.Shared.DTOs;
 /// <summary>
 /// DTO for creating a new player
 /// </summary>
-public record CreatePlayerRequest(string Username);
+public record CreatePlayerRequest(string Username, Guid? CharacterPersonaId = null);
 
 /// <summary>
 /// DTO for player dashboard information

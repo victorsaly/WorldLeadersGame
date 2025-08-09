@@ -3,12 +3,14 @@
 @using WorldLeaders.Shared.DTOs
 @using WorldLeaders.Shared.Enums
 @using WorldLeaders.Shared.Services
+@using WorldLeaders.Shared.Models
 @using WorldLeaders.Web.Services
 @using Microsoft.AspNetCore.SignalR.Client
 @inject IHttpClientFactory HttpClientFactory
 @inject ILogger<GameDashboard> Logger
 @inject IHubConnectionFactory HubConnectionFactory
 @inject IAuthenticationClientService AuthService
+@inject ILocalStorageService LocalStorage
 @inject NavigationManager Navigation
 @implements IAsyncDisposable
 
@@ -184,9 +186,30 @@
                     </div>
                     
                     <div class="max-w-md mx-auto">
-                        <input @bind="newPlayerName" @bind:event="oninput" @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreateAuthenticatedPlayer(); })"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               placeholder="Enter your character name (2-20 characters)" maxlength="20" />
+                        @if (selectedCharacterPersona != null)
+                        {
+                            <!-- Character Persona Display -->
+                            <div class="pixel-art-card mb-6" style="border-color: @selectedCharacterPersona.PrimaryColor;">
+                                <div class="text-center">
+                                    <h3 class="retro-subtitle mb-4">YOUR CHOSEN CHARACTER</h3>
+                                    <div class="flex items-center justify-center gap-4 mb-4">
+                                        <img src="@selectedCharacterPersona.PixelArtSprite64" 
+                                             alt="@selectedCharacterPersona.Name" 
+                                             class="pixel-image w-20 h-20" />
+                                        <div class="text-left">
+                                            <h4 class="font-bold font-retro text-lg" style="color: @selectedCharacterPersona.PrimaryColor;">
+                                                @selectedCharacterPersona.Name.ToUpper()
+                                            </h4>
+                                            <p class="retro-body text-sm mb-2">@selectedCharacterPersona.Description</p>
+                                            <div class="trait-badge mb-2">@selectedCharacterPersona.PersonalityTrait</div>
+                                            <p class="text-xs font-retro" style="color: @selectedCharacterPersona.PrimaryColor;">
+                                                Special Ability: @selectedCharacterPersona.SpecialAbility
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                         
                         @if (!string.IsNullOrEmpty(errorMessage))
                         {
@@ -194,8 +217,9 @@
                         }
                         
                         <button @onclick="CreateAuthenticatedPlayer" 
-                                disabled="@(string.IsNullOrWhiteSpace(newPlayerName) || newPlayerName.Trim().Length < 2 || isLoading)"
-                                class="w-full mt-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                disabled="@(selectedCharacterPersona == null || isLoading)"
+                                class="w-full mt-4 pixel-art-button text-lg px-8 py-4"
+                                style="background-color: @(selectedCharacterPersona?.PrimaryColor ?? "#2ea44f");">
                             @if (isLoading)
                             {
                                 <span class="flex items-center justify-center">
@@ -205,11 +229,19 @@
                             }
                             else
                             {
-                                <span>🚀 Start My Leadership Journey</span>
+                                <span>🚀 START ADVENTURE AS @(selectedCharacterPersona?.Name.ToUpper() ?? "CHARACTER")</span>
                             }
                         </button>
                         
-                        <p class="mt-3 text-xs text-gray-500">Create your character to begin learning about world leadership, geography, and languages!</p>
+                        <div class="text-center mt-4">
+                            <button @onclick="ChangeCharacter" 
+                                    class="pixel-art-button px-4 py-2 text-sm"
+                                    style="background-color: var(--pixel-gray);">
+                                🎭 CHANGE CHARACTER
+                            </button>
+                        </div>
+                        
+                        <p class="mt-3 text-xs text-gray-500 text-center">Ready to begin learning about world leadership, geography, and languages with @(selectedCharacterPersona?.Name ?? "your character")!</p>
                     </div>
                 </div>
             }
@@ -269,6 +301,7 @@
     private bool isAuthenticated = false;
     private List<GameEventDto> gameEvents = new();
     private List<ResourceChangeRecord> recentResourceChanges = new();
+    private CharacterPersona? selectedCharacterPersona;
     private string newPlayerName = "";
     private string gameMessage = "";
     private string errorMessage = "";
@@ -282,6 +315,25 @@
         // Check authentication first
         isAuthenticated = await AuthService.IsAuthenticatedAsync();
         
+        // Try to load selected character persona from localStorage
+        try
+        {
+            selectedCharacterPersona = await LocalStorage.GetItemAsync<CharacterPersona>("selectedCharacterPersona");
+            
+            // If no character selected, redirect to character selection
+            if (selectedCharacterPersona == null)
+            {
+                Navigation.NavigateTo("/character-select");
+                return;
+            }
+        }
+        catch
+        {
+            // If localStorage fails, redirect to character selection
+            Navigation.NavigateTo("/character-select");
+            return;
+        }
+        
         if (isAuthenticated)
         {
             // Load current user information
@@ -289,7 +341,7 @@
             
             if (currentUser != null)
             {
-                gameMessage = $"Welcome back, {currentUser.Username}! Ready to continue your leadership journey? 🎉";
+                gameMessage = $"Welcome back, {currentUser.Username}! Ready to continue your leadership journey with {selectedCharacterPersona.Name}? 🎉";
             }
         }
         
@@ -323,23 +375,11 @@
         // Clear previous errors
         errorMessage = "";
         
-        // Validate input
-        if (string.IsNullOrWhiteSpace(newPlayerName))
+        // Validate character persona is selected
+        if (selectedCharacterPersona == null)
         {
-            errorMessage = "Please enter your character name to start the game.";
-            return;
-        }
-
-        var trimmedName = newPlayerName.Trim();
-        if (trimmedName.Length < 2)
-        {
-            errorMessage = "Character name must be at least 2 characters long.";
-            return;
-        }
-
-        if (trimmedName.Length > 20)
-        {
-            errorMessage = "Character name must be 20 characters or less.";
+            errorMessage = "Please select a character to start the game.";
+            Navigation.NavigateTo("/character-select");
             return;
         }
 
@@ -348,7 +388,7 @@
         {
             // Use authenticated HTTP client to create player linked to user account
             var httpClient = await AuthService.GetAuthenticatedHttpClientAsync();
-            var request = new CreatePlayerRequest(trimmedName);
+            var request = new CreatePlayerRequest(selectedCharacterPersona.Name, selectedCharacterPersona.Id);
             
             var response = await httpClient.PostAsJsonAsync("api/Game/players", request);
             if (response.IsSuccessStatusCode)
@@ -356,7 +396,7 @@
                 playerDashboard = await response.Content.ReadFromJsonAsync<PlayerDashboardDto>();
                 if (playerDashboard != null)
                 {
-                    gameMessage = $"Welcome, {playerDashboard.Username}! Your authenticated leadership journey begins now! 🎉";
+                    gameMessage = $"Welcome, {selectedCharacterPersona.Name}! Your authenticated leadership journey begins now! 🎉";
                     try
                     {
                         if (hubConnection != null)
@@ -648,6 +688,12 @@
         }
         
         return null;
+    }
+
+    private void ChangeCharacter()
+    {
+        // Navigate back to character selection
+        Navigation.NavigateTo("/character-select");
     }
 
     public async ValueTask DisposeAsync()
