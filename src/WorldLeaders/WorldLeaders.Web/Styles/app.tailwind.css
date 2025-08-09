@@ -1,9 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Retro 32-bit Color Palette - Child Designer Approved */
+:root {
+  /* Primary Green Theme (from README inspiration) */
+  --retro-green-dark: #1a5a1a;
+  --retro-green-main: #2ea44f;
+  --retro-green-light: #4ade80;
+  --retro-green-bright: #86efac;
+  
+  /* Classic 32-bit Supporting Colors */
+  --retro-blue: #3b82f6;
+  --retro-purple: #8b5cf6;
+  --retro-yellow: #eab308;
+  --retro-red: #ef4444;
+  --retro-orange: #f97316;
+  
+  /* Pixel Art Neutrals */
+  --pixel-black: #000000;
+  --pixel-dark-gray: #374151;
+  --pixel-gray: #6b7280;
+  --pixel-light-gray: #d1d5db;
+  --pixel-white: #ffffff;
+}
+
 /* Custom child-friendly component classes */
 @layer components {
+  /* Retro 32-bit Game Container */
+  .retro-game-container {
+    background: linear-gradient(135deg, 
+      var(--retro-green-dark) 0%, 
+      var(--retro-green-main) 50%, 
+      var(--retro-green-light) 100%);
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    min-height: 100vh;
+  }
+
+  /* Retro Pixel Art Button */
+  .pixel-art-button {
+    @apply relative font-bold text-white cursor-pointer;
+    background: var(--retro-green-main);
+    border: 4px solid var(--pixel-white);
+    box-shadow: 
+      inset 2px 2px 0 var(--retro-green-light),
+      inset -2px -2px 0 var(--retro-green-dark),
+      4px 4px 0 var(--pixel-dark-gray);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    padding: 12px 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.1s ease;
+    image-rendering: pixelated;
+    min-height: 48px;
+  }
+
+  .pixel-art-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 
+      inset 2px 2px 0 var(--retro-green-light),
+      inset -2px -2px 0 var(--retro-green-dark),
+      2px 2px 0 var(--pixel-dark-gray);
+  }
+
+  .pixel-art-button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 
+      inset 2px 2px 0 var(--retro-green-dark),
+      inset -2px -2px 0 var(--retro-green-light);
+  }
+
+  /* Retro Pixel Art Card */
+  .pixel-art-card {
+    @apply relative p-6 bg-white;
+    border: 4px solid var(--pixel-black);
+    box-shadow: 
+      4px 4px 0 var(--pixel-gray),
+      8px 8px 0 var(--pixel-black);
+    image-rendering: pixelated;
+    transition: all 0.2s ease;
+  }
+
+  .pixel-art-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 
+      6px 6px 0 var(--pixel-gray),
+      10px 10px 0 var(--pixel-black);
+  }
+
+  .pixel-art-card.green-theme {
+    background: linear-gradient(135deg, 
+      var(--retro-green-light) 0%, 
+      var(--pixel-white) 100%);
+    border-color: var(--retro-green-main);
+  }
+
+  /* Retro Typography */
+  .retro-title {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--pixel-white);
+    text-shadow: 
+      2px 2px 0 var(--pixel-black),
+      4px 4px 0 var(--retro-green-dark);
+    image-rendering: pixelated;
+    letter-spacing: 2px;
+  }
+
+  .retro-subtitle {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--retro-green-bright);
+    font-size: 12px;
+    letter-spacing: 2px;
+    image-rendering: pixelated;
+  }
+
+  .retro-body {
+    font-family: 'Orbitron', 'Courier New', monospace;
+    color: var(--pixel-black);
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* Pixel Art Image Rendering */
+  .pixel-image {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+
+  /* Character Selection Components */
+  .character-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .character-card {
+    @apply bg-white border-4 border-black p-4 cursor-pointer text-center;
+    box-shadow: 4px 4px 0 var(--pixel-gray);
+    transition: all 0.1s ease-in-out;
+    image-rendering: pixelated;
+  }
+
+  .character-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--pixel-gray);
+  }
+
+  .character-card.selected {
+    border-color: var(--retro-green-main);
+    background: linear-gradient(135deg, 
+        var(--retro-green-light) 0%, 
+        var(--pixel-white) 100%);
+  }
+
+  .character-avatar {
+    @apply w-16 h-16 mx-auto mb-3;
+    image-rendering: pixelated;
+  }
+
+  .trait-badge {
+    @apply inline-block px-2 py-1 text-xs;
+    background: var(--retro-green-main);
+    color: white;
+    border: 1px solid var(--pixel-black);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+  }
+
+  /* Legacy child-friendly components updated for retro */
+  .btn-child-friendly {
+    @apply pixel-art-button;
+  }
+
+  .btn-child-success {
+    @apply pixel-art-button;
+    background: var(--retro-green-bright);
+  }
   .btn-child-friendly {
     @apply px-8 py-4 min-h-[56px] min-w-[120px];
     @apply text-child-lg font-bold tracking-wide;

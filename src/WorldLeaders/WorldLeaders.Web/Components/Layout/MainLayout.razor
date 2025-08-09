@@ -1,11 +1,11 @@
 ﻿@inherits LayoutComponentBase
 
-@* Clean, focused layout for educational game - no distracting sidebar navigation *@
+@* Clean, focused layout for educational game - retro 32-bit styling *@
 <div class="main-layout">
     <main>
-        <div class="top-row px-4 flex justify-between items-center bg-white shadow-sm border-b border-gray-200">
+        <div class="top-row px-4 flex justify-between items-center bg-retro-green-main border-b-4 border-pixel-black">
             <div class="flex items-center space-x-4">
-                <h1 class="text-xl font-bold text-game-primary-600">🌍 World Leaders Game</h1>
+                <h1 class="retro-title text-lg">🌍 WORLD LEADERS</h1>
             </div>
             <AuthenticationStatus />
         </div>
@@ -28,8 +28,8 @@
         min-height: 100vh;
         margin: 0;
         padding: 0;
-        background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
-        font-family: 'Open Sans', 'Inter', 'Arial', sans-serif;
+        background: linear-gradient(135deg, var(--retro-green-dark) 0%, var(--retro-green-main) 100%);
+        font-family: 'Press Start 2P', 'Courier New', monospace;
     }
 
     .top-row {
@@ -38,13 +38,13 @@
         align-items: center;
         justify-content: space-between;
         padding: 0 1rem;
-        background: white;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        border-bottom: 1px solid #e5e7eb;
+        background: var(--retro-green-main);
+        box-shadow: 0 4px 0 var(--pixel-black);
+        border-bottom: 4px solid var(--pixel-black);
     }
 
     .content {
-        padding: 1rem;
+        padding: 0;
         max-width: 100%;
         margin: 0 auto;
     }
@@ -53,20 +53,24 @@
     body, html {
         margin: 0;
         padding: 0;
-        font-family: 'Open Sans', 'Inter', 'Arial', sans-serif;
+        font-family: 'Press Start 2P', 'Courier New', monospace;
     }
 
-    /* Hide blazor error UI styling */
+    /* Hide blazor error UI styling - retro styled */
     #blazor-error-ui {
-        background: lightyellow;
+        background: var(--retro-red);
+        color: var(--pixel-white);
         bottom: 0;
-        box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 -4px 0 var(--pixel-black);
         display: none;
         left: 0;
         padding: 0.6rem 1.25rem 0.7rem 1.25rem;
         position: fixed;
         width: 100%;
         z-index: 1000;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 12px;
+        border-top: 4px solid var(--pixel-black);
     }
 
     #blazor-error-ui .dismiss {
@@ -74,9 +78,16 @@
         position: absolute;
         right: 0.75rem;
         top: 0.5rem;
+        color: var(--pixel-white);
+        font-weight: bold;
+    }
+
+    #blazor-error-ui .reload {
+        color: var(--pixel-white);
+        text-decoration: underline;
     }
 </style>
 
 @code {
-    // Removed game page detection - using consistent layout for all pages
+    // Retro layout for all pages
 }
