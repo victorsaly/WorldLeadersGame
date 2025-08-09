@@ -1,0 +1,44 @@
+@* Mobile-First Retro Navigation Menu for Child-Friendly Touch Interface *@
+
+<div class="retro-mobile-nav">
+    <!-- Mobile-first bottom navigation bar -->
+    <nav class="retro-nav-bottom" role="navigation" aria-label="Main navigation">
+        <div class="retro-nav-grid">
+            <NavLink class="retro-nav-item" href="" Match="NavLinkMatch.All" 
+                     aria-label="Home - Start your world leader journey">
+                <div class="retro-nav-icon">🏠</div>
+                <span class="retro-nav-label">HOME</span>
+            </NavLink>
+
+            <NavLink class="retro-nav-item" href="character-select" 
+                     aria-label="Choose your character">
+                <div class="retro-nav-icon">👤</div>
+                <span class="retro-nav-label">CHARACTER</span>
+            </NavLink>
+
+            <NavLink class="retro-nav-item" href="game" 
+                     aria-label="Play the world leaders game">
+                <div class="retro-nav-icon">🎮</div>
+                <span class="retro-nav-label">PLAY</span>
+            </NavLink>
+
+            <NavLink class="retro-nav-item" href="dashboard" 
+                     aria-label="View your progress dashboard">
+                <div class="retro-nav-icon">📊</div>
+                <span class="retro-nav-label">PROGRESS</span>
+            </NavLink>
+
+            <NavLink class="retro-nav-item" href="cost-dashboard" 
+                     aria-label="View learning costs">
+                <div class="retro-nav-icon">💰</div>
+                <span class="retro-nav-label">COSTS</span>
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+@code {
+    // Mobile-first navigation component for child-friendly touch interaction
+    // Educational objective: Easy access to all game sections with large touch targets
+    // Safety: Clear navigation labels and intuitive icons for 12-year-old users
+}
