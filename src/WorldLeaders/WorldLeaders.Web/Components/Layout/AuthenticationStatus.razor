@@ -7,24 +7,24 @@
 <div class="auth-status">
     @if (isAuthenticated)
     {
-        <div class="flex items-center space-x-4">
-            <span class="text-sm font-medium text-gray-700">
+        <div class="flex items-center space-x-3">
+            <span class="retro-body on-green text-xs" style="color: var(--text-on-green); font-weight: bold;">
                 Welcome, @currentUser?.DisplayName! 👋
             </span>
             <button @onclick="HandleLogout" 
-                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-200">
-                Logout
+                    class="pixel-art-button-small red">
+                LOGOUT
             </button>
         </div>
     }
     else
     {
         <div class="flex items-center space-x-2">
-            <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition duration-200">
-                Login
+            <a href="/login" class="pixel-art-button-small blue">
+                LOGIN
             </a>
-            <a href="/register" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition duration-200">
-                Register
+            <a href="/register" class="pixel-art-button-small">
+                REGISTER
             </a>
         </div>
     }
