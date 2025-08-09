@@ -1,0 +1,23 @@
+@page "/character-select"
+@rendermode InteractiveServer
+@using WorldLeaders.Shared.Models
+@inject NavigationManager Navigation
+
+<PageTitle>Choose Your Character - World Leaders Game</PageTitle>
+
+<CharacterSelection OnCharacterSelected="HandleCharacterSelected" 
+                   OnBackToHome="HandleBackToHome" />
+
+@code {
+    private async Task HandleCharacterSelected(CharacterPersona selectedPersona)
+    {
+        // Store selected character in session or local storage
+        // For now, navigate to game with character info
+        Navigation.NavigateTo($"/game?character={selectedPersona.Id}");
+    }
+
+    private async Task HandleBackToHome()
+    {
+        Navigation.NavigateTo("/");
+    }
+}

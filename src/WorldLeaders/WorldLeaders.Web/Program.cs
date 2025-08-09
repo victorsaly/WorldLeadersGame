@@ -38,6 +38,9 @@ builder.Services.AddScoped<ISpeechRecognitionService, SpeechRecognitionClientSer
 builder.Services.AddScoped<IAuthenticationClientService, AuthenticationClientService>();
 builder.Services.AddScoped<ILocalStorageService, LocalStorageService>();
 
+// Register character persona service for retro character selection
+builder.Services.AddScoped<ICharacterPersonaService, CharacterPersonaService>();
+
 // Register authentication handler
 builder.Services.AddTransient<JwtAuthenticationHandler>();
 
