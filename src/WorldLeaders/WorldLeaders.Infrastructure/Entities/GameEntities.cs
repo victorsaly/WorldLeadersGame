@@ -3,12 +3,35 @@ using WorldLeaders.Shared.Enums;
 namespace WorldLeaders.Infrastructure.Entities;
 
 /// <summary>
+/// Database entity for CharacterPersona
+/// </summary>
+public class CharacterPersonaEntity
+{
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string PersonalityTrait { get; set; } = string.Empty;
+    public string SpecialAbility { get; set; } = string.Empty;
+    public PersonaType Type { get; set; }
+    public string PixelArtSprite32 { get; set; } = string.Empty;
+    public string PixelArtSprite64 { get; set; } = string.Empty;
+    public string PrimaryColor { get; set; } = "#2ea44f";
+    public bool IsChildFriendly { get; set; } = true;
+    public int SortOrder { get; set; }
+    public bool IsActive { get; set; } = true;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsDeleted { get; set; } = false;
+}
+
+/// <summary>
 /// Database entity for Player
 /// </summary>
 public class PlayerEntity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Username { get; set; } = string.Empty;
+    public Guid? CharacterPersonaId { get; set; } // Link to selected character persona
     public int Income { get; set; }
     public int Reputation { get; set; }
     public int Happiness { get; set; }

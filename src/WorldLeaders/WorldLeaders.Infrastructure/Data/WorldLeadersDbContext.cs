@@ -21,6 +21,7 @@ public class WorldLeadersDbContext : IdentityDbContext<ApplicationUser, Identity
     }
 
     // DbSets for educational game entities
+    public DbSet<CharacterPersonaEntity> CharacterPersonas { get; set; } = null!;
     public DbSet<PlayerEntity> Players { get; set; } = null!;
     public DbSet<TerritoryEntity> Territories { get; set; } = null!;
     public DbSet<GameEventEntity> GameEvents { get; set; } = null!;
@@ -162,6 +163,7 @@ public class WorldLeadersDbContext : IdentityDbContext<ApplicationUser, Identity
         // Seed educational data for game functionality
         TerritorySeeder.SeedTerritories(modelBuilder);
         GameEventSeeder.SeedGameEvents(modelBuilder);
+        CharacterPersonaSeeder.SeedCharacterPersonas(modelBuilder);
     }
 
     /// <summary>

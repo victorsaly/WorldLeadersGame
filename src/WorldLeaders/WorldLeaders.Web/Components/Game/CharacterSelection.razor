@@ -135,7 +135,7 @@
 
     private string GetCharacterImagePath(CharacterPersona persona)
     {
-        // Convert PNG path to SVG for placeholder images
-        return persona.PixelArtSprite64.Replace(".png", ".svg");
+        // Use the PNG pixel art sprites directly
+        return persona.PixelArtSprite64;
     }
 }
