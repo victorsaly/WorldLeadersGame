@@ -57,7 +57,19 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
-    - name: 📦 Restore dependencies
+    - name: � Setup Node.js for TailwindCSS
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: 'src/WorldLeaders/WorldLeaders.Web/package-lock.json'
+        
+    - name: 📦 Install TailwindCSS dependencies
+      run: |
+        cd src/WorldLeaders/WorldLeaders.Web
+        npm ci
+        
+    - name: �📦 Restore dependencies
       run: |
         cd src/WorldLeaders
         dotnet restore
@@ -110,7 +122,19 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
-    - name: 📦 Restore dependencies
+    - name: � Setup Node.js for TailwindCSS
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: 'src/WorldLeaders/WorldLeaders.Web/package-lock.json'
+        
+    - name: 📦 Install TailwindCSS dependencies
+      run: |
+        cd src/WorldLeaders/WorldLeaders.Web
+        npm ci
+        
+    - name: �📦 Restore dependencies
       run: |
         cd src/WorldLeaders
         dotnet restore

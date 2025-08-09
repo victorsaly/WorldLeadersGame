@@ -1,0 +1,235 @@
+/* Fallback CSS for educational game when TailwindCSS is not available */
+/* Child-friendly design system for 12-year-old learners */
+
+:root {
+  --game-primary: #3b82f6;
+  --game-secondary: #a855f7;
+  --game-success: #10b981;
+  --game-border-radius: 12px;
+  --game-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Base styles */
+body {
+  font-family: 'Open Sans', 'Inter', 'Arial', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+/* Child-friendly button styles */
+.btn-child-friendly {
+  padding: 16px 32px;
+  min-height: 56px;
+  min-width: 120px;
+  font-size: 22px;
+  font-weight: bold;
+  border-radius: var(--game-border-radius);
+  box-shadow: var(--game-shadow);
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, var(--game-primary) 0%, var(--game-secondary) 100%);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  transform: scale(1);
+}
+
+.btn-child-friendly:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.btn-child-friendly:active {
+  transform: scale(0.95);
+}
+
+/* Card styles */
+.card-child {
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: var(--game-shadow);
+  border: 4px solid rgba(59, 130, 246, 0.1);
+  min-height: 120px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.card-child:hover {
+  transform: scale(1.02);
+}
+
+/* Layout styles */
+.game-layout {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #faf5ff 100%);
+}
+
+.game-header {
+  background: white;
+  box-shadow: var(--game-shadow);
+  border-bottom: 4px solid rgba(59, 130, 246, 0.2);
+  padding: 24px;
+}
+
+.game-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Progress meter */
+.progress-meter {
+  width: 100%;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  height: 24px;
+  overflow: hidden;
+  border: 2px solid #d1d5db;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, var(--game-success) 0%, var(--game-primary) 100%);
+  height: 100%;
+  border-radius: 9999px;
+  transition: all 1s ease-out;
+  box-shadow: var(--game-shadow);
+}
+
+/* Input styles */
+.input-child {
+  padding: 12px 16px;
+  font-size: 18px;
+  border-radius: var(--game-border-radius);
+  border: 2px solid #d1d5db;
+  min-height: 48px;
+  min-width: 200px;
+  transition: all 0.2s ease;
+}
+
+.input-child:focus {
+  outline: none;
+  border-color: var(--game-primary);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+}
+
+/* Territory card */
+.territory-card {
+  cursor: pointer;
+  border: 4px solid transparent;
+}
+
+.territory-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.territory-card.owned {
+  border-color: rgba(16, 185, 129, 0.2);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+/* Dice container */
+.dice-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  background: linear-gradient(135deg, var(--game-secondary) 0%, var(--game-primary) 100%);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--game-shadow);
+}
+
+.dice-container:hover {
+  transform: scale(1.05);
+}
+
+.dice-container:active {
+  transform: scale(0.95);
+}
+
+/* Loading spinner */
+.loading-spinner {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+}
+
+.spinner-ring {
+  position: absolute;
+  inset: 0;
+  border: 4px solid rgba(59, 130, 246, 0.2);
+  border-top-color: var(--game-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (min-width: 768px) {
+  .card-child {
+    padding: 32px;
+  }
+  
+  .game-content {
+    padding: 32px 24px;
+  }
+  
+  .game-header {
+    padding: 24px 32px;
+  }
+}
+
+/* Accessibility improvements */
+.focus-child:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
+  border-color: var(--game-primary);
+}
+
+/* Touch-friendly targets */
+.touch-child {
+  min-height: 44px;
+  min-width: 44px;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.touch-child-comfortable {
+  min-height: 56px;
+  min-width: 56px;
+}
+
+.touch-child-large {
+  min-height: 72px;
+  min-width: 72px;
+}
+
+/* Animation classes */
+.achievement-celebration {
+  animation: celebrate 1000ms ease-out;
+}
+
+.resource-update {
+  animation: countUp 500ms ease-in;
+}
+
+@keyframes celebrate {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(5deg); }
+  50% { transform: scale(1.2) rotate(-5deg); }
+  75% { transform: scale(1.1) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes countUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}

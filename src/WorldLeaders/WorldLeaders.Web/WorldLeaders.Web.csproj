@@ -28,14 +28,29 @@
   </ItemGroup>
 
   <!-- TailwindCSS Build Integration -->
-  <Target Name="BuildTailwindCSS" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="CheckNodeExists" BeforeTargets="BuildTailwindCSS;BuildTailwindCSSDebug">
+    <Exec Command="node --version" ContinueOnError="true" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="NodeExitCode" />
+    </Exec>
+    <PropertyGroup>
+      <NodeExists Condition="'$(NodeExitCode)' == '0'">true</NodeExists>
+      <NodeExists Condition="'$(NodeExitCode)' != '0'">false</NodeExists>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="BuildTailwindCSS" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release' AND '$(NodeExists)' == 'true'" DependsOnTargets="CheckNodeExists">
     <Message Text="Building TailwindCSS for production..." Importance="high" />
     <Exec Command="npm run build-css-prod" ContinueOnError="false" />
   </Target>
 
-  <Target Name="BuildTailwindCSSDebug" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+  <Target Name="BuildTailwindCSSDebug" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug' AND '$(NodeExists)' == 'true'" DependsOnTargets="CheckNodeExists">
     <Message Text="Building TailwindCSS for development..." Importance="high" />
     <Exec Command="npm run build-css-prod" ContinueOnError="false" />
+  </Target>
+
+  <Target Name="WarnNoTailwind" BeforeTargets="Build" Condition="'$(NodeExists)' != 'true'">
+    <Message Text="Node.js not found - using fallback CSS instead of TailwindCSS." Importance="high" />
+    <Copy SourceFiles="wwwroot/css/tailwind-fallback.css" DestinationFiles="wwwroot/css/tailwind.css" SkipUnchangedFiles="true" />
   </Target>
 
 </Project>
