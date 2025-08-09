@@ -2,6 +2,7 @@
 @using WorldLeaders.Shared.Services
 @using WorldLeaders.Shared.Enums
 @inject ICharacterPersonaService PersonaService
+@inject ILogger<CharacterSelection> Logger
 
 @* Character Selection Component - Child Designer Vision Implementation *@
 @* Context: Educational game component for 12-year-old players *@
@@ -122,9 +123,15 @@
 
     private async Task ConfirmSelection()
     {
+        Logger.LogInformation("ConfirmSelection called");
         if (selectedPersona != null)
         {
+            Logger.LogInformation("Invoking OnCharacterSelected with persona: {PersonaName} ({PersonaId})", selectedPersona.Name, selectedPersona.Id);
             await OnCharacterSelected.InvokeAsync(selectedPersona);
+        }
+        else
+        {
+            Logger.LogWarning("ConfirmSelection called but no persona is selected");
         }
     }
 

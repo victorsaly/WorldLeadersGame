@@ -4,27 +4,49 @@
 @using WorldLeaders.Web.Services
 @inject NavigationManager Navigation
 @inject ILocalStorageService LocalStorage
+@inject ILogger<CharacterSelect> Logger
 
 <PageTitle>Choose Your Character - World Leaders Game</PageTitle>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="pixel-art-card mb-4 p-4" style="background-color: #fee; border-color: #f00;">
+        <p class="text-red-600">@errorMessage</p>
+    </div>
+}
 
 <CharacterSelection OnCharacterSelected="HandleCharacterSelected" 
                    OnBackToHome="HandleBackToHome" />
 
 @code {
+    private string errorMessage = "";
+
     private async Task HandleCharacterSelected(CharacterPersona selectedPersona)
     {
         try
         {
-            // Store selected character persona in local storage for game use
-            await LocalStorage.SetItemAsync("selectedCharacterPersona", selectedPersona);
+            Logger.LogInformation("Character selected: {CharacterName} ({CharacterId})", selectedPersona.Name, selectedPersona.Id);
             
-            // Navigate to game - character will be loaded from storage
-            Navigation.NavigateTo("/game");
-        }
-        catch
-        {
-            // Fallback to query parameter if local storage fails
+            // Try to store in localStorage, but continue even if it fails
+            try
+            {
+                await LocalStorage.SetItemAsync("selectedCharacterPersona", selectedPersona);
+                Logger.LogInformation("Character stored in localStorage successfully");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning(ex, "Failed to store in localStorage, will use query parameter");
+            }
+            
+            // Navigate to game with query parameter as primary method
+            Logger.LogInformation("Navigating to /game with character ID: {CharacterId}", selectedPersona.Id);
             Navigation.NavigateTo($"/game?character={selectedPersona.Id}");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error handling character selection");
+            errorMessage = $"Error selecting character: {ex.Message}";
+            StateHasChanged();
         }
     }
 
