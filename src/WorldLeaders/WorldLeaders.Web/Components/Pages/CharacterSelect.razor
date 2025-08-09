@@ -1,7 +1,9 @@
 @page "/character-select"
 @rendermode InteractiveServer
 @using WorldLeaders.Shared.Models
+@using WorldLeaders.Web.Services
 @inject NavigationManager Navigation
+@inject ILocalStorageService LocalStorage
 
 <PageTitle>Choose Your Character - World Leaders Game</PageTitle>
 
@@ -11,12 +13,22 @@
 @code {
     private async Task HandleCharacterSelected(CharacterPersona selectedPersona)
     {
-        // Store selected character in session or local storage
-        // For now, navigate to game with character info
-        Navigation.NavigateTo($"/game?character={selectedPersona.Id}");
+        try
+        {
+            // Store selected character persona in local storage for game use
+            await LocalStorage.SetItemAsync("selectedCharacterPersona", selectedPersona);
+            
+            // Navigate to game - character will be loaded from storage
+            Navigation.NavigateTo("/game");
+        }
+        catch (Exception ex)
+        {
+            // Fallback to query parameter if local storage fails
+            Navigation.NavigateTo($"/game?character={selectedPersona.Id}");
+        }
     }
 
-    private async Task HandleBackToHome()
+    private void HandleBackToHome()
     {
         Navigation.NavigateTo("/");
     }
