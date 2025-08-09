@@ -70,7 +70,7 @@
             <!-- Start Game Button -->
             <button @onclick="StartGame" 
                     class="pixel-art-button text-lg px-8 py-4 mb-6">
-                🚀 START YOUR ADVENTURE
+                🚀 CHOOSE YOUR CHARACTER
             </button>
 
             <!-- Educational Note -->
@@ -85,6 +85,6 @@
 @code {
     private void StartGame()
     {
-        Navigation.NavigateTo("/game");
+        Navigation.NavigateTo("/character-select");
     }
 }

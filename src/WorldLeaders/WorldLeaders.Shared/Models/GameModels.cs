@@ -4,6 +4,88 @@ using WorldLeaders.Shared.Enums;
 namespace WorldLeaders.Shared.Models;
 
 /// <summary>
+/// Character Persona entity for visual player representation - Child Designer Vision
+/// </summary>
+public class CharacterPersona
+{
+    /// <summary>
+    /// Unique identifier for the character persona
+    /// </summary>
+    public Guid Id { get; set; } = Guid.NewGuid();
+    
+    /// <summary>
+    /// Character name (e.g., "Young Explorer", "Brave Leader")
+    /// </summary>
+    [Required]
+    [StringLength(50, ErrorMessage = "Character name cannot exceed 50 characters")]
+    public string Name { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Brief description of the character's personality
+    /// </summary>
+    [Required]
+    [StringLength(100, ErrorMessage = "Description cannot exceed 100 characters")]
+    public string Description { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Character's main personality trait
+    /// </summary>
+    [Required]
+    [StringLength(30, ErrorMessage = "Trait cannot exceed 30 characters")]
+    public string PersonalityTrait { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Special ability that makes this character unique
+    /// </summary>
+    [Required]
+    [StringLength(50, ErrorMessage = "Special ability cannot exceed 50 characters")]
+    public string SpecialAbility { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Persona type categorization
+    /// </summary>
+    public PersonaType Type { get; set; }
+    
+    /// <summary>
+    /// File path to 32x32 pixel art sprite
+    /// </summary>
+    [Required]
+    public string PixelArtSprite32 { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// File path to 64x64 pixel art sprite
+    /// </summary>
+    [Required]
+    public string PixelArtSprite64 { get; set; } = string.Empty;
+    
+    /// <summary>
+    /// Primary color theme for UI customization
+    /// </summary>
+    [Required]
+    public string PrimaryColor { get; set; } = "#2ea44f"; // Default retro green
+    
+    /// <summary>
+    /// Whether this character is appropriate for 12-year-old players
+    /// </summary>
+    public bool IsChildFriendly { get; set; } = true;
+    
+    /// <summary>
+    /// Display order for character selection screen
+    /// </summary>
+    [Range(0, 99, ErrorMessage = "Sort order must be between 0 and 99")]
+    public int SortOrder { get; set; }
+    
+    /// <summary>
+    /// Whether this persona is available for selection
+    /// </summary>
+    public bool IsActive { get; set; } = true;
+    
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public bool IsDeleted { get; set; } = false;
+}
+
+/// <summary>
 /// Core player entity for the World Leaders educational game
 /// </summary>
 public class Player
@@ -14,11 +96,21 @@ public class Player
     public Guid Id { get; set; } = Guid.NewGuid();
     
     /// <summary>
-    /// Player's chosen username for the game
+    /// Player's chosen username for the game (optional with persona system)
+    /// </summary>
+    [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
+    public string? Username { get; set; }
+    
+    /// <summary>
+    /// Selected character persona ID - replaces username as primary identity
     /// </summary>
     [Required]
-    [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
-    public string Username { get; set; } = string.Empty;
+    public Guid CharacterPersonaId { get; set; }
+    
+    /// <summary>
+    /// Navigation property to selected character persona
+    /// </summary>
+    public CharacterPersona? CharacterPersona { get; set; }
     
     /// <summary>
     /// Current monthly income from job and territories

@@ -1,0 +1,6 @@
+<!-- Simple SVG placeholder for Friendly Diplomat character -->
+<svg width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" fill="#bbf7d0"/>
+  <rect x="16" y="16" width="32" height="32" fill="#86efac"/>
+  <text x="32" y="44" text-anchor="middle" font-size="24" fill="white">🌸</text>
+</svg>

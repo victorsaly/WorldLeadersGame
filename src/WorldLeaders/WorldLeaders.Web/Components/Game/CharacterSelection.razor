@@ -1,0 +1,141 @@
+@using WorldLeaders.Shared.Models
+@using WorldLeaders.Shared.Services
+@using WorldLeaders.Shared.Enums
+@inject ICharacterPersonaService PersonaService
+
+@* Character Selection Component - Child Designer Vision Implementation *@
+@* Context: Educational game component for 12-year-old players *@
+@* Educational Objective: Visual character selection enhances engagement and identity *@
+@* Safety Requirements: Age-appropriate, diverse, positive role models *@
+
+<div class="retro-game-container p-8">
+    <div class="pixel-art-card green-theme max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="retro-title text-3xl mb-4">CHOOSE YOUR CHARACTER</h1>
+            <p class="retro-subtitle mb-2">SELECT YOUR ADVENTURE PERSONA</p>
+            <p class="retro-body text-sm">Each character has unique abilities to help you become a world leader!</p>
+        </div>
+
+        @if (availablePersonas.Any())
+        {
+            <div class="character-selection-grid mb-8">
+                @foreach (var persona in availablePersonas.OrderBy(p => p.SortOrder))
+                {
+                    <div class="character-card @(IsSelected(persona) ? "selected" : "")" 
+                         @onclick="() => SelectCharacter(persona)">
+                        <div class="character-avatar">
+                            <img src="@GetCharacterImagePath(persona)" 
+                                 alt="@persona.Name" 
+                                 class="pixel-image w-full h-full" />
+                        </div>
+                        <div class="character-info">
+                            <h3 class="font-bold text-sm mb-2 font-retro">@persona.Name.ToUpper()</h3>
+                            <p class="retro-body text-xs mb-3">@persona.Description</p>
+                            <div class="character-stats mb-3">
+                                <div class="trait-badge mb-2">@persona.PersonalityTrait</div>
+                                <div class="text-xs font-retro" style="color: @persona.PrimaryColor;">
+                                    ⭐ @persona.SpecialAbility
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            @if (selectedPersona != null)
+            {
+                <div class="pixel-art-card mb-6" style="border-color: @selectedPersona.PrimaryColor;">
+                    <div class="text-center">
+                        <h3 class="retro-subtitle mb-2">SELECTED CHARACTER</h3>
+                        <div class="flex items-center justify-center gap-4">
+                            <img src="@GetCharacterImagePath(selectedPersona)" 
+                                 alt="@selectedPersona.Name" 
+                                 class="pixel-image w-16 h-16" />
+                            <div class="text-left">
+                                <h4 class="font-bold font-retro">@selectedPersona.Name.ToUpper()</h4>
+                                <p class="retro-body text-xs">@selectedPersona.Description</p>
+                                <p class="text-xs font-retro" style="color: @selectedPersona.PrimaryColor;">
+                                    Special Ability: @selectedPersona.SpecialAbility
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button @onclick="ConfirmSelection" 
+                            class="pixel-art-button text-lg px-8 py-4"
+                            style="background-color: @selectedPersona.PrimaryColor;">
+                        🚀 START ADVENTURE AS @selectedPersona.Name.ToUpper()
+                    </button>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center">
+                <p class="retro-body">Loading characters...</p>
+            </div>
+        }
+
+        <!-- Back to Home Option -->
+        <div class="text-center mt-6">
+            <button @onclick="BackToHome" 
+                    class="pixel-art-button px-4 py-2 text-sm"
+                    style="background-color: var(--pixel-gray);">
+                ← BACK TO HOME
+            </button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback<CharacterPersona> OnCharacterSelected { get; set; }
+    [Parameter] public EventCallback OnBackToHome { get; set; }
+
+    private List<CharacterPersona> availablePersonas = new();
+    private CharacterPersona? selectedPersona;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            availablePersonas = await PersonaService.GetAvailablePersonasAsync();
+        }
+        catch
+        {
+            // Fallback to default personas if service fails
+            availablePersonas = PersonaService.GetDefaultPersonas();
+        }
+    }
+
+    private bool IsSelected(CharacterPersona persona)
+    {
+        return selectedPersona?.Id == persona.Id;
+    }
+
+    private void SelectCharacter(CharacterPersona persona)
+    {
+        selectedPersona = persona;
+        StateHasChanged();
+    }
+
+    private async Task ConfirmSelection()
+    {
+        if (selectedPersona != null)
+        {
+            await OnCharacterSelected.InvokeAsync(selectedPersona);
+        }
+    }
+
+    private async Task BackToHome()
+    {
+        await OnBackToHome.InvokeAsync();
+    }
+
+    private string GetCharacterImagePath(CharacterPersona persona)
+    {
+        // Convert PNG path to SVG for placeholder images
+        return persona.PixelArtSprite64.Replace(".png", ".svg");
+    }
+}

@@ -124,6 +124,42 @@ public enum SafetyEventType
 }
 
 /// <summary>
+/// Character persona types for visual player representation - Child Designer Vision
+/// </summary>
+public enum PersonaType
+{
+    /// <summary>
+    /// Curious adventurer with backpack - loves discovering new places
+    /// </summary>
+    YoungExplorer = 1,
+    
+    /// <summary>
+    /// Confident leader with cape - natural leadership qualities
+    /// </summary>
+    BraveLeader = 2,
+    
+    /// <summary>
+    /// Thoughtful learner with books - wisdom and knowledge focused
+    /// </summary>
+    WiseScholar = 3,
+    
+    /// <summary>
+    /// Peaceful negotiator with flowers - diplomacy and cooperation
+    /// </summary>
+    FriendlyDiplomat = 4,
+    
+    /// <summary>
+    /// Imaginative creator with paintbrush - creativity and arts
+    /// </summary>
+    CreativeArtist = 5,
+    
+    /// <summary>
+    /// Smart innovator with gadgets - technology and problem solving
+    /// </summary>
+    TechInventor = 6
+}
+
+/// <summary>
 /// Severity levels for safety events
 /// </summary>
 public enum SafetyEventSeverity
