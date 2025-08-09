@@ -34,11 +34,108 @@
   --text-on-green: #ffffff;
   --text-on-blue: #ffffff;
   --text-on-red: #ffffff;
+
+  /* Mobile-First Touch Interface Standards */
+  /* Touch-friendly sizing (44px minimum for WCAG compliance) */
+  --touch-target-small: 44px;
+  --touch-target-medium: 56px;
+  --touch-target-large: 72px;
+  
+  /* Mobile-first spacing system */
+  --mobile-spacing-xs: 0.5rem;   /* 8px */
+  --mobile-spacing-sm: 1rem;     /* 16px */
+  --mobile-spacing-md: 1.5rem;   /* 24px */
+  --mobile-spacing-lg: 2rem;     /* 32px */
+  --mobile-spacing-xl: 2.5rem;   /* 40px */
+  
+  /* Mobile-first typography scale */
+  --mobile-text-xs: 12px;
+  --mobile-text-sm: 14px;
+  --mobile-text-base: 16px;
+  --mobile-text-lg: 20px;
+  --mobile-text-xl: 24px;
+  --mobile-text-2xl: 28px;
+  
+  /* Mobile-specific line heights for readability */
+  --mobile-leading-tight: 1.25;
+  --mobile-leading-normal: 1.5;
+  --mobile-leading-relaxed: 1.75;
 }
 
 /* Custom child-friendly component classes */
 @layer components {
-  /* Retro 32-bit Game Container */
+  /* Mobile-First Responsive Container System */
+  .retro-mobile-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--mobile-spacing-sm);
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    
+    /* Base mobile styles (320px+) */
+    font-size: var(--mobile-text-xs);
+    line-height: var(--mobile-leading-normal);
+  }
+
+  /* Mobile Portrait Optimization (320px - 480px) */
+  @media (max-width: 480px) {
+    .retro-mobile-container {
+      padding: var(--mobile-spacing-xs);
+      font-size: var(--mobile-text-xs);
+    }
+    
+    .retro-mobile-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--mobile-spacing-sm);
+    }
+    
+    .retro-mobile-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--mobile-spacing-sm);
+    }
+  }
+
+  /* Mobile Landscape & Small Tablets (481px - 768px) */
+  @media (min-width: 481px) and (max-width: 768px) {
+    .retro-mobile-container {
+      padding: var(--mobile-spacing-sm);
+      font-size: var(--mobile-text-sm);
+      max-width: 680px;
+    }
+    
+    .retro-mobile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--mobile-spacing-md);
+    }
+  }
+
+  /* Tablets (769px - 1024px) */
+  @media (min-width: 769px) {
+    .retro-mobile-container {
+      padding: var(--mobile-spacing-md);
+      font-size: var(--mobile-text-base);
+      max-width: 900px;
+    }
+    
+    .retro-mobile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--mobile-spacing-lg);
+    }
+  }
+
+  /* Desktop (1025px+) */
+  @media (min-width: 1025px) {
+    .retro-mobile-container {
+      padding: var(--mobile-spacing-lg);
+      font-size: var(--mobile-text-lg);
+      max-width: 1200px;
+    }
+  }
+
+  /* Retro 32-bit Game Container - Mobile Enhanced */
   .retro-game-container {
     background: linear-gradient(135deg, 
       var(--retro-green-dark) 0%, 
@@ -49,9 +146,76 @@
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
     min-height: 100vh;
+    min-height: 100dvh; /* Use dynamic viewport height for mobile */
+    
+    /* Mobile-first responsive text sizing */
+    font-size: var(--mobile-text-xs);
+    padding: var(--mobile-spacing-sm);
   }
 
-  /* Retro Pixel Art Button */
+  @media (min-width: 480px) {
+    .retro-game-container {
+      font-size: var(--mobile-text-sm);
+      padding: var(--mobile-spacing-md);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .retro-game-container {
+      font-size: var(--mobile-text-base);
+      padding: var(--mobile-spacing-lg);
+    }
+  }
+
+  /* Mobile-First Retro Touch Button System */
+  .retro-touch-button {
+    @apply relative font-bold cursor-pointer;
+    min-width: var(--touch-target-medium);
+    min-height: var(--touch-target-medium);
+    padding: var(--mobile-spacing-sm) var(--mobile-spacing-md);
+    background: var(--retro-green-main);
+    border: 3px solid var(--pixel-white);
+    color: var(--pixel-white);
+    font-family: 'Press Start 2P', monospace;
+    font-size: var(--mobile-text-xs);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: var(--mobile-leading-tight);
+    touch-action: manipulation;
+    user-select: none;
+    box-shadow: 
+      inset 2px 2px 0 var(--retro-green-light),
+      inset -2px -2px 0 var(--retro-green-dark),
+      4px 4px 0 var(--pixel-dark-gray);
+    transition: all 0.1s ease;
+    image-rendering: pixelated;
+  }
+
+  .retro-touch-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 
+      inset 2px 2px 0 var(--retro-green-light),
+      inset -2px -2px 0 var(--retro-green-dark),
+      2px 2px 0 var(--pixel-dark-gray);
+  }
+
+  .retro-touch-button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 
+      inset 2px 2px 0 var(--retro-green-dark),
+      inset -2px -2px 0 var(--retro-green-light);
+  }
+
+  /* Large touch button for primary actions */
+  .retro-touch-button-large {
+    @apply retro-touch-button;
+    min-width: var(--touch-target-large);
+    min-height: var(--touch-target-large);
+    padding: var(--mobile-spacing-md) var(--mobile-spacing-lg);
+    font-size: var(--mobile-text-sm);
+  }
+
+  /* Enhanced Retro Pixel Art Button - Mobile Optimized */
   .pixel-art-button {
     @apply relative font-bold text-white cursor-pointer;
     background: var(--retro-green-main);
@@ -61,13 +225,34 @@
       inset -2px -2px 0 var(--retro-green-dark),
       4px 4px 0 var(--pixel-dark-gray);
     font-family: 'Press Start 2P', monospace;
-    font-size: 12px;
-    padding: 12px 24px;
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.1s ease;
     image-rendering: pixelated;
-    min-height: 48px;
+    touch-action: manipulation;
+    user-select: none;
+    
+    /* Mobile-first sizing */
+    min-height: var(--touch-target-medium);
+    min-width: var(--touch-target-medium);
+    padding: var(--mobile-spacing-sm) var(--mobile-spacing-md);
+    font-size: var(--mobile-text-xs);
+    line-height: var(--mobile-leading-tight);
+  }
+
+  /* Responsive font scaling for buttons */
+  @media (min-width: 480px) {
+    .pixel-art-button {
+      font-size: var(--mobile-text-sm);
+      padding: var(--mobile-spacing-md) var(--mobile-spacing-lg);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .pixel-art-button {
+      font-size: 12px;
+      padding: 12px 24px;
+    }
   }
 
   .pixel-art-button:hover {
@@ -85,7 +270,7 @@
       inset -2px -2px 0 var(--retro-green-light);
   }
 
-  /* Small Pixel Art Button for Navigation */
+  /* Mobile-Optimized Navigation Button */
   .pixel-art-button-small {
     position: relative;
     font-weight: bold;
@@ -100,14 +285,35 @@
       inset -1px -1px 0 var(--retro-green-dark),
       2px 2px 0 var(--pixel-dark-gray);
     font-family: 'Press Start 2P', monospace;
-    font-size: 8px;
-    padding: 8px 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: all 0.1s ease;
     image-rendering: pixelated;
-    min-height: 32px;
-    line-height: 1.2;
+    touch-action: manipulation;
+    user-select: none;
+    
+    /* Mobile-first sizing */
+    min-height: var(--touch-target-small);
+    min-width: var(--touch-target-small);
+    padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
+    font-size: var(--mobile-text-xs);
+    line-height: var(--mobile-leading-tight);
+  }
+
+  @media (min-width: 480px) {
+    .pixel-art-button-small {
+      padding: var(--mobile-spacing-sm) var(--mobile-spacing-md);
+      font-size: var(--mobile-text-xs);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .pixel-art-button-small {
+      padding: 8px 12px;
+      font-size: 8px;
+      min-height: 32px;
+      line-height: 1.2;
+    }
   }
 
   .pixel-art-button-small:hover {
@@ -164,15 +370,31 @@
       1px 1px 0 var(--pixel-dark-gray);
   }
 
-  /* Retro Pixel Art Card */
+  /* Mobile-Optimized Retro Pixel Art Card */
   .pixel-art-card {
-    @apply relative p-6 bg-white;
+    @apply relative bg-white;
     border: 4px solid var(--pixel-black);
     box-shadow: 
       4px 4px 0 var(--pixel-gray),
       8px 8px 0 var(--pixel-black);
     image-rendering: pixelated;
     transition: all 0.2s ease;
+    touch-action: manipulation;
+    
+    /* Mobile-first responsive padding */
+    padding: var(--mobile-spacing-sm);
+  }
+
+  @media (min-width: 480px) {
+    .pixel-art-card {
+      padding: var(--mobile-spacing-md);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .pixel-art-card {
+      padding: 1.5rem;
+    }
   }
 
   .pixel-art-card:hover {
@@ -196,7 +418,7 @@
     border-color: var(--retro-red);
   }
 
-  /* Retro Typography */
+  /* Mobile-First Retro Typography */
   .retro-title {
     font-family: 'Press Start 2P', monospace;
     color: var(--pixel-white);
@@ -205,21 +427,67 @@
       4px 4px 0 var(--retro-green-dark);
     image-rendering: pixelated;
     letter-spacing: 2px;
+    line-height: var(--mobile-leading-tight);
+    
+    /* Mobile-first responsive sizing */
+    font-size: var(--mobile-text-lg);
+  }
+
+  @media (min-width: 480px) {
+    .retro-title {
+      font-size: var(--mobile-text-xl);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .retro-title {
+      font-size: var(--mobile-text-2xl);
+    }
   }
 
   .retro-subtitle {
     font-family: 'Press Start 2P', monospace;
     color: var(--retro-green-bright);
-    font-size: 12px;
     letter-spacing: 2px;
     image-rendering: pixelated;
+    line-height: var(--mobile-leading-normal);
+    
+    /* Mobile-first responsive sizing */
+    font-size: var(--mobile-text-xs);
+  }
+
+  @media (min-width: 480px) {
+    .retro-subtitle {
+      font-size: var(--mobile-text-sm);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .retro-subtitle {
+      font-size: 12px;
+    }
   }
 
   .retro-body {
     font-family: 'Orbitron', 'Courier New', monospace;
     color: var(--text-on-light);
     font-weight: 600;
-    line-height: 1.6;
+    line-height: var(--mobile-leading-relaxed);
+    
+    /* Mobile-first responsive sizing */
+    font-size: var(--mobile-text-sm);
+  }
+
+  @media (min-width: 480px) {
+    .retro-body {
+      font-size: var(--mobile-text-base);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .retro-body {
+      line-height: 1.6;
+    }
   }
 
   /* Text variants for different backgrounds */
@@ -273,19 +541,54 @@
     image-rendering: crisp-edges;
   }
 
-  /* Character Selection Components */
+  /* Mobile-First Character Selection Components */
   .character-selection-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    padding: 20px;
+    gap: var(--mobile-spacing-sm);
+    padding: var(--mobile-spacing-sm);
+    
+    /* Mobile-first responsive grid */
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 480px) {
+    .character-selection-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--mobile-spacing-md);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .character-selection-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      padding: 20px;
+    }
   }
 
   .character-card {
-    @apply bg-white border-4 border-black p-4 cursor-pointer text-center;
+    @apply bg-white border-4 border-black cursor-pointer text-center;
     box-shadow: 4px 4px 0 var(--pixel-gray);
     transition: all 0.1s ease-in-out;
     image-rendering: pixelated;
+    touch-action: manipulation;
+    user-select: none;
+    
+    /* Mobile-first responsive padding */
+    padding: var(--mobile-spacing-sm);
+    min-height: var(--touch-target-large);
+  }
+
+  @media (min-width: 480px) {
+    .character-card {
+      padding: var(--mobile-spacing-md);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .character-card {
+      padding: 1rem;
+    }
   }
 
   .character-card:hover {
@@ -301,17 +604,39 @@
   }
 
   .character-avatar {
-    @apply w-16 h-16 mx-auto mb-3;
+    @apply mx-auto mb-3;
     image-rendering: pixelated;
+    
+    /* Mobile-first responsive sizing */
+    width: var(--touch-target-medium);
+    height: var(--touch-target-medium);
+  }
+
+  @media (min-width: 768px) {
+    .character-avatar {
+      width: 4rem;
+      height: 4rem;
+    }
   }
 
   .trait-badge {
-    @apply inline-block px-2 py-1 text-xs;
+    @apply inline-block;
     background: var(--retro-green-main);
     color: white;
     border: 1px solid var(--pixel-black);
     font-family: 'Press Start 2P', monospace;
-    font-size: 8px;
+    
+    /* Mobile-first responsive sizing */
+    padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
+    font-size: var(--mobile-text-xs);
+    min-height: var(--touch-target-small);
+  }
+
+  @media (min-width: 768px) {
+    .trait-badge {
+      padding: 0.25rem 0.5rem;
+      font-size: 8px;
+    }
   }
 
   /* Legacy child-friendly components updated for retro */
@@ -337,18 +662,20 @@
     animation: pixel-shimmer 1.5s ease-in-out infinite;
   }
 
-  /* Mobile Touch Optimization for Retro Interface */
-  .retro-touch-target {
-    @apply min-h-[56px] min-w-[56px];
-    touch-action: manipulation;
-    user-select: none;
-  }
-
-  /* Retro Progress Bar */
+  /* Mobile-Optimized Retro Progress Bar */
   .retro-progress-bar {
-    @apply w-full h-6 border-4 border-black bg-gray-200;
+    @apply w-full border-4 border-black bg-gray-200;
     image-rendering: pixelated;
     box-shadow: inset 2px 2px 0 var(--pixel-gray);
+    
+    /* Mobile-first responsive height */
+    height: var(--touch-target-small);
+  }
+
+  @media (min-width: 768px) {
+    .retro-progress-bar {
+      height: 1.5rem;
+    }
   }
 
   .retro-progress-fill {
@@ -357,6 +684,88 @@
       var(--retro-green-main) 0%, 
       var(--retro-green-bright) 100%);
     box-shadow: inset 1px 1px 0 var(--retro-green-light);
+  }
+
+  /* Mobile Touch Optimization for Retro Interface */
+  .retro-touch-target {
+    min-height: var(--touch-target-medium);
+    min-width: var(--touch-target-medium);
+    touch-action: manipulation;
+    user-select: none;
+    
+    /* Ensure adequate spacing between touch targets */
+    margin: var(--mobile-spacing-xs);
+  }
+
+  .retro-touch-target-large {
+    min-height: var(--touch-target-large);
+    min-width: var(--touch-target-large);
+    touch-action: manipulation;
+    user-select: none;
+    margin: var(--mobile-spacing-sm);
+  }
+
+  /* Mobile-First Form Controls */
+  .retro-input {
+    @apply w-full border-4 border-black bg-white;
+    image-rendering: pixelated;
+    font-family: 'Press Start 2P', monospace;
+    box-shadow: inset 2px 2px 0 var(--pixel-gray);
+    
+    /* Mobile-first sizing */
+    min-height: var(--touch-target-medium);
+    padding: var(--mobile-spacing-sm);
+    font-size: var(--mobile-text-sm);
+  }
+
+  .retro-input:focus {
+    outline: none;
+    border-color: var(--retro-green-main);
+    box-shadow: 
+      inset 2px 2px 0 var(--pixel-gray),
+      0 0 0 4px rgba(46, 164, 79, 0.3);
+  }
+
+  /* Mobile-optimized modal/popup */
+  .retro-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: var(--mobile-spacing-sm);
+  }
+
+  .retro-modal-content {
+    @apply bg-white border-4 border-black;
+    box-shadow: 8px 8px 0 var(--pixel-dark-gray);
+    image-rendering: pixelated;
+    max-width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    
+    /* Mobile-first responsive sizing */
+    width: 100%;
+    padding: var(--mobile-spacing-md);
+  }
+
+  @media (min-width: 480px) {
+    .retro-modal-content {
+      width: 90%;
+      max-width: 500px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .retro-modal-content {
+      padding: var(--mobile-spacing-lg);
+      max-width: 600px;
+    }
   }
   .btn-child-friendly {
     @apply px-8 py-4 min-h-[56px] min-w-[120px];
@@ -523,16 +932,336 @@
     @apply text-child-base leading-relaxed font-readable;
   }
 
+  /* Mobile-First Touch Utilities */
   .touch-child {
-    @apply min-h-[44px] min-w-[44px] select-none;
+    min-height: var(--touch-target-small);
+    min-width: var(--touch-target-small);
     touch-action: manipulation;
+    user-select: none;
   }
 
   .touch-child-comfortable {
-    @apply min-h-[56px] min-w-[56px];
+    min-height: var(--touch-target-medium);
+    min-width: var(--touch-target-medium);
+    touch-action: manipulation;
+    user-select: none;
   }
 
   .touch-child-large {
-    @apply min-h-[72px] min-w-[72px];
+    min-height: var(--touch-target-large);
+    min-width: var(--touch-target-large);
+    touch-action: manipulation;
+    user-select: none;
+  }
+
+  /* Mobile-first spacing utilities */
+  .mobile-spacing-xs { padding: var(--mobile-spacing-xs); }
+  .mobile-spacing-sm { padding: var(--mobile-spacing-sm); }
+  .mobile-spacing-md { padding: var(--mobile-spacing-md); }
+  .mobile-spacing-lg { padding: var(--mobile-spacing-lg); }
+  .mobile-spacing-xl { padding: var(--mobile-spacing-xl); }
+
+  /* Mobile-first gap utilities */
+  .mobile-gap-xs { gap: var(--mobile-spacing-xs); }
+  .mobile-gap-sm { gap: var(--mobile-spacing-sm); }
+  .mobile-gap-md { gap: var(--mobile-spacing-md); }
+  .mobile-gap-lg { gap: var(--mobile-spacing-lg); }
+
+  /* Mobile-first text sizing */
+  .mobile-text-xs { font-size: var(--mobile-text-xs); }
+  .mobile-text-sm { font-size: var(--mobile-text-sm); }
+  .mobile-text-base { font-size: var(--mobile-text-base); }
+  .mobile-text-lg { font-size: var(--mobile-text-lg); }
+  .mobile-text-xl { font-size: var(--mobile-text-xl); }
+
+  /* High contrast mode for accessibility */
+  @media (prefers-contrast: high) {
+    .retro-game-container {
+      background: var(--pixel-white);
+      color: var(--pixel-black);
+    }
+    
+    .pixel-art-button {
+      border-width: 6px;
+      box-shadow: 
+        inset 3px 3px 0 var(--pixel-white),
+        inset -3px -3px 0 var(--pixel-black),
+        6px 6px 0 var(--pixel-black);
+    }
+    
+    .pixel-art-card {
+      border-width: 6px;
+      box-shadow: 
+        6px 6px 0 var(--pixel-black),
+        12px 12px 0 var(--pixel-dark-gray);
+    }
+  }
+
+  /* Reduced motion for accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .pixel-art-button,
+    .pixel-art-card,
+    .character-card,
+    .retro-progress-fill {
+      transition: none;
+    }
+    
+    .retro-bounce,
+    .retro-glow,
+    .retro-shimmer {
+      animation: none;
+    }
+  }
+
+  /* Focus management for keyboard navigation */
+  .retro-focus-ring {
+    outline: 4px solid var(--retro-green-main);
+    outline-offset: 4px;
+  }
+
+  /* Safe area insets for mobile devices */
+  .mobile-safe-area {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Mobile-first main layout styles */
+  .main-layout {
+    width: 100vw;
+    min-height: 100vh;
+    min-height: 100dvh; /* Dynamic viewport height for mobile */
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, var(--retro-green-dark) 0%, var(--retro-green-main) 100%);
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+  }
+
+  .retro-main-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--retro-green-main);
+    box-shadow: 0 4px 0 var(--pixel-black);
+    border-bottom: 4px solid var(--pixel-black);
+    min-height: var(--touch-target-medium);
+    padding: 0;
+  }
+
+  @media (min-width: 768px) {
+    .retro-main-header {
+      height: 60px;
+    }
+  }
+
+  .retro-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
+    max-width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .retro-header-content {
+      padding: 0 1rem;
+    }
+  }
+
+  .retro-main-content {
+    padding: 0;
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative;
+    /* Ensure content doesn't go under mobile nav */
+    padding-bottom: calc(var(--touch-target-medium) + var(--mobile-spacing-sm));
+  }
+
+  @media (min-width: 1024px) {
+    .retro-main-content {
+      padding-bottom: 0;
+    }
+  }
+
+  .mobile-nav-spacer {
+    /* Extra space for mobile navigation on small screens */
+    height: var(--touch-target-large);
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-nav-spacer {
+      display: none;
+    }
+  }
+
+  /* Mobile-optimized blazor error UI styling */
+  #blazor-error-ui {
+    background: var(--retro-red);
+    color: var(--pixel-white);
+    bottom: 0;
+    box-shadow: 0 -4px 0 var(--pixel-black);
+    display: none;
+    left: 0;
+    padding: var(--mobile-spacing-sm);
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    font-family: 'Press Start 2P', monospace;
+    font-size: var(--mobile-text-xs);
+    border-top: 4px solid var(--pixel-black);
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    #blazor-error-ui {
+      padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+      font-size: 12px;
+    }
+  }
+
+  #blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: var(--mobile-spacing-sm);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--pixel-white);
+    font-weight: bold;
+    min-height: var(--touch-target-small);
+    min-width: var(--touch-target-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #blazor-error-ui .reload {
+    color: var(--pixel-white);
+    text-decoration: underline;
+    touch-action: manipulation;
+  }
+
+  /* Mobile-specific layout optimizations */
+  @media (max-width: 480px) {
+    .main-layout {
+      font-size: var(--mobile-text-xs);
+    }
+    
+    .retro-header-content {
+      padding: var(--mobile-spacing-xs);
+    }
+  }
+
+  /* Remove any default body margins for clean mobile layout */
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    overflow-x: hidden;
+  }
+
+  /* Mobile Navigation Styles */
+  .retro-mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--retro-green-main);
+    border-top: 4px solid var(--pixel-black);
+    box-shadow: 0 -4px 0 var(--pixel-dark-gray);
+    padding: env(safe-area-inset-bottom) 0 0 0;
+  }
+
+  .retro-nav-bottom {
+    padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
+  }
+
+  .retro-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--mobile-spacing-xs);
+    max-width: 100%;
+  }
+
+  .retro-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--pixel-white);
+    font-family: 'Press Start 2P', monospace;
+    transition: all 0.1s ease;
+    border-radius: 4px;
+    
+    /* Touch-optimized sizing */
+    min-height: var(--touch-target-medium);
+    min-width: var(--touch-target-small);
+    padding: var(--mobile-spacing-xs);
+    touch-action: manipulation;
+    user-select: none;
+  }
+
+  .retro-nav-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .retro-nav-item:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .retro-nav-item.active {
+    background: var(--retro-green-bright);
+    color: var(--pixel-black);
+    border: 2px solid var(--pixel-white);
+    box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .retro-nav-icon {
+    font-size: var(--mobile-text-lg);
+    margin-bottom: var(--mobile-spacing-xs);
+    line-height: 1;
+  }
+
+  .retro-nav-label {
+    font-size: var(--mobile-text-xs);
+    text-align: center;
+    line-height: var(--mobile-leading-tight);
+    letter-spacing: 0.5px;
+  }
+
+  /* Hide mobile nav on large screens where desktop nav is preferred */
+  @media (min-width: 1024px) {
+    .retro-mobile-nav {
+      display: none;
+    }
+  }
+
+  /* Mobile navigation responsive adjustments */
+  @media (max-width: 480px) {
+    .retro-nav-grid {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+    }
+    
+    .retro-nav-item {
+      padding: var(--mobile-spacing-xs) 2px;
+    }
+    
+    .retro-nav-label {
+      font-size: 6px;
+    }
+  }
+
+  @media (min-width: 481px) and (max-width: 768px) {
+    .retro-nav-grid {
+      max-width: 600px;
+      margin: 0 auto;
+    }
   }
 }
