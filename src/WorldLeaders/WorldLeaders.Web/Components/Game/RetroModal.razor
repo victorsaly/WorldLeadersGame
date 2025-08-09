@@ -1,0 +1,66 @@
+@* Mobile-First Retro Modal Component for Touch Devices *@
+@inject IJSRuntime JSRuntime
+
+<div class="retro-modal @(IsVisible ? "retro-modal-visible" : "retro-modal-hidden")" @onclick="OnBackdropClick">
+    <div class="retro-modal-content" @onclick:stopPropagation="true" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <!-- Modal Header -->
+        <div class="retro-modal-header">
+            <h2 id="modal-title" class="retro-title mobile-text-lg">@Title</h2>
+            <button class="retro-modal-close retro-touch-target"
+                    @onclick="CloseModal"
+                    aria-label="Close modal"
+                    type="button">
+                ❌
+            </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="retro-modal-body">
+            @ChildContent
+        </div>
+
+        <!-- Modal Footer (if actions provided) -->
+        @if (FooterContent != null)
+        {
+            <div class="retro-modal-footer">
+                @FooterContent
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool IsVisible { get; set; } = false;
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public RenderFragment? FooterContent { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public bool CloseOnBackdropClick { get; set; } = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Manage body scroll when modal visibility changes
+        if (IsVisible)
+        {
+            await JSRuntime.InvokeVoidAsync("document.body.classList.add", "modal-open");
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("document.body.classList.remove", "modal-open");
+        }
+    }
+
+    private async Task CloseModal()
+    {
+        await JSRuntime.InvokeVoidAsync("document.body.classList.remove", "modal-open");
+        await OnClose.InvokeAsync();
+    }
+
+    private async Task OnBackdropClick()
+    {
+        if (CloseOnBackdropClick)
+        {
+            await CloseModal();
+        }
+    }
+}

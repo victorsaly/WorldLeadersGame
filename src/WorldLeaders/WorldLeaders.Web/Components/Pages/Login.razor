@@ -9,27 +9,27 @@
 
 <PageTitle>Login - World Leaders Game</PageTitle>
 
-<div class="retro-game-container flex items-center justify-center p-4">
-    <div class="pixel-art-card green-theme w-full max-w-md">
+<div class="retro-game-container retro-mobile-container">
+    <div class="pixel-art-card green-theme mobile-spacing-md">
         <!-- Header -->
-        <div class="text-center mb-8">
-            <h1 class="retro-title text-2xl mb-4">🌍 WORLD LEADERS</h1>
+        <div class="text-center mobile-spacing-md">
+            <h1 class="retro-title mobile-text-2xl mb-4">🌍 WORLD LEADERS</h1>
             <p class="retro-subtitle mb-2">EDUCATIONAL ADVENTURE</p>
-            <p class="retro-body text-sm">Geography & Leadership for Young Learners</p>
+            <p class="retro-body mobile-text-sm">Geography & Leadership for Young Learners</p>
         </div>
 
         <!-- Login Form -->
-        <EditForm Model="@loginRequest" OnValidSubmit="@HandleLogin" FormName="LoginForm" class="space-y-6">
+        <EditForm Model="@loginRequest" OnValidSubmit="@HandleLogin" FormName="LoginForm" class="mobile-gap-md">
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-red-600 text-sm" />
+            <ValidationSummary class="text-red-600 mobile-text-sm" />
 
             <!-- Error Message -->
             @if (!string.IsNullOrEmpty(errorMessage))
             {
-                <div class="pixel-art-card bg-red-100 border-red-400 text-red-700 p-4 mb-4">
-                    <div class="flex items-center">
-                        <span class="text-2xl mr-2">⚠️</span>
-                        <span class="retro-body font-bold">@errorMessage</span>
+                <div class="pixel-art-card bg-red-100 border-red-400 text-red-700 mobile-spacing-sm mobile-spacing-md">
+                    <div class="flex items-center mobile-gap-sm">
+                        <span class="mobile-text-xl">⚠️</span>
+                        <span class="retro-body font-bold mobile-text-sm">@errorMessage</span>
                     </div>
                 </div>
             }
@@ -37,72 +37,74 @@
             <!-- Success Message -->
             @if (!string.IsNullOrEmpty(successMessage))
             {
-                <div class="pixel-art-card bg-green-100 border-green-400 text-green-700 p-4 mb-4">
-                    <div class="flex items-center">
-                        <span class="text-2xl mr-2">🎉</span>
-                        <span class="retro-body font-bold">@successMessage</span>
+                <div class="pixel-art-card bg-green-100 border-green-400 text-green-700 mobile-spacing-sm mobile-spacing-md">
+                    <div class="flex items-center mobile-gap-sm">
+                        <span class="mobile-text-xl">🎉</span>
+                        <span class="retro-body font-bold mobile-text-sm">@successMessage</span>
                     </div>
                 </div>
             }
 
             <!-- Username/Email Field -->
-            <div>
-                <label for="usernameOrEmail" class="block retro-body font-bold mb-2">
+            <div class="mobile-spacing-sm">
+                <label for="usernameOrEmail" class="block retro-body font-bold mobile-spacing-xs mobile-text-sm">
                     🔑 Username or Email
                 </label>
                 <InputText id="usernameOrEmail" 
                           @bind-Value="loginRequest.UsernameOrEmail" 
-                          class="w-full px-4 py-3 border-4 border-gray-400 bg-white retro-body focus:border-green-500 focus:ring-4 focus:ring-green-200 min-h-[48px]"
+                          class="retro-input w-full"
                           placeholder="Enter your username or email" />
-                <ValidationMessage For="@(() => loginRequest.UsernameOrEmail)" class="text-red-600 retro-body text-sm" />
+                <ValidationMessage For="@(() => loginRequest.UsernameOrEmail)" class="text-red-600 retro-body mobile-text-xs" />
             </div>
 
             <!-- Password Field -->
-            <div>
-                <label for="password" class="block retro-body font-bold mb-2">
+            <div class="mobile-spacing-sm">
+                <label for="password" class="block retro-body font-bold mobile-spacing-xs mobile-text-sm">
                     🔐 Password
                 </label>
                 <InputText id="password" 
                           type="password"
                           @bind-Value="loginRequest.Password" 
-                          class="w-full px-4 py-3 border-4 border-gray-400 bg-white retro-body focus:border-green-500 focus:ring-4 focus:ring-green-200 min-h-[48px]"
+                          class="retro-input w-full"
                           placeholder="Enter your password" />
-                <ValidationMessage For="@(() => loginRequest.Password)" class="text-red-600 retro-body text-sm" />
+                <ValidationMessage For="@(() => loginRequest.Password)" class="text-red-600 retro-body mobile-text-xs" />
             </div>
 
             <!-- Login Button -->
-            <button type="submit" 
-                    disabled="@isLoading" 
-                    class="pixel-art-button w-full retro-touch-target">
-                @if (isLoading)
-                {
-                    <span class="flex items-center justify-center">
-                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        LOGGING IN...
-                    </span>
-                }
-                else
-                {
-                    <span>🎮 START LEARNING!</span>
-                }
-            </button>
+            <div class="mobile-spacing-md">
+                <button type="submit" 
+                        disabled="@isLoading" 
+                        class="retro-touch-button-large w-full"
+                        aria-label="Login to start your educational adventure">
+                    @if (isLoading)
+                    {
+                        <span class="flex items-center justify-center mobile-gap-sm">
+                            <span class="retro-loading-spinner"></span>
+                            LOGGING IN...
+                        </span>
+                    }
+                    else
+                    {
+                        <span>🎮 START LEARNING!</span>
+                    }
+                </button>
+            </div>
         </EditForm>
 
         <!-- Register Link -->
-        <div class="mt-6 text-center">
-            <p class="retro-body">
+        <div class="mobile-spacing-md text-center">
+            <p class="retro-body mobile-text-sm">
                 Don't have an account? 
-                <a href="/register" class="text-green-600 hover:text-green-800 font-bold retro-body">REGISTER HERE</a>
             </p>
+            <a href="/register" class="retro-touch-button mobile-spacing-sm" aria-label="Register for a new account">
+                📝 REGISTER HERE
+            </a>
         </div>
 
         <!-- Demo Credentials -->
-        <div class="mt-6 pixel-art-card bg-green-50 border-green-400">
-            <h3 class="retro-subtitle text-green-800 mb-2">🎯 DEMO ACCOUNT</h3>
-            <p class="retro-body text-green-700 text-sm">
+        <div class="mobile-spacing-md pixel-art-card bg-green-50 border-green-400">
+            <h3 class="retro-subtitle text-green-800 mobile-spacing-xs mobile-text-sm">🎯 DEMO ACCOUNT</h3>
+            <p class="retro-body text-green-700 mobile-text-xs">
                 <strong>Username:</strong> student123<br>
                 <strong>Password:</strong> Education123!
             </p>

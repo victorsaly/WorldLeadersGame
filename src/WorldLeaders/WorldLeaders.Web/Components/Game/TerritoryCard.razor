@@ -1,0 +1,147 @@
+@* Mobile-First Territory Card with Touch Gestures *@
+@inject IJSRuntime JSRuntime
+
+<div class="retro-territory-card @(IsOwned ? "territory-owned" : "") @(IsSelected ? "territory-selected" : "")"
+     @onclick="HandleCardClick"
+     @ref="cardElement"
+     role="button"
+     tabindex="0"
+     aria-label="@GetAriaLabel()"
+     @onkeypress="HandleKeyPress">
+    
+    <!-- Territory Flag/Image -->
+    <div class="territory-image">
+        @if (!string.IsNullOrEmpty(Territory.FlagEmoji))
+        {
+            <span class="territory-flag">@Territory.FlagEmoji</span>
+        }
+        else
+        {
+            <span class="territory-placeholder">🏴</span>
+        }
+    </div>
+
+    <!-- Territory Info -->
+    <div class="territory-info">
+        <h3 class="territory-name retro-title mobile-text-sm">@Territory.Name</h3>
+        <p class="territory-region retro-body mobile-text-xs">@Territory.Region</p>
+        
+        <!-- Territory Stats -->
+        <div class="territory-stats">
+            <div class="territory-stat">
+                <span class="stat-icon">💰</span>
+                <span class="stat-value mobile-text-xs">$@Territory.GDP.ToString("N0")</span>
+            </div>
+            <div class="territory-stat">
+                <span class="stat-icon">👥</span>
+                <span class="stat-value mobile-text-xs">@Territory.Population.ToString("N0")</span>
+            </div>
+        </div>
+
+        <!-- Purchase/Status Info -->
+        <div class="territory-action">
+            @if (IsOwned)
+            {
+                <div class="territory-owned-badge">
+                    <span class="mobile-text-xs">✅ OWNED</span>
+                </div>
+            }
+            else
+            {
+                <div class="territory-price">
+                    <span class="price-label mobile-text-xs">Purchase:</span>
+                    <span class="price-value mobile-text-sm">$@PurchasePrice.ToString("N0")</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Swipe Action Indicator -->
+    <div class="swipe-indicator @(showSwipeHint ? "swipe-visible" : "")">
+        <span class="mobile-text-xs">← Swipe for details →</span>
+    </div>
+</div>
+
+@code {
+    [Parameter] public TerritoryInfo Territory { get; set; } = new();
+    [Parameter] public bool IsOwned { get; set; } = false;
+    [Parameter] public bool IsSelected { get; set; } = false;
+    [Parameter] public decimal PurchasePrice { get; set; } = 0;
+    [Parameter] public EventCallback<TerritoryInfo> OnCardClick { get; set; }
+    [Parameter] public EventCallback<TerritoryInfo> OnCardSwipe { get; set; }
+
+    private ElementReference cardElement;
+    private bool showSwipeHint = false;
+    private Timer? swipeHintTimer;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Show swipe hint for a few seconds on mobile
+            await ShowSwipeHintTemporarily();
+        }
+    }
+
+    private async Task HandleCardClick()
+    {
+        await OnCardClick.InvokeAsync(Territory);
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" || e.Key == " ")
+        {
+            await HandleCardClick();
+        }
+    }
+
+    private string GetAriaLabel()
+    {
+        var status = IsOwned ? "owned" : $"available for ${PurchasePrice:N0}";
+        return $"{Territory.Name} in {Territory.Region}, {status}. GDP: ${Territory.GDP:N0}, Population: {Territory.Population:N0}";
+    }
+
+    private async Task ShowSwipeHintTemporarily()
+    {
+        // Only show on mobile devices
+        if (await IsMobileDevice())
+        {
+            showSwipeHint = true;
+            StateHasChanged();
+            
+            swipeHintTimer = new Timer(async _ =>
+            {
+                showSwipeHint = false;
+                await InvokeAsync(StateHasChanged);
+            }, null, 3000, Timeout.Infinite);
+        }
+    }
+
+    private async Task<bool> IsMobileDevice()
+    {
+        try
+        {
+            return await JSRuntime.InvokeAsync<bool>("window.matchMedia", "(max-width: 768px)").AsTask();
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public void Dispose()
+    {
+        swipeHintTimer?.Dispose();
+    }
+
+    // Temporary TerritoryInfo class for demonstration
+    public class TerritoryInfo
+    {
+        public string Name { get; set; } = "";
+        public string Region { get; set; } = "";
+        public string FlagEmoji { get; set; } = "";
+        public long GDP { get; set; } = 0;
+        public long Population { get; set; } = 0;
+    }
+}
