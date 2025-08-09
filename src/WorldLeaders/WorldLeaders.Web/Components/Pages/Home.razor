@@ -4,63 +4,78 @@
 
 <PageTitle>World Leaders Game</PageTitle>
 
-<div class="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-green-400 flex items-center justify-center p-4">
-    <div class="max-w-2xl mx-auto text-center">
-        <div class="bg-white rounded-2xl shadow-2xl p-8">
+<div class="retro-game-container">
+    <div class="max-w-4xl mx-auto text-center p-8">
+        <div class="pixel-art-card green-theme mb-8">
             <!-- Game Logo/Title -->
             <div class="mb-8">
-                <h1 class="text-5xl font-bold text-gray-800 mb-4">
-                    <span class="text-blue-500">🌍</span> World Leaders Game
+                <h1 class="retro-title text-4xl md:text-5xl mb-4">
+                    🌍 WORLD LEADERS
                 </h1>
-                <p class="text-xl text-gray-600">Educational Strategy Game for Young Leaders</p>
-                <p class="text-sm text-gray-500 mt-2">Designed for ages 12 and up</p>
+                <p class="retro-subtitle mb-2">EDUCATIONAL ADVENTURE GAME</p>
+                <p class="retro-body text-sm">Designed for ages 12 and up • Learn geography, economics & languages</p>
             </div>
 
             <!-- Game Features -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-blue-50 rounded-lg p-4">
-                    <span class="text-3xl">🎯</span>
-                    <h3 class="font-bold text-blue-800 mt-2">Strategic Learning</h3>
-                    <p class="text-blue-600 text-sm">Make decisions and learn about leadership</p>
+                <div class="pixel-art-card">
+                    <span class="text-3xl block mb-2">🎯</span>
+                    <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm">STRATEGIC LEARNING</h3>
+                    <p class="retro-body text-xs">Make decisions and learn about leadership</p>
                 </div>
-                <div class="bg-green-50 rounded-lg p-4">
-                    <span class="text-3xl">🗺️</span>
-                    <h3 class="font-bold text-green-800 mt-2">World Geography</h3>
-                    <p class="text-green-600 text-sm">Discover countries and their cultures</p>
+                <div class="pixel-art-card">
+                    <span class="text-3xl block mb-2">🗺️</span>
+                    <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm">WORLD GEOGRAPHY</h3>
+                    <p class="retro-body text-xs">Discover countries and their cultures</p>
                 </div>
-                <div class="bg-purple-50 rounded-lg p-4">
-                    <span class="text-3xl">🗣️</span>
-                    <h3 class="font-bold text-purple-800 mt-2">Language Learning</h3>
-                    <p class="text-purple-600 text-sm">Practice pronunciation with AI assistance</p>
+                <div class="pixel-art-card">
+                    <span class="text-3xl block mb-2">🗣️</span>
+                    <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm">LANGUAGE LEARNING</h3>
+                    <p class="retro-body text-xs">Practice pronunciation with AI assistance</p>
                 </div>
-                <div class="bg-yellow-50 rounded-lg p-4">
-                    <span class="text-3xl">👥</span>
-                    <h3 class="font-bold text-yellow-800 mt-2">Social Skills</h3>
-                    <p class="text-yellow-600 text-sm">Learn about cooperation and diplomacy</p>
+                <div class="pixel-art-card">
+                    <span class="text-3xl block mb-2">👥</span>
+                    <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm">SOCIAL SKILLS</h3>
+                    <p class="retro-body text-xs">Learn about cooperation and diplomacy</p>
                 </div>
             </div>
 
             <!-- How to Play -->
-            <div class="bg-gray-50 rounded-lg p-6 mb-8">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">🎮 How to Play</h3>
-                <div class="space-y-2 text-sm text-gray-600 text-left">
-                    <p><strong>1.</strong> Start as a farmer and roll dice to determine your job</p>
-                    <p><strong>2.</strong> Earn income and build your reputation</p>
-                    <p><strong>3.</strong> Purchase territories and learn their languages</p>
-                    <p><strong>4.</strong> Keep your population happy and make strategic decisions</p>
-                    <p><strong>5.</strong> Become a world leader through wisdom and diplomacy!</p>
+            <div class="pixel-art-card green-theme mb-8">
+                <h3 class="retro-subtitle text-lg mb-4">🎮 HOW TO PLAY</h3>
+                <div class="space-y-3 text-left">
+                    <div class="retro-body text-sm flex items-start gap-3">
+                        <span class="font-bold text-retro-green-main">1.</span>
+                        <span>Choose your character persona and start as a farmer</span>
+                    </div>
+                    <div class="retro-body text-sm flex items-start gap-3">
+                        <span class="font-bold text-retro-green-main">2.</span>
+                        <span>Roll dice to determine your job and earn income</span>
+                    </div>
+                    <div class="retro-body text-sm flex items-start gap-3">
+                        <span class="font-bold text-retro-green-main">3.</span>
+                        <span>Purchase territories and learn their languages</span>
+                    </div>
+                    <div class="retro-body text-sm flex items-start gap-3">
+                        <span class="font-bold text-retro-green-main">4.</span>
+                        <span>Keep your population happy and make strategic decisions</span>
+                    </div>
+                    <div class="retro-body text-sm flex items-start gap-3">
+                        <span class="font-bold text-retro-green-main">5.</span>
+                        <span>Become a world leader through wisdom and diplomacy!</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Start Game Button -->
             <button @onclick="StartGame" 
-                    class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 text-xl">
-                🚀 Start Your Leadership Journey!
+                    class="pixel-art-button text-lg px-8 py-4 mb-6">
+                🚀 START YOUR ADVENTURE
             </button>
 
             <!-- Educational Note -->
-            <div class="mt-6 text-xs text-gray-500">
-                <p>This game promotes positive values, critical thinking, and global awareness.</p>
+            <div class="retro-body text-xs opacity-75">
+                <p class="mb-1">This game promotes positive values, critical thinking, and global awareness.</p>
                 <p>All content is age-appropriate and educationally focused.</p>
             </div>
         </div>

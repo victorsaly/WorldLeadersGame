@@ -46,11 +46,32 @@ module.exports = {
           700: '#047857',
           800: '#065f46',
           900: '#064e3b',
+        },
+        // Retro 32-bit Color Palette - Child Designer Approved
+        'retro-green': {
+          'dark': '#1a5a1a',
+          'main': '#2ea44f',
+          'light': '#4ade80',
+          'bright': '#86efac',
+        },
+        'retro-blue': '#3b82f6',
+        'retro-purple': '#8b5cf6',
+        'retro-yellow': '#eab308',
+        'retro-red': '#ef4444',
+        'retro-orange': '#f97316',
+        'pixel': {
+          'black': '#000000',
+          'dark-gray': '#374151',
+          'gray': '#6b7280',
+          'light-gray': '#d1d5db',
+          'white': '#ffffff',
         }
       },
       fontFamily: {
         'child-friendly': ['Comic Neue', 'Arial Rounded MT Bold', 'Helvetica Rounded', 'Arial', 'sans-serif'],
-        'readable': ['Open Sans', 'Inter', 'Arial', 'sans-serif']
+        'readable': ['Open Sans', 'Inter', 'Arial', 'sans-serif'],
+        'retro': ['Press Start 2P', 'Courier New', 'monospace'],
+        'retro-body': ['Orbitron', 'Courier New', 'monospace']
       },
       fontSize: {
         'child-xs': ['12px', '18px'],
