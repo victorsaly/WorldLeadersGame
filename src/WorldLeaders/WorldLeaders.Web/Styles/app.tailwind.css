@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom child-friendly component classes */
+@layer components {
+  .btn-child-friendly {
+    @apply px-8 py-4 min-h-[56px] min-w-[120px];
+    @apply text-child-lg font-bold tracking-wide;
+    @apply rounded-child-lg shadow-child-friendly;
+    @apply border-4 border-white border-opacity-20;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:shadow-child-hover active:scale-95;
+    @apply bg-gradient-to-r from-game-primary-500 to-game-secondary-600 text-white;
+  }
+
+  .btn-child-success {
+    @apply btn-child-friendly;
+    @apply bg-gradient-to-r from-game-success-500 to-game-primary-500;
+  }
+
+  .card-child {
+    @apply p-6 md:p-8 rounded-child-xl shadow-child-friendly;
+    @apply border-4 border-opacity-10 border-game-primary-200;
+    @apply min-h-[120px] bg-white;
+    @apply transform transition-all duration-300 hover:scale-102;
+  }
+
+  .educational-card {
+    @apply card-child;
+    @apply bg-gradient-to-br from-white to-game-primary-50;
+    @apply border-game-primary-300;
+  }
+
+  .progress-meter {
+    @apply w-full bg-gray-200 rounded-full h-6 overflow-hidden;
+    @apply border-2 border-gray-300 shadow-inner;
+  }
+
+  .progress-fill {
+    @apply bg-gradient-to-r from-game-success-400 to-game-primary-500 h-full rounded-full;
+    @apply transition-all duration-1000 ease-out;
+    @apply shadow-lg;
+  }
+
+  .dice-container {
+    @apply flex flex-col items-center space-y-4 p-6;
+    @apply bg-gradient-to-br from-game-secondary-500 to-game-primary-600 rounded-child-xl;
+    @apply cursor-pointer transform transition-all duration-300;
+    @apply hover:scale-105 active:scale-95 shadow-child-friendly;
+  }
+
+  .territory-card {
+    @apply card-child cursor-pointer;
+    @apply border-transparent hover:border-game-primary-400;
+    @apply hover:shadow-child-hover;
+  }
+
+  .territory-card.owned {
+    @apply border-game-success-200 bg-game-success-50;
+    @apply hover:border-game-success-400;
+  }
+
+  .input-child {
+    @apply px-4 py-3 text-child-base rounded-child;
+    @apply border-2 border-gray-300 focus:border-game-primary-500;
+    @apply min-h-[48px] min-w-[200px];
+    @apply focus:ring-4 focus:ring-game-primary-200 focus:ring-opacity-50;
+    @apply transition-all duration-200;
+  }
+
+  .game-layout {
+    @apply min-h-screen bg-gradient-to-br from-game-primary-50 via-white to-game-secondary-50;
+    @apply font-readable text-child-base text-gray-800;
+  }
+
+  .game-header {
+    @apply bg-white shadow-child-friendly border-b-4 border-game-primary-200;
+    @apply p-4 md:p-6;
+  }
+
+  .game-content {
+    @apply container mx-auto px-4 py-6 md:py-8;
+    @apply max-w-7xl;
+  }
+
+  .loading-spinner {
+    @apply relative w-16 h-16 mx-auto;
+  }
+
+  .spinner-ring {
+    @apply absolute inset-0 border-4 border-game-primary-200 border-t-game-primary-500 rounded-full;
+    animation: spin 1s linear infinite;
+  }
+
+  .achievement-celebration {
+    animation: celebrate 1000ms ease-out;
+  }
+
+  .resource-update {
+    animation: countUp 500ms ease-in;
+  }
+}
+
+/* Custom animations for educational feedback */
+@keyframes celebrate {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(5deg); }
+  50% { transform: scale(1.2) rotate(-5deg); }
+  75% { transform: scale(1.1) rotate(3deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes countUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Child-friendly accessibility improvements */
+@layer utilities {
+  .focus-child {
+    @apply focus:outline-none focus:ring-4 focus:ring-game-primary-300;
+    @apply focus:ring-opacity-50 focus:border-game-primary-500;
+  }
+
+  .text-child-readable {
+    @apply text-child-base leading-relaxed font-readable;
+  }
+
+  .touch-child {
+    @apply min-h-[44px] min-w-[44px] select-none;
+    touch-action: manipulation;
+  }
+
+  .touch-child-comfortable {
+    @apply min-h-[56px] min-w-[56px];
+  }
+
+  .touch-child-large {
+    @apply min-h-[72px] min-w-[72px];
+  }
+}

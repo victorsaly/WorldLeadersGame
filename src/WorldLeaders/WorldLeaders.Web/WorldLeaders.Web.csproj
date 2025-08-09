@@ -27,4 +27,15 @@
     </Content>
   </ItemGroup>
 
+  <!-- TailwindCSS Build Integration -->
+  <Target Name="BuildTailwindCSS" BeforeTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <Message Text="Building TailwindCSS for production..." Importance="high" />
+    <Exec Command="npm run build-css-prod" ContinueOnError="false" />
+  </Target>
+
+  <Target Name="BuildTailwindCSSDebug" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+    <Message Text="Building TailwindCSS for development..." Importance="high" />
+    <Exec Command="npm run build-css-prod" ContinueOnError="false" />
+  </Target>
+
 </Project>

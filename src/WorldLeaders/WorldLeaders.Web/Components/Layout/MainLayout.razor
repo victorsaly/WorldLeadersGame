@@ -1,34 +1,20 @@
 ﻿@inherits LayoutComponentBase
 
-@* Conditional layout - clean for game pages, default for others *@
-@if (IsGamePage)
-{
-    <!-- Clean, full-screen game layout for educational immersion -->
-    <div class="game-layout">
-        @Body
-    </div>
-}
-else
-{
-    <div class="page">
-        <div class="sidebar">
-            <NavMenu />
+@* Clean, focused layout for educational game - no distracting sidebar navigation *@
+<div class="main-layout">
+    <main>
+        <div class="top-row px-4 flex justify-between items-center bg-white shadow-sm border-b border-gray-200">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-xl font-bold text-game-primary-600">🌍 World Leaders Game</h1>
+            </div>
+            <AuthenticationStatus />
         </div>
 
-        <main>
-            <div class="top-row px-4 flex justify-between items-center">
-                <div class="flex space-x-4">
-                    <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-                </div>
-                <AuthenticationStatus />
-            </div>
-
-            <article class="content px-4">
-                @Body
-            </article>
-        </main>
-    </div>
-}
+        <article class="content">
+            @Body
+        </article>
+    </main>
+</div>
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
@@ -37,28 +23,60 @@ else
 </div>
 
 <style>
-    .game-layout {
+    .main-layout {
         width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
         margin: 0;
         padding: 0;
-        overflow-x: auto;
-        overflow-y: auto;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+        font-family: 'Open Sans', 'Inter', 'Arial', sans-serif;
     }
 
-    /* Ensure full-screen experience for game */
-    body.game-mode, body.game-mode html {
+    .top-row {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1rem;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .content {
+        padding: 1rem;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    /* Remove any default body margins for clean layout */
+    body, html {
         margin: 0;
         padding: 0;
-        height: 100%;
+        font-family: 'Open Sans', 'Inter', 'Arial', sans-serif;
+    }
+
+    /* Hide blazor error UI styling */
+    #blazor-error-ui {
+        background: lightyellow;
+        bottom: 0;
+        box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+        display: none;
+        left: 0;
+        padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+        position: fixed;
         width: 100%;
-        overflow-x: hidden;
+        z-index: 1000;
+    }
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 0.75rem;
+        top: 0.5rem;
     }
 </style>
 
 @code {
-    [Inject] private NavigationManager Navigation { get; set; } = default!;
-
-    private bool IsGamePage => Navigation.Uri.Contains("/game") || Navigation.Uri.EndsWith("/");
+    // Removed game page detection - using consistent layout for all pages
 }
