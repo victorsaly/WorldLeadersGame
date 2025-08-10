@@ -90,7 +90,7 @@ fi
 
 # Test 8: Verify YAML syntax is still valid
 echo "✅ Test 8: Checking YAML syntax..."
-if python3 -c "import yaml; yaml.safe_load(open('$REPO_ROOT/.github/workflows/azure-deploy.yml', 'r'))" 2>/dev/null; then
+if python3 -c "import yaml; yaml.safe_load(open(\"$REPO_ROOT/.github/workflows/azure-deploy.yml\", 'r'))" 2>/dev/null; then
     echo "   ✅ YAML syntax is valid"
 else
     echo "   ❌ YAML syntax is invalid"
