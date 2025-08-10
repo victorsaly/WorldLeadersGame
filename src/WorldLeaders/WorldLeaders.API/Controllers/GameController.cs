@@ -85,8 +85,10 @@ public class GameController : ControllerBase
             {
                 try
                 {
-                    var territories = await _territoryService.GetAvailableTerritoriesAsync(Guid.Empty);
-                    var territoryDataHealthy = territories != null && territories.Any();
+                    var territories = _territoryService != null 
+                        ? await _territoryService.GetAvailableTerritoriesAsync(Guid.Empty)
+                        : new List<TerritoryDto>();
+                    var territoryDataHealthy = territories.Any();
                     checks.Add(new GameHealthCheck
                     {
                         Name = "TerritoryData",
