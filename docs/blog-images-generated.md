@@ -12,15 +12,7 @@
 - **Size**: 2.7M
 - **Status**: ✅ Integrated into blog post
 
-**2. Week 6 Results Post**
-- **File**: `2025-08-10-ai-autonomy-experiment-week-6-results.md`
-- **Title**: "AI Autonomy Experiment: 95% AI-Led Educational Game Development Results"
-- **Image**: `/assets/linkedin-images/2025-08-10-ai-autonomy-experiment-week-6-results-linkedin.png`
-- **Theme**: Royal Purple (#8B5CF6)
-- **Size**: 2.5M
-- **Status**: ✅ Generated, ready for integration
-
-**3. Retro Design Post**
+**2. Retro Design Post**
 - **File**: `2025-08-09-retro-pixel-art-educational-game-design.md`
 - **Title**: "Week 6: Retro 32-Bit Transformation - Honoring Young Creative Vision"
 - **Image**: `/assets/linkedin-images/2025-08-09-retro-pixel-art-educational-game-design-linkedin.png`
@@ -28,9 +20,7 @@
 - **Size**: 2.7M
 - **Status**: ✅ Generated, ready for integration
 
-### Supporting Technical Posts
-
-**4. AI-First Methodology**
+**3. AI-First Methodology**
 - **File**: `2025-08-02-ai-first-development-methodology-new-paradigm.md`
 - **Title**: "AI-First Development"
 - **Image**: `/assets/linkedin-images/2025-08-02-ai-first-development-methodology-new-paradigm-linkedin.png`
@@ -38,7 +28,7 @@
 - **Size**: 3.4M
 - **Status**: ✅ Generated, used in main post as comparison image
 
-**5. Child-Safe AI Agents**
+**4. Child-Safe AI Agents**
 - **File**: `2025-08-04-building-child-safe-ai-agents-educational-applications.md`
 - **Title**: "AI Agent Personality System: Child-Safe Educational Mentors with Multi-Layer Safety"
 - **Image**: `/assets/linkedin-images/2025-08-04-building-child-safe-ai-agents-educational-applications-linkedin.png`
