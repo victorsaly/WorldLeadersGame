@@ -312,11 +312,21 @@ jobs:
       - name: Deploy to Staging Slot (Green Environment)
         run: |
           echo "🟢 Deploying to Green Environment (Staging Slot)"
-          az webapp deployment source config-zip \
+          # Pre-warm Kudu to reduce deployment delays
+          az webapp deployment list \
             --resource-group "${{ env.RESOURCE_GROUP }}" \
             --name "${{ env.WEB_APP_NAME }}" \
             --slot staging \
-            --src web-app.zip
+            --query "[0].id" --output tsv > /dev/null 2>&1 || true
+          
+          # Use modern az webapp deploy with increased timeout
+          az webapp deploy \
+            --resource-group "${{ env.RESOURCE_GROUP }}" \
+            --name "${{ env.WEB_APP_NAME }}" \
+            --slot staging \
+            --src-path web-app.zip \
+            --type zip \
+            --timeout 900
 
       - name: Comprehensive Health Validation
         run: |

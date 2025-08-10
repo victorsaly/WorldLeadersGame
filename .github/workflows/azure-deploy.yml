@@ -330,9 +330,10 @@ jobs:
         name: api
         path: api-publish/
         
-    - name: "🎯 Step 1: Deploy to Staging Slots (Blue-Green with Retry Logic)"
+    - name: "🎯 Step 1: Deploy to Staging Slots (Blue-Green with Enhanced Retry Logic)"
       run: |
-        echo "🔄 Starting blue-green deployment to staging slots with retry logic..."
+        echo "🔄 Starting blue-green deployment to staging slots with enhanced retry logic..."
+        echo "🛠️ Enhanced with: 900s timeout, modern az webapp deploy, Kudu pre-warming"
         
         # Function to deploy with retry logic
         deploy_with_retry() {
@@ -345,12 +346,22 @@ jobs:
           while [ $attempt -le $max_attempts ]; do
             echo "📦 Deploying $app_name to $slot slot (attempt $attempt/$max_attempts)..."
             
-            if az webapp deployment source config-zip \
+            # Pre-warm Kudu to reduce deployment delays
+            echo "🔥 Pre-warming Kudu deployment engine..."
+            az webapp deployment list \
               --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
               --name "$app_name" \
               --slot "$slot" \
-              --src "$zip_file" \
-              --timeout 600; then
+              --query "[0].id" --output tsv > /dev/null 2>&1 || true
+            
+            # Use the modern az webapp deploy command with increased timeout
+            if az webapp deploy \
+              --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+              --name "$app_name" \
+              --slot "$slot" \
+              --src-path "$zip_file" \
+              --type zip \
+              --timeout 900; then
               echo "✅ $app_name deployment successful on attempt $attempt"
               return 0
             else

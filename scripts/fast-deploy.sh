@@ -48,11 +48,21 @@ direct_deploy() {
     cd "${app_type}-publish" && zip -r "../${app_type}.zip" . && cd ..
     
     echo "🚀 Deploying $app_type directly to production (fast method)..."
-    az webapp deployment source config-zip \
+    
+    # Pre-warm Kudu to reduce deployment delays
+    echo "🔥 Pre-warming Kudu deployment engine..."
+    az webapp deployment list \
         --resource-group "$RESOURCE_GROUP" \
         --name "$app_name" \
-        --src "${app_type}.zip" \
-        --timeout 300 \
+        --query "[0].id" --output tsv > /dev/null 2>&1 || true
+    
+    # Use modern az webapp deploy command with increased timeout
+    az webapp deploy \
+        --resource-group "$RESOURCE_GROUP" \
+        --name "$app_name" \
+        --src-path "${app_type}.zip" \
+        --type zip \
+        --timeout 900 \
         --verbose
     
     echo "✅ $app_type deployed successfully!"
