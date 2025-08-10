@@ -136,10 +136,19 @@ jobs:
     - name: Zero-Downtime Slot Swap (Blue-Green Switch)
       run: |
         # Deploy to staging slots first
-        az webapp deployment source config-zip \
+        # Pre-warm Kudu to reduce deployment delays
+        az webapp deployment list \
           --name "worldleaders-web-prod-uksouth" \
           --slot staging \
-          --src web-app.zip
+          --query "[0].id" --output tsv > /dev/null 2>&1 || true
+        
+        # Use modern az webapp deploy with increased timeout
+        az webapp deploy \
+          --name "worldleaders-web-prod-uksouth" \
+          --slot staging \
+          --src-path web-app.zip \
+          --type zip \
+          --timeout 900
 
         # Comprehensive health checks including child safety
         curl -f "$STAGING_URL/health"
