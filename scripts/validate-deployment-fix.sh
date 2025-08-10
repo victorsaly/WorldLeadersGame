@@ -79,7 +79,7 @@ done
 
 # Test 7: Verify no deprecated commands remain anywhere
 echo "✅ Test 7: Checking for remaining deprecated commands..."
-DEPRECATED_FOUND=$(find "$REPO_ROOT" -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.md" | grep -v "validate-deployment-fix.sh" | xargs grep -l "config-zip" 2>/dev/null || true)
+DEPRECATED_FOUND=$(find "$REPO_ROOT" \( -name "*.yml" -o -name "*.yaml" -o -name "*.sh" -o -name "*.md" \) -print0 | grep -zv "validate-deployment-fix.sh" | xargs -0 grep -l "config-zip" 2>/dev/null || true)
 if [ -z "$DEPRECATED_FOUND" ]; then
     echo "   ✅ No deprecated commands found"
 else
