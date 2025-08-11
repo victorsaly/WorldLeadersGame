@@ -474,7 +474,7 @@
     color: var(--text-on-light);
     font-weight: 600;
     line-height: var(--mobile-leading-relaxed);
-    
+    height: 33px;
     /* Mobile-first responsive sizing */
     font-size: var(--mobile-text-sm);
   }
@@ -1056,24 +1056,7 @@
       0 0 0 6px var(--retro-green-main);
   }
 
-  /* Skip to content link for screen readers */
-  .skip-to-content {
-    position: absolute;
-    top: -40px;
-    left: 6px;
-    background: var(--retro-green-main);
-    color: var(--pixel-white);
-    padding: var(--mobile-spacing-sm) var(--mobile-spacing-md);
-    text-decoration: none;
-    font-family: 'Press Start 2P', monospace;
-    font-size: var(--mobile-text-sm);
-    border: 2px solid var(--pixel-white);
-    z-index: 100;
-  }
 
-  .skip-to-content:focus {
-    top: 6px;
-  }
 
   /* Performance optimizations for mobile */
   .retro-game-container,
@@ -1174,8 +1157,7 @@
   /* Print styles for educational materials */
   @media print {
     .retro-mobile-nav,
-    .retro-modal,
-    .skip-to-content {
+    .retro-modal {
       display: none !important;
     }
     
@@ -1239,32 +1221,20 @@
     box-shadow: 0 4px 0 var(--pixel-black);
     border-bottom: 4px solid var(--pixel-black);
     min-height: var(--touch-target-medium);
-    padding: 0;
+    padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   @media (min-width: 768px) {
     .retro-main-header {
       height: 60px;
-    }
-  }
-
-  .retro-header-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    padding: var(--mobile-spacing-xs) var(--mobile-spacing-sm);
-    max-width: 100%;
-  }
-
-  @media (min-width: 768px) {
-    .retro-header-content {
       padding: 0 1rem;
     }
   }
 
   .retro-main-content {
-    padding: var(--mobile-spacing-sm); /* Mobile padding */
     max-width: 100%;
     margin: 0 auto;
     position: relative;
@@ -1277,7 +1247,6 @@
 
   @media (min-width: 1024px) {
     .retro-main-content {
-      padding: var(--mobile-spacing-lg); /* Proper desktop padding for content */
       /* Full height on desktop since no mobile nav */
       min-height: calc(100vh - 60px); /* Subtract header height */
       min-height: calc(100dvh - 60px);
@@ -1347,10 +1316,6 @@
   @media (max-width: 480px) {
     .main-layout {
       font-size: var(--mobile-text-xs);
-    }
-    
-    .retro-header-content {
-      padding: var(--mobile-spacing-xs);
     }
   }
 
