@@ -68,7 +68,7 @@
   .retro-mobile-container {
     width: 100%;
     margin: 0 auto;
-    padding: var(--mobile-spacing-sm);
+    /* padding: var(--mobile-spacing-sm); */
     font-family: 'Press Start 2P', 'Courier New', monospace;
     
     /* Base mobile styles (320px+) */
@@ -1239,7 +1239,7 @@
     margin: 0 auto;
     position: relative;
     /* Ensure content doesn't go under mobile nav */
-    padding-bottom: calc(var(--touch-target-medium) + var(--mobile-spacing-sm));
+    /* padding-bottom: calc(var(--touch-target-medium) + var(--mobile-spacing-sm)); */
     /* Fill remaining viewport height on desktop */
     min-height: calc(100vh - var(--touch-target-medium));
     min-height: calc(100dvh - var(--touch-target-medium));
@@ -1250,6 +1250,7 @@
       /* Full height on desktop since no mobile nav */
       min-height: calc(100vh - 60px); /* Subtract header height */
       min-height: calc(100dvh - 60px);
+      padding: 0;
       width: 100%; /* Ensure full width usage */
       margin: 0; /* Remove auto centering that could cause left alignment */
     }
