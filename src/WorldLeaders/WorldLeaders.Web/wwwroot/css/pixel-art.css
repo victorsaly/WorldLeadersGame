@@ -81,18 +81,227 @@
     image-rendering: pixelated;
 }
 
-/* Retro Header */
+/* Retro Header with Compact Option */
 .retro-header {
     background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
     border-bottom: 4px solid #1B5E20;
     box-shadow: 0 4px 0 #37474F;
     color: white;
+    padding: 0.8rem 1rem;
 }
 
-.retro-title {
+.retro-header-compact {
+    background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+    border-bottom: 3px solid #1B5E20;
+    box-shadow: 0 3px 0 #37474F;
     color: white;
-    text-shadow: 2px 2px 0 #1B5E20;
+    padding: 0.5rem 1rem;
+}
+
+/* Container Optimizations for Better Spacing */
+.retro-game-container {
+    background: linear-gradient(135deg, var(--retro-green-dark) 0%, var(--retro-green-main) 50%, var(--retro-green-light) 100%);
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 1rem;
+}
+
+@media (min-width: 480px) {
+    .retro-game-container {
+        padding: 1.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .retro-game-container {
+        padding: 2rem;
+    }
+}
+
+/* Better Text Size Hierarchy */
+.text-retro-xs {
+    font-size: 8px;
+    line-height: 1.2;
+}
+
+.text-retro-sm {
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+.text-retro-base {
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.text-retro-lg {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.text-retro-xl {
+    font-size: 16px;
+    line-height: 1.3;
+}
+
+@media (min-width: 480px) {
+    .text-retro-xs { font-size: 9px; }
+    .text-retro-sm { font-size: 11px; }
+    .text-retro-base { font-size: 13px; }
+    .text-retro-lg { font-size: 15px; }
+    .text-retro-xl { font-size: 18px; }
+}
+
+@media (min-width: 768px) {
+    .text-retro-xs { font-size: 10px; }
+    .text-retro-sm { font-size: 12px; }
+    .text-retro-base { font-size: 14px; }
+    .text-retro-lg { font-size: 16px; }
+    .text-retro-xl { font-size: 20px; }
+}
+
+/* Typography Hierarchy for Child-Friendly Retro Design - Improved Scaling */
+.retro-title {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--pixel-white);
+    text-shadow: 2px 2px 0 var(--pixel-black), 4px 4px 0 var(--retro-green-dark);
+    image-rendering: pixelated;
     letter-spacing: 1px;
+    line-height: 1.2;
+    font-size: 18px;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 480px) {
+    .retro-title {
+        font-size: 20px;
+        letter-spacing: 1.5px;
+    }
+}
+
+@media (min-width: 768px) {
+    .retro-title {
+        font-size: 24px;
+        letter-spacing: 2px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .retro-title {
+        font-size: 28px;
+    }
+}
+
+.retro-subtitle {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--retro-green-bright);
+    letter-spacing: 0.8px;
+    image-rendering: pixelated;
+    line-height: 1.3;
+    font-size: 10px;
+    margin-bottom: 0.4rem;
+}
+
+@media (min-width: 480px) {
+    .retro-subtitle {
+        font-size: 11px;
+        letter-spacing: 1px;
+    }
+}
+
+@media (min-width: 768px) {
+    .retro-subtitle {
+        font-size: 12px;
+        letter-spacing: 1.2px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .retro-subtitle {
+        font-size: 14px;
+    }
+}
+
+.retro-body {
+    font-family: 'Orbitron', 'Courier New', monospace;
+    color: var(--text-on-light);
+    font-weight: 600;
+    line-height: 1.5;
+    font-size: 13px;
+}
+
+@media (min-width: 480px) {
+    .retro-body {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+}
+
+@media (min-width: 768px) {
+    .retro-body {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+}
+
+@media (min-width: 1024px) {
+    .retro-body {
+        font-size: 16px;
+    }
+}
+
+/* Compact Header Variations */
+.retro-title-compact {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--pixel-white);
+    text-shadow: 1px 1px 0 var(--pixel-black), 2px 2px 0 var(--retro-green-dark);
+    image-rendering: pixelated;
+    letter-spacing: 0.8px;
+    line-height: 1.1;
+    font-size: 16px;
+    margin-bottom: 0.3rem;
+}
+
+@media (min-width: 480px) {
+    .retro-title-compact {
+        font-size: 18px;
+        letter-spacing: 1px;
+    }
+}
+
+@media (min-width: 768px) {
+    .retro-title-compact {
+        font-size: 20px;
+        letter-spacing: 1.2px;
+    }
+}
+
+.retro-subtitle-compact {
+    font-family: 'Press Start 2P', monospace;
+    color: var(--retro-green-bright);
+    letter-spacing: 0.5px;
+    image-rendering: pixelated;
+    line-height: 1.2;
+    font-size: 8px;
+    margin-bottom: 0.2rem;
+}
+
+@media (min-width: 480px) {
+    .retro-subtitle-compact {
+        font-size: 9px;
+        letter-spacing: 0.6px;
+    }
+}
+
+@media (min-width: 768px) {
+    .retro-subtitle-compact {
+        font-size: 10px;
+        letter-spacing: 0.8px;
+    }
 }
 
 .retro-icon {
@@ -100,7 +309,42 @@
     filter: drop-shadow(2px 2px 0 #1B5E20);
 }
 
-/* Retro Controls */
+/* Retro Pixel Art Cards with Compact Options */
+.retro-card {
+    background: white;
+    border: 4px solid var(--pixel-black);
+    box-shadow: 4px 4px 0 var(--pixel-gray), 8px 8px 0 var(--pixel-black);
+    image-rendering: pixelated;
+    transition: all 0.2s ease;
+    padding: 1.2rem;
+}
+
+.retro-card-compact {
+    background: white;
+    border: 3px solid var(--pixel-black);
+    box-shadow: 3px 3px 0 var(--pixel-gray), 6px 6px 0 var(--pixel-black);
+    image-rendering: pixelated;
+    transition: all 0.2s ease;
+    padding: 0.8rem;
+}
+
+@media (min-width: 480px) {
+    .retro-card {
+        padding: 1.5rem;
+    }
+    .retro-card-compact {
+        padding: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .retro-card {
+        padding: 1.8rem;
+    }
+    .retro-card-compact {
+        padding: 1.2rem;
+    }
+}
 .retro-controls {
     display: flex;
     gap: 8px;
@@ -492,3 +736,53 @@
         display: none;
     }
 }
+
+/* Retro Pixel Art Cards with Compact Options */
+.retro-card {
+    background: white;
+    border: 4px solid var(--pixel-black);
+    box-shadow: 4px 4px 0 var(--pixel-gray), 8px 8px 0 var(--pixel-black);
+    image-rendering: pixelated;
+    transition: all 0.2s ease;
+    padding: 1.2rem;
+}
+
+.retro-card-compact {
+    background: white;
+    border: 3px solid var(--pixel-black);
+    box-shadow: 3px 3px 0 var(--pixel-gray), 6px 6px 0 var(--pixel-black);
+    image-rendering: pixelated;
+    transition: all 0.2s ease;
+    padding: 0.8rem;
+}
+
+@media (min-width: 480px) {
+    .retro-card {
+        padding: 1.5rem;
+    }
+    .retro-card-compact {
+        padding: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .retro-card {
+        padding: 1.8rem;
+    }
+    .retro-card-compact {
+        padding: 1.2rem;
+    }
+}
+
+/* Spacing Utility Classes for Better Control */
+.spacing-xs { margin-bottom: 0.5rem; }
+.spacing-sm { margin-bottom: 0.75rem; }
+.spacing-md { margin-bottom: 1rem; }
+.spacing-lg { margin-bottom: 1.5rem; }
+.spacing-xl { margin-bottom: 2rem; }
+
+.p-xs { padding: 0.5rem; }
+.p-sm { padding: 0.75rem; }
+.p-md { padding: 1rem; }
+.p-lg { padding: 1.5rem; }
+.p-xl { padding: 2rem; }
