@@ -1,0 +1,307 @@
+/* 🎨 Accessible Retro Color Scheme - High Contrast & Readability
+ * Context: Educational game for 12-year-olds - readability over aesthetics
+ * Approach: Scrap green theme for better contrast and text visibility
+ * Standards: WCAG 2.1 AA compliance with 4.5:1 contrast ratios
+ */
+
+:root {
+  /* High-Contrast Color Palette - Accessibility First */
+  --primary-dark: #1a1a2e;      /* Dark navy for text/borders */
+  --primary-light: #16213e;     /* Slightly lighter navy */
+  --accent-blue: #0f4c75;       /* Strong blue for buttons */
+  --accent-purple: #6b46c1;     /* Purple for special elements */
+  --success-green: #059669;     /* Green reserved for success only */
+  --warning-orange: #ea580c;    /* Orange for warnings */
+  --error-red: #dc2626;         /* Red for errors */
+  
+  /* Background Colors - Light & Clean */
+  --bg-primary: #f8fafc;        /* Almost white primary background */
+  --bg-secondary: #e2e8f0;      /* Light gray secondary */
+  --bg-tertiary: #cbd5e1;       /* Medium gray for cards */
+  
+  /* Text Colors - Maximum Contrast */
+  --text-primary: #0f172a;      /* Almost black for primary text */
+  --text-secondary: #334155;    /* Dark gray for secondary text */
+  --text-inverse: #ffffff;      /* White text on dark backgrounds */
+  
+  /* Pixel Art Colors - High Contrast */
+  --pixel-black: #000000;
+  --pixel-white: #ffffff;
+  --pixel-dark-gray: #374151;
+  --pixel-light-gray: #d1d5db;
+  
+  /* Interactive Colors - High Contrast */
+  --button-primary: var(--accent-blue);
+  --button-primary-hover: #1e40af;
+  --button-secondary: var(--bg-tertiary);
+  --button-secondary-hover: #94a3b8;
+  
+  /* Border Colors */
+  --border-primary: var(--primary-dark);
+  --border-secondary: var(--pixel-dark-gray);
+  --border-light: var(--pixel-light-gray);
+}
+
+/* FORCE Override Green Theme - Critical for Accessibility */
+/* Override ANY green color with high-contrast alternatives */
+
+/* Green Color Variable Overrides */
+:root {
+  --retro-green-dark: var(--primary-dark) !important;
+  --retro-green-main: var(--accent-blue) !important;
+  --retro-green-primary: var(--accent-blue) !important;
+  --retro-green-light: var(--bg-secondary) !important;
+  --retro-green-bright: var(--accent-purple) !important;
+  --text-retro-green-dark: var(--text-primary) !important;
+  --text-retro-green-main: var(--text-inverse) !important;
+}
+
+/* Force Override All Green Background Classes */
+.pixel-art-card.green-theme,
+.retro-card.green-theme,
+.territory-card.owned,
+.character-card.selected {
+  background: var(--bg-primary) !important;
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Force Override Green Gradients */
+.from-green-100,
+.from-green-400,
+.from-green-500,
+.to-green-200,
+.to-green-50 {
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%) !important;
+}
+
+/* Force Override Green Text Colors */
+.text-green-600,
+.text-green-700,
+.text-green-800,
+.text-retro-green-dark,
+.text-retro-green-main {
+  color: var(--text-primary) !important;
+}
+
+/* Force Override Green Borders */
+.border-green-200,
+.border-green-300,
+.border-green-400,
+.border-green-500 {
+  border-color: var(--border-primary) !important;
+}
+
+/* Force Override Green Backgrounds */
+.bg-green-50,
+.bg-green-100,
+.bg-green-200,
+.bg-green-500,
+.bg-retro-green-main {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Specific overrides for HOW TO PLAY section and educational content */
+.pixel-art-card h3,
+.retro-subtitle,
+.retro-title {
+  color: var(--text-primary) !important;
+  text-shadow: none !important;
+}
+
+.retro-body,
+.mobile-text-sm,
+.mobile-text-xs {
+  color: var(--text-primary) !important;
+}
+
+/* Step numbers in HOW TO PLAY */
+.font-bold.text-retro-green-main {
+  color: var(--accent-blue) !important;
+  font-weight: 800 !important;
+}
+
+/* Card backgrounds - force white with dark text */
+.pixel-art-card,
+.educational-card,
+.card-child {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-primary) !important;
+}
+
+/* Button text readability */
+.retro-touch-button-large,
+.pixel-art-button,
+.btn-child-friendly {
+  background: var(--button-primary) !important;
+  color: var(--text-inverse) !important;
+  border-color: var(--border-primary) !important;
+}
+
+/* Header styling */
+.retro-main-header {
+  background: var(--primary-dark) !important;
+  color: var(--text-inverse) !important;
+  border-color: var(--border-primary) !important;
+}
+
+.retro-touch-button {
+  background: var(--button-primary);
+  border: 3px solid var(--pixel-white);
+  color: var(--text-inverse);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255, 255, 255, 0.3),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.3),
+    4px 4px 0 var(--pixel-dark-gray);
+}
+
+.retro-touch-button:hover {
+  background: var(--button-primary-hover);
+  transform: translate(2px, 2px);
+  box-shadow: 
+    inset 2px 2px 0 rgba(255, 255, 255, 0.3),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.3),
+    2px 2px 0 var(--pixel-dark-gray);
+}
+
+.retro-touch-button:active {
+  transform: translate(4px, 4px);
+  box-shadow: 
+    inset 2px 2px 0 rgba(0, 0, 0, 0.3),
+    inset -2px -2px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* High-Contrast Cards */
+.retro-card {
+  background: var(--bg-primary);
+  border: 4px solid var(--border-primary);
+  color: var(--text-primary);
+  box-shadow: 
+    4px 4px 0 var(--pixel-dark-gray),
+    8px 8px 0 var(--pixel-black);
+}
+
+/* Readable Text Styling */
+.retro-text {
+  color: var(--text-primary);
+  text-shadow: none; /* Remove text shadows for clarity */
+  font-weight: 700;
+}
+
+.retro-text-secondary {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* High-Contrast Icons */
+.retro-icon {
+  color: var(--text-primary);
+  filter: none; /* Remove drop shadows for clarity */
+}
+
+/* Success States - Reserved Green Usage */
+.success-state {
+  background: var(--success-green);
+  color: var(--text-inverse);
+  border: 3px solid var(--pixel-white);
+}
+
+/* Map Container - High Contrast */
+.map-container {
+  background: var(--bg-primary);
+  border: 4px solid var(--border-primary);
+  box-shadow: 
+    inset 4px 4px 0 var(--bg-secondary),
+    inset -4px -4px 0 var(--border-secondary),
+    8px 8px 0 var(--pixel-dark-gray);
+}
+
+/* Territory States - Clear Visual Distinction */
+.territory-owned {
+  background: var(--success-green);
+  border: 3px solid var(--pixel-white);
+  color: var(--text-inverse);
+}
+
+.territory-available {
+  background: var(--accent-blue);
+  border: 3px solid var(--pixel-white);
+  color: var(--text-inverse);
+}
+
+.territory-locked {
+  background: var(--bg-tertiary);
+  border: 3px solid var(--border-secondary);
+  color: var(--text-secondary);
+}
+
+/* Information Bars - High Contrast */
+.info-bar {
+  background: var(--bg-primary);
+  border-top: 3px solid var(--border-primary);
+  color: var(--text-primary);
+}
+
+/* Loading States */
+.loading-overlay {
+  background: rgba(248, 250, 252, 0.95);
+  backdrop-filter: blur(4px);
+}
+
+.loading-content {
+  background: var(--bg-primary);
+  border: 4px solid var(--border-primary);
+  color: var(--text-primary);
+  box-shadow: 
+    4px 4px 0 var(--pixel-dark-gray),
+    8px 8px 0 var(--pixel-black);
+}
+
+/* Focus States - Accessibility */
+.retro-touch-button:focus {
+  outline: 4px solid var(--accent-purple);
+  outline-offset: 2px;
+  box-shadow: 
+    0 0 0 2px var(--pixel-white),
+    0 0 0 6px var(--accent-purple);
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: #000000;
+    --bg-primary: #ffffff;
+    --border-primary: #000000;
+    --button-primary: #000000;
+  }
+  
+  .retro-touch-button {
+    border-width: 6px;
+    box-shadow: 
+      inset 3px 3px 0 var(--pixel-white),
+      inset -3px -3px 0 var(--pixel-black),
+      6px 6px 0 var(--pixel-black);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .retro-touch-button {
+    border: 2px solid #000000;
+    background: #ffffff;
+    color: #000000;
+    box-shadow: none;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 480px) {
+  .retro-touch-button {
+    min-width: 56px;
+    min-height: 56px;
+    font-size: 14px;
+    border-width: 4px;
+  }
+}
