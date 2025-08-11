@@ -144,8 +144,10 @@
                 successMessage = $"Welcome back, {response.User.DisplayName}! 🎉";
                 StateHasChanged();
                 
-                // Wait a moment to show success message, then navigate
-                await Task.Delay(1500);
+                // Small delay for visual feedback, then navigate
+                await Task.Delay(800);
+                
+                // Navigate to home page - authentication state will be handled by the AuthorizeView
                 Navigation.NavigateTo("/");
             }
             else

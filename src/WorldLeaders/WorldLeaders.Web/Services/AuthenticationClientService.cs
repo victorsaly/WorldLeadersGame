@@ -29,6 +29,7 @@ public class AuthenticationClientService : IAuthenticationClientService
     private readonly HttpClient _httpClient;
     private readonly ILogger<AuthenticationClientService> _logger;
     private readonly ILocalStorageService _localStorage;
+    private readonly IServiceProvider _serviceProvider;
     
     private const string TOKEN_KEY = "worldleaders_auth_token";
     private const string USER_KEY = "worldleaders_user_info";
@@ -36,11 +37,13 @@ public class AuthenticationClientService : IAuthenticationClientService
     public AuthenticationClientService(
         IHttpClientFactory httpClientFactory,
         ILogger<AuthenticationClientService> logger,
-        ILocalStorageService localStorage)
+        ILocalStorageService localStorage,
+        IServiceProvider serviceProvider)
     {
         _httpClient = httpClientFactory.CreateClient("GameAPI");
         _logger = logger;
         _localStorage = localStorage;
+        _serviceProvider = serviceProvider;
     }
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterUserRequest request)
@@ -85,7 +88,13 @@ public class AuthenticationClientService : IAuthenticationClientService
                 var authResponse = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
                 if (authResponse != null)
                 {
+                    // Store in both localStorage (for compatibility) and server session
                     await StoreAuthenticationDataAsync(authResponse);
+                    
+                    // Update server authentication state
+                    var authStateProvider = _serviceProvider.GetRequiredService<SimpleAuthenticationStateProvider>();
+                    await authStateProvider.MarkUserAsAuthenticatedAsync(authResponse);
+                    
                     _logger.LogInformation("User logged in successfully: {UsernameOrEmail}", request.UsernameOrEmail);
                     return authResponse;
                 }
@@ -112,8 +121,13 @@ public class AuthenticationClientService : IAuthenticationClientService
         {
             _logger.LogInformation("Logging out user");
             
+            // Clear both localStorage and server session
             await _localStorage.RemoveItemAsync(TOKEN_KEY);
             await _localStorage.RemoveItemAsync(USER_KEY);
+            
+            // Update server authentication state
+            var authStateProvider = _serviceProvider.GetRequiredService<SimpleAuthenticationStateProvider>();
+            await authStateProvider.MarkUserAsLoggedOutAsync();
             
             _logger.LogInformation("User logged out successfully");
         }
@@ -126,17 +140,15 @@ public class AuthenticationClientService : IAuthenticationClientService
 
     public async Task<bool> IsAuthenticatedAsync()
     {
-        var token = await GetTokenAsync();
-        if (string.IsNullOrEmpty(token))
-            return false;
-
         try
         {
-            var jwt = new JwtSecurityTokenHandler().ReadJwtToken(token);
-            return jwt.ValidTo > DateTime.UtcNow;
+            // Use server authentication state as primary source
+            var authStateProvider = _serviceProvider.GetRequiredService<SimpleAuthenticationStateProvider>();
+            return await authStateProvider.IsAuthenticatedAsync();
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "IsAuthenticatedAsync - Error checking server authentication state");
             return false;
         }
     }
@@ -158,11 +170,15 @@ public class AuthenticationClientService : IAuthenticationClientService
     {
         try
         {
-            var token = await _localStorage.GetItemAsync<string>(TOKEN_KEY);
-            return !string.IsNullOrEmpty(token) && !IsTokenExpired(token) ? token : null;
+            // Use server authentication state as primary source
+            var authStateProvider = _serviceProvider.GetRequiredService<SimpleAuthenticationStateProvider>();
+            var token = await authStateProvider.GetCurrentTokenAsync();
+            _logger.LogInformation("GetTokenAsync - Retrieved token from server session, length: {TokenLength}", token?.Length ?? 0);
+            return token;
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "GetTokenAsync - Error retrieving token from server session");
             return null;
         }
     }
@@ -171,14 +187,13 @@ public class AuthenticationClientService : IAuthenticationClientService
     {
         try
         {
-            if (!await IsAuthenticatedAsync())
-                return null;
-
-            var userInfo = await _localStorage.GetItemAsync<UserInfoDto>(USER_KEY);
-            return userInfo;
+            // Use server authentication state as primary source
+            var authStateProvider = _serviceProvider.GetRequiredService<SimpleAuthenticationStateProvider>();
+            return await authStateProvider.GetCurrentUserAsync();
         }
-        catch
+        catch (Exception ex)
         {
+            _logger.LogError(ex, "GetCurrentUserAsync - Error retrieving user from server session");
             return null;
         }
     }

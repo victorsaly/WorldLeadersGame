@@ -12,8 +12,8 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
 
 <div class="territory-explorer bg-gradient-to-br from-blue-50 to-green-50 rounded-xl p-6 shadow-lg">
     <div class="text-center mb-6">
-        <h2 class="text-3xl font-bold text-blue-800 mb-2">🌍 Territory Explorer</h2>
-        <p class="text-blue-600 text-lg">Discover amazing countries around the world!</p>
+        <h2 class="text-4xl font-bold text-blue-800 mb-3">🌍 Territory Explorer</h2>
+        <p class="text-blue-600 text-xl">Discover amazing countries around the world!</p>
     </div>
 
     @if (isLoading)
@@ -51,7 +51,7 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
         @if (ownedTerritories.Any())
         {
             <div class="mb-8 bg-green-50 border-2 border-green-200 rounded-lg p-4">
-                <h3 class="text-xl font-bold text-green-800 mb-3">🏴 Your Territories (@ownedTerritories.Count)</h3>
+                <h3 class="text-2xl font-bold text-green-800 mb-4">🏴 Your Territories (@ownedTerritories.Count)</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach (var territory in ownedTerritories)
                     {
@@ -61,11 +61,11 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
                                      alt="@territory.CountryName flag" class="w-full h-20 object-cover rounded-t-lg">
                             </div>
                             <div class="p-3">
-                                <h4 class="font-bold text-green-800">@territory.CountryName</h4>
-                                <p class="text-sm text-green-600">Monthly Income: $@territory.MonthlyIncome</p>
-                                <p class="text-xs text-gray-600">Languages: @string.Join(", ", territory.OfficialLanguages.Take(2))</p>
+                                <h4 class="font-bold text-green-800 text-base">@territory.CountryName</h4>
+                                <p class="text-base text-green-600">Monthly Income: $@territory.MonthlyIncome</p>
+                                <p class="text-sm text-gray-600">Languages: @string.Join(", ", territory.OfficialLanguages.Take(2))</p>
                                 <button @onclick="() => ViewTerritoryDetails(territory.Id)" 
-                                        class="mt-2 btn-child-friendly btn-small">
+                                        class="mt-2 territory-action-button">
                                     📖 Learn More
                                 </button>
                             </div>
@@ -73,18 +73,18 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
                     }
                 </div>
                 <div class="mt-4 text-center">
-                    <p class="text-green-700 font-semibold">Total Monthly Income: $@totalMonthlyIncome</p>
+                    <p class="text-green-700 font-semibold text-lg">Total Monthly Income: $@totalMonthlyIncome</p>
                 </div>
             </div>
         }
 
         <!-- Available Territories Section -->
         <div class="mb-6">
-            <h3 class="text-xl font-bold text-blue-800 mb-3">
+            <h3 class="text-2xl font-bold text-blue-800 mb-4">
                 🗺️ Available Territories 
                 @if (selectedTier != null)
                 {
-                    <span class="text-sm font-normal text-blue-600">(@GetTierDescription(selectedTier.Value))</span>
+                    <span class="text-lg font-normal text-blue-600">(@GetTierDescription(selectedTier.Value))</span>
                 }
             </h3>
             
@@ -101,20 +101,20 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
                                     @GetTierEmoji(territory.Tier)
                                 </div>
                             </div>
-                            <div class="p-3">
-                                <h4 class="font-bold text-blue-800 text-sm">@territory.CountryName</h4>
-                                <div class="text-xs text-gray-600 mb-2">
-                                    <p>💰 Cost: $@territory.Cost</p>
-                                    <p>⭐ Reputation: @territory.ReputationRequired%</p>
-                                    <p>📈 Income: $@territory.MonthlyIncome/month</p>
+                            <div class="p-4">
+                                <h4 class="font-bold text-blue-800 text-base mb-2">@territory.CountryName</h4>
+                                <div class="text-sm text-gray-600 mb-3">
+                                    <p class="mb-1">💰 Cost: $@territory.Cost</p>
+                                    <p class="mb-1">⭐ Reputation: @territory.ReputationRequired%</p>
+                                    <p class="mb-1">📈 Income: $@territory.MonthlyIncome/month</p>
                                 </div>
-                                <div class="flex gap-1">
+                                <div class="flex gap-2">
                                     <button @onclick="() => ViewTerritoryDetails(territory.Id)" 
-                                            class="btn-child-friendly btn-small bg-blue-500">
+                                            class="territory-action-button bg-blue-500">
                                         👁️ View
                                     </button>
                                     <button @onclick="() => AcquireTerritory(territory.Id)" 
-                                            class="btn-child-friendly btn-small bg-green-500"
+                                            class="territory-action-button bg-green-500"
                                             disabled="@(!CanAffordTerritory(territory))">
                                         @if (CanAffordTerritory(territory))
                                         {
@@ -153,8 +153,8 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
 
     <!-- Educational Tips -->
     <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mt-6">
-        <h4 class="font-bold text-yellow-800 mb-2">💡 Learning Tips</h4>
-        <ul class="text-sm text-yellow-700 space-y-1">
+        <h4 class="font-bold text-yellow-800 mb-3 text-lg">💡 Learning Tips</h4>
+        <ul class="text-base text-yellow-700 space-y-2">
             <li>🎯 Start with Small Nations to build your reputation!</li>
             <li>🌍 Each territory teaches you about different countries and cultures</li>
             <li>💰 Territories generate monthly income to help you buy more</li>
@@ -389,5 +389,43 @@ Safety Requirements: Age-appropriate content, positive messaging, child-friendly
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+}
+
+/* Improved territory action buttons */
+.territory-action-button {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    color: white;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    min-width: 80px;
+    text-align: center;
+}
+
+.territory-action-button:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+}
+
+.territory-action-button:active {
+    transform: scale(0.98);
+}
+
+.territory-action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    filter: none;
+}
+
+.territory-action-button.bg-blue-500 {
+    background-color: #3b82f6;
+}
+
+.territory-action-button.bg-green-500 {
+    background-color: #10b981;
 }
 </style>

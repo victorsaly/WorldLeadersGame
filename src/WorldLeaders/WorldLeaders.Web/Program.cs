@@ -4,6 +4,7 @@ using WorldLeaders.Web.Handlers;
 using WorldLeaders.Shared.Services;
 using WorldLeaders.Infrastructure.Configuration;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,30 @@ builder.Configuration.AddEnvironmentVariables();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Add session services for authentication with memory-based storage for development
+// Temporarily disable sessions to resolve Redis dependency issue
+// TODO: Re-enable sessions once Redis configuration is resolved
+// builder.Services.AddDistributedMemoryCache();
+// builder.Services.AddSession(options =>
+// {
+//     options.IdleTimeout = TimeSpan.FromMinutes(30); // Session timeout
+//     options.Cookie.HttpOnly = true;
+//     options.Cookie.IsEssential = true;
+//     options.Cookie.SecurePolicy = builder.Environment.IsDevelopment() 
+//         ? CookieSecurePolicy.SameAsRequest 
+//         : CookieSecurePolicy.Always;
+//     options.Cookie.Name = "WorldLeaders.Session";
+// });
+
+// Add HTTP context accessor for session access
+builder.Services.AddHttpContextAccessor();
+
+// Add Blazor Server authentication services (simplified for development)
+builder.Services.AddAuthenticationCore();
+builder.Services.AddScoped<SimpleAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(provider => 
+    provider.GetRequiredService<SimpleAuthenticationStateProvider>());
 
 // Configure security headers and options
 builder.Services.AddAntiforgery(options =>
@@ -124,35 +149,42 @@ if (!string.IsNullOrEmpty(applicationInsightsConnectionString))
     });
 }
 
-// Add Redis distributed cache for multi-instance scaling
-var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
-if (!string.IsNullOrEmpty(redisConnectionString))
+// For development, we use in-memory cache
+// Production deployments will configure Redis separately via environment variables
+if (builder.Environment.IsProduction())
 {
-    builder.Services.AddStackExchangeRedisCache(options =>
+    var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING");
+    if (!string.IsNullOrEmpty(redisConnectionString))
     {
-        options.Configuration = redisConnectionString;
-        options.InstanceName = "WorldLeadersGame.Web";
-        
-        // Performance optimization for child-friendly responsiveness
         try
         {
-            options.ConfigurationOptions = StackExchange.Redis.ConfigurationOptions.Parse(redisConnectionString);
-            options.ConfigurationOptions.ConnectTimeout = 5000; // 5 seconds
-            options.ConfigurationOptions.SyncTimeout = 1500; // 1.5 seconds for child attention span
-            options.ConfigurationOptions.AbortOnConnectFail = false; // Graceful degradation
-        }
-        catch (Exception)
-        {
-            // Use safe default configuration for educational platform if parsing fails
-            options.ConfigurationOptions = new StackExchange.Redis.ConfigurationOptions
+            builder.Services.AddStackExchangeRedisCache(options =>
             {
-                EndPoints = { "localhost:6379" },
-                ConnectTimeout = 5000,
-                SyncTimeout = 1500,
-                AbortOnConnectFail = false
-            };
+                options.Configuration = redisConnectionString;
+                options.InstanceName = "WorldLeadersGame.Web";
+            });
+            
+            // Use logger factory instead of BuildServiceProvider during configuration
+            using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder.AddConsole());
+            var productionLogger = loggerFactory.CreateLogger<Program>();
+            productionLogger.LogInformation("📊 Redis distributed cache configured for production");
         }
-    });
+        catch (Exception ex)
+        {
+            // Use logger factory instead of BuildServiceProvider during configuration
+            using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder.AddConsole());
+            var errorLogger = loggerFactory.CreateLogger<Program>();
+            errorLogger.LogError(ex, "❌ Redis configuration failed in production");
+            throw; // Fail fast in production if Redis is expected but not available
+        }
+    }
+}
+else
+{
+    // Use logger factory instead of BuildServiceProvider during configuration
+    using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder.AddConsole());
+    var devLogger = loggerFactory.CreateLogger<Program>();
+    devLogger.LogInformation("🧠 Using in-memory cache for session storage (development mode)");
 }
 
 // Add service defaults (Aspire) - Comment out for manual execution
@@ -203,6 +235,8 @@ app.Use(async (context, next) =>
 });
 
 app.UseStaticFiles();
+// Temporarily disable session middleware to resolve Redis dependency issue
+// app.UseSession(); // Enable session middleware
 app.UseAntiforgery();
 
 // Map health checks - Comment out for manual execution since not all services available

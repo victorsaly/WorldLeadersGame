@@ -1,91 +1,205 @@
-﻿@page "/"
-@rendermode InteractiveServer
+@page "/"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using Microsoft.AspNetCore.Components.Authorization
+@using WorldLeaders.Web.Services
+@using WorldLeaders.Shared.DTOs
 @inject NavigationManager Navigation
+@inject IAuthenticationClientService AuthService
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ILogger<Home> Logger
 
 <PageTitle>World Leaders Game</PageTitle>
 
-<div class="retro-game-container p-6">
-    <div class="pixel-art-card green-theme max-w-4xl mx-auto">
-        <!-- Game Logo/Title - More Compact Header -->
-        <div class="mb-6">
-            <h1 class="retro-title-compact text-center mb-2">
-                🌍 WORLD LEADERS
-            </h1>
-            <p class="retro-subtitle-compact text-center mb-1">EDUCATIONAL ADVENTURE GAME</p>
-            <p class="retro-body text-center text-sm">Designed for ages 12 and up • Learn geography, economics & languages</p>
-        </div>
-
-        <!-- Game Features - Mobile-first grid with better spacing -->
-        <div class="retro-mobile-grid mobile-gap-sm mb-6">
-            <div class="pixel-art-card retro-touch-target p-4">
-                <span class="text-2xl block mb-2 text-center">🎯</span>
-                <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm text-center">STRATEGIC LEARNING</h3>
-                <p class="retro-body text-xs text-center">Make decisions and learn about leadership</p>
-            </div>
-            <div class="pixel-art-card retro-touch-target p-4">
-                <span class="text-2xl block mb-2 text-center">🗺️</span>
-                <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm text-center">WORLD GEOGRAPHY</h3>
-                <p class="retro-body text-xs text-center">Discover countries and their cultures</p>
-            </div>
-            <div class="pixel-art-card retro-touch-target p-4">
-                <span class="text-2xl block mb-2 text-center">🗣️</span>
-                <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm text-center">LANGUAGE LEARNING</h3>
-                <p class="retro-body text-xs text-center">Practice pronunciation with AI assistance</p>
-            </div>
-            <div class="pixel-art-card retro-touch-target p-4">
-                <span class="text-2xl block mb-2 text-center">👥</span>
-                <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm text-center">SOCIAL SKILLS</h3>
-                <p class="retro-body text-xs text-center">Learn about cooperation and diplomacy</p>
-            </div>
-        </div>
-
-        <!-- How to Play - More Compact -->
-        <div class="pixel-art-card green-theme mb-6 p-5">
-            <h3 class="retro-subtitle text-lg mb-3 text-center">🎮 HOW TO PLAY</h3>
-            <div>
-                <div class="retro-body text-sm flex items-start gap-3">
-                    <span class="font-bold text-retro-green-main">1.</span>
-                    <span>Choose your character persona and start as a farmer</span>
-                </div>
-                <div class="retro-body text-sm flex items-start gap-3">
-                    <span class="font-bold text-retro-green-main">2.</span>
-                    <span>Roll dice to determine your job and earn income</span>
-                </div>
-                <div class="retro-body text-sm flex items-start gap-3">
-                    <span class="font-bold text-retro-green-main">3.</span>
-                    <span>Purchase territories and learn their languages</span>
-                </div>
-                <div class="retro-body text-sm flex items-start gap-3">
-                    <span class="font-bold text-retro-green-main">4.</span>
-                    <span>Keep your population happy and make strategic decisions</span>
-                </div>
-                <div class="retro-body text-sm flex items-start gap-3">
-                    <span class="font-bold text-retro-green-main">5.</span>
-                    <span>Become a world leader through wisdom and diplomacy!</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Start Game Button - Mobile-optimized -->
-        <div class="text-center mb-4">
-            <button @onclick="StartGame" 
-                    class="retro-touch-button-large"
-                    aria-label="Start your journey as a world leader">
-                🚀 CHOOSE YOUR CHARACTER
-            </button>
-        </div>
-
-        <!-- Educational Note - More Compact -->
-        <div class="retro-body text-xs text-center opacity-75">
-            <p class="mb-1">This game promotes positive values, critical thinking, and global awareness.</p>
-            <p>All content is age-appropriate and educationally focused.</p>
+@if (isLoading)
+{
+    <div class="retro-game-container p-6 min-h-screen flex items-center justify-center">
+        <div class="pixel-art-card green-theme p-8 text-center">
+            <div class="retro-loading-spinner mx-auto mb-4"></div>
+            <p class="retro-body">Loading World Leaders Game...</p>
         </div>
     </div>
-</div>
+}
+else
+{
+    <CascadingAuthenticationState>
+        <AuthorizeView>
+            <Authorized>
+            @* User is authenticated - show game content *@
+            <div class="retro-game-container p-6">
+                <div class="pixel-art-card green-theme max-w-4xl mx-auto">
+                    <!-- Welcome message for authenticated user -->
+                    <div class="mb-6 text-center">
+                        <h2 class="retro-subtitle text-lg text-retro-green-main mb-2">
+                            🎉 Welcome back, @context.User.FindFirst("DisplayName")?.Value! 🎉
+                        </h2>
+                        <p class="retro-body text-sm">Ready to continue your world leadership journey?</p>
+                    </div>
+
+                    <!-- Game action buttons -->
+                    <div class="text-center mb-4 space-y-3">
+                        <button @onclick="StartGame" 
+                                class="retro-touch-button-large"
+                                aria-label="Start your journey as a world leader">
+                            🚀 CONTINUE YOUR ADVENTURE
+                        </button>
+                        
+                        <button @onclick="LogoutAsync" 
+                                class="retro-touch-button-secondary"
+                                aria-label="Log out of your account">
+                            🚪 LOG OUT
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            @* User is not authenticated - show landing page *@
+            <div class="retro-game-container p-6">
+                <div class="pixel-art-card green-theme max-w-4xl mx-auto">
+                    <!-- Game Logo/Title - More Compact Header -->
+                    <div class="mb-6">
+                        <h1 class="retro-title-compact text-center mb-2">
+                            🌍 WORLD LEADERS
+                        </h1>
+                        <p class="retro-subtitle-compact text-center mb-1">EDUCATIONAL ADVENTURE GAME</p>
+                        <p class="retro-body text-center text-sm">Designed for ages 12 and up • Learn geography, economics & languages</p>
+                    </div>
+
+                    <!-- Game Features - Mobile-first grid with better spacing -->
+                    <div class="retro-mobile-grid mobile-gap-sm mb-6">
+                        <div class="pixel-art-card retro-touch-target p-4">
+                            <span class="text-2xl block mb-2 text-center">🎯</span>
+                            <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm text-center">STRATEGIC LEARNING</h3>
+                            <p class="retro-body text-xs text-center">Make decisions and learn about leadership</p>
+                        </div>
+                        <div class="pixel-art-card retro-touch-target p-4">
+                            <span class="text-2xl block mb-2 text-center">🗺️</span>
+                            <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm text-center">WORLD GEOGRAPHY</h3>
+                            <p class="retro-body text-xs text-center">Discover countries and their cultures</p>
+                        </div>
+                        <div class="pixel-art-card retro-touch-target p-4">
+                            <span class="text-2xl block mb-2 text-center">🗣️</span>
+                            <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm text-center">LANGUAGE LEARNING</h3>
+                            <p class="retro-body text-xs text-center">Practice pronunciation with AI assistance</p>
+                        </div>
+                        <div class="pixel-art-card retro-touch-target p-4">
+                            <span class="text-2xl block mb-2 text-center">👥</span>
+                            <h3 class="font-bold text-retro-green-dark mb-2 font-retro text-sm text-center">SOCIAL SKILLS</h3>
+                            <p class="retro-body text-xs text-center">Learn about cooperation and diplomacy</p>
+                        </div>
+                    </div>
+
+                    <!-- How to Play - More Compact -->
+                    <div class="pixel-art-card green-theme mb-6 p-5">
+                        <h3 class="retro-subtitle text-lg mb-3 text-center">🎮 HOW TO PLAY</h3>
+                        <div>
+                            <div class="retro-body text-sm flex items-start gap-3">
+                                <span class="font-bold text-retro-green-main">1.</span>
+                                <span>Choose your character persona and start as a farmer</span>
+                            </div>
+                            <div class="retro-body text-sm flex items-start gap-3">
+                                <span class="font-bold text-retro-green-main">2.</span>
+                                <span>Roll dice to determine your job and earn income</span>
+                            </div>
+                            <div class="retro-body text-sm flex items-start gap-3">
+                                <span class="font-bold text-retro-green-main">3.</span>
+                                <span>Purchase territories and learn their languages</span>
+                            </div>
+                            <div class="retro-body text-sm flex items-start gap-3">
+                                <span class="font-bold text-retro-green-main">4.</span>
+                                <span>Keep your population happy and make strategic decisions</span>
+                            </div>
+                            <div class="retro-body text-sm flex items-start gap-3">
+                                <span class="font-bold text-retro-green-main">5.</span>
+                                <span>Become a world leader through wisdom and diplomacy!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Authentication Buttons - For non-authenticated users -->
+                    <div class="text-center mb-4 space-y-3">
+                        <button @onclick="GoToLogin" 
+                                class="retro-touch-button-large"
+                                aria-label="Login to start your journey">
+                            🔑 LOGIN TO PLAY
+                        </button>
+                    </div>
+
+                    <!-- Educational Note - More Compact -->
+                    <div class="retro-body text-xs text-center opacity-75">
+                        <p class="mb-1">This game promotes positive values, critical thinking, and global awareness.</p>
+                        <p>All content is age-appropriate and educationally focused.</p>
+                    </div>
+                </div>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+    </CascadingAuthenticationState>
+}
 
 @code {
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Logger.LogInformation("🏠 Home page initializing with proper Blazor Server authentication");
+            
+            // Small delay for smooth UX transition
+            await Task.Delay(500);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "❌ Error in Home page initialization");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                Logger.LogInformation("🔄 OnAfterRenderAsync called for first render");
+                // Simplify to avoid any issues during initial render
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "❌ Error in OnAfterRenderAsync");
+            }
+        }
+        
+        return Task.CompletedTask;
+    }
+    
     private void StartGame()
     {
         Navigation.NavigateTo("/character-select");
+    }
+    
+    private void GoToLogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+    
+    private async Task LogoutAsync()
+    {
+        try
+        {
+            Logger.LogInformation("🚪 User requesting logout");
+            await AuthService.LogoutAsync();
+            Logger.LogInformation("✅ User logged out successfully");
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "❌ Error during logout");
+        }
     }
 }

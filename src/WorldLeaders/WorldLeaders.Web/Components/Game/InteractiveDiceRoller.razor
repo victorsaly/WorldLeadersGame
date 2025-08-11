@@ -18,7 +18,7 @@
     <!-- Dice Container -->
     <div class="flex flex-col items-center mb-6">
         <!-- Animated Dice -->
-        <div class="@GetDiceClass() w-24 h-24 bg-white border-4 border-purple-400 rounded-lg shadow-lg flex items-center justify-center text-4xl font-bold cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105"
+        <div class="@GetDiceClass() w-20 h-20 bg-white border-4 border-purple-400 rounded-lg shadow-lg flex items-center justify-center text-3xl font-bold cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105"
              @onclick="RollDice"
              disabled="@isRolling">
             @if (isRolling)
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Roll Button -->
-        <button class="@GetRollButtonClass() mt-4 px-8 py-4 rounded-lg font-bold text-white text-lg transition-all duration-200 transform hover:scale-105 disabled:transform-none disabled:opacity-50"
+        <button class="@GetRollButtonClass() mt-4 px-6 py-3 rounded-lg font-bold text-white text-base transition-all duration-200 transform hover:scale-105 disabled:transform-none disabled:opacity-50"
                 @onclick="RollDice"
                 disabled="@isRolling">
             @if (isRolling)
@@ -56,39 +56,39 @@
     <!-- Results Display -->
     @if (lastRollResult != null)
     {
-        <div class="bg-gradient-to-r from-green-100 to-blue-100 rounded-lg p-6 mb-4 border-2 border-green-400">
-            <div class="text-center mb-4">
-                <h4 class="text-2xl font-bold text-green-800 mb-2">🎉 Awesome Roll!</h4>
-                <p class="text-green-700 text-lg font-medium">@lastRollResult.EncouragingMessage</p>
+        <div class="bg-gradient-to-r from-green-100 to-blue-100 rounded-lg p-4 mb-4 border-2 border-green-400">
+            <div class="text-center mb-3">
+                <h4 class="text-xl font-bold text-green-800 mb-2">🎉 Awesome Roll!</h4>
+                <p class="text-green-700 text-base font-medium">@lastRollResult.EncouragingMessage</p>
             </div>
 
             <!-- Job Information -->
-            <div class="bg-white rounded-lg p-4 mb-4">
-                <div class="flex items-center justify-center mb-3">
-                    <span class="text-3xl mr-3">@GetJobEmoji(lastRollResult.NewJob)</span>
+            <div class="bg-white rounded-lg p-3 mb-3">
+                <div class="flex items-center justify-center mb-2">
+                    <span class="text-xl mr-2">@GetJobEmoji(lastRollResult.NewJob)</span>
                     <div class="text-center">
-                        <h5 class="text-xl font-bold text-gray-800">@lastRollResult.NewJob</h5>
-                        <p class="text-green-600 font-bold text-lg">$@(lastRollResult.IncomeChange.ToString("N0"))/month</p>
+                        <h5 class="text-base font-bold text-gray-800">@lastRollResult.NewJob</h5>
+                        <p class="text-green-600 font-bold text-sm">$@(lastRollResult.IncomeChange.ToString("N0"))/month</p>
                     </div>
                 </div>
-                <p class="text-gray-600 text-sm text-center">@lastRollResult.JobDescription</p>
+                <p class="text-gray-600 text-xs text-center">@lastRollResult.JobDescription</p>
             </div>
 
             <!-- Stat Changes -->
-            <div class="grid grid-cols-3 gap-4">
-                <div class="text-center bg-green-50 rounded-lg p-3">
-                    <div class="text-2xl">💰</div>
-                    <div class="text-green-600 font-bold">+$@(lastRollResult.IncomeChange.ToString("N0"))</div>
+            <div class="grid grid-cols-3 gap-2">
+                <div class="text-center bg-green-50 rounded-lg p-2">
+                    <div class="text-lg">💰</div>
+                    <div class="text-green-600 font-bold text-sm">+$@(lastRollResult.IncomeChange.ToString("N0"))</div>
                     <div class="text-xs text-gray-600">Monthly Income</div>
                 </div>
-                <div class="text-center bg-blue-50 rounded-lg p-3">
-                    <div class="text-2xl">⭐</div>
-                    <div class="text-blue-600 font-bold">+@lastRollResult.ReputationChange</div>
+                <div class="text-center bg-blue-50 rounded-lg p-2">
+                    <div class="text-lg">⭐</div>
+                    <div class="text-blue-600 font-bold text-sm">+@lastRollResult.ReputationChange</div>
                     <div class="text-xs text-gray-600">Reputation</div>
                 </div>
-                <div class="text-center bg-yellow-50 rounded-lg p-3">
-                    <div class="text-2xl">😊</div>
-                    <div class="text-yellow-600 font-bold">+@lastRollResult.HappinessChange</div>
+                <div class="text-center bg-yellow-50 rounded-lg p-2">
+                    <div class="text-lg">😊</div>
+                    <div class="text-yellow-600 font-bold text-sm">+@lastRollResult.HappinessChange</div>
                     <div class="text-xs text-gray-600">Happiness</div>
                 </div>
             </div>
