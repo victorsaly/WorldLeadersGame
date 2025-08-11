@@ -1,0 +1,798 @@
+/* 
+Enhanced Territory Explorer Styles - Retro 32-bit Design
+Context: Educational game styling for 12-year-old players
+Design Theme: Green-focused retro pixel art with child-friendly elements
+*/
+
+/* Retro Typography */
+.retro-heading-xl {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: var(--retro-green-primary, #22c55e);
+    text-shadow: 2px 2px 0 var(--retro-black, #1f2937);
+    letter-spacing: 1px;
+    image-rendering: pixelated;
+}
+
+.retro-heading-lg {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--retro-green-dark, #15803d);
+    text-shadow: 1px 1px 0 var(--retro-black, #1f2937);
+    letter-spacing: 1px;
+}
+
+.retro-heading-sm {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--retro-green-primary, #22c55e);
+    letter-spacing: 0.5px;
+}
+
+.retro-body {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--retro-black, #1f2937);
+    font-weight: 500;
+}
+
+.text-shadow-retro {
+    text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Main Container */
+.territory-explorer {
+    font-family: 'Orbitron', monospace;
+    background: linear-gradient(135deg, 
+        var(--retro-green-light, #86efac) 0%, 
+        var(--retro-green-primary, #22c55e) 50%, 
+        var(--retro-green-dark, #15803d) 100%);
+}
+
+.retro-gradient-nature {
+    background: linear-gradient(135deg, 
+        var(--retro-green-light, #86efac) 0%, 
+        var(--retro-green-primary, #22c55e) 50%, 
+        var(--retro-green-dark, #15803d) 100%);
+}
+
+/* Loading Animation */
+.retro-loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    margin: 0 auto;
+    border: 4px solid var(--retro-green-light, #86efac);
+    border-top: 4px solid var(--retro-white, #f9fafb);
+    border-radius: 50%;
+    animation: retro-spin 1s linear infinite;
+    image-rendering: pixelated;
+}
+
+@keyframes retro-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Retro Tabs */
+.retro-tab {
+    padding: 0.75rem 1rem;
+    border: 3px solid var(--retro-white, #f9fafb);
+    background: var(--retro-green-primary, #22c55e);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+    image-rendering: pixelated;
+    box-shadow: 3px 3px 0 var(--retro-green-dark, #15803d);
+}
+
+.retro-tab:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--retro-green-dark, #15803d);
+}
+
+.retro-tab.active {
+    background: var(--retro-white, #f9fafb);
+    color: var(--retro-green-primary, #22c55e);
+    box-shadow: inset 2px 2px 0 var(--retro-green-dark, #15803d);
+    transform: translate(1px, 1px);
+}
+
+/* Cards */
+.retro-card {
+    background: white;
+    border: 4px solid var(--retro-black, #1f2937);
+    box-shadow: 4px 4px 0 var(--retro-gray-dark, #4b5563);
+    image-rendering: pixelated;
+}
+
+.retro-card-owned {
+    background: linear-gradient(135deg, 
+        var(--retro-green-light, #86efac) 0%, 
+        var(--retro-white, #f9fafb) 100%);
+    border: 4px solid var(--retro-green-primary, #22c55e);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 6px 6px 0 var(--retro-green-dark, #15803d);
+}
+
+.territory-card-owned {
+    background: white;
+    border: 3px solid var(--retro-green-primary, #22c55e);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 3px 3px 0 var(--retro-green-dark, #15803d);
+}
+
+.territory-card-owned:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--retro-green-dark, #15803d);
+}
+
+.territory-card-available {
+    background: white;
+    border: 3px solid var(--retro-blue, #3b82f6);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 3px 3px 0 var(--retro-gray-dark, #4b5563);
+}
+
+.territory-card-available:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--retro-gray-dark, #4b5563);
+    border-color: var(--retro-green-primary, #22c55e);
+}
+
+/* Pixel Art Images */
+.pixel-art-image {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Territory Stats */
+.territory-stats {
+    font-family: 'Orbitron', monospace;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+}
+
+.stat-icon {
+    font-size: 1rem;
+    min-width: 1.25rem;
+}
+
+.stat-label {
+    font-weight: 600;
+    color: var(--retro-gray-dark, #4b5563);
+    min-width: 4rem;
+}
+
+.stat-value {
+    font-weight: 700;
+    color: var(--retro-black, #1f2937);
+}
+
+.stat-value-small {
+    font-size: 0.625rem;
+    color: var(--retro-gray-dark, #4b5563);
+}
+
+/* Retro Buttons */
+.retro-button {
+    padding: 0.75rem 1rem;
+    border: 3px solid var(--retro-white, #f9fafb);
+    background: var(--retro-green-primary, #22c55e);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--retro-green-dark, #15803d);
+    image-rendering: pixelated;
+}
+
+.retro-button:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--retro-green-dark, #15803d);
+}
+
+.retro-button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--retro-green-dark, #15803d);
+}
+
+.retro-button-explore {
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--retro-blue, #3b82f6);
+    background: var(--retro-blue, #3b82f6);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.625rem;
+    box-shadow: 2px 2px 0 var(--retro-gray-dark, #4b5563);
+}
+
+.retro-button-explore:hover {
+    background: var(--retro-green-primary, #22c55e);
+    border-color: var(--retro-green-primary, #22c55e);
+}
+
+.retro-button-purchase {
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--retro-green-primary, #22c55e);
+    background: var(--retro-green-primary, #22c55e);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.625rem;
+    box-shadow: 2px 2px 0 var(--retro-green-dark, #15803d);
+}
+
+.retro-button-purchase:disabled {
+    background: var(--retro-gray-light, #d1d5db);
+    border-color: var(--retro-gray-dark, #4b5563);
+    color: var(--retro-gray-dark, #4b5563);
+    cursor: not-allowed;
+    box-shadow: 1px 1px 0 var(--retro-gray-dark, #4b5563);
+}
+
+.retro-button-nav {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--retro-white, #f9fafb);
+    background: var(--retro-blue, #3b82f6);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.625rem;
+    box-shadow: 2px 2px 0 var(--retro-gray-dark, #4b5563);
+}
+
+.retro-button-nav:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.retro-button-oracle {
+    padding: 1rem 2rem;
+    border: 4px solid var(--retro-purple, #8b5cf6);
+    background: var(--retro-purple, #8b5cf6);
+    color: white;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.75rem;
+    box-shadow: 4px 4px 0 var(--retro-black, #1f2937);
+    animation: retro-glow 2s ease-in-out infinite;
+}
+
+.retro-button-tiny {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--retro-green-primary, #22c55e);
+    background: var(--retro-green-primary, #22c55e);
+    color: white;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.5rem;
+    box-shadow: 1px 1px 0 var(--retro-green-dark, #15803d);
+}
+
+.retro-button-close {
+    padding: 0.5rem;
+    border: 2px solid var(--retro-red, #ef4444);
+    background: var(--retro-red, #ef4444);
+    color: white;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    box-shadow: 2px 2px 0 var(--retro-black, #1f2937);
+}
+
+/* Page Info */
+.retro-page-info {
+    text-align: center;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid white;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+}
+
+.retro-income-display {
+    background: linear-gradient(135deg, 
+        var(--retro-green-light, #86efac) 0%, 
+        var(--retro-white, #f9fafb) 100%);
+    border: 3px solid var(--retro-green-primary, #22c55e);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 3px 3px 0 var(--retro-green-dark, #15803d);
+}
+
+/* Tips Section */
+.retro-tips-section {
+    background: linear-gradient(135deg, 
+        var(--retro-yellow, #fbbf24) 0%, 
+        rgba(251, 191, 36, 0.1) 100%);
+    border: 3px solid var(--retro-yellow, #fbbf24);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 4px 4px 0 rgba(251, 191, 36, 0.3);
+}
+
+.tip-card {
+    background: white;
+    border: 2px solid var(--retro-yellow, #fbbf24);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 2px 2px 0 rgba(251, 191, 36, 0.3);
+    transition: all 0.2s ease-in-out;
+}
+
+.tip-card:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 rgba(251, 191, 36, 0.5);
+}
+
+/* Modal Styles */
+.country-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.country-modal-content {
+    background: white;
+    border: 4px solid var(--retro-black, #1f2937);
+    border-radius: 12px;
+    box-shadow: 8px 8px 0 var(--retro-gray-dark, #4b5563);
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.country-modal-header {
+    background: linear-gradient(135deg, 
+        var(--retro-blue, #3b82f6) 0%, 
+        var(--retro-green-primary, #22c55e) 100%);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--retro-black, #1f2937);
+}
+
+.country-modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Country Tabs */
+.country-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    border-bottom: 3px solid var(--retro-gray-light, #d1d5db);
+    padding-bottom: 1rem;
+}
+
+.country-tab {
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--retro-gray-light, #d1d5db);
+    background: white;
+    color: var(--retro-gray-dark, #4b5563);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.625rem;
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+    box-shadow: 2px 2px 0 var(--retro-gray-light, #d1d5db);
+}
+
+.country-tab:hover {
+    background: var(--retro-green-light, #86efac);
+    border-color: var(--retro-green-primary, #22c55e);
+}
+
+.country-tab.active {
+    background: var(--retro-green-primary, #22c55e);
+    color: white;
+    border-color: var(--retro-green-dark, #15803d);
+    box-shadow: inset 2px 2px 0 var(--retro-green-dark, #15803d);
+}
+
+/* Tab Content */
+.tab-content {
+    margin-top: 1.5rem;
+}
+
+.info-card {
+    background: white;
+    border: 3px solid var(--retro-blue, #3b82f6);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 3px 3px 0 rgba(59, 130, 246, 0.3);
+}
+
+.fact-list, .feature-grid, .highlight-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.fact-item, .highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.875rem;
+}
+
+.fact-icon, .highlight-bullet {
+    font-size: 1.25rem;
+    min-width: 1.5rem;
+}
+
+.feature-tag {
+    display: inline-block;
+    background: var(--retro-green-light, #86efac);
+    color: var(--retro-green-dark, #15803d);
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 0.25rem;
+    border: 2px solid var(--retro-green-primary, #22c55e);
+}
+
+.educational-fact, .geography-lesson, .language-learning-tip {
+    background: var(--retro-green-light, #86efac);
+    border: 3px solid var(--retro-green-primary, #22c55e);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 3px 3px 0 var(--retro-green-dark, #15803d);
+}
+
+/* Language Section */
+.languages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.language-card {
+    background: white;
+    border: 3px solid var(--retro-purple, #8b5cf6);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 3px 3px 0 rgba(139, 92, 246, 0.3);
+}
+
+.phrase-item {
+    background: var(--retro-white, #f9fafb);
+    border: 2px solid var(--retro-gray-light, #d1d5db);
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.phrase-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.phrase-english {
+    font-weight: 600;
+    color: var(--retro-black, #1f2937);
+}
+
+.phrase-local {
+    font-weight: 700;
+    color: var(--retro-purple, #8b5cf6);
+    font-size: 1.1em;
+}
+
+.phrase-pronunciation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+}
+
+.pronunciation-guide {
+    color: var(--retro-gray-dark, #4b5563);
+    font-style: italic;
+}
+
+/* Happiness Section */
+.happiness-strategies {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.strategy-card {
+    background: white;
+    border: 3px solid var(--retro-green-primary, #22c55e);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 3px 3px 0 var(--retro-green-dark, #15803d);
+}
+
+.strategy-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.strategy-icon {
+    font-size: 2rem;
+}
+
+.strategy-benefits {
+    margin-bottom: 1rem;
+}
+
+.benefit-label {
+    font-weight: 600;
+    color: var(--retro-gray-dark, #4b5563);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.benefits-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.benefit-tag {
+    background: var(--retro-blue, #3b82f6);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.strategy-income {
+    background: var(--retro-yellow, #fbbf24);
+    padding: 0.5rem;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--retro-black, #1f2937);
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.tip-item {
+    background: white;
+    border: 2px solid var(--retro-blue, #3b82f6);
+    border-radius: 6px;
+    padding: 0.75rem;
+    text-align: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    box-shadow: 2px 2px 0 rgba(59, 130, 246, 0.3);
+}
+
+/* Strategy Oracle */
+.oracle-crystal {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.crystal-animation {
+    font-size: 4rem;
+    animation: retro-glow 2s ease-in-out infinite;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.oracle-loading {
+    text-align: center;
+    padding: 2rem;
+}
+
+.oracle-recommendations {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.oracle-card {
+    background: white;
+    border: 3px solid var(--retro-purple, #8b5cf6);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 3px 3px 0 rgba(139, 92, 246, 0.3);
+}
+
+.oracle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.oracle-type {
+    background: var(--retro-purple, #8b5cf6);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.oracle-confidence {
+    background: var(--retro-yellow, #fbbf24);
+    color: var(--retro-black, #1f2937);
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.oracle-outcomes {
+    margin-bottom: 1rem;
+}
+
+.outcome-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: var(--retro-gray-light, #d1d5db);
+    border-radius: 6px;
+}
+
+.outcome-icon {
+    font-size: 1.25rem;
+}
+
+.outcome-text {
+    flex: 1;
+    font-weight: 500;
+}
+
+.outcome-value {
+    font-weight: 700;
+    color: var(--retro-green-primary, #22c55e);
+}
+
+.oracle-prompt {
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Tier Badges */
+.tier-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    border: 2px solid white;
+    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.tier-small {
+    background: var(--retro-green-light, #86efac);
+    color: var(--retro-green-dark, #15803d);
+}
+
+.tier-medium {
+    background: var(--retro-yellow, #fbbf24);
+    color: var(--retro-black, #1f2937);
+}
+
+.tier-major {
+    background: var(--retro-red, #ef4444);
+    color: white;
+}
+
+/* Animations */
+@keyframes retro-glow {
+    0%, 100% { 
+        filter: drop-shadow(0 0 5px var(--retro-green-primary, #22c55e));
+        transform: scale(1);
+    }
+    50% { 
+        filter: drop-shadow(0 0 15px var(--retro-green-primary, #22c55e)) 
+                drop-shadow(0 0 25px var(--retro-green-light, #86efac));
+        transform: scale(1.05);
+    }
+}
+
+@keyframes retro-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .retro-heading-xl {
+        font-size: 1.25rem;
+    }
+    
+    .retro-heading-lg {
+        font-size: 1rem;
+    }
+    
+    .country-modal-content {
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+    
+    .country-modal-header {
+        padding: 1rem;
+    }
+    
+    .country-modal-body {
+        padding: 1rem;
+    }
+    
+    .country-tabs {
+        flex-direction: column;
+    }
+    
+    .country-tab {
+        text-align: center;
+    }
+    
+    .languages-grid,
+    .happiness-strategies {
+        grid-template-columns: 1fr;
+    }
+    
+    .tips-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+/* CSS Variables for Retro Color Theme */
+:root {
+    --retro-green-primary: #22c55e;
+    --retro-green-secondary: #16a34a;
+    --retro-green-light: #86efac;
+    --retro-green-dark: #15803d;
+    --retro-blue: #3b82f6;
+    --retro-yellow: #fbbf24;
+    --retro-red: #ef4444;
+    --retro-purple: #8b5cf6;
+    --retro-black: #1f2937;
+    --retro-white: #f9fafb;
+    --retro-gray-dark: #4b5563;
+    --retro-gray-light: #d1d5db;
+}
