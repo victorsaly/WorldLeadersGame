@@ -133,10 +133,14 @@ try
     
     if (databaseProvider.ToLowerInvariant() == "inmemory")
     {
-        // For in-memory database, just ensure the context is created
+        // For in-memory database, ensure the context is created and demo user is set up
         using var scope = app.Services.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<WorldLeadersDbContext>();
         await context.Database.EnsureCreatedAsync();
+        
+        // Create demo user for testing
+        await scope.ServiceProvider.CreateDemoUserIfNeededAsync();
+        
         app.Logger.LogInformation("Educational game in-memory database initialized successfully");
     }
     else
