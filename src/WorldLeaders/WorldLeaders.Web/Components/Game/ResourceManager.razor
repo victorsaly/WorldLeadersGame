@@ -2,56 +2,56 @@
 @using WorldLeaders.Shared.DTOs
 @using WorldLeaders.Shared.Enums
 
-<div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-    <h3 class="text-2xl font-bold text-blue-600 mb-4 text-center">📊 Your Leadership Resources</h3>
+<div class="pixel-art-card green-theme mb-6">
+    <h3 class="retro-subtitle text-retro-base md:text-retro-lg mb-4 text-center">📊 Your Leadership Resources</h3>
     
-    <!-- Resource Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Resource Cards Grid - Better Sized Design -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         
         <!-- Income Card -->
-        <div class="bg-gradient-to-br from-green-100 to-green-200 rounded-lg p-5 border-l-4 border-green-500">
+        <div class="pixel-art-card bg-gradient-to-br from-green-100 to-green-200 border-green-500">
             <div class="flex items-center mb-3">
-                <span class="text-3xl mr-3">💰</span>
-                <div>
-                    <h4 class="text-lg font-bold text-green-800">Monthly Income</h4>
-                    <p class="text-sm text-green-600">From your job & territories</p>
+                <span class="text-xl mr-3">💰</span>
+                <div class="flex-1">
+                    <h4 class="retro-body text-retro-sm font-bold text-green-800">Monthly Income</h4>
+                    <p class="text-retro-xs text-green-600">From job & territories</p>
                 </div>
             </div>
-            <div class="text-3xl font-bold text-green-800 mb-2">$@Income.ToString("N0")</div>
-            <div class="w-full bg-green-200 rounded-full h-3">
-                <div class="bg-green-500 h-3 rounded-full transition-all duration-500" 
+            <div class="retro-subtitle text-retro-lg font-bold text-green-800 mb-3">$@Income.ToString("N0")</div>
+            <div class="retro-progress-bar h-3">
+                <div class="retro-progress-fill h-3 transition-all duration-500" 
                      style="width: @GetIncomeProgress()%"></div>
             </div>
         </div>
 
         <!-- Reputation Card -->
-        <div class="bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg p-5 border-l-4 border-blue-500">
+        <div class="pixel-art-card bg-gradient-to-br from-blue-100 to-blue-200 border-blue-500">
             <div class="flex items-center mb-3">
-                <span class="text-3xl mr-3">⭐</span>
-                <div>
-                    <h4 class="text-lg font-bold text-blue-800">Reputation</h4>
-                    <p class="text-sm text-blue-600">How much people trust you</p>
+                <span class="text-xl mr-3">⭐</span>
+                <div class="flex-1">
+                    <h4 class="retro-body text-retro-sm font-bold text-blue-800">Reputation</h4>
+                    <p class="text-retro-xs text-blue-600">People's trust in you</p>
                 </div>
             </div>
-            <div class="text-3xl font-bold text-blue-800 mb-2">@Reputation%</div>
-            <div class="w-full bg-blue-200 rounded-full h-3">
-                <div class="bg-blue-500 h-3 rounded-full transition-all duration-500" 
+            <div class="retro-subtitle text-retro-lg font-bold text-blue-800 mb-3">@Reputation%</div>
+            <div class="retro-progress-bar h-3">
+                <div class="bg-blue-500 h-3 transition-all duration-500" 
                      style="width: @Reputation%"></div>
             </div>
         </div>
 
         <!-- Happiness Card -->
-        <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg p-5 border-l-4 border-yellow-500">
+        <div class="pixel-art-card bg-gradient-to-br from-yellow-100 to-yellow-200 border-yellow-500">
             <div class="flex items-center mb-3">
-                <span class="text-3xl mr-3">😊</span>
-                <div>
-                    <h4 class="text-lg font-bold text-yellow-800">Population Happiness</h4>
-                    <p class="text-sm text-yellow-600">How happy your people are</p>
+                <span class="text-xl mr-3">😊</span>
+                <div class="flex-1">
+                    <h4 class="retro-body text-retro-sm font-bold text-yellow-800">Population Happiness</h4>
+                    <p class="text-retro-xs text-yellow-600">How happy people are</p>
                 </div>
             </div>
-            <div class="text-3xl font-bold text-yellow-800 mb-2">@Happiness%</div>
-            <div class="w-full bg-yellow-200 rounded-full h-3">
-                <div class="bg-yellow-500 h-3 rounded-full transition-all duration-500" 
+            <div class="retro-subtitle text-retro-lg font-bold text-yellow-800 mb-3">@Happiness%</div>
+            <div class="retro-progress-bar h-3">
+                <div class="bg-yellow-500 h-3 transition-all duration-500" 
                      style="width: @Happiness%"></div>
             </div>
         </div>

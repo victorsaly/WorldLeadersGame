@@ -27,281 +27,188 @@
     else if (currentUser != null)
     {
         <!-- Welcome Header -->
-        <div class="pixel-art-card green-theme mb-8">
-            <h1 class="retro-title text-2xl mb-4">
+        <div class="pixel-art-card green-theme mb-6 lg:mb-8">
+            <h1 class="retro-title-compact text-xl sm:text-2xl mb-3 sm:mb-4">
                 🌍 Welcome to Your Learning Dashboard, @currentUser.DisplayName!
             </h1>
-            <p class="retro-body">
+            <p class="retro-body text-sm sm:text-base">
                 Ready to explore the world and learn about geography, economics, and languages?
             </p>
         </div>
 
         <!-- User Info Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 lg:mb-8">
             <!-- User Profile Card -->
             <div class="pixel-art-card" style="border-color: var(--retro-blue);">
-                <h3 class="retro-subtitle text-lg mb-3">👤 Your Profile</h3>
+                <h3 class="retro-subtitle text-base sm:text-lg mb-3">👤 Your Profile</h3>
                 <div class="space-y-2">
-                    <p class="retro-body text-sm"><strong>Username:</strong> @currentUser.Username</p>
-                    <p class="retro-body text-sm"><strong>Email:</strong> @currentUser.Email</p>
-                    <p class="retro-body text-sm"><strong>Age:</strong> @currentUser.Age years old</p>
-                    <p class="retro-body text-sm"><strong>Role:</strong> @(currentUser.Role == 0 ? "Student" : "Teacher")</p>
-                    <p class="retro-body text-sm"><strong>Child Safety:</strong> @(currentUser.IsChild ? "Enabled" : "Standard")</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Username:</strong> @currentUser.Username</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Email:</strong> @currentUser.Email</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Age:</strong> @currentUser.Age years old</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Role:</strong> @(currentUser.Role == 0 ? "Student" : "Teacher")</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Child Safety:</strong> @(currentUser.IsChild ? "Enabled" : "Standard")</p>
                 </div>
             </div>
 
             <!-- Game Stats Card -->
             <div class="pixel-art-card" style="border-color: var(--retro-green-primary);">
-                <h3 class="retro-subtitle text-lg mb-3">🎮 Game Progress</h3>
+                <h3 class="retro-subtitle text-base sm:text-lg mb-3">🎮 Game Progress</h3>
                 <div class="space-y-2">
-                    <p class="retro-body text-sm"><strong>Status:</strong> Active Player</p>
-                    <p class="retro-body text-sm"><strong>Territories:</strong> 0 owned</p>
-                    <p class="retro-body text-sm"><strong>Income:</strong> $0</p>
-                    <p class="retro-body text-sm"><strong>Reputation:</strong> Starting level</p>
-                    <p class="retro-body text-sm"><strong>Last Login:</strong> @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Status:</strong> Active Player</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Territories:</strong> 0 owned</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Income:</strong> $0</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Reputation:</strong> Starting level</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Last Login:</strong> @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
                 </div>
             </div>
 
             <!-- Learning Journey Card -->
-            <div class="pixel-art-card" style="border-color: var(--retro-purple);">
-                <h3 class="retro-subtitle text-lg mb-3">📚 Learning Journey</h3>
+            <div class="pixel-art-card md:col-span-2 lg:col-span-1" style="border-color: var(--retro-purple);">
+                <h3 class="retro-subtitle text-base sm:text-lg mb-3">📚 Learning Journey</h3>
                 <div class="space-y-2">
-                    <p class="retro-body text-sm"><strong>Countries Learned:</strong> 0</p>
-                    <p class="retro-body text-sm"><strong>Languages Practiced:</strong> 0</p>
-                    <p class="retro-body text-sm"><strong>Economic Concepts:</strong> Starting</p>
-                    <p class="retro-body text-sm"><strong>Achievement Level:</strong> Beginner Explorer</p>
-                    <p class="retro-body text-sm"><strong>Safety Score:</strong> 100% Protected</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Countries Learned:</strong> 0</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Languages Practiced:</strong> 0</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Economic Concepts:</strong> Starting</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Achievement Level:</strong> Beginner Explorer</p>
+                    <p class="retro-body text-xs sm:text-sm"><strong>Safety Score:</strong> 100% Protected</p>
                 </div>
             </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 lg:mb-8">
             <button @onclick="GoToGame" 
-                    class="pixel-art-button"
+                    class="pixel-art-button h-16 sm:h-20 text-xs sm:text-sm"
                     style="background-color: var(--retro-blue);">
-                🗺️ EXPLORE TERRITORIES
+                <div class="flex flex-col items-center">
+                    <span class="text-lg sm:text-xl mb-1">🗺️</span>
+                    <span>EXPLORE</span>
+                </div>
             </button>
             <button @onclick="GoToGame" 
-                    class="pixel-art-button"
+                    class="pixel-art-button h-16 sm:h-20 text-xs sm:text-sm"
                     style="background-color: var(--retro-green-primary);">
-                🎲 ROLL CAREER DICE
+                <div class="flex flex-col items-center">
+                    <span class="text-lg sm:text-xl mb-1">🎲</span>
+                    <span>CAREER</span>
+                </div>
             </button>
             <button @onclick="GoToGame" 
-                    class="pixel-art-button"
+                    class="pixel-art-button h-16 sm:h-20 text-xs sm:text-sm"
                     style="background-color: var(--retro-purple);">
-                🗣️ PRACTICE LANGUAGES
+                <div class="flex flex-col items-center">
+                    <span class="text-lg sm:text-xl mb-1">🗣️</span>
+                    <span>LANGUAGE</span>
+                </div>
             </button>
             <button @onclick="GoToGame" 
-                    class="pixel-art-button"
+                    class="pixel-art-button h-16 sm:h-20 text-xs sm:text-sm"
                     style="background-color: var(--retro-orange);">
-                🤖 AI TUTORS
+                <div class="flex flex-col items-center">
+                    <span class="text-lg sm:text-xl mb-1">🤖</span>
+                    <span>AI TUTORS</span>
+                </div>
             </button>
         </div>
-    }
-    else
-    {
-        <div class="flex items-center justify-center min-h-screen">
-            <div class="pixel-art-card green-theme text-center">
-                <h2 class="retro-title text-xl mb-4">🔒 Authentication Required</h2>
-                <p class="retro-body mb-6">Please log in to access your educational dashboard.</p>
-                <a href="/login" class="pixel-art-button">
-                    LOGIN TO CONTINUE
-                </a>
-            </div>
-        </div>
-    }
-    </div>
-</div>
 
-<div class="retro-game-container">
-    <div class="max-w-6xl mx-auto p-4">
-    @if (isLoading)
-    {
-        <div class="flex items-center justify-center min-h-screen">
-            <div class="pixel-art-card green-theme">
-                <div class="flex items-center space-x-3 p-8">
-                    <div class="retro-loading-spinner"></div>
-                    <span class="retro-body">Loading your educational dashboard...</span>
-                </div>
-            </div>
-        </div>
-    }
-    else if (currentUser != null)
-    {
-        <div class="max-w-6xl mx-auto">
-            <!-- Welcome Header -->
-            <div class="pixel-art-card green-theme mb-8">
-                <h1 class="retro-title text-2xl mb-4">
-                    🌍 Welcome to Your Learning Dashboard, @currentUser.DisplayName!
-                </h1>
-                <p class="retro-body">
-                    Ready to explore the world and learn about geography, economics, and languages?
-                </p>
-            </div>
-
-            <!-- User Info Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- User Profile Card -->
-                <div class="pixel-art-card" style="border-color: var(--retro-blue);">
-                    <h3 class="retro-subtitle text-lg mb-3">👤 Your Profile</h3>
-                    <div class="space-y-2">
-                        <p class="retro-body text-sm"><strong>Username:</strong> @currentUser.Username</p>
-                        <p class="retro-body text-sm"><strong>Email:</strong> @currentUser.Email</p>
-                        <p class="retro-body text-sm"><strong>Age:</strong> @currentUser.Age years old</p>
-                        <p class="retro-body text-sm"><strong>Role:</strong> @(currentUser.Role == 0 ? "Student" : "Teacher")</p>
-                        <p class="retro-body text-sm"><strong>Child Safety:</strong> @(currentUser.IsChild ? "Enabled" : "Standard")</p>
-                    </div>
-                </div>
-
-                <!-- Game Stats Card -->
-                <div class="pixel-art-card" style="border-color: var(--retro-green-primary);">
-                    <h3 class="retro-subtitle text-lg mb-3">🎮 Game Progress</h3>
-                    <div class="space-y-2">
-                        <p class="retro-body text-sm"><strong>Status:</strong> Active Player</p>
-                        <p class="retro-body text-sm"><strong>Territories:</strong> 0 owned</p>
-                        <p class="retro-body text-sm"><strong>Income:</strong> $0</p>
-                        <p class="retro-body text-sm"><strong>Reputation:</strong> Starting level</p>
-                        <p class="retro-body text-sm"><strong>Last Login:</strong> @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
-                    </div>
-                </div>
-
-                <!-- Learning Journey Card -->
-                <div class="pixel-art-card" style="border-color: var(--retro-purple);">
-                    <h3 class="retro-subtitle text-lg mb-3">📚 Learning Journey</h3>
-                    <div class="space-y-2">
-                        <p class="retro-body text-sm"><strong>Countries Learned:</strong> 0</p>
-                        <p class="retro-body text-sm"><strong>Languages Practiced:</strong> 0</p>
-                        <p class="retro-body text-sm"><strong>Economic Concepts:</strong> Starting</p>
-                        <p class="retro-body text-sm"><strong>Achievement Level:</strong> Beginner Explorer</p>
-                        <p class="retro-body text-sm"><strong>Safety Score:</strong> 100% Protected</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <button @onclick="GoToGame" 
-                        class="pixel-art-button"
-                        style="background-color: var(--retro-blue);">
-                    🗺️ EXPLORE TERRITORIES
-                </button>
-                <button @onclick="GoToGame" 
-                        class="pixel-art-button"
-                        style="background-color: var(--retro-green-primary);">
-                    🎲 ROLL CAREER DICE
-                </button>
-                <button @onclick="GoToGame" 
-                        class="pixel-art-button"
-                        style="background-color: var(--retro-purple);">
-                    🗣️ PRACTICE LANGUAGES
-                </button>
-                <button @onclick="GoToGame" 
-                        class="pixel-art-button"
-                        style="background-color: var(--retro-orange);">
-                    🤖 AI TUTORS
-                </button>
-            </div>
-
-            <!-- Character Creation Section -->
-            @if (!hasGameCharacter)
-            {
-                <div class="pixel-art-card green-theme mb-8">
-                    <h3 class="retro-title text-xl mb-4">🎭 Create Your World Leader Character</h3>
-                    <p class="retro-body mb-6">Choose your character name to begin your educational leadership journey!</p>
-                    
-                    <div class="max-w-md mx-auto">
-                        <div class="space-y-4">
-                            <div>
-                                <label for="characterName" class="block text-lg font-bold text-purple-700 mb-2">
-                                    👑 Your World Leader Name
-                                </label>
-                                <input id="characterName"
-                                       @bind="characterName" 
-                                       @bind:event="oninput" 
-                                       @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreateCharacter(); })"
-                                       class="w-full px-4 py-3 text-lg border-3 border-purple-300 rounded-lg focus:border-purple-500 focus:outline-none"
-                                       placeholder="Leader Sarah, President Alex, etc." 
-                                       maxlength="50" />
-                            </div>
-                            
-                            @if (!string.IsNullOrEmpty(characterCreationError))
-                            {
-                                <div class="bg-red-100 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg">
-                                    <span class="font-medium">@characterCreationError</span>
-                                </div>
-                            }
-                            
-                            @if (!string.IsNullOrEmpty(characterCreationSuccess))
-                            {
-                                <div class="bg-green-100 border-2 border-green-300 text-green-700 px-4 py-3 rounded-lg">
-                                    <span class="font-medium">@characterCreationSuccess</span>
-                                </div>
-                            }
-                            
-                            <button @onclick="CreateCharacter" 
-                                    disabled="@(string.IsNullOrWhiteSpace(characterName) || isCreatingCharacter)"
-                                    class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-                                @if (isCreatingCharacter)
-                                {
-                                    <span class="flex items-center justify-center">
-                                        <span class="animate-spin mr-2">⭐</span>
-                                        Creating your character...
-                                    </span>
-                                }
-                                else
-                                {
-                                    <span>🚀 Create My Character</span>
-                                }
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl shadow-lg p-8 mb-8 border-4 border-green-300">
-                    <h3 class="text-2xl font-bold text-green-800 mb-4">🎉 Your Character is Ready!</h3>
-                    <p class="text-green-700 mb-4">Great! You have a game character. Click below to start your adventure!</p>
-                    <button @onclick="GoToGame" 
-                            class="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:from-green-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105">
-                        🌍 Start My Adventure
-                    </button>
-                </div>
-            }
-
-            <!-- API Test Section -->
-            <div class="bg-white rounded-xl shadow-lg p-6 border-4 border-yellow-200">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">🔧 API Connection Test</h3>
-                <div class="flex space-x-4 mb-4">
-                    <button @onclick="TestTerritories" 
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200">
-                        Test Territories API
-                    </button>
-                    <button @onclick="TestAuthProfile" 
-                            class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-200">
-                        Test Auth Profile
-                    </button>
-                </div>
+        <!-- Character Creation Section -->
+        @if (!hasGameCharacter)
+        {
+            <div class="pixel-art-card green-theme mb-6 lg:mb-8">
+                <h3 class="retro-title-compact text-lg sm:text-xl mb-4">🎭 Create Your World Leader Character</h3>
+                <p class="retro-body text-sm sm:text-base mb-6">Choose your character name to begin your educational leadership journey!</p>
                 
-                @if (!string.IsNullOrEmpty(apiTestResult))
-                {
-                    <div class="bg-gray-100 rounded p-4 mt-4">
-                        <h4 class="font-semibold mb-2">API Test Result:</h4>
-                        <pre class="text-sm overflow-auto">@apiTestResult</pre>
+                <div class="max-w-md mx-auto">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="characterName" class="block text-base sm:text-lg font-bold text-purple-700 mb-2">
+                                👑 Your World Leader Name
+                            </label>
+                            <input id="characterName"
+                                   @bind="characterName" 
+                                   @bind:event="oninput" 
+                                   @onkeypress="@(async (e) => { if (e.Key == "Enter") await CreateCharacter(); })"
+                                   class="w-full px-4 py-3 text-base sm:text-lg border-3 border-purple-300 rounded-lg focus:border-purple-500 focus:outline-none"
+                                   placeholder="Leader Sarah, President Alex, etc." 
+                                   maxlength="50" />
+                        </div>
+                        
+                        @if (!string.IsNullOrEmpty(characterCreationError))
+                        {
+                            <div class="bg-red-100 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg">
+                                <span class="font-medium text-sm sm:text-base">@characterCreationError</span>
+                            </div>
+                        }
+                        
+                        @if (!string.IsNullOrEmpty(characterCreationSuccess))
+                        {
+                            <div class="bg-green-100 border-2 border-green-300 text-green-700 px-4 py-3 rounded-lg">
+                                <span class="font-medium text-sm sm:text-base">@characterCreationSuccess</span>
+                            </div>
+                        }
+                        
+                        <button @onclick="CreateCharacter" 
+                                disabled="@(string.IsNullOrWhiteSpace(characterName) || isCreatingCharacter)"
+                                class="w-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:from-purple-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-sm sm:text-base">
+                            @if (isCreatingCharacter)
+                            {
+                                <span class="flex items-center justify-center">
+                                    <span class="animate-spin mr-2">⭐</span>
+                                    Creating your character...
+                                </span>
+                            }
+                            else
+                            {
+                                <span>🚀 Create My Character</span>
+                            }
+                        </button>
                     </div>
-                }
+                </div>
             </div>
+        }
+        else
+        {
+            <div class="bg-gradient-to-r from-green-100 to-blue-100 rounded-xl shadow-lg p-6 sm:p-8 mb-6 lg:mb-8 border-4 border-green-300">
+                <h3 class="text-xl sm:text-2xl font-bold text-green-800 mb-4">🎉 Your Character is Ready!</h3>
+                <p class="text-green-700 mb-4 text-sm sm:text-base">Great! You have a game character. Click below to start your adventure!</p>
+                <button @onclick="GoToGame" 
+                        class="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-6 sm:px-8 rounded-lg shadow-lg hover:from-green-600 hover:to-blue-600 transition-all duration-300 transform hover:scale-105 text-sm sm:text-base">
+                    🌍 Start My Adventure
+                </button>
+            </div>
+        }
+
+        <!-- API Test Section -->
+        <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-4 border-yellow-200">
+            <h3 class="text-base sm:text-lg font-semibold text-gray-800 mb-4">🔧 API Connection Test</h3>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4">
+                <button @onclick="TestTerritories" 
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-200 text-sm sm:text-base">
+                    Test Territories API
+                </button>
+                <button @onclick="TestAuthProfile" 
+                        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition duration-200 text-sm sm:text-base">
+                    Test Auth Profile
+                </button>
+            </div>
+            
+            @if (!string.IsNullOrEmpty(apiTestResult))
+            {
+                <div class="bg-gray-100 rounded p-4 mt-4">
+                    <h4 class="font-semibold mb-2 text-sm sm:text-base">API Test Result:</h4>
+                    <pre class="text-xs sm:text-sm overflow-auto">@apiTestResult</pre>
+                </div>
+            }
         </div>
     }
     else
     {
         <div class="flex items-center justify-center min-h-screen">
-            <div class="bg-white rounded-lg p-8 shadow-xl text-center">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">🔒 Authentication Required</h2>
-                <p class="text-gray-600 mb-6">Please log in to access your educational dashboard.</p>
-                <a href="/login" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition duration-200">
-                    Go to Login
+            <div class="pixel-art-card green-theme text-center p-6 sm:p-8">
+                <h2 class="retro-title text-lg sm:text-xl mb-4">🔒 Authentication Required</h2>
+                <p class="retro-body mb-6 text-sm sm:text-base">Please log in to access your educational dashboard.</p>
+                <a href="/login" class="pixel-art-button text-sm sm:text-base">
+                    LOGIN TO CONTINUE
                 </a>
             </div>
         </div>

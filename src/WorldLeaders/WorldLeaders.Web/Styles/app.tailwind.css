@@ -121,7 +121,7 @@
     
     .retro-mobile-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: var(--mobile-spacing-lg);
     }
   }
@@ -138,10 +138,6 @@
 
   /* Retro 32-bit Game Container - Mobile Enhanced */
   .retro-game-container {
-    background: linear-gradient(135deg, 
-      var(--retro-green-dark) 0%, 
-      var(--retro-green-main) 50%, 
-      var(--retro-green-light) 100%);
     font-family: 'Press Start 2P', 'Courier New', monospace;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -549,7 +545,7 @@
     padding: var(--mobile-spacing-sm);
     
     /* Mobile-first responsive grid */
-    grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
   }
 
   @media (min-width: 480px) {
@@ -607,7 +603,7 @@
   .character-avatar {
     @apply mx-auto mb-3;
     image-rendering: pixelated;
-    
+    background: #0f4c75;
     /* Mobile-first responsive sizing */
     width: var(--touch-target-medium);
     height: var(--touch-target-medium);
@@ -648,6 +644,37 @@
   .btn-child-success {
     @apply pixel-art-button;
     background: var(--retro-green-bright);
+  }
+
+  /* Improved territory action buttons for better UX */
+  .territory-action-button {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    color: white;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    min-width: 80px;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .territory-action-button:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+  }
+
+  .territory-action-button:active {
+    transform: scale(0.98);
+  }
+
+  .territory-action-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    filter: none;
   }
 
   /* Retro Game Animations */

@@ -1,736 +1,228 @@
 @page "/cost-dashboard"
 @using WorldLeaders.Shared.DTOs
-@using System.Text.Json
-@inject HttpClient Http
 @inject IJSRuntime JSRuntime
-@inject ILogger<CostDashboard> Logger
 
-@*
-Context: Educational cost dashboard for 12-year-old players
-Educational Objective: Teach digital resource awareness and budget management
-Safety Requirements: Child-friendly presentation, positive messaging, educational value
-*@
+<PageTitle>World Leaders - Cost Dashboard</PageTitle>
 
-<PageTitle>💰 My Learning Costs - World Leaders Game</PageTitle>
+<!-- Mobile-First Responsive Cost Dashboard -->
+<div class="cost-dashboard-container p-4 min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <!-- Header Section -->
+    <div class="dashboard-header text-center mb-6">
+        <h1 class="text-3xl md:text-4xl font-bold text-green-800 mb-2 pixel-shadow">💰 Cost Dashboard</h1>
+        <p class="text-sm md:text-base text-gray-600">Track your learning progress costs and efficiency</p>
+    </div>
 
-<div class="retro-game-container">
-    <div class="max-w-6xl mx-auto p-4">
-        <!-- Header Section -->
-        <div class="pixel-art-card green-theme mb-6">
-            <div class="flex items-center justify-between flex-wrap">
-                <div>
-                    <h1 class="retro-title text-2xl mb-2">
-                        💰 MY LEARNING ADVENTURE COSTS
-                    </h1>
-                    <p class="retro-body">
-                        See how much your world exploration and learning activities cost!
-                    </p>
-                </div>
-                <div class="flex gap-4 flex-wrap">
-                    @if (costSummary != null)
-                    {
-                        <div class="pixel-art-card @(costSummary.IsOverDailyLimit ? "red-theme" : "green-theme")">
-                            <div class="retro-subtitle text-lg">£@costSummary.TotalCostGBP.ToString("F3")</div>
-                            <div class="retro-body text-xs">Today's Adventure Cost</div>
-                        </div>
-                        <div class="pixel-art-card green-theme">
-                            <div class="retro-subtitle text-lg">@costSummary.AverageEducationalScore.ToString("F0")%</div>
-                            <div class="retro-body text-xs">Learning Efficiency</div>
-                        </div>
-                    }
+    @if (isLoading)
+    {
+        <!-- Mobile-Optimized Loading State -->
+        <div class="loading-container text-center py-8">
+            <div class="retro-loading-animation mx-auto mb-4">
+                <div class="pixel-loading-bars flex justify-center space-x-2">
+                    <div class="loading-bar w-3 h-8 bg-green-500 animate-pulse"></div>
+                    <div class="loading-bar w-3 h-8 bg-green-400 animate-pulse" style="animation-delay: 0.2s"></div>
+                    <div class="loading-bar w-3 h-8 bg-green-300 animate-pulse" style="animation-delay: 0.4s"></div>
                 </div>
             </div>
+            <p class="text-gray-600">Loading dashboard...</p>
         </div>
-
-        <!-- Loading State -->
-        @if (isLoading)
-        {
-            <div class="flex items-center justify-center p-8">
-                <div class="pixel-art-card green-theme">
-                    <div class="flex items-center space-x-3">
-                        <div class="retro-loading-spinner"></div>
-                        <p class="retro-body">🔍 Checking your learning costs...</p>
-                    </div>
-                </div>
-            </div>
-        }
-    else if (costSummary != null)
+    }
+    else
     {
         <!-- Main Dashboard Content -->
-        <div class="dashboard-grid">
+        <div class="dashboard-content space-y-6 max-w-7xl mx-auto">
             
-            <!-- Daily Cost Progress -->
-            <div class="dashboard-card cost-progress-card">
-                <h2 class="card-title">
-                    <span class="card-icon">📊</span>
-                    Today's Budget Progress
-                </h2>
-                <div class="cost-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: @(GetProgressPercentage())%"></div>
+            <!-- Cost Summary Cards - Mobile Stack, Desktop Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                
+                <!-- Total Cost Card -->
+                <div class="cost-card p-4 md:p-6 bg-white rounded-lg shadow-lg border-l-4 border-blue-500 hover:shadow-xl transition-shadow duration-300">
+                    <div class="card-header flex items-center mb-3">
+                        <span class="text-2xl mr-3">💷</span>
+                        <h3 class="text-lg md:text-xl font-bold text-blue-800">Total Cost</h3>
                     </div>
-                    <div class="progress-details">
-                        <span class="current-cost">£@costSummary.TotalCostGBP.ToString("F3")</span>
-                        <span class="separator">/</span>
-                        <span class="budget-limit">£0.08</span>
+                    <div class="card-content">
+                        <p class="cost-amount text-2xl md:text-3xl font-bold text-blue-900 mb-2">
+                            £@(costSummary?.TotalCostGBP.ToString("F2") ?? "0.00")
+                        </p>
+                        <p class="cost-description text-sm text-blue-600">
+                            @if (costSummary?.IsOverDailyLimit == true)
+                            {
+                                <span class="text-red-600 font-semibold">⚠️ Over daily limit</span>
+                            }
+                            else
+                            {
+                                <span class="text-green-600">✅ Within budget</span>
+                            }
+                        </p>
                     </div>
-                    <div class="progress-message">
-                        @if (costSummary.IsOverDailyLimit)
-                        {
-                            <span class="warning-message">⚠️ You've used your daily budget! Great learning today!</span>
-                        }
-                        else
-                        {
-                            <span class="success-message">✅ You have £@((0.08m - costSummary.TotalCostGBP).ToString("F3")) left to explore!</span>
-                        }
+                </div>
+
+                <!-- Remaining Budget Card -->
+                <div class="cost-card p-4 md:p-6 bg-white rounded-lg shadow-lg border-l-4 border-green-500 hover:shadow-xl transition-shadow duration-300">
+                    <div class="card-header flex items-center mb-3">
+                        <span class="text-2xl mr-3">💰</span>
+                        <h3 class="text-lg md:text-xl font-bold text-green-800">Remaining Budget</h3>
+                    </div>
+                    <div class="card-content">
+                        <p class="cost-amount text-2xl md:text-3xl font-bold text-green-900 mb-2">
+                            £@(costSummary?.RemainingBudgetGBP.ToString("F2") ?? "0.00")
+                        </p>
+                        <p class="cost-description text-sm text-green-600">Available today</p>
+                    </div>
+                </div>
+
+                <!-- Learning Efficiency Card -->
+                <div class="cost-card p-4 md:p-6 bg-white rounded-lg shadow-lg border-l-4 border-purple-500 hover:shadow-xl transition-shadow duration-300 md:col-span-2 lg:col-span-1">
+                    <div class="card-header flex items-center mb-3">
+                        <span class="text-2xl mr-3">📚</span>
+                        <h3 class="text-lg md:text-xl font-bold text-purple-800">Learning Efficiency</h3>
+                    </div>
+                    <div class="card-content">
+                        <p class="efficiency-score text-2xl md:text-3xl font-bold text-purple-900 mb-2">
+                            @(costSummary?.AverageEducationalScore.ToString("F0") ?? "0")%
+                        </p>
+                        <p class="efficiency-description text-sm text-purple-600">
+                            @(costSummary?.LearningObjectivesAchieved ?? 0) objectives achieved
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Service Breakdown -->
-            <div class="dashboard-card services-card">
-                <h2 class="card-title">
-                    <span class="card-icon">🔧</span>
-                    What You're Using
-                </h2>
-                <div class="services-grid">
-                    @foreach (var service in costSummary.ServiceBreakdown.Values)
-                    {
-                        <div class="service-item">
-                            <div class="service-icon">@GetServiceIcon(service.ServiceName)</div>
-                            <div class="service-details">
-                                <div class="service-name">@GetFriendlyServiceName(service.ServiceName)</div>
-                                <div class="service-cost">£@service.CostGBP.ToString("F4")</div>
-                                <div class="service-description">@GetServiceDescription(service.ServiceName)</div>
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <!-- Learning Efficiency -->
-            <div class="dashboard-card efficiency-card">
-                <h2 class="card-title">
-                    <span class="card-icon">📚</span>
-                    Learning Efficiency Score
-                </h2>
-                <div class="efficiency-display">
-                    <div class="efficiency-circle">
-                        <div class="efficiency-score">@costSummary.AverageEducationalScore.ToString("F0")%</div>
-                        <div class="efficiency-label">Efficiency</div>
-                    </div>
-                    <div class="efficiency-message">
-                        @if (costSummary.AverageEducationalScore >= 90)
-                        {
-                            <p class="excellent">🌟 Excellent! You're learning very efficiently!</p>
-                        }
-                        else if (costSummary.AverageEducationalScore >= 75)
-                        {
-                            <p class="good">👍 Good job! Your learning is well-optimized!</p>
-                        }
-                        else
-                        {
-                            <p class="needs-improvement">💡 Try focusing on key learning activities to improve efficiency!</p>
-                        }
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cost Forecast -->
-            @if (costForecast != null && costForecast.Any())
+            <!-- Service Breakdown Section -->
+            @if (costSummary?.ServiceBreakdown?.Any() == true)
             {
-                <div class="dashboard-card forecast-card">
-                    <h2 class="card-title">
-                        <span class="card-icon">🔮</span>
-                        Next 7 Days Forecast
-                    </h2>
-                    <div class="forecast-chart">
-                        @foreach (var forecast in costForecast.Take(7))
+                <div class="service-breakdown bg-white rounded-lg shadow-lg p-4 md:p-6">
+                    <h3 class="text-xl md:text-2xl font-bold mb-4 text-center md:text-left text-gray-800">🔧 Service Breakdown</h3>
+                    
+                    <!-- Mobile: Stack vertically, Desktop: Grid layout -->
+                    <div class="services-grid space-y-3 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4">
+                        @foreach (var service in costSummary.ServiceBreakdown.Take(6))
                         {
-                            <div class="forecast-day">
-                                <div class="day-name">@forecast.ForecastDate.ToString("ddd")</div>
-                                <div class="forecast-bar">
-                                    <div class="bar-fill" style="height: @(forecast.PredictedCostGBP / 0.08m * 100)%"></div>
+                            <div class="service-item flex justify-between items-center p-3 bg-gray-50 rounded-lg border hover:bg-gray-100 transition-colors duration-200">
+                                <div class="service-info flex-1">
+                                    <h4 class="font-semibold text-gray-800 text-sm md:text-base">@service.Key</h4>
+                                    <p class="text-xs md:text-sm text-gray-600">@service.Value.CallCount calls</p>
                                 </div>
-                                <div class="day-cost">£@forecast.PredictedCostGBP.ToString("F3")</div>
+                                <div class="service-cost text-right">
+                                    <p class="font-bold text-gray-900 text-sm md:text-base">£@service.Value.CostGBP.ToString("F2")</p>
+                                    <p class="text-xs text-gray-500">@service.Value.EducationalValueScore.ToString("F0")% efficiency</p>
+                                </div>
                             </div>
                         }
-                    </div>
-                    <div class="forecast-note">
-                        <p>🎯 This shows predicted costs based on your learning patterns!</p>
                     </div>
                 </div>
             }
 
-            <!-- Educational Tips -->
-            <div class="dashboard-card tips-card">
-                <h2 class="card-title">
-                    <span class="card-icon">💡</span>
-                    Cost-Smart Learning Tips
-                </h2>
-                <div class="tips-list">
-                    <div class="tip-item">
-                        <span class="tip-icon">🎯</span>
-                        <span class="tip-text">Focus on specific countries to learn more efficiently!</span>
+            <!-- Learning Progress Section -->
+            <div class="learning-progress bg-white rounded-lg shadow-lg p-4 md:p-6">
+                <h3 class="text-xl md:text-2xl font-bold mb-4 text-center md:text-left text-gray-800">📖 Learning Progress</h3>
+                
+                <div class="progress-grid grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <!-- Active Learning Time -->
+                    <div class="progress-item p-4 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="text-xl mr-2">⏱️</span>
+                            <h4 class="font-bold text-gray-800">Active Learning Time</h4>
+                        </div>
+                        <p class="text-lg md:text-xl font-bold text-gray-900">
+                            @(costSummary?.ActiveLearningTime.ToString(@"hh\:mm") ?? "00:00")
+                        </p>
                     </div>
-                    <div class="tip-item">
-                        <span class="tip-icon">🗣️</span>
-                        <span class="tip-text">Practice pronunciation in short, focused sessions.</span>
-                    </div>
-                    <div class="tip-item">
-                        <span class="tip-icon">🤖</span>
-                        <span class="tip-text">Ask specific questions to get better AI responses.</span>
-                    </div>
-                    <div class="tip-item">
-                        <span class="tip-icon">📚</span>
-                        <span class="tip-text">Review previous lessons before asking new questions.</span>
+
+                    <!-- Learning Objectives -->
+                    <div class="progress-item p-4 bg-gradient-to-r from-purple-100 to-pink-100 rounded-lg">
+                        <div class="flex items-center mb-2">
+                            <span class="text-xl mr-2">🎯</span>
+                            <h4 class="font-bold text-gray-800">Learning Objectives</h4>
+                        </div>
+                        <p class="text-lg md:text-xl font-bold text-gray-900">
+                            @(costSummary?.LearningObjectivesAchieved ?? 0) achieved
+                        </p>
                     </div>
                 </div>
             </div>
 
+            <!-- Tomorrow's Forecast -->
+            @if (costSummary?.TomorrowForecast != null)
+            {
+                <div class="forecast bg-white rounded-lg shadow-lg p-4 md:p-6">
+                    <h3 class="text-xl md:text-2xl font-bold mb-4 text-center md:text-left text-gray-800">🔮 Tomorrow's Forecast</h3>
+                    
+                    <div class="forecast-content grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div class="forecast-item p-4 bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <span class="text-xl mr-2">💷</span>
+                                <h4 class="font-bold text-gray-800">Predicted Cost</h4>
+                            </div>
+                            <p class="text-lg md:text-xl font-bold text-gray-900">
+                                £@costSummary.TomorrowForecast.PredictedCostGBP.ToString("F2")
+                            </p>
+                        </div>
+
+                        <div class="forecast-item p-4 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg">
+                            <div class="flex items-center mb-2">
+                                <span class="text-xl mr-2">📊</span>
+                                <h4 class="font-bold text-gray-800">Educational Score</h4>
+                            </div>
+                            <p class="text-lg md:text-xl font-bold text-gray-900">
+                                @costSummary.TomorrowForecast.PredictedEducationalScore.ToString("F0")%
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     }
-    else if (hasError)
-    {
-        <!-- Error State -->
-        <div class="error-container">
-            <div class="error-message">
-                <span class="error-icon">😅</span>
-                <h2>Oops! Can't load cost information right now</h2>
-                <p class="retro-body">Don't worry - your learning progress is still being tracked!</p>
-                <button class="pixel-art-button" @onclick="LoadCostData">TRY AGAIN</button>
-            </div>
-        </div>
-    }
-    </div>
 </div>
 
-<style>
-    .cost-dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 1rem;
-        font-family: 'Comic Neue', 'Arial Rounded', sans-serif;
-    }
-
-    .dashboard-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 1rem;
-        padding: 2rem;
-        color: white;
-        margin-bottom: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .dashboard-title {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .title-icon {
-        font-size: 3rem;
-    }
-
-    .dashboard-subtitle {
-        font-size: 1.2rem;
-        margin: 0.5rem 0 0 0;
-        opacity: 0.9;
-    }
-
-    .header-stats {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .quick-stat {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 0.75rem;
-        padding: 1rem;
-        text-align: center;
-        min-width: 120px;
-    }
-
-    .quick-stat.warning {
-        background: rgba(255, 193, 7, 0.3);
-    }
-
-    .quick-stat.success {
-        background: rgba(40, 167, 69, 0.3);
-    }
-
-    .stat-value {
-        font-size: 1.5rem;
-        font-weight: bold;
-    }
-
-    .stat-label {
-        font-size: 0.9rem;
-        opacity: 0.9;
-    }
-
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .dashboard-card {
-        background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        border: 3px solid #f0f0f0;
-        transition: transform 0.3s ease;
-    }
-
-    .dashboard-card:hover {
-        transform: translateY(-2px);
-    }
-
-    .card-title {
-        font-size: 1.3rem;
-        font-weight: bold;
-        margin: 0 0 1rem 0;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: #333;
-    }
-
-    .card-icon {
-        font-size: 1.5rem;
-    }
-
-    .cost-progress-card {
-        grid-column: span 2;
-    }
-
-    .progress-bar {
-        background: #e0e0e0;
-        border-radius: 1rem;
-        height: 2rem;
-        overflow: hidden;
-        margin-bottom: 1rem;
-    }
-
-    .progress-fill {
-        background: linear-gradient(90deg, #28a745, #20c997);
-        height: 100%;
-        border-radius: 1rem;
-        transition: width 1s ease;
-    }
-
-    .progress-details {
-        text-align: center;
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-    }
-
-    .current-cost {
-        color: #333;
-    }
-
-    .separator {
-        color: #666;
-        margin: 0 0.5rem;
-    }
-
-    .budget-limit {
-        color: #666;
-    }
-
-    .progress-message {
-        text-align: center;
-        font-weight: bold;
-    }
-
-    .warning-message {
-        color: #ffc107;
-    }
-
-    .success-message {
-        color: #28a745;
-    }
-
-    .services-grid {
-        display: grid;
-        gap: 1rem;
-    }
-
-    .service-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        background: #f8f9fa;
-        border-radius: 0.5rem;
-    }
-
-    .service-icon {
-        font-size: 2rem;
-        min-width: 3rem;
-        text-align: center;
-    }
-
-    .service-name {
-        font-weight: bold;
-        color: #333;
-    }
-
-    .service-cost {
-        font-weight: bold;
-        color: #007bff;
-        font-size: 1.1rem;
-    }
-
-    .service-description {
-        font-size: 0.9rem;
-        color: #666;
-    }
-
-    .efficiency-display {
-        text-align: center;
-    }
-
-    .efficiency-circle {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: 0 auto 1rem auto;
-    }
-
-    .efficiency-score {
-        font-size: 2rem;
-        font-weight: bold;
-    }
-
-    .efficiency-label {
-        font-size: 0.9rem;
-        opacity: 0.9;
-    }
-
-    .forecast-chart {
-        display: flex;
-        justify-content: space-between;
-        align-items: end;
-        height: 150px;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .forecast-day {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.25rem;
-    }
-
-    .day-name {
-        font-size: 0.8rem;
-        font-weight: bold;
-        color: #666;
-    }
-
-    .forecast-bar {
-        background: #e0e0e0;
-        width: 100%;
-        height: 100px;
-        border-radius: 0.25rem;
-        position: relative;
-        display: flex;
-        align-items: end;
-    }
-
-    .bar-fill {
-        background: linear-gradient(180deg, #28a745, #20c997);
-        width: 100%;
-        border-radius: 0.25rem;
-        min-height: 2px;
-        transition: height 1s ease;
-    }
-
-    .day-cost {
-        font-size: 0.7rem;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .forecast-note {
-        text-align: center;
-        color: #666;
-        font-style: italic;
-    }
-
-    .tips-list {
-        display: grid;
-        gap: 0.75rem;
-    }
-
-    .tip-item {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem;
-        background: #f8f9fa;
-        border-radius: 0.5rem;
-        border-left: 4px solid #007bff;
-    }
-
-    .tip-icon {
-        font-size: 1.2rem;
-        min-width: 1.5rem;
-    }
-
-    .tip-text {
-        color: #333;
-        font-weight: 500;
-    }
-
-    .loading-container, .error-container {
-        text-align: center;
-        padding: 3rem;
-    }
-
-    .loading-spinner {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .spinner {
-        width: 3rem;
-        height: 3rem;
-        border: 4px solid #e0e0e0;
-        border-top: 4px solid #007bff;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    .loading-text {
-        font-size: 1.2rem;
-        color: #666;
-        font-weight: 500;
-    }
-
-    .error-message {
-        background: white;
-        border-radius: 1rem;
-        padding: 2rem;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        margin: 0 auto;
-    }
-
-    .error-icon {
-        font-size: 4rem;
-        margin-bottom: 1rem;
-    }
-
-    .retry-button {
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 0.5rem;
-        padding: 0.75rem 2rem;
-        font-size: 1rem;
-        font-weight: bold;
-        cursor: pointer;
-        margin-top: 1rem;
-    }
-
-    .retry-button:hover {
-        background: #0056b3;
-    }
-
-    /* Simplified responsive behavior */
-    .dashboard-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .header-stats {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-</style>
-
 @code {
-    private EnhancedCostSummaryDto? costSummary;
-    private List<CostForecastData>? costForecast;
     private bool isLoading = true;
-    private bool hasError = false;
+    private EnhancedCostSummaryDto? costSummary;
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadCostData();
-    }
-
-    private async Task LoadCostData()
-    {
-        isLoading = true;
-        hasError = false;
-        StateHasChanged();
-
         try
         {
-            // Try to load from API first, fall back to mock data
-            bool apiSuccess = false;
+            // Simulate loading
+            await Task.Delay(1000);
             
-            try
+            // Load cost data (mock data for now)
+            costSummary = new EnhancedCostSummaryDto(
+                UserId: Guid.NewGuid(),
+                Date: DateTime.UtcNow,
+                TotalCostGBP: 0.05m,
+                IsOverDailyLimit: false,
+                RemainingBudgetGBP: 0.03m)
             {
-                // Load cost summary
-                var summaryResponse = await Http.GetAsync("/api/costmanagement/enhanced-summary");
-                if (summaryResponse.IsSuccessStatusCode)
+                ServiceBreakdown = new Dictionary<string, CostServiceBreakdown>
                 {
-                    var summaryJson = await summaryResponse.Content.ReadAsStringAsync();
-                    costSummary = JsonSerializer.Deserialize<EnhancedCostSummaryDto>(summaryJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    apiSuccess = true;
-                }
-
-                // Load cost forecast
-                var forecastResponse = await Http.GetAsync("/api/costmanagement/forecast");
-                if (forecastResponse.IsSuccessStatusCode)
+                    ["OpenAI GPT-4"] = new CostServiceBreakdown("OpenAI GPT-4", 0.02m, 15, 0.0013m),
+                    ["Azure Speech"] = new CostServiceBreakdown("Azure Speech", 0.015m, 8, 0.0019m),
+                    ["Azure Cognitive"] = new CostServiceBreakdown("Azure Cognitive", 0.01m, 5, 0.002m),
+                    ["World Bank API"] = new CostServiceBreakdown("World Bank API", 0.005m, 3, 0.0017m)
+                },
+                AverageEducationalScore = 87m,
+                LearningObjectivesAchieved = 3,
+                ActiveLearningTime = TimeSpan.FromMinutes(45),
+                TomorrowForecast = new CostForecastData(
+                    UserId: Guid.NewGuid(),
+                    ForecastDate: DateTime.UtcNow.AddDays(1),
+                    PredictedCostGBP: 0.06m,
+                    ConfidenceScore: 0.85m,
+                    TrendFactors: new List<string> { "Increased engagement", "Weekend usage" })
                 {
-                    var forecastJson = await forecastResponse.Content.ReadAsStringAsync();
-                    costForecast = JsonSerializer.Deserialize<List<CostForecastData>>(forecastJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    PredictedEducationalScore = 89m
                 }
-            }
-            catch (Exception apiEx)
-            {
-                Logger.LogWarning(apiEx, "API not available, using mock data for demonstration");
-                apiSuccess = false;
-            }
-
-            // If API fails, use mock data for demonstration
-            if (!apiSuccess)
-            {
-                await LoadMockData();
-            }
-
-            Logger.LogInformation("Cost dashboard data loaded successfully");
+            };
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error loading cost dashboard data");
-            hasError = true;
+            // Handle error gracefully
+            Console.WriteLine($"Error loading cost dashboard: {ex.Message}");
         }
         finally
         {
             isLoading = false;
-            StateHasChanged();
         }
     }
-
-    private async Task LoadMockData()
-    {
-        // Simulate API delay
-        await Task.Delay(800);
-
-        // Create mock cost summary
-        var mockServices = new Dictionary<string, CostServiceBreakdown>
-        {
-            ["AI"] = new("AI", 0.025m, 15, 0.0017m) 
-            { 
-                EducationalValueScore = 92m,
-                LearningOutcomes = new List<string> { "Geography learning", "AI interaction skills" }
-            },
-            ["Speech"] = new("Speech", 0.012m, 8, 0.0015m) 
-            { 
-                EducationalValueScore = 88m,
-                LearningOutcomes = new List<string> { "Pronunciation practice", "Language skills" }
-            },
-            ["Storage"] = new("Storage", 0.003m, 0, 0m) 
-            { 
-                EducationalValueScore = 85m,
-                LearningOutcomes = new List<string> { "Progress tracking" }
-            }
-        };
-
-        costSummary = new EnhancedCostSummaryDto(
-            UserId: Guid.NewGuid(),
-            Date: DateTime.UtcNow,
-            TotalCostGBP: 0.040m,
-            IsOverDailyLimit: false,
-            RemainingBudgetGBP: 0.040m)
-        {
-            ServiceBreakdown = mockServices,
-            AverageEducationalScore = 89m,
-            LearningObjectivesAchieved = 3,
-            ActiveLearningTime = TimeSpan.FromMinutes(45),
-            IsEducationallyCompliant = true,
-            ComplianceNotes = new List<string> { "All content age-appropriate", "COPPA compliant" }
-        };
-
-        // Create mock forecast data
-        costForecast = new List<CostForecastData>();
-        for (int i = 1; i <= 7; i++)
-        {
-            costForecast.Add(new CostForecastData(
-                UserId: Guid.NewGuid(),
-                ForecastDate: DateTime.UtcNow.AddDays(i),
-                PredictedCostGBP: 0.035m + (decimal)(Random.Shared.NextDouble() * 0.03),
-                ConfidenceScore: 0.85m,
-                TrendFactors: new List<string> { "Normal usage pattern", "Weekend factor" })
-            {
-                UsagePattern = i % 2 == 0 ? "Light" : "Standard",
-                PredictedEducationalScore = 85m + (decimal)(Random.Shared.NextDouble() * 10)
-            });
-        }
-    }
-
-    private double GetProgressPercentage()
-    {
-        if (costSummary == null) return 0;
-        return Math.Min(100, (double)(costSummary.TotalCostGBP / 0.08m * 100));
-    }
-
-    private string GetServiceIcon(string serviceType) => serviceType.ToLowerInvariant() switch
-    {
-        "ai" or "openai" => "🤖",
-        "speech" => "🗣️",
-        "contentmoderation" => "🛡️",
-        "storage" => "💾",
-        "compute" => "⚡",
-        _ => "🔧"
-    };
-
-    private string GetFriendlyServiceName(string serviceType) => serviceType.ToLowerInvariant() switch
-    {
-        "ai" or "openai" => "AI Learning Assistant",
-        "speech" => "Speech & Pronunciation",
-        "contentmoderation" => "Safety & Protection",
-        "storage" => "Data Storage",
-        "compute" => "Game Processing",
-        _ => serviceType
-    };
-
-    private string GetServiceDescription(string serviceType) => serviceType.ToLowerInvariant() switch
-    {
-        "ai" or "openai" => "Your AI tutors and learning guides",
-        "speech" => "Language learning and pronunciation practice",
-        "contentmoderation" => "Keeping your content safe and appropriate",
-        "storage" => "Saving your game progress and achievements",
-        "compute" => "Running the game smoothly",
-        _ => "Supporting your learning adventure"
-    };
 }

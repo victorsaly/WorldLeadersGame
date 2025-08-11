@@ -30,6 +30,7 @@ completion_summary: "Complete pixel art design system with green theme, responsi
 ## 🌟 Child Designer Requirements
 
 ### Visual Style Specifications
+
 - **32-bit Pixel Art Aesthetic**: Classic retro gaming look with crisp pixel graphics
 - **Green Background Theme**: Matching the README.md gradient style preferred by designer
 - **Custom Logo Integration**: Use the son's independently created Figma logo design
@@ -37,6 +38,7 @@ completion_summary: "Complete pixel art design system with green theme, responsi
 - **Hand-drawn Mockup Inspiration**: Implement interface elements from original sketches
 
 ### Color Palette (Child-Specified)
+
 ```css
 /* Retro 32-bit Color Palette - Child Designer Approved */
 :root {
@@ -45,14 +47,14 @@ completion_summary: "Complete pixel art design system with green theme, responsi
   --retro-green-main: #2ea44f;
   --retro-green-light: #4ade80;
   --retro-green-bright: #86efac;
-  
+
   /* Classic 32-bit Supporting Colors */
   --retro-blue: #3b82f6;
   --retro-purple: #8b5cf6;
   --retro-yellow: #eab308;
   --retro-red: #ef4444;
   --retro-orange: #f97316;
-  
+
   /* Pixel Art Neutrals */
   --pixel-black: #000000;
   --pixel-dark-gray: #374151;
@@ -65,14 +67,11 @@ completion_summary: "Complete pixel art design system with green theme, responsi
 ## 🎮 Implementation Phases
 
 ### Phase 1: Core Visual Framework (4 hours)
+
 ```css
 /* Retro 32-bit Base Styles */
 .retro-game-container {
-  background: linear-gradient(135deg, 
-    var(--retro-green-dark) 0%, 
-    var(--retro-green-main) 50%, 
-    var(--retro-green-light) 100%);
-  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-family: "Press Start 2P", "Courier New", monospace;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
@@ -81,11 +80,9 @@ completion_summary: "Complete pixel art design system with green theme, responsi
 .pixel-art-button {
   background: var(--retro-green-main);
   border: 4px solid var(--pixel-white);
-  box-shadow: 
-    inset 2px 2px 0 var(--retro-green-light),
-    inset -2px -2px 0 var(--retro-green-dark),
+  box-shadow: inset 2px 2px 0 var(--retro-green-light), inset -2px -2px 0 var(--retro-green-dark),
     4px 4px 0 var(--pixel-dark-gray);
-  font-family: 'Press Start 2P', monospace;
+  font-family: "Press Start 2P", monospace;
   font-size: 12px;
   padding: 12px 24px;
   text-transform: uppercase;
@@ -96,21 +93,18 @@ completion_summary: "Complete pixel art design system with green theme, responsi
 
 .pixel-art-button:hover {
   transform: translate(2px, 2px);
-  box-shadow: 
-    inset 2px 2px 0 var(--retro-green-light),
-    inset -2px -2px 0 var(--retro-green-dark),
+  box-shadow: inset 2px 2px 0 var(--retro-green-light), inset -2px -2px 0 var(--retro-green-dark),
     2px 2px 0 var(--pixel-dark-gray);
 }
 
 .pixel-art-button:active {
   transform: translate(4px, 4px);
-  box-shadow: 
-    inset 2px 2px 0 var(--retro-green-dark),
-    inset -2px -2px 0 var(--retro-green-light);
+  box-shadow: inset 2px 2px 0 var(--retro-green-dark), inset -2px -2px 0 var(--retro-green-light);
 }
 ```
 
 ### Phase 2: Character Persona System (4 hours)
+
 ```csharp
 // Character Persona Selection - Child Designer Inspired
 public class CharacterPersona
@@ -136,11 +130,12 @@ public enum RetroPersonaType
 ```
 
 ### Phase 3: Pixel Art Asset System (4 hours)
+
 ```typescript
 // Pixel Art Asset Management
 interface PixelArtAsset {
   id: string;
-  width: number;  // 32x32, 64x64, etc.
+  width: number; // 32x32, 64x64, etc.
   height: number;
   spriteSheet?: string;
   animations?: PixelAnimation[];
@@ -160,13 +155,14 @@ const CHILD_DESIGNED_LOGO: PixelArtAsset = {
   width: 128,
   height: 64,
   spriteSheet: "/assets/pixel-art/child-designed-logo.png",
-  retro32BitCompliant: true
+  retro32BitCompliant: true,
 };
 ```
 
 ## 🎨 Visual Components
 
 ### Retro Game Interface Elements
+
 ```razor
 @* Retro 32-bit Home Screen Component *@
 <div class="retro-game-screen">
@@ -200,8 +196,8 @@ const CHILD_DESIGNED_LOGO: PixelArtAsset = {
 
 <style>
 .retro-game-screen {
-    background: linear-gradient(135deg, 
-        var(--retro-green-dark) 0%, 
+    background: linear-gradient(135deg,
+        var(--retro-green-dark) 0%,
         var(--retro-green-main) 100%);
     min-height: 100vh;
     padding: 2rem;
@@ -227,7 +223,7 @@ const CHILD_DESIGNED_LOGO: PixelArtAsset = {
 .retro-title {
     color: var(--pixel-white);
     font-size: 24px;
-    text-shadow: 
+    text-shadow:
         2px 2px 0 var(--pixel-black),
         4px 4px 0 var(--retro-green-dark);
     margin-bottom: 0.5rem;
@@ -296,7 +292,7 @@ const CHILD_DESIGNED_LOGO: PixelArtAsset = {
     background: var(--retro-yellow);
     border-color: var(--pixel-black);
     color: var(--pixel-black);
-    box-shadow: 
+    box-shadow:
         inset 2px 2px 0 #fbbf24,
         inset -2px -2px 0 #d97706,
         6px 6px 0 var(--pixel-black);
@@ -304,7 +300,7 @@ const CHILD_DESIGNED_LOGO: PixelArtAsset = {
 
 .start-game-btn:hover {
     background: #fbbf24;
-    box-shadow: 
+    box-shadow:
         inset 2px 2px 0 #fde047,
         inset -2px -2px 0 #d97706,
         4px 4px 0 var(--pixel-black);
@@ -315,21 +311,21 @@ const CHILD_DESIGNED_LOGO: PixelArtAsset = {
     .retro-title {
         font-size: 18px;
     }
-    
+
     .retro-subtitle {
         font-size: 10px;
     }
-    
+
     .persona-selection-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
-    
+
     .pixel-character {
         width: 48px;
         height: 48px;
     }
-    
+
     .persona-name {
         font-size: 12px;
     }
@@ -339,7 +335,7 @@ const CHILD_DESIGNED_LOGO: PixelArtAsset = {
     .persona-selection-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .start-game-btn {
         font-size: 14px;
         padding: 0.8rem 1.5rem;
@@ -351,6 +347,7 @@ const CHILD_DESIGNED_LOGO: PixelArtAsset = {
 ## 🌍 World Map Integration
 
 ### Interactive Pixel Art World Map
+
 ```csharp
 public class RetroWorldMap
 {
@@ -383,13 +380,14 @@ public class PixelCoordinate
 ## 🎵 Retro Audio Integration
 
 ### 8-bit Style Sound Effects
+
 ```typescript
 // Retro Game Audio System
 interface RetroAudioTrack {
   id: string;
   name: string;
-  type: 'sfx' | 'music';
-  format: '8bit' | '16bit';
+  type: "sfx" | "music";
+  format: "8bit" | "16bit";
   loop: boolean;
   volume: number;
   childFriendly: boolean;
@@ -397,38 +395,39 @@ interface RetroAudioTrack {
 
 const RETRO_SOUND_LIBRARY: RetroAudioTrack[] = [
   {
-    id: 'dice-roll',
-    name: 'Dice Roll Sound',
-    type: 'sfx',
-    format: '8bit',
+    id: "dice-roll",
+    name: "Dice Roll Sound",
+    type: "sfx",
+    format: "8bit",
     loop: false,
     volume: 0.7,
-    childFriendly: true
+    childFriendly: true,
   },
   {
-    id: 'success-fanfare',
-    name: 'Achievement Success',
-    type: 'sfx',
-    format: '8bit',
+    id: "success-fanfare",
+    name: "Achievement Success",
+    type: "sfx",
+    format: "8bit",
     loop: false,
     volume: 0.8,
-    childFriendly: true
+    childFriendly: true,
   },
   {
-    id: 'world-map-theme',
-    name: 'World Exploration Music',
-    type: 'music',
-    format: '16bit',
+    id: "world-map-theme",
+    name: "World Exploration Music",
+    type: "music",
+    format: "16bit",
     loop: true,
     volume: 0.4,
-    childFriendly: true
-  }
+    childFriendly: true,
+  },
 ];
 ```
 
 ## 📱 Mobile-First Retro Design
 
 ### Touch-Optimized Pixel Art Interface
+
 ```css
 /* Mobile-Friendly Retro Game Controls */
 .mobile-retro-controls {
@@ -502,14 +501,19 @@ const RETRO_SOUND_LIBRARY: RetroAudioTrack[] = [
 ## 🔧 Technical Implementation
 
 ### Font Integration
+
 ```html
 <!-- Google Fonts for Retro Style -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+  rel="stylesheet"
+/>
 ```
 
 ### Asset Organization
+
 ```
 wwwroot/
 ├── assets/
@@ -544,6 +548,7 @@ wwwroot/
 ## 📊 Success Criteria
 
 ### Visual Design Goals
+
 - [ ] **Authentic 32-bit aesthetic**: Pixelated graphics with proper rendering
 - [ ] **Child designer vision**: Green background theme and logo integration
 - [ ] **Character persona system**: 6 unique selectable characters
@@ -551,12 +556,14 @@ wwwroot/
 - [ ] **Retro authenticity**: Classic gaming feel with modern functionality
 
 ### Educational Integration
+
 - [ ] **Learning preservation**: Educational content enhanced by visual appeal
 - [ ] **Child engagement**: Increased interaction through appealing aesthetics
 - [ ] **Accessibility**: Maintains WCAG compliance with retro design
 - [ ] **Performance**: Fast loading despite pixel art assets
 
 ### Technical Achievement
+
 - [ ] **Asset optimization**: Compressed pixel art for web delivery
 - [ ] **Mobile performance**: Smooth animations on touch devices
 - [ ] **Cross-browser support**: Consistent rendering across platforms
@@ -565,6 +572,7 @@ wwwroot/
 ## 🎯 AI Autonomy Plan (90%)
 
 ### AI-Generated Components
+
 - **CSS Framework**: Complete retro styling system
 - **Blazor Components**: Pixel art UI components
 - **Asset Integration**: Automated sprite loading and management
@@ -572,6 +580,7 @@ wwwroot/
 - **Animation System**: CSS-based pixel art animations
 
 ### Human Oversight (10%)
+
 - **Child Design Validation**: Ensuring son's vision is accurately implemented
 - **Asset Quality**: Pixel art creation and optimization
 - **Educational Alignment**: Maintaining learning effectiveness

@@ -21,28 +21,27 @@
 
 <div class="retro-game-container">
     <div class="max-w-6xl mx-auto p-4">
-        <!-- Header Section -->
+        <!-- Header Section - Improved Layout with Better Spacing -->
         <div class="pixel-art-card green-theme mb-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="retro-title text-2xl mb-2">🌍 WORLD LEADERS</h1>
-                    <p class="retro-body">Educational game for young leaders (Age 12+)</p>
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                <div class="flex-1">
+                    <h1 class="retro-title-compact mb-3">🌍 WORLD LEADERS</h1>
+                    <p class="retro-body text-retro-sm">Educational game for young leaders (Age 12+)</p>
                 </div>
-                <div class="text-right">
+                <div class="text-left md:text-right md:min-w-0 md:flex-shrink-0">
                     @if (currentUser != null)
                     {
-                        <h2 class="retro-subtitle mb-1">Welcome, @currentUser.Username!</h2>
-                        <p class="retro-body text-xs">@currentUser.Email</p>
-                        <p class="retro-body text-xs opacity-75">Last login: @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
-                        <button @onclick="Logout" class="pixel-art-button mt-2 px-4 py-2 text-xs"
-                                style="background-color: var(--retro-red);">
+                        <h2 class="retro-subtitle-compact mb-2">Welcome, @currentUser.Username!</h2>
+                        <p class="retro-body text-retro-xs opacity-75 mb-1">@currentUser.Email</p>
+                        <p class="retro-body text-retro-xs opacity-75 mb-3">Last login: @currentUser.LastLoginAt.ToString("MMM dd, yyyy")</p>
+                        <button @onclick="Logout" class="pixel-art-button-small red px-3 py-2">
                             LOGOUT
                         </button>
                     }
                     else if (playerDashboard != null)
                     {
-                        <h2 class="retro-subtitle">Welcome, @playerDashboard.Username!</h2>
-                        <p class="retro-body text-xs">@playerDashboard.CurrentGameState</p>
+                        <h2 class="retro-subtitle-compact mb-2">Welcome, @playerDashboard.Username!</h2>
+                        <p class="retro-body text-retro-xs">@playerDashboard.CurrentGameState</p>
                     }
                     else if (!isLoading)
                     {
