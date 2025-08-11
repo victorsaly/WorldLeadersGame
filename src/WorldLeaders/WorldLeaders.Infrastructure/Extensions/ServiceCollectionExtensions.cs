@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
 using WorldLeaders.Infrastructure.Configuration;
 using WorldLeaders.Infrastructure.Data;
 using WorldLeaders.Infrastructure.Extensions;
@@ -339,6 +341,9 @@ public static class ServiceCollectionExtensions
 
         // Ensure database is created with all migrations applied
         await context.Database.EnsureCreatedAsync();
+        
+        // Create demo user for testing purposes
+        await CreateDemoUserAsync(scope.ServiceProvider);
     }
 
     /// <summary>
@@ -415,5 +420,76 @@ public static class ServiceCollectionExtensions
         services.AddScoped<PerformanceOptimizedGameComponent>();
 
         return services;
+    }
+
+    /// <summary>
+    /// Creates demo user for testing purposes if it doesn't already exist
+    /// Educational Context: Allows users to test the game without registration
+    /// </summary>
+    /// <param name="serviceProvider">The service provider</param>
+    /// <returns>Async task</returns>
+    private static async Task CreateDemoUserAsync(IServiceProvider serviceProvider)
+    {
+        try
+        {
+            var userManager = serviceProvider.GetRequiredService<IUserManagerService>();
+            var context = serviceProvider.GetRequiredService<WorldLeadersDbContext>();
+            var logger = serviceProvider.GetRequiredService<ILogger<object>>();
+
+            // Check if demo user already exists
+            var existingUser = await userManager.GetUserByUsernameOrEmailAsync("student123");
+            if (existingUser != null)
+            {
+                logger.LogInformation("Demo user 'student123' already exists");
+                return;
+            }
+
+            // Create demo user directly in the database for simplicity
+            var demoUser = new WorldLeaders.Shared.Models.ApplicationUser
+            {
+                Id = Guid.NewGuid(),
+                UserName = "student123",
+                NormalizedUserName = "STUDENT123",
+                Email = "demo@worldleadersgame.co.uk",
+                NormalizedEmail = "DEMO@WORLDLEADERSGAME.CO.UK",
+                DisplayName = "Demo Student",
+                DateOfBirth = DateTime.UtcNow.AddYears(-12), // 12 years old
+                ParentalEmail = "parent@worldleadersgame.co.uk",
+                HasParentalConsent = true,
+                Role = WorldLeaders.Shared.Enums.UserRole.Student,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                EmailConfirmed = true, // Demo account is pre-confirmed
+                PasswordHash = "", // Will be set below
+                SecurityStamp = Guid.NewGuid().ToString(),
+                ConcurrencyStamp = Guid.NewGuid().ToString()
+            };
+
+            // Set password using ASP.NET Core Identity password hasher
+            var passwordHasher = serviceProvider.GetRequiredService<IPasswordHasher<WorldLeaders.Shared.Models.ApplicationUser>>();
+            demoUser.PasswordHash = passwordHasher.HashPassword(demoUser, "Education123!");
+
+            // Add to database
+            context.Users.Add(demoUser);
+            await context.SaveChangesAsync();
+            
+            logger.LogInformation("Demo user 'student123' created successfully for testing purposes");
+        }
+        catch (Exception ex)
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger<object>>();
+            logger.LogError(ex, "Error creating demo user: {Message}", ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Creates demo user for testing purposes if it doesn't already exist (public method)
+    /// Educational Context: Allows users to test the game without registration
+    /// </summary>
+    /// <param name="serviceProvider">The service provider</param>
+    /// <returns>Async task</returns>
+    public static async Task CreateDemoUserIfNeededAsync(this IServiceProvider serviceProvider)
+    {
+        await CreateDemoUserAsync(serviceProvider);
     }
 }
