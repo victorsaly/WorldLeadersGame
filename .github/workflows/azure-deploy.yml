@@ -709,7 +709,7 @@ jobs:
         # Enable Application Insights live metrics
         az monitor app-insights component update \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          --app worldleaders-prod-uksouth-insights \
+          --app worldleaders-prod-insights \
           --retention-time 90
         
         echo "🔔 Setting up performance alerts for child-friendly response times..."
