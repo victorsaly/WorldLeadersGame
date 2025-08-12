@@ -104,6 +104,12 @@ public static class Extensions
             Predicate = r => r.Tags.Contains("live")
         });
 
+        // Ready endpoint for container orchestration and Azure slot swaps
+        app.MapHealthChecks("/ready", new HealthCheckOptions
+        {
+            Predicate = r => r.Tags.Contains("ready") || r.Tags.Contains("live")
+        });
+
         return app;
     }
 }

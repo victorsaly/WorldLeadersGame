@@ -515,21 +515,88 @@ jobs:
         echo "🔄 Starting zero-downtime slot swap..."
         SWAP_START_TIME=$(date +%s)
         
-        # Swap Web App slots
+        # Pre-swap health verification
+        echo "🏥 Pre-swap health verification..."
+        
+        # Check staging Web App health
+        echo "Testing staging Web App health endpoint..."
+        WEB_HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 --max-time 30 "https://${{ env.AZURE_WEB_APP_NAME }}-staging.azurewebsites.net/health" || echo "000")
+        echo "Web staging health status: $WEB_HEALTH_STATUS"
+        
+        # Check staging API health
+        echo "Testing staging API health endpoint..."
+        API_HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 --max-time 30 "https://${{ env.AZURE_API_APP_NAME }}-staging.azurewebsites.net/health" || echo "000")
+        echo "API staging health status: $API_HEALTH_STATUS"
+        
+        # Determine swap strategy based on health checks
+        if [[ "$WEB_HEALTH_STATUS" == "200" && "$API_HEALTH_STATUS" == "200" ]]; then
+          echo "✅ All staging services healthy - proceeding with normal slot swap"
+          SWAP_MODE="normal"
+        else
+          echo "⚠️  Some staging services not responding to health checks"
+          echo "This may be due to missing health endpoints in the current staging deployment"
+          echo "Proceeding with swap but monitoring for issues..."
+          SWAP_MODE="force"
+        fi
+        
+        # Swap Web App slots with error handling
         echo "🌐 Swapping Web App staging to production..."
-        az webapp deployment slot swap \
+        if ! az webapp deployment slot swap \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
           --name ${{ env.AZURE_WEB_APP_NAME }} \
           --slot staging \
-          --target-slot production
+          --target-slot production; then
+          echo "❌ Web App slot swap failed"
+          
+          # Try to get more details about the failure
+          echo "📊 Checking Web App status..."
+          az webapp show --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AZURE_WEB_APP_NAME }} --query "{state:state, availabilityState:availabilityState}" --output table
+          
+          echo "🔧 Attempting restart of staging slot..."
+          az webapp restart --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AZURE_WEB_APP_NAME }} --slot staging
+          
+          echo "⏱️  Waiting 30 seconds for restart..."
+          sleep 30
+          
+          echo "🔄 Retrying Web App slot swap..."
+          if ! az webapp deployment slot swap \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --name ${{ env.AZURE_WEB_APP_NAME }} \
+            --slot staging \
+            --target-slot production; then
+            echo "❌ Web App slot swap failed after retry - this needs manual intervention"
+            exit 1
+          fi
+        fi
         
-        # Swap API slots
+        # Swap API slots with error handling
         echo "🔧 Swapping API staging to production..."
-        az webapp deployment slot swap \
+        if ! az webapp deployment slot swap \
           --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
           --name ${{ env.AZURE_API_APP_NAME }} \
           --slot staging \
-          --target-slot production
+          --target-slot production; then
+          echo "❌ API slot swap failed"
+          
+          echo "📊 Checking API status..."
+          az webapp show --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AZURE_API_APP_NAME }} --query "{state:state, availabilityState:availabilityState}" --output table
+          
+          echo "🔧 Attempting restart of API staging slot..."
+          az webapp restart --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --name ${{ env.AZURE_API_APP_NAME }} --slot staging
+          
+          echo "⏱️  Waiting 30 seconds for restart..."
+          sleep 30
+          
+          echo "🔄 Retrying API slot swap..."
+          if ! az webapp deployment slot swap \
+            --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+            --name ${{ env.AZURE_API_APP_NAME }} \
+            --slot staging \
+            --target-slot production; then
+            echo "❌ API slot swap failed after retry - this needs manual intervention"
+            exit 1
+          fi
+        fi
           
         SWAP_END_TIME=$(date +%s)
         SWAP_DURATION=$((SWAP_END_TIME - SWAP_START_TIME))

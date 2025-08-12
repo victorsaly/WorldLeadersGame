@@ -5,6 +5,7 @@ using WorldLeaders.Shared.Services;
 using WorldLeaders.Infrastructure.Configuration;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -196,11 +197,8 @@ else
     devLogger.LogInformation("🧠 Using in-memory cache for session storage (development mode)");
 }
 
-// Add service defaults (Aspire) - Comment out for manual execution
-// builder.AddServiceDefaults();
-
-// Add health checks manually when not using Aspire
-builder.Services.AddHealthChecks();
+// Add service defaults (Aspire) for production monitoring
+builder.AddServiceDefaults();
 
 var app = builder.Build();
 
@@ -248,14 +246,14 @@ app.UseStaticFiles();
 // app.UseSession(); // Enable session middleware
 app.UseAntiforgery();
 
-// Map health checks - Comment out for manual execution since not all services available
-// app.MapHealthChecks("/health");
+// Health endpoints are automatically mapped by MapDefaultEndpoints() below
+// This includes /health, /alive, and /ready endpoints for Azure deployment slot swaps
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-// Map default service endpoints (Aspire) - Comment out for manual execution
-// app.MapDefaultEndpoints();
+// Map default service endpoints (Aspire) - Enabled for production health monitoring
+app.MapDefaultEndpoints();
 
 app.Run();
 
