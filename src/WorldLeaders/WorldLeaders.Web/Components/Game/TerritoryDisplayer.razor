@@ -52,10 +52,9 @@
                         <!-- Territory Header with Flag -->
                         <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
                             <div class="flex items-center gap-3">
-                                <img src="/images/flags/@(territory.CountryCode.ToLower()).png" 
-                                     alt="@territory.CountryName flag" 
-                                     class="w-8 h-6 object-cover border border-gray-300 pixel-art-image"
-                                     onerror="this.style.display='none';" />
+                                <div class="country-flag-emoji text-2xl">
+                                    @GetCountryFlagEmoji(territory.CountryCode)
+                                </div>
                                 <h3 class="retro-heading-sm text-gray-800">@territory.CountryName</h3>
                             </div>
                             <div class="tier-badge tier-@GetTierClass(territory)">
@@ -157,10 +156,9 @@
                     {
                         <div class="retro-card-owned">
                             <div class="flex items-center gap-3 mb-3">
-                                <img src="/images/flags/@(territory.CountryCode.ToLower()).png" 
-                                     alt="@territory.CountryName flag" 
-                                     class="w-10 h-7 object-cover border-2 border-green-400 pixel-art-image"
-                                     onerror="this.style.display='none';" />
+                                <div class="country-flag-emoji text-3xl">
+                                    @GetCountryFlagEmoji(territory.CountryCode)
+                                </div>
                                 <h3 class="retro-heading-sm text-green-800">@territory.CountryName</h3>
                             </div>
                             
@@ -208,10 +206,9 @@
         <div class="country-modal-content" @onclick:stopPropagation="true">
             <div class="country-modal-header">
                 <div class="flex items-center gap-3">
-                    <img src="/images/flags/@(selectedTerritoryForExploration.CountryCode.ToLower()).png" 
-                         alt="@selectedTerritoryForExploration.CountryName flag" 
-                         class="w-12 h-8 object-cover border-2 border-white pixel-art-image"
-                         onerror="this.style.display='none';" />
+                    <div class="country-flag-emoji text-4xl">
+                        @GetCountryFlagEmoji(selectedTerritoryForExploration.CountryCode)
+                    </div>
                     <h2 class="retro-heading-lg text-white">@selectedTerritoryForExploration.CountryName</h2>
                 </div>
                 <button class="retro-button-close" @onclick="CloseExplorationModal">✕</button>
@@ -647,5 +644,28 @@
                 IncomeBoost = 10000
             }
         };
+    }
+
+    private string GetCountryFlagEmoji(string countryCode)
+    {
+        var flagEmojis = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            {"US", "🇺🇸"}, {"CA", "🇨🇦"}, {"MX", "🇲🇽"}, {"BR", "🇧🇷"}, {"AR", "🇦🇷"},
+            {"GB", "🇬🇧"}, {"FR", "🇫🇷"}, {"DE", "🇩🇪"}, {"IT", "🇮🇹"}, {"ES", "🇪🇸"},
+            {"RU", "🇷🇺"}, {"CN", "🇨🇳"}, {"JP", "🇯🇵"}, {"IN", "🇮🇳"}, {"KR", "🇰🇷"},
+            {"AU", "🇦🇺"}, {"NZ", "🇳🇿"}, {"ZA", "🇿🇦"}, {"EG", "🇪🇬"}, {"NG", "🇳🇬"},
+            {"SE", "🇸🇪"}, {"NO", "🇳🇴"}, {"DK", "🇩🇰"}, {"FI", "🇫🇮"}, {"NL", "🇳🇱"},
+            {"BE", "🇧🇪"}, {"CH", "🇨🇭"}, {"AT", "🇦🇹"}, {"PT", "🇵🇹"}, {"GR", "🇬🇷"},
+            {"TR", "🇹🇷"}, {"SA", "🇸🇦"}, {"AE", "🇦🇪"}, {"IL", "🇮🇱"}, {"PK", "🇵🇰"},
+            {"BD", "🇧🇩"}, {"TH", "🇹🇭"}, {"VN", "🇻🇳"}, {"PH", "🇵🇭"}, {"ID", "🇮🇩"},
+            {"MY", "🇲🇾"}, {"SG", "🇸🇬"}, {"HK", "🇭🇰"}, {"TW", "🇹🇼"}, {"KZ", "🇰🇿"},
+            {"UZ", "🇺🇿"}, {"AF", "🇦🇫"}, {"IR", "🇮🇷"}, {"IQ", "🇮🇶"}, {"SY", "🇸🇾"},
+            {"LB", "🇱🇧"}, {"JO", "🇯🇴"}, {"CL", "🇨🇱"}, {"PE", "🇵🇪"}, {"CO", "🇨🇴"},
+            {"VE", "🇻🇪"}, {"EC", "🇪🇨"}, {"UY", "🇺🇾"}, {"PY", "🇵🇾"}, {"BO", "🇧🇴"},
+            {"CR", "🇨🇷"}, {"PA", "🇵🇦"}, {"GT", "🇬🇹"}, {"CU", "🇨🇺"}, {"DO", "🇩🇴"},
+            {"HT", "🇭🇹"}, {"JM", "🇯🇲"}, {"TT", "🇹🇹"}, {"BZ", "🇧🇿"}, {"VU", "🇻🇺"}
+        };
+
+        return flagEmojis.GetValueOrDefault(countryCode, "🏳️");
     }
 }
