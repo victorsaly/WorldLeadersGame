@@ -10,21 +10,26 @@ educational_objective: "Platform reliability and child safety monitoring"
 # Enhanced Monitoring Configuration - Educational Platform
 
 ## 🎯 Educational Objective
+
 Ensure reliable, safe, and performant educational experience for 12-year-old learners through comprehensive application monitoring.
 
 ## 🌍 Real-World Connection
+
 Professional platform monitoring ensures consistent learning availability and validates that educational technology meets child-friendly performance standards.
 
 ## 🔧 Technical Implementation
 
 ### Issue Resolution
+
 **Problem**: Application Insights component name mismatch in GitHub workflow
+
 - **Expected**: `worldleaders-prod-uksouth-insights`
 - **Actual**: `worldleaders-prod-insights`
 
 **Solution**: Updated workflow configuration and created enhanced monitoring script.
 
 ### Monitoring Configuration
+
 ```bash
 # Key Performance Targets for Child-Friendly Experience
 TARGET_RESPONSE_TIME_MS=1500  # < 1.5 seconds for child engagement
@@ -33,6 +38,7 @@ RETENTION_DAYS=90             # Educational compliance retention
 ```
 
 ### Application Insights Setup
+
 ```bash
 # Configure retention for educational compliance
 az monitor app-insights component update \
@@ -42,11 +48,13 @@ az monitor app-insights component update \
 ```
 
 ### Performance Alerts
+
 1. **Response Time Alert**: Monitors response times < 1500ms for child engagement
 2. **Availability Alert**: Ensures >99.5% uptime for continuous learning
 3. **Error Rate Alert**: Tracks application errors affecting child experience
 
 ## 🛡️ Child Safety Measures
+
 - **Performance Monitoring**: Ensures fast response times to maintain child engagement
 - **Availability Tracking**: Guarantees learning platform accessibility
 - **Error Detection**: Rapid identification of issues affecting child experience
@@ -55,6 +63,7 @@ az monitor app-insights component update \
 ## 📊 Educational Effectiveness Metrics
 
 ### Planned Custom Analytics
+
 - AI agent response times and safety validations
 - Educational content effectiveness metrics
 - Child engagement and learning progression
@@ -63,11 +72,13 @@ az monitor app-insights component update \
 ## 🔍 Monitoring Dashboard Features
 
 ### Child-Friendly Performance Targets
+
 - **Response Time**: < 1.5 seconds (critical for 12-year-old attention span)
 - **Availability**: > 99.5% (ensures consistent learning access)
 - **Error Rate**: < 1% (maintains positive learning experience)
 
 ### Educational Platform Specific Metrics
+
 - Learning session duration and completion rates
 - AI agent interaction success rates
 - Territory acquisition game performance
@@ -76,17 +87,21 @@ az monitor app-insights component update \
 ## 🚀 Implementation Files
 
 ### Enhanced Monitoring Script
+
 **Location**: `/scripts/configure-monitoring.sh`
 **Purpose**: Automated setup of educational platform monitoring
 **Features**:
+
 - Application Insights configuration validation
 - Child-friendly performance alert creation
 - Educational compliance data retention
 - Platform health verification
 
 ### GitHub Workflow Integration
+
 **File**: `.github/workflows/azure-deploy.yml`
 **Changes**:
+
 - Fixed Application Insights component name
 - Removed unsupported `--enabled` parameters
 - Enhanced educational platform monitoring
@@ -94,12 +109,14 @@ az monitor app-insights component update \
 ## 🎯 Success Metrics
 
 ### Technical Quality
+
 - ✅ Application Insights properly configured
 - ✅ Performance alerts active for child-friendly targets
 - ✅ Error monitoring protecting learning experience
 - ✅ Availability monitoring ensuring continuous access
 
 ### Educational Value
+
 - **Reliability**: Consistent platform availability for learning
 - **Performance**: Fast response times maintaining child engagement
 - **Safety**: Rapid error detection and resolution

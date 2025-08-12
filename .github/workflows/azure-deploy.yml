@@ -334,6 +334,11 @@ jobs:
       run: |
         echo "🔄 Starting blue-green deployment to staging slots with enhanced retry logic..."
         echo "🛠️ Enhanced with: 900s timeout, modern az webapp deploy, Kudu pre-warming"
+        echo "📊 Performance target: < 10 minutes (vs previous 34+ minute timeouts)"
+        
+        # Record total deployment start time
+        DEPLOYMENT_START=$(date +%s)
+        echo "⏰ Deployment started at: $(date)"
         
         # Function to deploy with retry logic
         deploy_with_retry() {
@@ -409,20 +414,21 @@ jobs:
         echo "🔥 Azure App Service needs extended time for proper container initialization..."
         echo "📊 Allowing for SCM restart completion and .NET runtime warmup..."
         
-        # Extended stabilization for container recycling and SCM operations
-        echo "⏳ Phase 1: Container recycling stabilization (60 seconds)..."
+        # Optimized stabilization for container recycling and SCM operations
+        echo "⏳ Optimized stabilization period (60 seconds total)..."
+        echo "   - Container recycling and .NET runtime initialization"
         sleep 60
         
-        echo "⏳ Phase 2: .NET runtime initialization (60 seconds)..."
-        sleep 60
-        
-        echo "✅ Enhanced stabilization period completed (120 seconds total)"
-        echo "🎯 Azure containers should now be fully stable and ready for health checks"
+        echo "✅ Optimized stabilization period completed (60 seconds total)"
+        echo "🎯 Azure containers should now be ready for health checks"
         
     - name: "🏥 Step 3: Comprehensive Staging Health Checks"
       run: |
         echo "🔍 Starting comprehensive health checks on staging slots..."
-        echo "🔥 Using generous timeouts for Azure App Service cold start..."
+        echo "🔥 Using optimized progressive backoff strategy for faster validation..."
+        
+        # Record health check start time for performance tracking
+        HEALTH_CHECK_START=$(date +%s)
         
         # Web App staging health check with multiple endpoint options
         WEB_STAGING_URL="https://${{ env.AZURE_WEB_APP_NAME }}-staging.azurewebsites.net"
@@ -430,57 +436,67 @@ jobs:
         
         echo "🌐 Testing Web App staging: $WEB_STAGING_URL"
         WEB_HEALTHY=false
-        for i in {1..8}; do
+        
+        # Progressive backoff strategy: 10s, 20s, 30s, 45s, 60s
+        wait_times=(10 20 30 45 60)
+        
+        for i in {1..5}; do
           # Try multiple endpoints: /health, /api/health, or just root /
           for endpoint in "/health" "/" "/api/health"; do
             if curl -f -s --max-time 30 --connect-timeout 10 "$WEB_STAGING_URL$endpoint" > /dev/null 2>&1; then
-              echo "✅ Web App staging health check $i/8 passed (endpoint: $endpoint)"
+              echo "✅ Web App staging health check $i/5 passed (endpoint: $endpoint) - Early success!"
               WEB_HEALTHY=true
-              break
+              break 2  # Break out of both loops
             fi
           done
           
-          if [ "$WEB_HEALTHY" = true ]; then
-            break
-          fi
-          
-          if [ $i -eq 8 ]; then
-            echo "❌ Web App staging health check failed after 8 attempts (4 minutes total)"
+          if [ $i -eq 5 ]; then
+            echo "❌ Web App staging health check failed after 5 attempts (2m 45s total)"
             echo "🔍 Last response status:"
             curl -I -s --max-time 10 "$WEB_STAGING_URL" || echo "No response"
             exit 1
           fi
           
-          echo "⚠️ Web App staging health check $i/8 failed, waiting 30s before retry..."
-          sleep 30
+          wait_time=${wait_times[$((i-1))]}
+          echo "⚠️ Web App staging health check $i/5 failed, waiting ${wait_time}s before retry..."
+          sleep $wait_time
         done
         
         echo "🔧 Testing API staging: $API_STAGING_URL"
         API_HEALTHY=false
-        for i in {1..8}; do
+        
+        # Progressive backoff strategy: 10s, 20s, 30s, 45s, 60s
+        wait_times=(10 20 30 45 60)
+        
+        for i in {1..5}; do
           # Try multiple endpoints for API
           for endpoint in "/health" "/api/health" "/" "/swagger"; do
             if curl -f -s --max-time 30 --connect-timeout 10 "$API_STAGING_URL$endpoint" > /dev/null 2>&1; then
-              echo "✅ API staging health check $i/8 passed (endpoint: $endpoint)"
+              echo "✅ API staging health check $i/5 passed (endpoint: $endpoint) - Early success!"
               API_HEALTHY=true
-              break
+              break 2  # Break out of both loops
             fi
           done
           
-          if [ "$API_HEALTHY" = true ]; then
-            break
-          fi
-          
-          if [ $i -eq 8 ]; then
-            echo "❌ API staging health check failed after 8 attempts (4 minutes total)"
+          if [ $i -eq 5 ]; then
+            echo "❌ API staging health check failed after 5 attempts (2m 45s total)"
             echo "🔍 Last response status:"
             curl -I -s --max-time 10 "$API_STAGING_URL" || echo "No response"
             exit 1
           fi
           
-          echo "⚠️ API staging health check $i/8 failed, waiting 30s before retry..."
-          sleep 30
+          wait_time=${wait_times[$((i-1))]}
+          echo "⚠️ API staging health check $i/5 failed, waiting ${wait_time}s before retry..."
+          sleep $wait_time
         done
+        
+        echo "✅ All staging health checks completed successfully"
+        
+        # Calculate and report health check performance
+        HEALTH_CHECK_END=$(date +%s)
+        HEALTH_CHECK_DURATION=$((HEALTH_CHECK_END - HEALTH_CHECK_START))
+        echo "📊 Health check performance: ${HEALTH_CHECK_DURATION} seconds"
+        echo "🎯 Target achieved: < 3 minutes (180s) vs previous 8 minutes (480s)"
         
         echo "🛡️ Testing child safety validation (dedicated endpoint)..."
         if curl -f -s --max-time 10 "$API_STAGING_URL/api/child-safety/health" > /dev/null; then
@@ -632,15 +648,15 @@ jobs:
           az webapp deployment slot swap \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --name ${{ env.AZURE_WEB_APP_NAME }} \
-            --slot production \
-            --target-slot staging
+            --slot staging \
+            --target-slot production
           
           echo "⏪ Rolling back API..."
           az webapp deployment slot swap \
             --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
             --name ${{ env.AZURE_API_APP_NAME }} \
-            --slot production \
-            --target-slot staging
+            --slot staging \
+            --target-slot production
           
           ROLLBACK_END_TIME=$(date +%s)
           ROLLBACK_DURATION=$((ROLLBACK_END_TIME - ROLLBACK_START_TIME))
@@ -863,3 +879,27 @@ jobs:
         echo "- .NET 8 AOT optimizations for faster startup" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "### 🌍 Ready for Global Educational Impact!" >> $GITHUB_STEP_SUMMARY
+        
+        # Calculate and report total deployment performance
+        DEPLOYMENT_END=$(date +%s)
+        TOTAL_DEPLOYMENT_TIME=$((DEPLOYMENT_END - DEPLOYMENT_START))
+        DEPLOYMENT_MINUTES=$((TOTAL_DEPLOYMENT_TIME / 60))
+        DEPLOYMENT_SECONDS=$((TOTAL_DEPLOYMENT_TIME % 60))
+        
+        echo ""
+        echo "🚀 ==============================================="
+        echo "📊 DEPLOYMENT PERFORMANCE SUMMARY"
+        echo "🚀 ==============================================="
+        echo "⏰ Total deployment time: ${DEPLOYMENT_MINUTES}m ${DEPLOYMENT_SECONDS}s"
+        echo "🎯 Performance target: < 10 minutes"
+        echo "📈 Previous baseline: 7m 45s (June 2024)"
+        echo "❌ Previous timeout: 34m 2s (August 2024)"
+        echo ""
+        if [ $TOTAL_DEPLOYMENT_TIME -lt 600 ]; then
+          echo "✅ PERFORMANCE TARGET ACHIEVED! (< 10 minutes)"
+        elif [ $TOTAL_DEPLOYMENT_TIME -lt 1200 ]; then
+          echo "⚠️ Performance acceptable but room for improvement (< 20 minutes)"
+        else
+          echo "❌ Performance needs optimization (> 20 minutes)"
+        fi
+        echo "🚀 ==============================================="

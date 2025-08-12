@@ -48,15 +48,15 @@ builder.Services.AddHttpContextAccessor();
 // Add Blazor Server authentication services (simplified for development)
 builder.Services.AddAuthenticationCore();
 builder.Services.AddScoped<SimpleAuthenticationStateProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(provider => 
+builder.Services.AddScoped<AuthenticationStateProvider>(provider =>
     provider.GetRequiredService<SimpleAuthenticationStateProvider>());
 
 // Configure security headers and options
 builder.Services.AddAntiforgery(options =>
 {
     // Use environment-appropriate secure policy: Always for production, SameAsRequest for development
-    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment() 
-        ? CookieSecurePolicy.SameAsRequest 
+    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? CookieSecurePolicy.SameAsRequest
         : CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.Strict;
     options.Cookie.HttpOnly = true;
@@ -93,7 +93,7 @@ builder.Services.AddHttpClient("GameAPI", client =>
     client.Timeout = apiTimeout;
     client.DefaultRequestHeaders.Add("User-Agent", "WorldLeaders-Web/1.0");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
-    
+
     // Add API key if available for production
     var apiKey = Environment.GetEnvironmentVariable("API_KEY");
     if (!string.IsNullOrEmpty(apiKey))
@@ -102,16 +102,16 @@ builder.Services.AddHttpClient("GameAPI", client =>
     }
 })
 .AddHttpMessageHandler<JwtAuthenticationHandler>() // Automatically add JWT tokens
-.ConfigurePrimaryHttpMessageHandler(() => 
+.ConfigurePrimaryHttpMessageHandler(() =>
 {
     var handler = new HttpClientHandler();
-    
+
     // Only allow self-signed certificates in development
     if (builder.Environment.IsDevelopment())
     {
         handler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
     }
-    
+
     return handler;
 });
 
@@ -130,7 +130,7 @@ builder.Services.AddLogging(logging =>
     logging.ClearProviders();
     logging.AddConsole();
     logging.AddDebug();
-    
+
     if (builder.Environment.IsProduction())
     {
         logging.SetMinimumLevel(LogLevel.Warning);
@@ -173,7 +173,7 @@ if (builder.Environment.IsProduction())
                 options.Configuration = redisConnectionString;
                 options.InstanceName = "WorldLeadersGame.Web";
             });
-            
+
             // Use logger factory instead of BuildServiceProvider during configuration
             using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder.AddConsole());
             var productionLogger = loggerFactory.CreateLogger<Program>();
@@ -230,14 +230,14 @@ app.Use(async (context, next) =>
     context.Response.Headers["X-Content-Type-Options"] = "nosniff";
     context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
     context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
-    
+
     if (app.Environment.IsProduction())
     {
-        var csp = app.Configuration["Security:ContentSecurityPolicy"] ?? 
+        var csp = app.Configuration["Security:ContentSecurityPolicy"] ??
             "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' wss: https:;";
         context.Response.Headers["Content-Security-Policy"] = csp;
     }
-    
+
     await next();
 });
 
@@ -266,7 +266,7 @@ app.Run();
 /// <returns>API base URL for HTTP client configuration</returns>
 static string GetApiBaseUrl(IConfiguration configuration, IWebHostEnvironment environment)
 {
-    return configuration["ApiSettings:BaseUrl"] ?? 
-           Environment.GetEnvironmentVariable("API_BASE_URL") ?? 
+    return configuration["ApiSettings:BaseUrl"] ??
+           Environment.GetEnvironmentVariable("API_BASE_URL") ??
            (environment.IsProduction() ? "https://api.worldleadersgame.co.uk" : "https://localhost:7155");
 }
