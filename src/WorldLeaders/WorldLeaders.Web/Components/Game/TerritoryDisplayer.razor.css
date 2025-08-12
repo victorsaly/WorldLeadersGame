@@ -80,7 +80,7 @@ Design Theme: Green-focused retro pixel art with child-friendly elements
 /* Retro Tabs */
 .retro-tab {
     padding: 0.75rem 1rem;
-    border: 3px solid var(--retro-white, #f9fafb);
+    border: 3px solid var(--retro-gray-dark, #4b5563);
     background: var(--retro-green-primary, #22c55e);
     color: white;
     font-family: 'Press Start 2P', monospace;
@@ -100,7 +100,8 @@ Design Theme: Green-focused retro pixel art with child-friendly elements
 
 .retro-tab.active {
     background: var(--retro-white, #f9fafb);
-    color: var(--retro-green-primary, #22c55e);
+    color: var(--retro-green-dark, #15803d);
+    border-color: var(--retro-green-primary, #22c55e);
     box-shadow: inset 2px 2px 0 var(--retro-green-dark, #15803d);
     transform: translate(1px, 1px);
 }

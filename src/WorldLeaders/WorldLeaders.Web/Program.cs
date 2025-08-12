@@ -17,6 +17,15 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// Configure Blazor Server options for detailed error reporting
+builder.Services.Configure<Microsoft.AspNetCore.Components.Server.CircuitOptions>(options =>
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        options.DetailedErrors = true;
+    }
+});
+
 // Add session services for authentication with memory-based storage for development
 // Temporarily disable sessions to resolve Redis dependency issue
 // TODO: Re-enable sessions once Redis configuration is resolved

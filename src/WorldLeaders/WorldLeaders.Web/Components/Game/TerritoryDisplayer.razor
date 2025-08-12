@@ -1,0 +1,651 @@
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Services
+@using Microsoft.AspNetCore.Components
+@inject ITerritoryService TerritoryService
+@inject ILogger<TerritoryDisplayer> Logger
+
+<div class="territory-displayer bg-white rounded-xl p-4 sm:p-6 shadow-xl border-4 border-gray-200">
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <h2 class="retro-heading-xl text-gray-800 mb-3">🌍 Territory Explorer</h2>
+        <p class="text-gray-600 text-lg">Discover amazing countries and learn about the world!</p>
+        
+        <!-- Current Income Display -->
+        <div class="retro-income-display mt-4">
+            <div class="flex justify-center items-center gap-4 text-sm font-bold">
+                <span class="text-gray-700">💰 Income: $@PlayerIncome.ToString("N0")</span>
+                <span class="text-gray-700">⭐ Reputation: @PlayerReputation%</span>
+            </div>
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center py-8">
+            <div class="retro-loading-spinner"></div>
+            <p class="text-gray-600 mt-4">Loading territories...</p>
+        </div>
+    }
+    else if (territories.Any())
+    {
+        <!-- Tab Navigation -->
+        <div class="country-tabs mb-6">
+            <button class="retro-tab @(activeTab == "available" ? "active" : "")" 
+                    @onclick='() => SetActiveTab("available")'>
+                🔍 Available (@availableTerritories.Count)
+            </button>
+            <button class="retro-tab @(activeTab == "owned" ? "active" : "")" 
+                    @onclick='() => SetActiveTab("owned")'>
+                🏆 Owned (@ownedTerritories.Count)
+            </button>
+        </div>
+
+        @if (activeTab == "available")
+        {
+            <!-- Available Territories -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                @foreach (var territory in GetCurrentPageTerritories())
+                {
+                    <div class="territory-card-available hover:shadow-lg transition-all duration-300 cursor-pointer"
+                         @onclick="() => SelectTerritory(territory)">
+                        
+                        <!-- Territory Header with Flag -->
+                        <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+                            <div class="flex items-center gap-3">
+                                <img src="/images/flags/@(territory.CountryCode.ToLower()).png" 
+                                     alt="@territory.CountryName flag" 
+                                     class="w-8 h-6 object-cover border border-gray-300 pixel-art-image"
+                                     onerror="this.style.display='none';" />
+                                <h3 class="retro-heading-sm text-gray-800">@territory.CountryName</h3>
+                            </div>
+                            <div class="tier-badge tier-@GetTierClass(territory)">
+                                @GetTierName(territory)
+                            </div>
+                        </div>
+
+                        <!-- Territory Stats -->
+                        <div class="territory-stats p-4">
+                            <div class="space-y-2">
+                                <div class="stat-row">
+                                    <span class="stat-icon">💰</span>
+                                    <span class="stat-label">Cost:</span>
+                                    <span class="stat-value text-green-600">$@territory.Cost.ToString("N0")</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-icon">⭐</span>
+                                    <span class="stat-label">Rep Req:</span>
+                                    <span class="stat-value text-blue-600">@territory.ReputationRequired%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-icon">🌍</span>
+                                    <span class="stat-label">GDP:</span>
+                                    <span class="stat-value-small">$@territory.GdpInBillions.ToString("N1")B</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-icon">🗣️</span>
+                                    <span class="stat-label">Languages:</span>
+                                    <span class="stat-value-small">@string.Join(", ", territory.OfficialLanguages?.Take(2) ?? new List<string>())</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex gap-2 mt-4">
+                                <button class="retro-button-explore flex-1" 
+                                        @onclick:stopPropagation="true"
+                                        @onclick="() => ExploreTerritory(territory)">
+                                    Explore
+                                </button>
+                                @if (CanAffordTerritory(territory))
+                                {
+                                    <button class="retro-button-purchase flex-1"
+                                            @onclick:stopPropagation="true"
+                                            @onclick="() => SelectTerritory(territory)">
+                                        Purchase
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="retro-button-purchase flex-1" disabled>
+                                        @if (PlayerIncome < territory.Cost)
+                                        {
+                                            <span>Need $@((territory.Cost - PlayerIncome).ToString("N0"))</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Need @(territory.ReputationRequired - PlayerReputation)% Rep</span>
+                                        }
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (availableTerritories.Count > pageSize)
+            {
+                <div class="retro-page-info mb-4">
+                    <div class="flex justify-between items-center">
+                        <button class="retro-button-nav" 
+                                @onclick="PreviousPage" 
+                                disabled="@(currentPage == 1)">
+                            ← Previous
+                        </button>
+                        
+                        <span class="text-gray-700 font-bold">
+                            Page @currentPage of @TotalPages 
+                            (@availableTerritories.Count territories)
+                        </span>
+                        
+                        <button class="retro-button-nav" 
+                                @onclick="NextPage" 
+                                disabled="@(currentPage == TotalPages)">
+                            Next →
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <!-- Owned Territories -->
+            @if (ownedTerritories.Any())
+            {
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    @foreach (var territory in ownedTerritories)
+                    {
+                        <div class="retro-card-owned">
+                            <div class="flex items-center gap-3 mb-3">
+                                <img src="/images/flags/@(territory.CountryCode.ToLower()).png" 
+                                     alt="@territory.CountryName flag" 
+                                     class="w-10 h-7 object-cover border-2 border-green-400 pixel-art-image"
+                                     onerror="this.style.display='none';" />
+                                <h3 class="retro-heading-sm text-green-800">@territory.CountryName</h3>
+                            </div>
+                            
+                            <div class="space-y-1 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Monthly Income:</span>
+                                    <span class="font-bold text-green-600">$@GetTerritoryIncome(territory).ToString("N0")</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Purchase Price:</span>
+                                    <span class="text-gray-500">$@territory.Cost.ToString("N0")</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-8">
+                    <p class="text-gray-600">No territories owned yet. Start exploring to build your empire!</p>
+                </div>
+            }
+        }
+
+        <!-- Strategy Oracle Section -->
+        <div class="mt-8 text-center">
+            <button class="retro-button-oracle" @onclick="ShowStrategyOracle">
+                🔮 Consult Strategy Oracle
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-8">
+            <p class="text-gray-600">No territories available at the moment.</p>
+        </div>
+    }
+</div>
+
+<!-- Country Exploration Modal -->
+@if (selectedTerritoryForExploration != null)
+{
+    <div class="country-modal-overlay" @onclick="CloseExplorationModal">
+        <div class="country-modal-content" @onclick:stopPropagation="true">
+            <div class="country-modal-header">
+                <div class="flex items-center gap-3">
+                    <img src="/images/flags/@(selectedTerritoryForExploration.CountryCode.ToLower()).png" 
+                         alt="@selectedTerritoryForExploration.CountryName flag" 
+                         class="w-12 h-8 object-cover border-2 border-white pixel-art-image"
+                         onerror="this.style.display='none';" />
+                    <h2 class="retro-heading-lg text-white">@selectedTerritoryForExploration.CountryName</h2>
+                </div>
+                <button class="retro-button-close" @onclick="CloseExplorationModal">✕</button>
+            </div>
+            
+            <div class="country-modal-body">
+                <!-- Modal Tabs -->
+                <div class="country-tabs">
+                    <button class="country-tab @(explorationTab == "info" ? "active" : "")" 
+                            @onclick='() => SetExplorationTab("info")'>
+                        📋 Info
+                    </button>
+                    <button class="country-tab @(explorationTab == "language" ? "active" : "")" 
+                            @onclick='() => SetExplorationTab("language")'>
+                        🗣️ Language
+                    </button>
+                    <button class="country-tab @(explorationTab == "happiness" ? "active" : "")" 
+                            @onclick='() => SetExplorationTab("happiness")'>
+                        😊 Happiness
+                    </button>
+                </div>
+
+                <div class="tab-content">
+                    @if (explorationTab == "info")
+                    {
+                        <div class="info-card">
+                            <div class="fact-list">
+                                <div class="fact-item">
+                                    <span class="fact-icon">🌍</span>
+                                    <span><strong>GDP:</strong> $@selectedTerritoryForExploration.GdpInBillions.ToString("N1") billion</span>
+                                </div>
+                                <div class="fact-item">
+                                    <span class="fact-icon">💰</span>
+                                    <span><strong>Purchase Cost:</strong> $@selectedTerritoryForExploration.Cost.ToString("N0")</span>
+                                </div>
+                                <div class="fact-item">
+                                    <span class="fact-icon">⭐</span>
+                                    <span><strong>Reputation Required:</strong> @selectedTerritoryForExploration.ReputationRequired%</span>
+                                </div>
+                                <div class="fact-item">
+                                    <span class="fact-icon">📈</span>
+                                    <span><strong>Monthly Income:</strong> $@GetTerritoryIncome(selectedTerritoryForExploration).ToString("N0")</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="educational-fact mt-4">
+                            <h4 class="retro-heading-sm mb-3">🎓 Educational Facts</h4>
+                            <p class="text-gray-700">
+                                @selectedTerritoryForExploration.CountryName is an excellent choice for learning about 
+                                @if (selectedTerritoryForExploration.GdpInBillions > 1000)
+                                {
+                                    <span>major world economies and global trade.</span>
+                                }
+                                else if (selectedTerritoryForExploration.GdpInBillions > 100)
+                                {
+                                    <span>emerging markets and regional economics.</span>
+                                }
+                                else
+                                {
+                                    <span>developing economies and sustainable growth.</span>
+                                }
+                                Understanding different economic systems helps build global awareness!
+                            </p>
+                        </div>
+                    }
+                    else if (explorationTab == "language")
+                    {
+                        <div class="languages-grid">
+                            @if (selectedTerritoryForExploration.OfficialLanguages?.Any() == true)
+                            {
+                                @foreach (var language in selectedTerritoryForExploration.OfficialLanguages.Take(2))
+                                {
+                                    <div class="language-card">
+                                        <h4 class="retro-heading-sm mb-3">🗣️ @language</h4>
+                                        
+                                        @foreach (var phrase in GetLanguagePhrases(language))
+                                        {
+                                            <div class="phrase-item">
+                                                <div class="phrase-text">
+                                                    <span class="phrase-english">@phrase.English</span>
+                                                    <span class="phrase-local">@phrase.Local</span>
+                                                </div>
+                                                <div class="phrase-pronunciation">
+                                                    <span class="pronunciation-guide">@phrase.Pronunciation</span>
+                                                    <button class="retro-button-tiny">🔊 Listen</button>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="language-card">
+                                    <p class="text-gray-600">Language information will be available soon!</p>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else if (explorationTab == "happiness")
+                    {
+                        <div class="happiness-strategies">
+                            @foreach (var strategy in GetHappinessStrategies())
+                            {
+                                <div class="strategy-card">
+                                    <div class="strategy-header">
+                                        <span class="strategy-icon">@strategy.Icon</span>
+                                        <h4 class="retro-heading-sm">@strategy.Name</h4>
+                                    </div>
+                                    
+                                    <div class="strategy-benefits">
+                                        <span class="benefit-label">Benefits:</span>
+                                        <div class="benefits-list">
+                                            @foreach (var benefit in strategy.Benefits)
+                                            {
+                                                <span class="benefit-tag">@benefit</span>
+                                            }
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="strategy-income">
+                                        Income Boost: +$@strategy.IncomeBoost.ToString("N0")/month
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        <div class="retro-tips-section mt-6">
+                            <h4 class="retro-heading-sm mb-4 text-center">💡 Happiness Tips</h4>
+                            <div class="tips-grid">
+                                <div class="tip-item">Keep reputation above 60%</div>
+                                <div class="tip-item">Invest in education</div>
+                                <div class="tip-item">Maintain cultural respect</div>
+                                <div class="tip-item">Balance growth & environment</div>
+                                <div class="tip-item">Listen to citizens</div>
+                                <div class="tip-item">Promote peace</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    // Parameters
+    [Parameter] public Guid PlayerId { get; set; }
+    [Parameter] public int PlayerReputation { get; set; }
+    [Parameter] public int PlayerIncome { get; set; }
+    [Parameter] public Microsoft.AspNetCore.Components.EventCallback<WorldLeaders.Shared.DTOs.TerritoryDto> OnTerritorySelected { get; set; }
+
+    // State
+    private bool isLoading = true;
+    private List<TerritoryDto> territories = new();
+    private List<TerritoryDto> availableTerritories = new();
+    private List<TerritoryDto> ownedTerritories = new();
+    
+    // Pagination
+    private int currentPage = 1;
+    private const int pageSize = 2; // Mobile-first: 2 countries at a time
+    private int TotalPages => (int)Math.Ceiling((double)availableTerritories.Count / pageSize);
+    
+    // Tabs
+    private string activeTab = "available";
+    
+    // Modal state
+    private TerritoryDto? selectedTerritoryForExploration = null;
+    private string explorationTab = "info";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTerritories();
+    }
+
+    private async Task LoadTerritories()
+    {
+        try
+        {
+            isLoading = true;
+            Logger.LogInformation("Loading territories for player {PlayerId}", PlayerId);
+            
+            // Load both available and owned territories
+            availableTerritories = await TerritoryService.GetAvailableTerritoriesAsync(PlayerId);
+            ownedTerritories = await TerritoryService.GetPlayerTerritoriesAsync(PlayerId);
+            
+            territories = availableTerritories; // For compatibility
+            
+            Logger.LogInformation("Loaded {AvailableCount} available and {OwnedCount} owned territories", 
+                availableTerritories.Count, ownedTerritories.Count);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error loading territories for player {PlayerId}", PlayerId);
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private List<TerritoryDto> GetCurrentPageTerritories()
+    {
+        var skip = (currentPage - 1) * pageSize;
+        return availableTerritories.Skip(skip).Take(pageSize).ToList();
+    }
+
+    private void NextPage()
+    {
+        if (currentPage < TotalPages)
+        {
+            currentPage++;
+        }
+    }
+
+    private void PreviousPage()
+    {
+        if (currentPage > 1)
+        {
+            currentPage--;
+        }
+    }
+
+    private void SetActiveTab(string tab)
+    {
+        activeTab = tab;
+        currentPage = 1; // Reset pagination when switching tabs
+    }
+
+    private async Task SelectTerritory(TerritoryDto territory)
+    {
+        try
+        {
+            Logger.LogInformation("Territory selected for purchase: {CountryName} by player {PlayerId}", 
+                territory.CountryName, PlayerId);
+            
+            if (OnTerritorySelected.HasDelegate)
+            {
+                await OnTerritorySelected.InvokeAsync(territory);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error selecting territory {CountryName}", territory.CountryName);
+        }
+    }
+
+    private void ExploreTerritory(TerritoryDto territory)
+    {
+        selectedTerritoryForExploration = territory;
+        explorationTab = "info";
+    }
+
+    private void CloseExplorationModal()
+    {
+        selectedTerritoryForExploration = null;
+    }
+
+    private void SetExplorationTab(string tab)
+    {
+        explorationTab = tab;
+    }
+
+    private bool CanAffordTerritory(TerritoryDto territory)
+    {
+        return PlayerIncome >= territory.Cost && PlayerReputation >= territory.ReputationRequired;
+    }
+
+    private string GetTierClass(TerritoryDto territory)
+    {
+        if (territory.GdpInBillions >= 1000) return "major";
+        if (territory.GdpInBillions >= 100) return "medium";
+        return "small";
+    }
+
+    private string GetTierName(TerritoryDto territory)
+    {
+        if (territory.GdpInBillions >= 1000) return "Major";
+        if (territory.GdpInBillions >= 100) return "Medium";
+        return "Small";
+    }
+
+    private int GetTerritoryIncome(TerritoryDto territory)
+    {
+        // Calculate monthly income based on GDP (simplified formula for educational purposes)
+        return (int)(territory.GdpInBillions * 1000m * 0.001m); // 0.1% of GDP in thousands as monthly income
+    }
+
+    private void ShowStrategyOracle()
+    {
+        // TODO: Implement Strategy Oracle modal
+        Logger.LogInformation("Strategy Oracle requested by player {PlayerId}", PlayerId);
+    }
+
+    // Language learning data
+    public class LanguagePhrase
+    {
+        public string English { get; set; } = "";
+        public string Local { get; set; } = "";
+        public string Pronunciation { get; set; } = "";
+    }
+
+    private List<LanguagePhrase> GetLanguagePhrases(string language)
+    {
+        // Educational phrases for 12-year-olds to learn
+        var commonPhrases = new List<LanguagePhrase>
+        {
+            new() { English = "Hello", Local = GetLocalTranslation(language, "Hello"), Pronunciation = GetPronunciation(language, "Hello") },
+            new() { English = "Buy", Local = GetLocalTranslation(language, "Buy"), Pronunciation = GetPronunciation(language, "Buy") },
+            new() { English = "Welcome", Local = GetLocalTranslation(language, "Welcome"), Pronunciation = GetPronunciation(language, "Welcome") },
+            new() { English = "I love you", Local = GetLocalTranslation(language, "I love you"), Pronunciation = GetPronunciation(language, "I love you") }
+        };
+
+        return commonPhrases;
+    }
+
+    private string GetLocalTranslation(string language, string phrase)
+    {
+        // Simplified translations for educational purposes
+        var translations = new Dictionary<string, Dictionary<string, string>>
+        {
+            ["Spanish"] = new() {
+                ["Hello"] = "Hola",
+                ["Buy"] = "Comprar",
+                ["Welcome"] = "Bienvenido",
+                ["I love you"] = "Te amo"
+            },
+            ["French"] = new() {
+                ["Hello"] = "Bonjour",
+                ["Buy"] = "Acheter",
+                ["Welcome"] = "Bienvenue",
+                ["I love you"] = "Je t'aime"
+            },
+            ["German"] = new() {
+                ["Hello"] = "Hallo",
+                ["Buy"] = "Kaufen",
+                ["Welcome"] = "Willkommen",
+                ["I love you"] = "Ich liebe dich"
+            },
+            ["Italian"] = new() {
+                ["Hello"] = "Ciao",
+                ["Buy"] = "Comprare",
+                ["Welcome"] = "Benvenuto",
+                ["I love you"] = "Ti amo"
+            },
+            ["Portuguese"] = new() {
+                ["Hello"] = "Olá",
+                ["Buy"] = "Comprar",
+                ["Welcome"] = "Bem-vindo",
+                ["I love you"] = "Eu te amo"
+            }
+        };
+
+        return translations.GetValueOrDefault(language)?.GetValueOrDefault(phrase) ?? phrase;
+    }
+
+    private string GetPronunciation(string language, string phrase)
+    {
+        // Simplified pronunciation guides for educational purposes
+        var pronunciations = new Dictionary<string, Dictionary<string, string>>
+        {
+            ["Spanish"] = new() {
+                ["Hello"] = "OH-lah",
+                ["Buy"] = "kom-PRAR",
+                ["Welcome"] = "bee-en-veh-NEE-doh",
+                ["I love you"] = "teh AH-moh"
+            },
+            ["French"] = new() {
+                ["Hello"] = "bone-ZHOOR",
+                ["Buy"] = "ah-sheh-TAY",
+                ["Welcome"] = "bee-ahn-veh-NEW",
+                ["I love you"] = "zhuh TEHM"
+            },
+            ["German"] = new() {
+                ["Hello"] = "HAH-loh",
+                ["Buy"] = "KOW-fen",
+                ["Welcome"] = "vill-KOM-men",
+                ["I love you"] = "ikh LEE-beh dikh"
+            }
+        };
+
+        return pronunciations.GetValueOrDefault(language)?.GetValueOrDefault(phrase) ?? "Pronunciation guide coming soon!";
+    }
+
+    // Happiness strategies
+    public class HappinessStrategy
+    {
+        public string Name { get; set; } = "";
+        public string Icon { get; set; } = "";
+        public List<string> Benefits { get; set; } = new();
+        public int IncomeBoost { get; set; }
+    }
+
+    private List<HappinessStrategy> GetHappinessStrategies()
+    {
+        return new List<HappinessStrategy>
+        {
+            new() {
+                Name = "Education Investment",
+                Icon = "📚",
+                Benefits = new() { "+20% Reputation", "Skilled Workforce", "Innovation" },
+                IncomeBoost = 5000
+            },
+            new() {
+                Name = "Healthcare System",
+                Icon = "🏥",
+                Benefits = new() { "+15% Happiness", "Healthy Population", "Longevity" },
+                IncomeBoost = 3000
+            },
+            new() {
+                Name = "Cultural Programs",
+                Icon = "🎭",
+                Benefits = new() { "+10% Tourism", "Cultural Pride", "Unity" },
+                IncomeBoost = 2500
+            },
+            new() {
+                Name = "Environmental Care",
+                Icon = "🌱",
+                Benefits = new() { "Sustainability", "Clean Air", "Future Security" },
+                IncomeBoost = 4000
+            },
+            new() {
+                Name = "Infrastructure",
+                Icon = "🏗️",
+                Benefits = new() { "+25% Efficiency", "Trade Routes", "Growth" },
+                IncomeBoost = 7500
+            },
+            new() {
+                Name = "Technology Hub",
+                Icon = "💻",
+                Benefits = new() { "Innovation", "High-Tech Jobs", "Global Connect" },
+                IncomeBoost = 10000
+            }
+        };
+    }
+}

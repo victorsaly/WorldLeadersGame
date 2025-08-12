@@ -1,0 +1,105 @@
+@* 
+Enhanced Territory Explorer Component - Mobile-First Educational Design
+Context: Educational game component for 12-year-old players learning world geography
+Educational Objective: Interactive territory discovery with detailed country exploration
+Safety Requirements: Age-appropriate content, positive messaging, child-friendly design
+Retro Theme: 32-bit pixel art with green theme and retro typography
+*@
+@using WorldLeaders.Shared.DTOs
+@using WorldLeaders.Shared.Enums
+@using WorldLeaders.Shared.Services
+@inject ITerritoryService TerritoryService
+@inject ILogger<TerritoryExplorer> Logger
+
+<div class="territory-explorer bg-white rounded-xl p-4 sm:p-6 shadow-xl border-4 border-gray-200">
+    <!-- Header -->
+    <div class="text-center mb-6">
+        <h2 class="retro-heading-xl text-gray-800 mb-3">🌍 Territory Explorer</h2>
+        <p class="retro-body text-gray-600">Discover amazing countries and learn about the world!</p>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center py-8">
+            <div class="retro-loading-spinner mb-4"></div>
+            <p class="retro-body text-gray-600">Loading your world adventure...</p>
+        </div>
+    }
+    else
+    {
+        <!-- Basic territory list for now to fix the immediate issue -->
+        <div class="mb-6">
+            @if (territories.Any())
+            {
+                <div class="text-center py-8">
+                    <h3 class="retro-heading-lg text-gray-800 mb-4">Available Territories</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        @foreach (var territory in territories.Take(6))
+                        {
+                            <div class="retro-card">
+                                <h4 class="retro-heading-sm text-gray-800">@territory.CountryName</h4>
+                                <p class="retro-body text-gray-600">Cost: $@territory.Cost.ToString("N0")</p>
+                            </div>
+                        }
+                    </div>
+                    
+                    <!-- Simple pagination display -->
+                    <div class="text-center mt-6">
+                        <span class="retro-body text-gray-800">Page 1 of @Math.Ceiling((double)territories.Count / 6)</span>
+                        <div class="text-xs text-gray-600 mt-1">
+                            Showing 1-@Math.Min(6, territories.Count) of @territories.Count territories
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-8 bg-gray-50 rounded-lg border-2 border-gray-200">
+                    <div class="text-6xl mb-4">🌍</div>
+                    <h3 class="retro-heading-lg text-gray-800 mb-3">No territories available</h3>
+                    <p class="retro-body text-gray-600">Check back later for more adventure opportunities!</p>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    // Parameters
+    [Parameter] public Guid PlayerId { get; set; }
+    [Parameter] public int PlayerReputation { get; set; }
+    [Parameter] public int PlayerIncome { get; set; }
+    [Parameter] public EventCallback<TerritoryDto> OnTerritorySelected { get; set; }
+
+    // State
+    private bool isLoading = true;
+    private List<TerritoryDto> territories = new();
+    private List<TerritoryDto> ownedTerritories = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+            territories = await TerritoryService.GetAvailableTerritoriesAsync(PlayerId);
+            ownedTerritories = await TerritoryService.GetPlayerTerritoriesAsync(PlayerId);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Failed to load territories for player {PlayerId}", PlayerId);
+            territories = new List<TerritoryDto>();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task SelectTerritory(TerritoryDto territory)
+    {
+        if (OnTerritorySelected.HasDelegate)
+        {
+            await OnTerritorySelected.InvokeAsync(territory);
+        }
+    }
+}
