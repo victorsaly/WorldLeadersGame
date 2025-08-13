@@ -17,11 +17,14 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            // Remove existing database context
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<WorldLeadersDbContext>));
+            // Remove all existing database context registrations safely
+            var dbContextDescriptors = services
+                .Where(d => d.ServiceType == typeof(DbContextOptions<WorldLeadersDbContext>) ||
+                           d.ServiceType == typeof(DbContextOptions) ||
+                           d.ServiceType == typeof(WorldLeadersDbContext))
+                .ToList();
             
-            if (descriptor != null)
+            foreach (var descriptor in dbContextDescriptors)
             {
                 services.Remove(descriptor);
             }

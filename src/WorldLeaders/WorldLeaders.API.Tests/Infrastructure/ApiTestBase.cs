@@ -45,17 +45,19 @@ public abstract class ApiTestBase : EducationalTestBase, IClassFixture<TestWebAp
     }
 
     /// <summary>
-    /// Configure services for API testing
-    /// Override in derived classes to customize test services
+    /// Configure test services - override to add additional test services
     /// </summary>
     /// <param name="services">Service collection to configure</param>
     protected virtual void ConfigureTestServices(IServiceCollection services)
     {
-        // Remove existing database context
-        var descriptor = services.SingleOrDefault(
-            d => d.ServiceType == typeof(DbContextOptions<WorldLeadersDbContext>));
+        // Remove all existing database context registrations safely
+        var dbContextDescriptors = services
+            .Where(d => d.ServiceType == typeof(DbContextOptions<WorldLeadersDbContext>) ||
+                       d.ServiceType == typeof(DbContextOptions) ||
+                       d.ServiceType == typeof(WorldLeadersDbContext))
+            .ToList();
         
-        if (descriptor != null)
+        foreach (var descriptor in dbContextDescriptors)
         {
             services.Remove(descriptor);
         }
@@ -63,18 +65,11 @@ public abstract class ApiTestBase : EducationalTestBase, IClassFixture<TestWebAp
         // Add in-memory database for testing
         services.AddDbContext<WorldLeadersDbContext>(options =>
         {
-            options.UseInMemoryDatabase("TestDatabase_" + Guid.NewGuid());
+            options.UseInMemoryDatabase("TestDb_API_" + Guid.NewGuid());
             options.EnableSensitiveDataLogging();
         });
-
-        // Configure test logging
-        services.AddLogging(builder =>
-        {
-            builder.AddConsole();
-            builder.SetMinimumLevel(LogLevel.Debug);
-        });
-
-        // Add any additional test services
+        
+        // Configure additional test services
         ConfigureAdditionalServices(services);
     }
 
