@@ -61,7 +61,9 @@ public class GameModelsTests : EducationalTestBase
         var jobValue = (int)jobLevel;
         Assert.InRange(jobValue, 1, 6);
         
-        ValidateEducationalOutcome(jobLevel, "Career progression and economic understanding");
+        // Get the educational description for validation
+        var jobDescription = GetJobLevelDescription(jobLevel);
+        ValidateEducationalOutcome(jobDescription, "Career progression and economic understanding");
     }
 
     [Theory]
@@ -102,7 +104,7 @@ public class GameModelsTests : EducationalTestBase
         var description = GetTerritoryTierDescription(territoryTier);
         ValidateChildSafeContent(description, $"Territory Tier: {territoryTier}");
         
-        ValidateEducationalOutcome(territoryTier, "Geography and economic concepts through GDP understanding");
+        ValidateEducationalOutcome(description, "Geography and economic concepts through GDP understanding");
     }
 
     [Theory]
@@ -122,7 +124,7 @@ public class GameModelsTests : EducationalTestBase
         // Assert - Educational value
         Assert.True(eventDescription.Length > 10, "Event descriptions should be descriptive for learning");
         
-        ValidateEducationalOutcome(eventType, "Real-world events and scenario-based learning");
+        ValidateEducationalOutcome(eventDescription, "Real-world events and scenario-based learning");
     }
 
     #region Helper Methods
