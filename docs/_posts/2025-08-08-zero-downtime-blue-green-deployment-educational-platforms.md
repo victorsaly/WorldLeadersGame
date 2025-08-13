@@ -104,7 +104,7 @@ Instead of stopping and starting applications, Blue-Green deployment works like 
 graph TD
     A[🏫 Active Learning Session<br/><br/>📊 30 Students Online<br/>🎯 Geography Lesson in Progress<br/>⏰ Peak Learning Hours] 
     
-    A --> B[⏹️ Application Shutdown<br/><br/>� Service Interruption<br/>📉 Students Disconnected<br/>⚠️ Learning Session Halted]
+    A --> B[⏹️ Application Shutdown<br/><br/>🚨 Service Interruption<br/>📉 Students Disconnected<br/>⚠️ Learning Session Halted]
     
     B --> C[📦 New Version Deployment<br/><br/>⏳ 5-15 Minutes Process<br/>🔧 Database Updates<br/>🛠️ Configuration Changes]
     
@@ -286,11 +286,11 @@ graph TB
     subgraph "UK South Region - GDPR Compliant"
         subgraph "Production Environment"
             PROD[🔵 Production Web App<br/>worldleaders-web-prod]
-            API_PROD[� API Production<br/>Educational Content API]
+            API_PROD[🔵 API Production<br/>Educational Content API]
         end
         
         subgraph "Staging Environment"
-            STAGE[� Staging Web App<br/>New Version Testing]
+            STAGE[🟢 Staging Web App<br/>New Version Testing]
             API_STAGE[🟢 API Staging<br/>New Features Testing]
         end
         
