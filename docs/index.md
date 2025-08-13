@@ -193,18 +193,6 @@ title: "World Leaders Game"
 
 ---
 
-<div class="cta-section">
-  <div class="cta-content">
-    <h3>🎯 Ready to Explore?</h3>
-    <p>Follow our <strong><a href="{{ '/post/' | relative_url }}">latest blog posts</a></strong> for real-time updates, or dive into our <strong><a href="{{ '/journey/' | relative_url }}">complete development journey</a></strong> to see AI autonomy in action.</p>
-    
-    <div class="cta-buttons">
-      <a href="https://worldleadersgame.co.uk" class="btn-primary large">🌐 Play the Game</a>
-      <a href="{{ '/post/' | relative_url }}" class="btn-secondary large">📖 Latest Posts</a>
-    </div>
-  </div>
-</div>
-
 <style>
 /* Enhanced landing page styles matching blog design */
 .stats-grid {
@@ -909,24 +897,6 @@ div.feature-item *::before {
 
 ---
 
-## 📰 **Latest Updates**
-
-<div class="recent-posts">
-  {% for post in site.posts limit:4 %}
-  <article class="post-preview">
-    <div class="post-meta">{{ post.date | date: "%b %d" }}</div>
-    <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-    <p>{{ post.excerpt | strip_html | truncate: 120 }}</p>
-  </article>
-  {% endfor %}
-</div>
-
-<div style="text-align: center; margin: 2rem 0;">
-  <a href="{{ '/post/' | relative_url }}" class="btn-primary">📖 View All Blog Posts</a>
-</div>
-
----
-
 ## 🎨 **What We're Building**
 
 Educational strategy game where **12-year-olds** learn geography, economics, and languages through:
@@ -937,36 +907,6 @@ Educational strategy game where **12-year-olds** learn geography, economics, and
 - **🗣️ Language learning** via speech recognition
 
 **Current Focus**: **Retro pixel art transformation** inspired by our 12-year-old designer!
-
----
-
-## 🚀 **Quick Navigation**
-
-<div class="nav-grid">
-  <div class="nav-card">
-    <h3>📅 Development Journey</h3>
-    <p>Week-by-week AI collaboration insights</p>
-    <a href="{{ '/journey/' | relative_url }}" class="btn">Explore →</a>
-  </div>
-  
-  <div class="nav-card">
-    <h3>� Technical Docs</h3>
-    <p>Implementation guides and patterns</p>
-    <a href="{{ '/technical-docs/' | relative_url }}" class="btn">Learn →</a>
-  </div>
-  
-  <div class="nav-card">
-    <h3>🏆 Milestones</h3>
-    <p>Achievement tracking and metrics</p>
-    <a href="{{ '/milestones/' | relative_url }}" class="btn">Track →</a>
-  </div>
-  
-  <div class="nav-card">
-    <h3>🐛 AI Issues</h3>
-    <p>Systematic development planning</p>
-    <a href="{{ '/issues/' | relative_url }}" class="btn">Monitor →</a>
-  </div>
-</div>
 
 ---
 
@@ -982,12 +922,3 @@ Educational strategy game where **12-year-olds** learn geography, economics, and
 **Perfect for**: Educators, parents, AI researchers, and developers exploring human-AI collaboration.
 
 ---
-
-<div class="highlight-box">
-  <h3>🎯 Ready to Explore?</h3>
-  <p>Follow our <strong><a href="{{ '/post/' | relative_url }}">latest blog posts</a></strong> for real-time updates, or dive into our <strong><a href="{{ '/journey/' | relative_url }}">complete development journey</a></strong> to see AI autonomy in action.</p>
-  
-  <div style="text-align: center; margin-top: 1rem;">
-    <a href="https://worldleadersgame.co.uk" class="btn-primary">🌐 Play the Game</a>
-  </div>
-</div>

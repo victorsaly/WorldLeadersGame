@@ -1,26 +1,18 @@
 ---
-layout: post
-title: "From Voice Memo to Production"
-subtitle: "An AI-First Development Experiment"
-date: 2025-08-01
-categories: ["development", "ai", "education"]
-tags:
-  [
-    "artificial-intelligence",
-    "educational-technology",
-    "software-development",
-    "collaboration",
-    "child-design",
-  ]
-author: "Victor Saly"
-pin: true
-image:
-  path: /assets/linkedin-images/voice-memo-to-production-linkedin.png
-  alt: "Professional LinkedIn image - Voice Memo to Production AI Development"
-educational_objective: "Demonstrates how AI can transform child creativity into production-ready educational software"
-child_safety_verified: true
+title: From Voice Memo to Production
+published: false
+description: Everything started with a five-minute voice memo from my son describing his dream educational game. Instead of filing it away as a "someday" project, we decided to attempt something unprecedented: let AI build it with 95% autonomy while we serve as creative directors.
+tags: ai, education, gamedev, softwaredevelopment
+cover_image: https://docs.worldleadersgame.co.uk/assets/linkedin-images/voice-memo-to-production-linkedin.png
+canonical_url: https://docs.worldleadersgame.co.uk/posts/2025/08/01/from-voice-memo-to-production-ai-development-experiment/
+series: "AI-First Educational Game Development"
 ---
 
+# From Voice Memo to Production: An AI-First Development Experiment
+
+![Voice Memo to Production](https://docs.worldleadersgame.co.uk/assets/linkedin-images/voice-memo-to-production-linkedin.png)
+
+> **TL;DR**: A 5-minute voice memo from my 12-year-old son became a production-ready educational game through AI-first development. We gave GitHub Copilot 95% autonomy and discovered that structured AI collaboration can transform creative ideas into real software in ways we never expected.
 ## AI-generated game foundation architecture
 
 Everything started with a five-minute voice memo from my son describing his dream educational game. Instead of filing it away as a "someday" project, we decided to attempt something unprecedented: let AI build it with 95% autonomy while we serve as creative directors.
@@ -101,7 +93,7 @@ The transformation from voice memo to production system follows a structured AI 
 </div>
 </details>
 
-```mermaid
+```
 graph TB
     subgraph "Voice Memo to Production Journey"
         A[5-Minute Voice Memo] --> B[Child Design Mockups]
@@ -164,7 +156,7 @@ The experiment continues: transforming creative vision into educational reality 
 
 ---
 
-_This post begins our 18-week development journey. Follow our progress at [worldleadersgame.co.uk](/) to see how AI autonomy evolves throughout the project._
+_This post begins our 18-week development journey. Follow our progress at [docs.worldleadersgame.co.uk](https://docs.worldleadersgame.co.uk/) to see how AI autonomy evolves throughout the project._
 
 <div align="center">
   <img src="{{ '/assets/world-leaders-logo.svg' | relative_url }}" alt="World Leaders Game Logo" width="200" height="300">
@@ -383,6 +375,19 @@ Every AI-generated component is validated for:
 
 ---
 
-**🎮 Ready to follow our journey?** This is just the beginning of our 18-week AI-first educational game development experiment. Follow our [weekly progress updates](/blog/) and explore our [complete development documentation](/journey/) to see AI autonomy in action.
+**🎮 Ready to follow our journey?** This is just the beginning of our 18-week AI-first educational game development experiment. Follow me for [weekly progress updates](https://docs.worldleadersgame.co.uk/blog/) and explore our [complete development documentation](https://docs.worldleadersgame.co.uk/journey/) to see AI autonomy in action.
 
 **Next week:** We're implementing the core game engine with 90% AI autonomy. Will AI successfully translate the 6-phase gameplay loop into engaging educational mechanics? Stay tuned! 🚀
+
+---
+
+## 💭 Discussion Questions
+
+I'm curious about your experience with the topics covered:
+
+1. **What's your experience with [specific topic]?**
+2. **Have you tried [specific approach/technique]?**
+3. **What challenges have you encountered?**
+4. **How do you balance [competing concerns]?**
+
+Share your thoughts and experiences in the comments below! 👇

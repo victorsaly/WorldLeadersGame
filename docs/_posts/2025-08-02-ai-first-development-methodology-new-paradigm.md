@@ -36,6 +36,47 @@ Instead of requesting "create a game component," we specify: "Create an educatio
 
 ## Structured AI Collaboration Patterns
 
+```mermaid
+graph TB
+    subgraph "AI-First Development Methodology"
+        A[Context-Driven Development] --> B[Visual-Driven Implementation]
+        B --> C[Iterative Prompt Engineering]
+        C --> D[Educational Validation Loops]
+        D --> A
+    end
+
+    subgraph "Pattern Details"
+        A --> A1[Project Context<br/>Educational Objectives<br/>Technical Constraints]
+        B --> B1[Child Mockups<br/>Visual Targets<br/>Concrete Goals]
+        C --> C1[Refine Instructions<br/>Quality Analysis<br/>Gap Identification]
+        D --> D1[Pedagogical Validation<br/>Learning Outcomes<br/>Safety Verification]
+    end
+
+    style A fill:#e1f5fe
+    style B fill:#e8f5e8
+    style C fill:#fff3e0
+    style D fill:#fce4ec
+```
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Mermaid Workflow</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This Mermaid diagram demonstrates the cyclical nature of AI-first development for educational software. The methodology ensures continuous improvement while maintaining educational objectives and child safety throughout the development process.</p>
+
+<h4>Key Implementation Insights</h4>
+<ul>
+<li><strong>Context-Driven Development:</strong> Every AI interaction includes complete project context, educational goals, and technical constraints to enable intelligent decision-making</li>
+<li><strong>Visual-Driven Implementation:</strong> Child mockups provide concrete targets that translate more effectively to AI code generation than abstract requirements</li>
+<li><strong>Iterative Prompt Engineering:</strong> Continuous refinement of AI instructions based on output quality, treating poor results as instruction gaps rather than AI limitations</li>
+<li><strong>Educational Validation Loops:</strong> Human oversight focuses on pedagogical accuracy and safety compliance while AI handles technical implementation</li>
+</ul>
+
+<h4>Value for Developers</h4>
+<p>This cyclical approach enables 95% AI autonomy by providing comprehensive context upfront and focusing human intervention on high-value educational validation rather than technical implementation details.</p>
+</div>
+</details>
+
 **Pattern 1: Context-Driven Development**
 Every AI interaction includes project context, educational objectives, and technical constraints. This enables the AI to make intelligent architectural decisions without constant guidance.
 
@@ -49,6 +90,51 @@ We refine AI instructions based on generated output quality. Poor results indica
 Human intervention focuses on pedagogical validation—ensuring generated educational content meets learning objectives—while AI handles technical implementation.
 
 ## Measuring AI Autonomy
+
+```mermaid
+graph LR
+    subgraph "Development Phase Autonomy"
+        A[Architecture Design<br/>95% Autonomous] --> B[Code Generation<br/>92% Autonomous]
+        B --> C[Documentation<br/>100% Autonomous]
+        C --> D[Educational Content<br/>85% Autonomous]
+    end
+
+    subgraph "Human Intervention Areas"
+        E[Educational Validation] --> F[Safety Compliance]
+        F --> G[Technical Debugging]
+        G --> H[Pedagogical Review]
+    end
+
+    D --> E
+
+    style A fill:#4caf50
+    style B fill:#4caf50
+    style C fill:#2e7d32
+    style D fill:#66bb6a
+    style E fill:#ff9800
+    style F fill:#f44336
+    style G fill:#ff9800
+    style H fill:#ff5722
+```
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain AI Autonomy Metrics</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This diagram visualizes the actual measured autonomy levels achieved during educational game development, showing where AI excels and where human expertise remains essential for child-focused educational software.</p>
+
+<h4>Key Implementation Insights</h4>
+<ul>
+<li><strong>Architecture Design (95%):</strong> AI successfully interpreted educational requirements into appropriate .NET Aspire solution structures and domain models</li>
+<li><strong>Code Generation (92%):</strong> Most business logic, UI components, and data access patterns generated automatically with minimal correction</li>
+<li><strong>Documentation (100%):</strong> All technical documentation, API specifications, and implementation guides written entirely by AI</li>
+<li><strong>Educational Content (85%):</strong> Game mechanics and learning objectives required pedagogical review but minimal technical adjustment</li>
+</ul>
+
+<h4>Value for Developers</h4>
+<p>These metrics demonstrate that AI autonomy is highest in technical implementation tasks, while human intervention remains critical for educational validation, safety compliance, and pedagogical accuracy in child-focused applications.</p>
+</div>
+</details>
 
 Our metrics across development phases:
 
@@ -67,6 +153,60 @@ AI-generated game mechanics and learning objectives required pedagogical review 
 Human intervention primarily addressed educational validation, safety compliance verification, and occasional technical debugging.
 
 ## The Emergence of Autonomous Problem-Solving
+
+```mermaid
+flowchart TD
+    subgraph "AI Problem-Solving Evolution"
+        A[Problem Detection] --> B[Pattern Recognition]
+        B --> C[Solution Research]
+        C --> D[Implementation]
+        D --> E[Verification]
+        E --> F[Learning Integration]
+        F --> A
+    end
+
+    subgraph "Example: PostgreSQL Configuration Issue"
+        G[PostgreSQL Failed] --> H[AI Identifies Missing Packages]
+        H --> I[Researches EF Core Solutions]
+        I --> J[Implements Package References]
+        J --> K[Tests Connection]
+        K --> L[Documents Solution Pattern]
+    end
+
+    subgraph "Example: Entity Framework Circular References"
+        M[Circular Reference Error] --> N[Pattern Recognition]
+        N --> O[JsonIgnore Solution]
+        O --> P[Applies Fix]
+        P --> Q[Validates Serialization]
+    end
+
+    style A fill:#e3f2fd
+    style D fill:#c8e6c9
+    style G fill:#ffebee
+    style J fill:#e8f5e8
+    style M fill:#fff3e0
+    style P fill:#e8f5e8
+```
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Autonomous Problem-Solving</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This flowchart demonstrates how AI evolved from basic code completion to autonomous problem-solving during educational game development. The examples show real issues that AI resolved without human intervention, indicating genuine understanding rather than pattern matching.</p>
+
+<h4>Key Implementation Insights</h4>
+<ul>
+<li><strong>Problem Detection:</strong> AI identifies issues through compilation errors, runtime exceptions, and testing failures</li>
+<li><strong>Pattern Recognition:</strong> AI connects current problems to known solution patterns from training data and project context</li>
+<li><strong>Solution Research:</strong> AI explores multiple solution approaches, considering project constraints and educational requirements</li>
+<li><strong>Implementation:</strong> AI applies fixes with appropriate error handling and educational safety considerations</li>
+<li><strong>Learning Integration:</strong> AI documents solutions for future reference and pattern reuse</li>
+</ul>
+
+<h4>Value for Developers</h4>
+<p>This autonomous problem-solving capability reduces debugging time by ~80% while maintaining code quality. AI handles routine technical issues, allowing developers to focus on educational design and child safety validation.</p>
+</div>
+</details>
 
 The most revealing development has been observing AI autonomous problem-solving. When PostgreSQL configuration failed, the AI identified missing packages, researched solutions, and implemented fixes without human guidance.
 
@@ -114,7 +254,7 @@ The future of software development may not be human versus AI, but human creativ
 
 ---
 
-_This post is part of our 18-week AI-first development experiment. Follow the complete journey at [worldleadersgame.dev](/) to see how AI autonomy evolves with project complexity._
+_This post is part of our 18-week AI-first development experiment. Follow the complete journey at [worldleadersgame.co.uk](/) to see how AI autonomy evolves with project complexity._
 
 ## 💻 Development Guidelines
 
@@ -248,6 +388,54 @@ public class ComponentName : ComponentBase
 
 ## 📊 **AI Autonomy Levels & Intervention Triggers**
 
+```mermaid
+graph TB
+    subgraph "AI Autonomy by Development Phase"
+        A[Architecture Phase<br/>98% AI Autonomous] --> B[Documentation Creation<br/>100% AI Autonomous]
+        B --> C[Code Generation<br/>92% AI Autonomous]
+        C --> D[UI/UX Design<br/>85% AI Autonomous]
+        D --> E[Testing Strategy<br/>95% AI Autonomous]
+    end
+
+    subgraph "Human Intervention Decision Framework"
+        F[AI Logic vs Intent?] --> G{Safety Concerns?}
+        G -->|Yes| H[🚨 IMMEDIATE INTERVENTION]
+        G -->|No| I{Compilation Issues?}
+        I -->|Yes| J[Technical Review Required]
+        I -->|No| K{Educational Accuracy?}
+        K -->|Issues| L[Pedagogical Validation]
+        K -->|Good| M[✅ AI CONTINUES]
+    end
+
+    style A fill:#c8e6c9
+    style B fill:#4caf50
+    style C fill:#81c784
+    style D fill:#aed581
+    style E fill:#c8e6c9
+    style H fill:#ffcdd2
+    style M fill:#c8e6c9
+```
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Intervention Decision Framework</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This decision framework establishes clear boundaries for AI autonomy in educational software development. It ensures that critical aspects affecting child safety, educational accuracy, and user trust require human oversight while allowing AI to handle routine technical implementation efficiently.</p>
+
+<h4>Key Implementation Insights</h4>
+<ul>
+<li><strong>Safety-First Boundaries:</strong> Any child safety concern immediately triggers human review, preventing inappropriate content from reaching young learners</li>
+<li><strong>Educational Accuracy Checks:</strong> Factual errors in learning content require human validation, ensuring educational integrity and curriculum alignment</li>
+<li><strong>Original Intent Preservation:</strong> When AI interpretation diverges from the original educational vision, human guidance realigns the development direction</li>
+<li><strong>Autonomous Technical Zones:</strong> Standard software development tasks can proceed without intervention, maintaining development velocity while ensuring quality</li>
+<li><strong>Graduated Response System:</strong> Different intervention levels based on issue severity, from immediate stops to gentle course corrections</li>
+</ul>
+
+<h4>Value for Developers</h4>
+<p>This clear intervention framework prevents over-management of AI while ensuring critical oversight. It helps teams maintain 95% development speed while protecting the educational mission and child safety requirements that are non-negotiable in educational software development.</p>
+</div>
+</details>
+
 ### **Development Autonomy by Phase**
 
 - **Architecture Phase**: 98% AI autonomous (2% human guidance through iterative requirements)
@@ -258,59 +446,76 @@ public class ComponentName : ComponentBase
 
 ### **Human Intervention Decision Tree**
 
-<details class="code-explanation">
-<summary>💡 <strong>Explain Code</strong></summary>
-<div class="explanation-content">
-<h4>Educational Context</h4>
-<p>This decision tree framework establishes clear boundaries for AI autonomy in educational software development. The structure prioritizes child safety and educational accuracy while allowing AI maximum autonomy for technical implementation, creating a balanced approach to AI-assisted educational development.</p>
+🚨 **INTERVENTION REQUIRED** when:
 
-<h4>Key Implementation Insights</h4>
-<p>The framework demonstrates how to identify critical decision points where human expertise is essential (safety, educational accuracy, intent validation) versus areas where AI can operate independently (architecture, implementation, documentation). This creates efficient collaboration that leverages both human judgment and AI capability.</p>
+- AI logic contradicts original voice memo intent
+- Code compilation fails and AI cannot self-correct
+- Educational content is factually incorrect
+- Child safety concerns arise
+- Real-world data integration has accuracy issues
 
-<h4>Value for Developers</h4>
-<p>This pattern provides a practical framework for managing AI autonomy in educational projects. The clear intervention triggers help developers know when to step in while maximizing AI efficiency, ensuring both development speed and educational quality.</p>
-</div>
-</details>
+✅ **AI CONTINUES AUTONOMOUSLY** for:
 
-```
-🚨 INTERVENTION REQUIRED when:
-   ┌── AI logic contradicts original voice memo intent
-   ├── Code compilation fails and AI cannot self-correct
-   ├── Educational content is factually incorrect
-   ├── Child safety concerns arise
-   └── Real-world data integration has accuracy issues
-
-✅ AI CONTINUES AUTONOMOUSLY for:
-   ┌── All architectural and design decisions
-   ├── Technology selection and implementation patterns
-   ├── UI/UX design and user experience flows
-   ├── Testing strategies and quality assurance
-   ├── Documentation structure and content creation
-   └── DevOps and deployment configurations
-```
-
-<details class="code-explanation">
-<summary>💡 Click for Intervention Guidelines Explanation</summary>
-<div class="explanation-content">
-<h4>Educational Context</h4>
-<p>This framework establishes clear boundaries for AI autonomy in educational software development. It ensures that critical aspects affecting child safety, educational accuracy, and user trust require human oversight while allowing AI to handle routine technical implementation.</p>
-
-<h4>Key Implementation Insights</h4>
-<ul>
-<li><strong>Safety-First Boundaries:</strong> Any child safety concern immediately triggers human review, preventing inappropriate content from reaching young learners</li>
-<li><strong>Educational Accuracy Checks:</strong> Factual errors in learning content require human validation, ensuring educational integrity</li>
-<li><strong>Original Intent Preservation:</strong> When AI interpretation diverges from the original vision, human guidance realigns the direction</li>
-<li><strong>Autonomous Technical Zones:</strong> Standard software development tasks can proceed without intervention, maintaining development velocity</li>
-</ul>
-
-<h4>Value for Developers</h4>
-<p>This clear intervention framework prevents over-management of AI while ensuring critical oversight. It helps teams maintain development speed while protecting the educational mission and child safety requirements that are non-negotiable in educational software.</p>
-</div>
-</details>
+- All architectural and design decisions
+- Technology selection and implementation patterns
+- UI/UX design and user experience flows
+- Testing strategies and quality assurance
+- Documentation structure and content creation
+- DevOps and deployment configurations
 
 ---
 
 ## 🧠 **The AI Development Dream Team**
+
+```mermaid
+graph LR
+    subgraph "AI Collaboration Architecture"
+        A[Claude Sonnet 3.5<br/>Strategic Architect<br/>95% Autonomy] --> B[Project Planning]
+        A --> C[Educational Content]
+        A --> D[Safety Guidelines]
+
+        E[GitHub Copilot<br/>Implementation Engine<br/>92% Autonomy] --> F[Real-time Coding]
+        E --> G[Pattern Recognition]
+        E --> H[Code Generation]
+
+        I[Human Oversight<br/>5-8% Involvement] --> J[Educational Validation]
+        I --> K[Safety Verification]
+        I --> L[Strategic Direction]
+    end
+
+    subgraph "Collaboration Flow"
+        B --> E
+        C --> E
+        D --> E
+        F --> I
+        G --> I
+        H --> I
+    end
+
+    style A fill:#e1f5fe
+    style E fill:#e8f5e8
+    style I fill:#fff3e0
+```
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain AI Collaboration Architecture</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This architecture diagram shows how different AI systems collaborate to create educational software while maintaining human oversight for critical educational and safety decisions. The flow demonstrates efficient specialization and handoffs between AI capabilities.</p>
+
+<h4>Key Implementation Insights</h4>
+<ul>
+<li><strong>Strategic vs. Implementation Division:</strong> Claude handles high-level planning and educational content while Copilot manages technical implementation</li>
+<li><strong>Specialized Autonomy Levels:</strong> Each AI system operates at its optimal autonomy level based on task complexity and safety requirements</li>
+<li><strong>Human Oversight Integration:</strong> Strategic human involvement focuses on educational validation and safety verification rather than technical implementation</li>
+<li><strong>Collaboration Flow:</strong> Clear handoffs between strategic planning, implementation, and validation ensure consistent quality throughout development</li>
+<li><strong>Feedback Loops:</strong> Human oversight informs both AI systems, creating continuous improvement in educational effectiveness</li>
+</ul>
+
+<h4>Value for Developers</h4>
+<p>This collaborative architecture enables 95% overall autonomy while maintaining educational integrity and child safety. It leverages each AI system's strengths while ensuring human expertise guides critical educational decisions.</p>
+</div>
+</details>
 
 ### **Claude Sonnet 3.5: Strategic Architect**
 
@@ -354,7 +559,7 @@ public class ComponentName : ComponentBase
 ```
 
 <details class="code-explanation">
-<summary>💡 Click for GitHub Copilot Configuration Explanation</summary>
+<summary>💡 <strong>Explain GitHub Copilot Configuration</strong></summary>
 <div class="explanation-content">
 <h4>Educational Context</h4>
 <p>GitHub Copilot's configuration emphasizes its strength in real-time implementation support. The 92% autonomy level reflects high confidence in its coding assistance while requiring occasional guidance for educational-specific requirements.</p>
@@ -505,7 +710,7 @@ Creating comprehensive Copilot instructions and mastering iterative prompt refin
 ```
 
 <details class="code-explanation">
-<summary>💡 Click for Copilot Instructions Framework Explanation</summary>
+<summary>💡 <strong>Explain Copilot Instructions Framework</strong></summary>
 <div class="explanation-content">
 <h4>Educational Context</h4>
 <p>This comprehensive framework ensures AI assistants understand the complete educational context of the project. Each element guides AI toward generating code that serves both technical requirements and learning objectives for 12-year-old users.</p>
@@ -515,6 +720,14 @@ Creating comprehensive Copilot instructions and mastering iterative prompt refin
 <li><strong>Educational Focus:</strong> Every technical decision must serve learning objectives in geography, economics, and language development</li>
 <li><strong>Technology Stack Rationale:</strong> Choices like Blazor Server and TailwindCSS are explained to help AI maintain architectural consistency</li>
 <li><strong>Game Mechanics Integration:</strong> AI understands how technical components support dice rolling, territory acquisition, and language learning</li>
+<li><strong>Safety Pattern Integration:</strong> Child protection and privacy considerations are built into every coding standard</li>
+<li><strong>Accessibility Requirements:</strong> WCAG 2.1 AA compliance ensures inclusive design for all learners</li>
+</ul>
+
+<h4>Value for Developers</h4>
+<p>This structured approach transforms AI from a generic coding assistant into a specialized educational software expert. It reduces the need for constant context-switching and ensures consistent quality across all components.</p>
+</div>
+</details>
 <li><strong>Safety Pattern Integration:</strong> Child protection and privacy considerations are built into every coding standard</li>
 <li><strong>Accessibility Requirements:</strong> WCAG 2.1 AA compliance ensures inclusive design for all learners</li>
 </ul>
@@ -533,6 +746,7 @@ Creating comprehensive Copilot instructions and mastering iterative prompt refin
 **Educational Context**: This C# template demonstrates how structured commenting enables AI to generate educational software components with complete context, ensuring code serves both technical requirements and learning objectives for 12-year-old users.
 
 **Key Implementation Insights**:
+
 - **Context-Rich Comments**: Every component includes educational purpose, learning goals, technical specs, and safety considerations
 - **AI Guidance Pattern**: Structured comments provide complete context for autonomous code generation, reducing human intervention from 25% to 7%
 - **Educational Integration**: Comments ensure generated code maintains learning objectives and child-appropriate design patterns
@@ -604,7 +818,7 @@ Rapid Educational Innovation
 ```
 
 <details class="code-explanation">
-<summary>💡 Click for Innovation Formula Explanation</summary>
+<summary>💡 <strong>Explain Innovation Formula</strong></summary>
 <div class="explanation-content">
 <h4>Educational Context</h4>
 <p>This formula encapsulates the key components that enable rapid development of educational software that truly serves young learners. It combines authentic user insight with technical excellence to create engaging learning experiences.</p>
@@ -626,6 +840,51 @@ Rapid Educational Innovation
 ---
 
 ## 🚀 **Results: What AI Autonomy Achieved**
+
+```mermaid
+graph TB
+    subgraph "Development Velocity Comparison"
+        A[Traditional Development<br/>18-20 weeks estimated] --> B[AI-First Development<br/>6 weeks to MVP target]
+        B --> C[Speed Improvement<br/>~300% faster]
+    end
+
+    subgraph "Quality Outcomes Achieved"
+        D[✅ Complete .NET Aspire Solution] --> E[✅ Educational Domain Models]
+        E --> F[✅ Child-Friendly UI Design]
+        F --> G[✅ COPPA-Compliant Architecture]
+        G --> H[✅ Production-Ready Infrastructure]
+    end
+
+    subgraph "Key Success Metrics"
+        I[Zero Compiler Warnings] --> J[Lighthouse PWA Score >90]
+        J --> K[WCAG 2.1 AA Compliance]
+        K --> L[Educational Value Validated]
+    end
+
+    style C fill:#4caf50
+    style H fill:#4caf50
+    style L fill:#4caf50
+```
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Development Results Metrics</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This results diagram demonstrates the tangible benefits of AI-first development for educational software, showing both velocity improvements and quality achievements that directly benefit 12-year-old learners through faster delivery of high-quality educational experiences.</p>
+
+<h4>Key Implementation Insights</h4>
+<ul>
+<li><strong>Development Velocity:</strong> 300% speed improvement enables rapid iteration and testing of educational concepts with real users</li>
+<li><strong>Quality Maintenance:</strong> Zero compiler warnings and high Lighthouse scores prove AI can maintain professional standards while moving fast</li>
+<li><strong>Educational Standards:</strong> COPPA compliance and accessibility requirements met automatically through AI instruction integration</li>
+<li><strong>Production Readiness:</strong> Complete infrastructure and domain models ready for real-world educational deployment</li>
+<li><strong>Child-Focused Design:</strong> UI design matches child mockups while maintaining technical excellence and safety standards</li>
+</ul>
+
+<h4>Value for Developers</h4>
+<p>These results prove that AI-first development can deliver both speed and quality simultaneously, enabling educational software teams to serve learners more effectively while maintaining professional standards and child protection requirements.</p>
+</div>
+</details>
 
 ### **Development Speed: 10x Improvement**
 

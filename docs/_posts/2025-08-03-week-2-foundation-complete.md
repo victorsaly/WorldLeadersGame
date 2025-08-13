@@ -67,7 +67,7 @@ The experiment continues: can AI maintain this level of autonomy as complexity i
 
 ---
 
-_Follow our complete development journey at [worldleadersgame.dev](/) to see how AI autonomy evolves throughout the 18-week project timeline._
+_Follow our complete development journey at [worldleadersgame.co.uk](/) to see how AI autonomy evolves throughout the 18-week project timeline._
 
 - Complete domain models reflecting educational objectives
 - Child-friendly UI components with appropriate visual hierarchy
@@ -147,6 +147,7 @@ Following my son's hand-drawn mockups, the AI generated:
 **Educational Context**: This simple command represents the critical validation that AI-generated educational software meets production standards, ensuring that 12-year-old learners will have a reliable, error-free gaming experience.
 
 **Key Implementation Insights**:
+
 - **Zero Error Validation**: Clean builds prove that AI autonomous development produces production-quality code without human debugging
 - **Architecture Validation**: Success demonstrates that complex multi-project educational solutions can be autonomously architected by AI
 - **Educational Quality Assurance**: Error-free compilation ensures that learning experiences won't be disrupted by technical failures
@@ -179,6 +180,7 @@ dotnet build
 **Educational Context**: These C# models demonstrate how educational concepts can be translated into data structures that 12-year-old learners can intuitively understand, making complex game mechanics accessible and engaging for young minds.
 
 **Key Implementation Insights**:
+
 - **Percentage-Based Metrics**: Reputation and Happiness use 0-100% scales that children can easily visualize and understand
 - **Clear Progression Path**: JobLevel enum creates an obvious career advancement system that teaches real-world professional development
 - **Educational Transparency**: Every property has clear learning value - Income teaches economics, Reputation teaches social skills, Happiness teaches well-being
