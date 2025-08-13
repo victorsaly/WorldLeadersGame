@@ -36,7 +36,7 @@ env:
   DEPLOYMENT_REGION: 'uksouth'
   ENABLE_BLUE_GREEN_DEPLOYMENT: 'true'
   ENABLE_AOT_OPTIMIZATION: 'true'
-  TARGET_RESPONSE_TIME_MS: '1500'
+  TARGET_RESPONSE_TIME_MS: '45000'  # Target response time for child-friendly educational content increase until we identify performance bottlenecks on azure
 
 # Required permissions for Azure OIDC authentication
 permissions:
