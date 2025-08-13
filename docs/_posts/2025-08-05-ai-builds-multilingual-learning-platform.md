@@ -30,6 +30,13 @@ Week 4 of our AI-first development experiment brought our most complex challenge
 
 Our week began with a simple question: "Can we add speech recognition to help children learn pronunciation?" By week's end, we had implemented a complete multilingual learning platform. This transformation happened through iterative AI collaboration that demonstrated remarkable educational understanding.
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This Mermaid timeline demonstrates agile development methodology applied to educational technology. The five-day progression shows how complex features emerge through iterative design: starting with research and safety analysis, progressing through architecture and implementation, and concluding with educational validation. This timeline pattern is crucial for educational software where safety and pedagogical effectiveness must be validated at each stage.</p>
+</div>
+</details>
+
 ```mermaid
 timeline
     title Week 4: Speech Recognition Development Journey
@@ -79,6 +86,13 @@ Connecting game mechanics to actual country languages and cultural contexts push
 ## 🛠️ Technical Architecture That Emerged
 
 The speech recognition integration required fundamental architectural evolution across our platform:
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This architecture diagram illustrates a comprehensive educational speech recognition system with three interconnected layers. The speech architecture shows real-time processing from Azure services through child safety validation to educational assessment. The multilingual framework demonstrates how 12 world languages integrate with cultural context and progressive learning. The child safety infrastructure ensures COPPA compliance through no-storage policies and real-time processing, creating a secure learning environment for children.</p>
+</div>
+</details>
 
 ```mermaid
 graph TB
@@ -151,6 +165,20 @@ The most impressive aspect of this week's development was how the AI understood 
 ### Global Language Learning Framework
 
 The AI autonomously created comprehensive support for 12 major world languages, each with age-appropriate content and cultural context:
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This mind map represents a culturally-sensitive multilingual learning framework designed for 12-year-old learners. The structure organizes 12 major world languages into logical groupings while emphasizing educational progression from basic pronunciation to cultural understanding.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>Each language branch includes specific educational considerations: tonal awareness for Chinese, honorific systems for Korean, and cultural sensitivity for Arabic. The framework balances linguistic accuracy with age-appropriate learning, connecting pronunciation skills to cultural appreciation and world geography knowledge.</p>
+
+<h4>Value for Developers</h4>
+<p>This demonstrates how educational content architecture must consider cognitive development, cultural sensitivity, and progressive skill building. The hierarchical organization supports scalable implementation while maintaining educational integrity across diverse linguistic systems.</p>
+</div>
+</details>
 
 ```mermaid
 mindmap
@@ -240,6 +268,20 @@ The most remarkable learning from this week was observing how our established ch
 
 ### Safety-First Development Process
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This sequence diagram illustrates a child-safe speech recognition workflow designed specifically for 12-year-old learners. The process emphasizes COPPA compliance through real-time processing with zero data storage, while maintaining educational effectiveness through confidence-building feedback loops.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The diagram shows three critical safety layers: real-time Azure processing (no storage), educational appropriateness validation, and mandatory positive reinforcement. The workflow ensures every pronunciation attempt results in encouraging feedback, building learning confidence regardless of accuracy levels.</p>
+
+<h4>Value for Developers</h4>
+<p>This demonstrates how educational technology can achieve technical sophistication while maintaining strict child safety standards. The pattern shows that compliance and educational effectiveness can reinforce each other rather than compete, creating safer and more engaging learning experiences.</p>
+</div>
+</details>
+
 ```mermaid
 sequenceDiagram
     participant Child as 12-Year-Old Learner
@@ -271,6 +313,20 @@ This week demonstrated how AI collaboration can produce enterprise-grade educati
 
 **Educational-First API Design:**
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This C# record defines a comprehensive educational challenge data structure that balances technical requirements with pedagogical needs. The inclusion of pronunciation guides, accuracy requirements, and assessment details creates a foundation for effective language learning while maintaining child-appropriate expectations.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The structure demonstrates educational-first API design through required accuracy thresholds (typically 70% for children), pronunciation guidance for accessibility, and speech recognition support flags. The optional assessment details allow for progressive enhancement without breaking existing functionality.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern shows how to design APIs that prioritize educational outcomes over technical complexity. The record structure supports both simple text challenges and advanced speech recognition while maintaining clear, educational intent in every property.</p>
+</div>
+</details>
+
 ```csharp
 public record LanguageChallengeDto(
     string LanguageCode,
@@ -287,6 +343,20 @@ public record LanguageChallengeDto(
 ```
 
 **Child-Safe Processing Implementation:**
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This method signature demonstrates child-safe speech processing that prioritizes COPPA compliance and educational appropriateness. The real-time processing approach ensures no audio storage while the 70% accuracy threshold accommodates 12-year-old learning capabilities and builds confidence.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The implementation comments highlight three critical aspects: Azure Speech Services integration for professional accuracy, educational threshold application that matches child development, and immediate audio disposal for privacy compliance. The encouraging feedback generation ensures positive learning experiences regardless of pronunciation accuracy.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern shows how to implement sophisticated speech recognition while maintaining strict privacy standards and educational focus. The approach demonstrates that child safety and technical capability can enhance rather than compromise each other in educational applications.</p>
+</div>
+</details>
 
 ```csharp
 public async Task<PronunciationAssessmentResult> AssessPronunciationAsync(

@@ -38,6 +38,23 @@ Most cost dashboards are designed for enterprise architects and CFOs, not middle
 
 ### **Problem-Solution Mapping**
 
+<details>
+<summary>🔍 Click to understand: Problem-Solution Architecture</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This diagram shows how technical problems in educational software require unique solutions that prioritize child experience over typical business metrics.</p>
+
+<p><strong>Key Problem-Solving Insights:</strong></p>
+<ul>
+<li><strong>Transparency vs. Comprehension:</strong> Traditional cost dashboards provide transparency but lack educational context - children need to understand WHY services cost money</li>
+<li><strong>Digital Literacy Gap:</strong> Kids use AI and cloud services but have no mental model of resource consumption - this creates dependency without understanding</li>
+<li><strong>Emotional Safety:</strong> Budget alerts can create anxiety in children - positive messaging and learning adventure framing maintains engagement while teaching responsibility</li>
+<li><strong>Technical Complexity:</strong> Aspire orchestration dependencies can prevent flexible deployment - commenting out dependencies enables multiple deployment scenarios</li>
+</ul>
+
+<p><strong>Design Philosophy:</strong> This represents child-centered software design where technical solutions must serve educational and emotional needs, not just functional requirements.</p>
+</div>
+</details>
+
 ```mermaid
 graph LR
     subgraph "Problems"
@@ -95,6 +112,23 @@ Our latest pull request tackled several critical issues:
 
 ### **Visual Language That Speaks to Kids**
 
+<details>
+<summary>🔍 Click to understand: Child-Friendly CSS Design System</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This CSS demonstrates how typography and visual design choices specifically target child cognitive development and engagement patterns.</p>
+
+<p><strong>Key Design System Insights:</strong></p>
+<ul>
+<li><strong>Font Psychology:</strong> "Comic Neue" and "Arial Rounded" fonts reduce reading anxiety and create approachable, friendly interfaces for 12-year-olds</li>
+<li><strong>Scale for Accessibility:</strong> 2.5rem (40px) titles and 3rem (48px) icons exceed minimum accessibility guidelines, accommodating varying visual acuity in children</li>
+<li><strong>Cognitive Load Reduction:</strong> Large, clear visual elements reduce mental effort required to parse interface information</li>
+<li><strong>Emotional Response:</strong> Rounded fonts and large emoji icons trigger positive emotional responses, reducing stress around financial concepts</li>
+</ul>
+
+<p><strong>Child UX Principles:</strong> This styling system prioritizes emotional safety and cognitive accessibility over minimalist design trends typically used in adult applications.</p>
+</div>
+</details>
+
 ```css
 .dashboard-title {
   font-size: 2.5rem;
@@ -128,6 +162,24 @@ Complex Azure services become friendly learning tools:
 
 ### **System Architecture Overview**
 
+<details>
+<summary>🔍 Click to understand: System Architecture Overview</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This architecture demonstrates how complex cost management systems can be simplified and made educational while maintaining enterprise-grade functionality.</p>
+
+<p><strong>Key Architectural Insights:</strong></p>
+<ul>
+<li><strong>Child-Friendly Frontend Layer:</strong> Educational Components and Progress Indicators transform raw financial data into learning experiences</li>
+<li><strong>Safety-First API Design:</strong> Child Content Moderator validates all cost information before presentation, ensuring age-appropriate financial education</li>
+<li><strong>Graceful Degradation:</strong> Fallback System ensures educational value continues even when Azure APIs are unavailable</li>
+<li><strong>Educational Metadata Service:</strong> Adds learning context to every cost item, transforming expenses into educational opportunities</li>
+<li><strong>Separation of Concerns:</strong> Business logic in API layer is completely separated from child-facing presentation logic</li>
+</ul>
+
+<p><strong>Educational Software Pattern:</strong> This architecture represents a new pattern where enterprise functionality is wrapped in educational context rather than simplified or dumbed down.</p>
+</div>
+</details>
+
 ```mermaid
 graph TB
     subgraph "Child-Friendly Frontend"
@@ -158,6 +210,24 @@ graph TB
 
 ### **Smart Fallback System**
 
+<details>
+<summary>🔍 Click to understand: Graceful Fallback Implementation</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This C# code demonstrates how educational applications must maintain learning continuity even when external services fail.</p>
+
+<p><strong>Key Implementation Insights:</strong></p>
+<ul>
+<li><strong>Try-Catch Educational Pattern:</strong> Unlike typical error handling, the catch block doesn't show errors to children - it gracefully switches to educational mock data</li>
+<li><strong>Success Path Optimization:</strong> Real Azure API data is preferred when available, providing authentic cost education</li>
+<li><strong>Transparent Fallback:</strong> LoadMockData() provides educational value that's equivalent to real data from a learning perspective</li>
+<li><strong>Child Experience Priority:</strong> The learning experience never breaks - children continue learning whether APIs are available or not</li>
+<li><strong>Async/Await Pattern:</strong> Proper async handling ensures UI remains responsive during API calls</li>
+</ul>
+
+<p><strong>Educational Software Principle:</strong> In child-focused applications, continuity of learning experience takes priority over technical accuracy or error reporting.</p>
+</div>
+</details>
+
 ```csharp
 private async Task LoadCostData()
 {
@@ -179,6 +249,24 @@ private async Task LoadCostData()
 ```
 
 ### **Child Learning Flow**
+
+<details>
+<summary>🔍 Click to understand: Child Learning Flow Decision Tree</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This flowchart demonstrates how educational applications must maintain positive learning experiences regardless of technical or budget constraints.</p>
+
+<p><strong>Key Learning Flow Insights:</strong></p>
+<ul>
+<li><strong>Graceful Technical Degradation:</strong> API availability doesn't affect educational value - both paths lead to meaningful learning experiences</li>
+<li><strong>Child-Friendly Language Transformation:</strong> Raw Azure data is transformed into age-appropriate explanations before presentation</li>
+<li><strong>Positive Budget Messaging:</strong> Both "Under Budget" and "Over Budget" scenarios are celebrated, preventing financial anxiety in children</li>
+<li><strong>Achievement Focus:</strong> The flow culminates in "Learning Achievement Celebration" rather than cost warnings or technical status</li>
+<li><strong>Continuous Learning Loop:</strong> All paths lead back to "Continue Learning," ensuring the educational experience never ends</li>
+</ul>
+
+<p><strong>Child Psychology Applied:</strong> This flow incorporates child development principles where exploration is encouraged and "failure" is reframed as learning achievement.</p>
+</div>
+</details>
 
 ```mermaid
 flowchart TD
@@ -214,6 +302,24 @@ The dashboard gracefully handles API unavailability by showing educational mock 
 
 Every component includes educational context comments:
 
+<details>
+<summary>🔍 Click to understand: Educational Component Documentation Pattern</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This Razor component comment pattern demonstrates how to document child-focused software with educational objectives clearly defined.</p>
+
+<p><strong>Key Documentation Insights:</strong></p>
+<ul>
+<li><strong>Context-First Documentation:</strong> Immediately establishes this is for 12-year-old players, not generic users</li>
+<li><strong>Educational Objective Clarity:</strong> Specific learning goals (digital resource awareness, budget management) are documented at the component level</li>
+<li><strong>Safety Requirements Integration:</strong> Child safety considerations are documented alongside technical requirements</li>
+<li><strong>Age-Appropriate Specification:</strong> "Child-friendly presentation" and "positive messaging" specify UX requirements unique to child applications</li>
+<li><strong>Educational Value Validation:</strong> Every component must justify its educational contribution</li>
+</ul>
+
+<p><strong>Documentation Evolution:</strong> This represents an evolution from technical documentation to educational software documentation that prioritizes learning outcomes and child development principles.</p>
+</div>
+</details>
+
 ```razor
 @*
 Context: Educational cost dashboard for 12-year-old players
@@ -226,6 +332,24 @@ Safety Requirements: Child-friendly presentation, positive messaging, educationa
 
 We solved the Aspire dependency issue by making services manually startable:
 
+<details>
+<summary>🔍 Click to understand: Aspire Dependency Management</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This C# configuration shows how to make educational software deployable in various environments by managing orchestration dependencies.</p>
+
+<p><strong>Key Deployment Insights:</strong></p>
+<ul>
+<li><strong>Conditional Orchestration:</strong> Commenting out Aspire dependencies allows manual service startup, critical for educational environments with varied infrastructure</li>
+<li><strong>Manual Health Checks:</strong> When Aspire orchestration isn't available, manual health check registration ensures monitoring capabilities remain</li>
+<li><strong>Educational Environment Flexibility:</strong> Schools and educational institutions often have restricted deployment capabilities - this configuration accommodates those constraints</li>
+<li><strong>Service Defaults Pattern:</strong> Aspire's AddServiceDefaults() provides enterprise features (logging, telemetry, health checks) in orchestrated environments</li>
+<li><strong>Graceful Degradation:</strong> Application functionality remains complete whether running in Aspire orchestration or manual deployment</li>
+</ul>
+
+<p><strong>Educational Software Deployment:</strong> This pattern prioritizes deployment flexibility over advanced orchestration features, ensuring educational software can run in diverse institutional environments.</p>
+</div>
+</details>
+
 ```csharp
 // Add service defaults (Aspire) - Comment out for manual execution
 // builder.AddServiceDefaults();
@@ -237,6 +361,24 @@ builder.Services.AddHealthChecks();
 ## 📊 Real Educational Impact
 
 ### **Cost-to-Learning Value Chain**
+
+<details>
+<summary>🔍 Click to understand: Cost-to-Learning Value Chain</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This diagram demonstrates how small Azure service costs translate into measurable educational outcomes for children.</p>
+
+<p><strong>Key Value Chain Insights:</strong></p>
+<ul>
+<li><strong>Micro-Transaction Learning:</strong> Extremely small costs (£0.0017 per AI interaction) enable experimentation without financial stress</li>
+<li><strong>Direct Learning Correlation:</strong> Each Azure service cost directly corresponds to specific educational achievements</li>
+<li><strong>Measurable Outcomes:</strong> Countries Learned, Pronunciation Score, and Efficiency Rating provide quantifiable educational value</li>
+<li><strong>Cost Transparency Education:</strong> Children learn the actual cost of AI, speech recognition, and data storage services</li>
+<li><strong>Value Demonstration:</strong> Parents can see precise educational return on investment for cloud service spending</li>
+</ul>
+
+<p><strong>Educational Economics:</strong> This represents a new model where cloud computing costs become part of the educational curriculum, teaching digital literacy alongside traditional subjects.</p>
+</div>
+</details>
 
 ```mermaid
 graph LR
@@ -299,6 +441,24 @@ Unlike mobile games that pressure kids to spend money, our approach:
 
 ### **Safety-First Design Process**
 
+<details>
+<summary>🔍 Click to understand: Child Safety Validation Pipeline</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This flowchart shows how every piece of content presented to children goes through multiple safety and educational validation layers.</p>
+
+<p><strong>Key Safety Architecture Insights:</strong></p>
+<ul>
+<li><strong>Multi-Gate Validation:</strong> Content must pass Child Safety, Educational Value, Age Appropriateness, and Cultural Sensitivity checks</li>
+<li><strong>Safe Fallback Philosophy:</strong> Any validation failure triggers safe fallback responses rather than error messages</li>
+<li><strong>Continuous Learning Loop:</strong> Incidents are logged and used to improve AI models, creating a continuously safer system</li>
+<li><strong>Positive Messaging Wrapper:</strong> Even approved content gets wrapped in encouraging, positive language before reaching children</li>
+<li><strong>Parent/Teacher Transparency:</strong> All interactions are logged for adult oversight while maintaining child engagement</li>
+</ul>
+
+<p><strong>Child Protection Innovation:</strong> This represents a new standard for child-safe AI where protection systems are built into the architecture rather than added as afterthoughts.</p>
+</div>
+</details>
+
 ```mermaid
 graph TD
     A[User Input/Action] --> B[Content Generation]
@@ -348,6 +508,24 @@ Every design decision prioritized child safety:
 ## 🚀 Technical Stack & Architecture
 
 ### **Full System Architecture**
+
+<details>
+<summary>🔍 Click to understand: Full System Architecture</summary>
+<div class="explanation-content">
+<p><strong>Educational Context:</strong> This comprehensive architecture diagram shows how enterprise-grade cost management can be made educational and child-safe through careful layer design.</p>
+
+<p><strong>Key Architectural Insights:</strong></p>
+<ul>
+<li><strong>Layer Separation:</strong> Frontend Layer focuses entirely on child experience while API Layer handles complex business logic and external service integration</li>
+<li><strong>Educational Metadata Service:</strong> Dedicated service adds learning context to every piece of data before presentation to children</li>
+<li><strong>Child Content Moderator:</strong> Specialized validation service ensures all cost information is appropriate for educational use</li>
+<li><strong>Fallback Data Generator:</strong> Ensures educational continuity by providing meaningful mock data when external services are unavailable</li>
+<li><strong>Multi-Service Integration:</strong> Real-time cost tracking connects to multiple Azure services and external educational data sources</li>
+</ul>
+
+<p><strong>Educational Software Architecture Pattern:</strong> This demonstrates how complex enterprise systems can be made educational through dedicated educational metadata and child safety layers rather than simplification.</p>
+</div>
+</details>
 
 ```mermaid
 graph TB

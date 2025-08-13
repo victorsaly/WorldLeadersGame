@@ -45,6 +45,23 @@ The AI didn't just identify problems—it created a complete issue management sy
 
 #### 1. **Structured Issue Generation**
 
+<details>
+<summary>� <strong>AI-Generated Issue Metadata</strong> - Structured project management with autonomous planning</summary>
+<div class="explanation-content">
+
+**Educational Context**: This YAML frontmatter demonstrates how AI can autonomously generate comprehensive project management metadata for educational software development, including effort estimation and priority classification typically requiring human project management expertise.
+
+**Key Implementation Insights**:
+- **Autonomous Estimation**: AI calculates effort hours and AI autonomy percentages based on task complexity analysis
+- **Educational Categorization**: Automatic assignment of priority and milestone alignment with learning objectives
+- **Structured Metadata**: Jekyll-compatible frontmatter enables automated issue tracking and milestone planning
+- **Human Oversight Integration**: AI-generated content maintains human oversight while achieving 95% autonomy
+
+**Value for Developers**: This approach shows how AI can handle complex project management tasks that traditionally require extensive experience, while maintaining educational quality and systematic planning.
+
+</div>
+</details>
+
 ```yaml
 # AI-generated frontmatter for each issue
 ---
@@ -66,6 +83,23 @@ author: "AI-Generated with Human Oversight"
 #### 2. **Medium.com-Style Blog Standards**
 
 The AI identified our need for professional, shareable content and automatically integrated Medium.com formatting standards:
+
+<details>
+<summary>� <strong>Medium.com Style Blog Template</strong> - Professional content standardization for educational platforms</summary>
+<div class="explanation-content">
+
+**Educational Context**: This markdown template demonstrates how AI can standardize educational content for professional publishing platforms, ensuring blog posts about educational game development are immediately ready for external sharing while maintaining child-safe learning objectives.
+
+**Key Implementation Insights**:
+- **Professional Formatting**: Template includes featured images, TL;DR sections, and metadata that meets Medium.com and dev.to standards
+- **Accessibility-First Design**: Semantic markup ensures content is accessible to educators and students with diverse needs
+- **Educational Continuity**: Template maintains focus on learning outcomes and child-appropriate content presentation
+- **Cross-Platform Compatibility**: Structure works across Jekyll, Medium.com, and other publishing platforms without reformatting
+
+**Value for Developers**: This template shows how to create educational content that serves both technical documentation and professional networking needs, scaling educational impact beyond internal teams.
+
+</div>
+</details>
 
 ```markdown
 # Medium.com Style Blog Post Template
@@ -143,6 +177,23 @@ _This post is part of our 18-week AI-led educational game development series. Fo
 For developers interested in replicating this AI-driven issue generation approach:
 
 ### Jekyll Collection Setup
+
+<details>
+<summary>⚙️ <strong>Jekyll Collection Configuration</strong> - Custom content management for educational project documentation</summary>
+<div class="explanation-content">
+
+**Educational Context**: This Jekyll configuration demonstrates how to create custom content collections for educational project management, enabling systematic organization of issues, milestones, and documentation while maintaining child-safe learning objectives.
+
+**Key Implementation Insights**:
+- **Custom Collections**: The 'issues' collection creates a dedicated content type for project management, separate from blog posts and pages
+- **Automated URL Structure**: Permalink patterns create consistent URLs that are easy for educators and students to navigate
+- **Default Frontmatter**: Consistent metadata application ensures all issues maintain educational context and tracking capabilities
+- **Scalable Architecture**: Collection structure supports growth from experimental projects to production educational platforms
+
+**Value for Developers**: This approach demonstrates how to structure educational project documentation for both technical teams and educational stakeholders, creating transparency in AI-driven development processes.
+
+</div>
+</details>
 
 ```yaml
 # _config.yml additions

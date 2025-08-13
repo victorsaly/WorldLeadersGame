@@ -535,6 +535,13 @@ Inspired by DataCamp's interactive code explanation tool, we've implemented our 
 
 Every code block in our educational blog now includes an **"Explain code"** button that provides:
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This C# service demonstrates secure authentication design for child users. It implements the dependency injection pattern with IChildSafetyValidator, uses async/await for non-blocking operations, and includes specialized validation for educational contexts. The service enforces session time limits and safety checks before granting access, following security best practices for applications handling children's data.</p>
+</div>
+</details>
+
 ```javascript
 // Example: Educational Authentication Service
 public class EducationalAuthenticationService : IAuthenticationService
@@ -594,6 +601,13 @@ public class EducationalAuthenticationService : IAuthenticationService
 ### Technical Implementation
 
 Our educational code explainer uses:
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This JavaScript class demonstrates a service-oriented architecture for educational content generation. The constructor establishes the context (target age and educational domain), while the async explainCode method uses composition to break down complex code analysis into manageable, age-appropriate explanations. Each method has a single responsibility, making the code maintainable and testable.</p>
+</div>
+</details>
 
 ```javascript
 class EducationalCodeExplainer {

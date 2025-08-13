@@ -38,6 +38,13 @@ We implemented a comprehensive deployment pipeline using **.NET 8**, **Azure ser
 
 The heart of our solution is the `EducationalDeploymentService`, designed specifically for child-safe deployments:
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This C# service demonstrates enterprise-grade deployment automation with educational-specific requirements. The primary constructor pattern is a .NET 8 feature that simplifies dependency injection, while the required properties ensure critical configuration isn't forgotten. The multi-layer validation approach (child safety → UK compliance → deployment → content validation) shows how educational platforms must validate content at every stage, not just during development.</p>
+</div>
+</details>
+
 ```csharp
 /// Enhanced deployment automation for educational platforms
 /// Context: Educational game deployment for 12-year-old learners
@@ -76,6 +83,13 @@ public class EducationalDeploymentService(
 ### 2. Infrastructure as Code with Educational Optimization
 
 Our Azure Bicep templates are specifically designed for educational workloads:
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This Azure Bicep template demonstrates infrastructure-as-code optimized for educational platforms. The parameters show performance targets specific to child engagement (1500ms response time), while the auto-scaling configuration aligns with UK school hours. The template uses Azure's declarative infrastructure language to ensure consistent, compliant deployments with built-in educational considerations like peak usage during learning hours.</p>
+</div>
+</details>
 
 ```bicep
 // Enhanced UK South Infrastructure for Educational Platform

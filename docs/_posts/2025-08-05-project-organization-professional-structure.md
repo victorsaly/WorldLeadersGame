@@ -35,6 +35,23 @@ This organic growth, while natural during rapid development, created several cha
 **Before**: 24+ files including documentation, scripts, infrastructure, and configuration scattered in root
 **After**: Clean, focused root with only essential project files
 
+<details>
+<summary>� <strong>Clean Root Directory Structure</strong> - Professional project organization for educational platforms</summary>
+<div class="explanation-content">
+
+**Educational Context**: This directory structure demonstrates how educational software projects can maintain professional organization while keeping essential project information accessible to educators, administrators, and development teams.
+
+**Key Implementation Insights**:
+- **Cognitive Load Reduction**: Minimal root directory structure helps educational stakeholders quickly understand project scope and purpose
+- **Security Best Practices**: .env.production.template provides configuration guidance without exposing sensitive educational data
+- **Educational Accessibility**: README.md serves as immediate entry point for educators and administrators to understand the learning platform
+- **Professional Standards**: Clean organization reflects the quality standards expected for educational technology serving children
+
+**Value for Developers**: This approach shows how to organize educational software projects for both technical excellence and stakeholder accessibility, essential for gaining trust in educational environments.
+
+</div>
+</details>
+
 ```
 Root Directory (Clean & Focused)
 ├── README.md                    # Main project entry point
@@ -46,6 +63,23 @@ Root Directory (Clean & Focused)
 ### Specialized Directory Structure
 
 Created dedicated directories for different concerns:
+
+<details>
+<summary>🏗️ <strong>Specialized Directory Architecture</strong> - Separation of concerns for educational software development</summary>
+<div class="explanation-content">
+
+**Educational Context**: This project structure applies separation of concerns principle to educational software development, ensuring that different aspects of the learning platform (infrastructure, application code, documentation) are organized for both technical excellence and educational transparency.
+
+**Key Implementation Insights**:
+- **Educational Transparency**: Clear separation between infrastructure, source code, and documentation enables educational stakeholders to understand different project aspects
+- **Team Collaboration**: Dedicated directories enable specialized teams (educators, developers, infrastructure) to work efficiently without conflict
+- **Maintainability Focus**: Organized structure supports long-term maintenance essential for educational platforms serving students over multiple years
+- **Industry Best Practices**: Professional organization demonstrates quality standards expected for educational technology investments
+
+**Value for Developers**: This architecture shows how to organize complex educational software projects for scalability, collaboration, and stakeholder confidence in educational environments.
+
+</div>
+</details>
 
 ```
 Project Structure (Professional Organization)
@@ -62,6 +96,23 @@ Project Structure (Professional Organization)
 ### Jekyll Site Organization
 
 Moved all documentation to proper Jekyll structure under `docs/`:
+
+<details>
+<summary>� <strong>Jekyll Documentation Architecture</strong> - Professional documentation system for educational platforms</summary>
+<div class="explanation-content">
+
+**Educational Context**: This Jekyll site structure demonstrates how to create comprehensive, searchable documentation for educational platforms that serves both technical teams and educational stakeholders, ensuring transparency and accessibility for all learning platform users.
+
+**Key Implementation Insights**:
+- **Educational Content Organization**: Collections (_posts, _journey, _technical, _milestones) enable different audiences to find relevant information efficiently
+- **Automated Navigation**: Jekyll's collection system generates navigation automatically, reducing maintenance overhead for educational documentation
+- **SEO-Friendly Content**: Static site generation ensures educational platform documentation is discoverable by educators and administrators
+- **Scalable Documentation**: Structure supports growth from experimental projects to production educational platforms serving thousands of students
+
+**Value for Developers**: This documentation architecture shows how to create professional-grade documentation that builds trust with educational stakeholders while maintaining technical excellence.
+
+</div>
+</details>
 
 ```
 docs/ (Professional Documentation Site)

@@ -34,6 +34,13 @@ Our World Leaders educational game had Azure OpenAI integration working, but wit
 
 **Solution**: Precision token management with educational focus.
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This Azure OpenAI configuration demonstrates precision tuning for educational applications. MaxTokens is reduced to 80 (versus default ~150) to ensure responses fit child-friendly UI constraints, while Temperature of 0.3 provides consistent, reliable educational content instead of creative variability. The lower temperature is crucial for child safety as it reduces unpredictable responses that might contain inappropriate content.</p>
+</div>
+</details>
+
 ```csharp
 var chatCompletionsOptions = new ChatCompletionsOptions()
 {
@@ -45,6 +52,13 @@ var chatCompletionsOptions = new ChatCompletionsOptions()
 ```
 
 **Enhanced System Prompts** with explicit character limits:
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This system prompt demonstrates how to provide clear constraints to AI models for child-appropriate content generation. The explicit character limits (300 chars/60 words) ensure UI compatibility, while specific requirements like "encouraging, positive language" and "educational keywords" guide the AI toward pedagogically sound responses. The structured approach with personality traits and educational focus creates consistent, safe learning experiences for children.</p>
+</div>
+</details>
 
 ```csharp
 private string GetSystemPrompt(AgentType agentType)
@@ -67,6 +81,13 @@ Personality: {GetPersonalityTraits(agentType)}";
 **Problem**: Educational terms like "awful weather" or "terrible economic conditions" were triggering inappropriate content flags.
 
 **Solution**: Context-aware content moderation that balances child safety with educational flexibility.
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This content moderation code demonstrates the balance between child safety and educational flexibility. The inappropriate terms list focuses on truly harmful language while removing educational false positives like "awful weather" that were blocking legitimate educational content. The validation logic allows neutral educational content by checking for positive messaging without requiring every response to be explicitly positive, enabling more natural educational discourse.</p>
+</div>
+</details>
 
 ```csharp
 private bool ContainsInappropriateLanguage(string content)

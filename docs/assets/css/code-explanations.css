@@ -1,0 +1,123 @@
+/**
+ * Simple Code Explanation Styles
+ * Clean, minimal styling for code explanations in blog posts
+ * Target: Adult developers reading on dev.to/medium.com
+ */
+
+/* Code explanation toggle */
+.code-explanation {
+    margin: 1rem 0;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    background: #f8f9fa;
+}
+
+.code-explanation summary {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: #495057;
+    border-bottom: 1px solid #e1e5e9;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 6px 6px 0 0;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+.code-explanation summary:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    color: #343a40;
+}
+
+.code-explanation summary::-webkit-details-marker {
+    display: none;
+}
+
+.code-explanation summary::before {
+    content: "▶";
+    display: inline-block;
+    margin-right: 0.5rem;
+    transition: transform 0.2s ease;
+    font-size: 0.8em;
+}
+
+.code-explanation[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.code-explanation[open] summary {
+    border-radius: 6px 6px 0 0;
+}
+
+/* Explanation content */
+.explanation-content {
+    padding: 1rem;
+    background: white;
+    border-radius: 0 0 6px 6px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.explanation-content p {
+    margin: 0;
+    color: #495057;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .code-explanation {
+        background: #2d3748;
+        border-color: #4a5568;
+    }
+    
+    .code-explanation summary {
+        background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+        color: #e2e8f0;
+        border-color: #4a5568;
+    }
+    
+    .code-explanation summary:hover {
+        background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+        color: #f7fafc;
+    }
+    
+    .explanation-content {
+        background: #1a202c;
+    }
+    
+    .explanation-content p {
+        color: #e2e8f0;
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .code-explanation {
+        margin: 0.75rem 0;
+    }
+    
+    .code-explanation summary {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .explanation-content {
+        padding: 0.8rem;
+    }
+    
+    .explanation-content p {
+        font-size: 0.9rem;
+    }
+}

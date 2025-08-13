@@ -21,6 +21,20 @@ Our code explainer serves a dual purpose in the World Leaders educational game e
 
 ### System Architecture Overview
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This system architecture diagram illustrates a comprehensive educational AI platform designed for child safety and learning effectiveness. The multi-layered approach separates client interactions from AI processing while maintaining strict safety controls throughout the system.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The architecture demonstrates defense-in-depth principles with distinct layers for API processing, AI services, and safety validation. The inclusion of local fallback systems ensures reliability, while comprehensive monitoring and storage layers enable continuous improvement and safety oversight.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern shows how to architect AI systems for children by prioritizing safety over convenience. The clear separation of concerns enables independent testing and validation of each layer, making the system more maintainable and trustworthy for educational applications.</p>
+</div>
+</details>
+
 ```mermaid
 graph TB
     subgraph "Client Layer"
@@ -65,6 +79,20 @@ graph TB
 #### Core Safety Principles
 Before writing any code, we established non-negotiable safety requirements:
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This mind map illustrates a comprehensive child safety framework that prioritizes COPPA compliance and educational appropriateness. The framework covers content validation, AI response controls, monitoring systems, and data protection to create a secure learning environment for 12-year-old students.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The framework demonstrates how safety requirements can be systematically organized into measurable, implementable components. Each branch represents enforceable policies: age-appropriate language standards, technical controls on AI responses, comprehensive logging for oversight, and minimal data collection for privacy protection.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern provides a blueprint for implementing child safety in AI systems through structured requirements that can be translated into code, policies, and procedures. The comprehensive approach ensures no safety aspect is overlooked during development.</p>
+</div>
+</details>
+
 ```mermaid
 mindmap
   root((Child Safety Framework))
@@ -91,6 +119,20 @@ mindmap
 ```
 
 #### Multi-Layer Safety Architecture
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This sequence diagram demonstrates a multi-layer safety validation system for AI interactions with children. The process shows how every student request passes through multiple safety checkpoints before and after AI processing, ensuring educational appropriateness while maintaining engagement.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The workflow implements two critical safety gates: pre-validation of input and post-validation of AI responses. The alternative flows show how the system gracefully handles unsafe content through logged incidents and safe fallback responses, ensuring children never receive inappropriate content.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern demonstrates how to implement robust safety validation without compromising user experience. The logging and monitoring components enable continuous improvement while the fallback mechanisms ensure system reliability even when AI responses fail safety checks.</p>
+</div>
+</details>
 
 ```mermaid
 sequenceDiagram
@@ -128,6 +170,20 @@ sequenceDiagram
 
 The key breakthrough was developing prompts that consistently generate child-appropriate content:
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This C# method demonstrates carefully crafted AI prompt engineering specifically designed for 12-year-old learners. The system prompt establishes clear guidelines for generating child-appropriate explanations with consistent formatting and educational value.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The prompt includes specific constraints: single sentence responses, age-appropriate vocabulary, emoji inclusion for engagement, and prohibition of complex formatting. The examples provide concrete patterns for the AI to follow, ensuring consistent output quality that matches children's cognitive abilities.</p>
+
+<h4>Value for Developers</h4>
+<p>This approach shows how detailed prompt engineering can create reliable, child-safe AI interactions. The specific examples and constraints help AI models understand not just what to say, but how to communicate effectively with young learners through appropriate tone and complexity.</p>
+</div>
+</details>
+
 ```csharp
 private string GetSystemPromptForCodeExplanation()
 {
@@ -152,6 +208,20 @@ Just give ONE simple, friendly sentence with an emoji. Nothing else.";
 #### Local Fallback System
 
 When Azure OpenAI is unavailable, our local system provides consistent, safe explanations:
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This flowchart demonstrates a resilient AI system that ensures children always receive explanations, regardless of Azure OpenAI availability. The system prioritizes reliability over sophistication, ensuring consistent educational experiences through multiple fallback mechanisms.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The decision tree shows how the system gracefully degrades from AI-generated responses through safety validation to local pattern analysis. Each path ensures children receive age-appropriate explanations, with safety checks preventing inappropriate content from reaching young learners.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern demonstrates how to build educational systems that are resilient to external service failures. The multiple fallback layers ensure educational continuity while maintaining safety standards, showing how reliability and safety can reinforce each other.</p>
+</div>
+</details>
 
 ```mermaid
 flowchart TD
@@ -181,6 +251,20 @@ flowchart TD
 
 #### Secure Configuration Management
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This diagram illustrates secure configuration management for educational AI systems, showing clear separation between development and production environments. The configuration validation ensures that educational systems meet security and functionality requirements before serving children.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The architecture demonstrates how to safely manage AI service credentials through environment variables and Azure Key Vault, while comprehensive validation checks ensure proper configuration before system activation. This prevents misconfigured systems from potentially exposing children to inappropriate content.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern shows how to implement secure configuration management that prioritizes child safety through environment separation and validation. The approach ensures that production systems serving children have verified, secure configurations that meet educational standards.</p>
+</div>
+</details>
+
 ```mermaid
 graph LR
     subgraph "Development Environment"
@@ -204,6 +288,20 @@ graph LR
 ```
 
 #### Azure OpenAI Service Implementation
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This C# class demonstrates a production-ready AI service implementation that prioritizes child safety through configuration validation and graceful fallbacks. The service ensures children always receive explanations while maintaining strict safety standards throughout the process.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The implementation shows defensive programming principles: configuration validation before client creation, null-safe operations, and automatic fallback to local analysis when cloud services are unavailable. This approach ensures educational continuity regardless of external service availability.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern demonstrates how to build resilient educational services that degrade gracefully while maintaining safety. The design shows how to balance sophisticated AI capabilities with simple, reliable fallback mechanisms appropriate for children's learning environments.</p>
+</div>
+</details>
 
 ```csharp
 public class CloudAIAgentService : IAIAgentService
@@ -242,6 +340,20 @@ public class CloudAIAgentService : IAIAgentService
 ## 🔐 Production Deployment Strategy
 
 ### Azure App Service Configuration
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This Azure infrastructure diagram shows a production-ready deployment architecture for educational AI systems. The configuration emphasizes security, monitoring, and reliable service delivery for applications that serve children, with comprehensive environment variable management and HTTPS enforcement.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The architecture demonstrates how to securely deploy educational AI services using Azure App Service with dedicated monitoring through Application Insights. The security configuration ensures encrypted communication, while environment variables provide secure access to AI services without exposing credentials.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern provides a blueprint for deploying child-safe AI systems in production with enterprise-grade security and monitoring. The approach balances operational requirements with the enhanced safety needs of educational applications serving minors.</p>
+</div>
+</details>
 
 ```mermaid
 graph TB
@@ -286,6 +398,20 @@ graph TB
 
 ### Deployment Pipeline with Safety Checks
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This deployment pipeline demonstrates automated safety validation for educational AI systems. The pipeline ensures every code change passes child safety checks before reaching production, maintaining the high safety standards required for applications serving 12-year-old learners.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The sequence shows multi-stage validation including build tests, safety validation, staging deployment, and comprehensive monitoring activation. The child safety validation step ensures that even automated deployments maintain educational appropriateness and COPPA compliance.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern demonstrates how to integrate child safety requirements into CI/CD pipelines, ensuring that safety is not an afterthought but a fundamental part of the deployment process. The automated validation reduces human error while maintaining educational standards.</p>
+</div>
+</details>
+
 ```mermaid
 sequenceDiagram
     participant Dev as Developer
@@ -308,6 +434,20 @@ sequenceDiagram
 
 ### Child-Friendly Analytics
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This analytics flowchart demonstrates how to measure educational effectiveness in AI systems designed for children. The focus on engagement indicators rather than traditional metrics reflects the unique requirements of educational technology that prioritizes learning outcomes over technical performance.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The decision tree shows how student behavior (staying on page vs. leaving) provides meaningful feedback about content complexity and educational value. The feedback loop enables continuous improvement of AI prompts and explanations to better serve 12-year-old learners.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern shows how to implement child-appropriate analytics that focus on learning outcomes rather than data collection. The approach demonstrates how educational effectiveness can be measured without compromising student privacy or safety.</p>
+</div>
+</details>
+
 ```mermaid
 graph TD
     A[Student Interaction] --> B[Simple Explanation Generated]
@@ -328,6 +468,20 @@ graph TD
 
 ### Success Metrics Dashboard
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This pie chart illustrates the success metrics for an educational AI system designed for children, showing high success rates (85%) with minimal safety interventions (3%). The metrics demonstrate that properly designed educational AI can achieve both effectiveness and safety for young learners.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The distribution shows that fallback systems handle 10% of cases when AI is unavailable, safety blocks prevent only 3% of inappropriate content, and technical errors account for just 2%. This demonstrates the effectiveness of proactive safety design and robust fallback mechanisms.</p>
+
+<h4>Value for Developers</h4>
+<p>These metrics provide benchmarks for educational AI systems, showing that 85%+ success rates are achievable while maintaining strict child safety standards. The low error and safety block rates indicate that well-designed systems can be both safe and effective.</p>
+</div>
+</details>
+
 ```mermaid
 %%{init: {'pie': {'textPosition': 0.75}, 'themeVariables': {'pieOuterStrokeWidth': '2px', 'pieSectionTextSize': '16px', 'pieTitleTextSize': '20px'}}}%%
 pie title Educational Effectiveness Metrics
@@ -342,6 +496,20 @@ pie title Educational Effectiveness Metrics
 ### Removed Legacy Components
 
 As part of our production optimization, we cleaned up several components that are no longer needed:
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This transformation diagram illustrates system optimization focused on educational outcomes rather than technical complexity. The removal of manual configuration components simplifies the student experience while enhancing safety through server-side processing and automated validation.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The optimization shows evolution from client-side complexity to streamlined server-side processing. By eliminating manual setup and browser storage, the system becomes more reliable and secure for educational environments while reducing cognitive load on young users.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern demonstrates how to optimize educational systems by removing unnecessary complexity that could confuse or frustrate young learners. The streamlined approach prioritizes user experience and safety over technical flexibility.</p>
+</div>
+</details>
 
 ```mermaid
 graph LR
@@ -375,6 +543,20 @@ graph LR
 ```
 
 ### Performance Optimizations
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This performance optimization diagram demonstrates the educational benefits of simplifying complex systems for child users. The improvements show how technical optimization can directly enhance learning outcomes by reducing cognitive load and improving system reliability.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The metrics demonstrate significant improvements: 50% faster load times reduce waiting that can frustrate young learners, 90% reduction in setup steps eliminates barriers to learning, and 100% safety coverage ensures consistent protection for all child interactions.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern shows how performance optimization in educational systems should prioritize user experience and safety over technical complexity. The dramatic improvements in setup simplicity and safety coverage demonstrate the value of child-centered design decisions.</p>
+</div>
+</details>
 
 ```mermaid
 graph TB
@@ -413,6 +595,20 @@ graph TB
 
 ### Student Experience Journey
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This user journey map illustrates the complete student learning experience from initial blog interaction through continued educational engagement. The journey emphasizes positive learning outcomes and family involvement in the educational process.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The journey shows how technical features translate into educational outcomes: simple explanations build understanding, encouraging interactions foster continued learning, and family engagement extends learning beyond the digital platform. Each touchpoint maintains high satisfaction scores (4-5) for effective learning.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern demonstrates how to design educational technology that creates positive learning journeys extending beyond individual interactions. The focus on encouragement and family involvement shows how technical systems can support broader educational goals.</p>
+</div>
+</details>
+
 ```mermaid
 journey
     title Student Learning Experience
@@ -448,6 +644,20 @@ Our system consistently generates explanations that 12-year-olds can understand:
 
 ### Feedback Loop System
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This feedback loop diagram demonstrates continuous improvement methodology for educational AI systems. The system learns from student interactions and adult feedback to enhance both safety and educational effectiveness, creating a self-improving educational platform.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The feedback mechanism shows multiple input sources: direct student interactions provide usage analytics, while parent and teacher feedback ensures educational appropriateness. The decision logic determines when AI prompt updates are needed versus when monitoring patterns is sufficient.</p>
+
+<h4>Value for Developers</h4>
+<p>This pattern illustrates how to implement continuous improvement systems that balance automated learning with human oversight. The integration of multiple feedback sources ensures that improvements serve both technical performance and educational outcomes.</p>
+</div>
+</details>
+
 ```mermaid
 graph TB
     A[Student Interactions] --> B[Usage Analytics]
@@ -480,6 +690,20 @@ graph TB
 
 ### Technical Best Practices
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This mind map illustrates comprehensive best practices for developing educational AI systems, organized into development, deployment, and operations phases. Each category focuses on child-centered design principles that prioritize safety, educational effectiveness, and continuous improvement.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The framework demonstrates how technical best practices must be adapted for educational contexts: TDD includes safety features, deployment requires child-specific validation, and operations emphasize educational effectiveness alongside technical performance. Each practice supports the unique requirements of serving young learners.</p>
+
+<h4>Value for Developers</h4>
+<p>This comprehensive framework provides actionable guidance for teams building educational AI systems. The organization shows how traditional software development practices must be enhanced with child safety, educational assessment, and continuous improvement focused on learning outcomes.</p>
+</div>
+</details>
+
 ```mermaid
 mindmap
   root((Best Practices))
@@ -503,6 +727,20 @@ mindmap
 ## 🚀 Future Enhancements
 
 ### Planned Features
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<h4>Educational Context</h4>
+<p>This timeline illustrates the planned evolution of educational AI features focusing on accessibility, personalization, and classroom integration. The roadmap balances technical advancement with educational research on how children learn programming concepts effectively.</p>
+
+<h4>Key Implementation Insights</h4>
+<p>The timeline shows progressive enhancement: multi-language support for global accessibility, visual diagrams for different learning styles, interactive elements for engagement, and teacher tools for classroom integration. Each phase builds on previous capabilities while maintaining child safety standards.</p>
+
+<h4>Value for Developers</h4>
+<p>This roadmap demonstrates how to plan educational technology evolution through research-driven feature development. The progression from basic AI explanations to comprehensive learning ecosystems shows how educational systems can grow while maintaining their core safety and effectiveness principles.</p>
+</div>
+</details>
 
 ```mermaid
 timeline

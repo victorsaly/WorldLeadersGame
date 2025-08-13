@@ -30,6 +30,13 @@ This milestone represents the successful implementation of **Issue 4.2: Territor
 
 The AI designed and implemented a multi-layered architecture connecting external data sources with interactive educational components:
 
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This comprehensive architecture diagram demonstrates how real-world data integrates with educational gameplay. The system pulls authentic country information from REST Countries API and World Bank GDP data, validates content for child safety, then transforms it into interactive learning experiences. The multi-layered approach separates data ingestion (top), business logic (middle), user interface (bottom), and persistence (right), creating a scalable educational platform that teaches geography through hands-on interaction.</p>
+</div>
+</details>
+
 ```mermaid
 graph TB
     subgraph "Real-World Data Integration"
@@ -91,6 +98,13 @@ The territory acquisition system teaches fundamental economic concepts through g
 **Monthly Income Generation**: Owned territories provide ongoing revenue, introducing passive income and investment return concepts.
 
 ### Geographic Learning Progression
+
+<details class="code-explanation">
+<summary>💡 <strong>Explain Code</strong></summary>
+<div class="explanation-content">
+<p>This learning progression diagram illustrates scaffolded geographic education where students advance from familiar small nations to complex major powers. The linear progression ensures students build confidence and foundational knowledge before tackling more challenging concepts, while the connected flow shows how each level prepares learners for the next stage of geographic and economic understanding.</p>
+</div>
+</details>
 
 ```mermaid
 graph LR

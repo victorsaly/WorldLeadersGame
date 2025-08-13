@@ -215,6 +215,23 @@ public class GameHub : Hub
 
 ### Azure CLI Deployment Script
 
+<details>
+<summary>� <strong>Azure Production Deployment Script</strong> - Automated infrastructure configuration for educational platforms</summary>
+<div class="explanation-content">
+
+**Educational Context**: This bash script demonstrates automated Azure infrastructure deployment specifically designed for educational platforms, ensuring reliable, secure access for 12-year-old learners and their educators while maintaining production-grade standards.
+
+**Key Implementation Insights**:
+- **Educational Platform Focus**: Domain configuration specifically optimized for educational institutions requiring reliable, secure access
+- **Child-Safe HTTPS**: Managed SSL certificates ensure secure connections essential for protecting children's educational data
+- **Error Handling**: Conditional checks and exit codes ensure deployment failures are caught before affecting student learning sessions
+- **DevOps Best Practices**: Variable definitions and systematic approach enable reproducible educational platform deployments
+
+**Value for Developers**: This script shows how to automate educational platform infrastructure with focus on security and reliability requirements specific to child-safe learning environments.
+
+</div>
+</details>
+
 ```bash
 #!/bin/bash
 # scripts/azure-domain-setup.sh - Production deployment automation
@@ -261,6 +278,23 @@ echo "🎉 Educational platform deployment completed!"
 ```
 
 ### Testing and Validation Script
+
+<details>
+<summary>🧪 <strong>Production Testing and Validation</strong> - Automated health checks for educational platform deployment</summary>
+<div class="explanation-content">
+
+**Educational Context**: This bash script implements comprehensive testing for educational platform deployments, ensuring that learning environments are fully functional and secure before students and educators access them.
+
+**Key Implementation Insights**:
+- **Educational Reliability**: Health checks ensure educational platforms are fully operational before student access, preventing learning disruption
+- **Comprehensive Validation**: Tests both main application and API endpoints to verify complete educational functionality
+- **SSL Security Verification**: OpenSSL certificate validation ensures child-safe secure connections are properly configured
+- **Defensive Programming**: Error checking and status reporting provide clear deployment success indicators for educational teams
+
+**Value for Developers**: This testing approach shows how to implement post-deployment validation specifically for educational platforms where reliability and security are paramount for child safety.
+
+</div>
+</details>
 
 ```bash
 #!/bin/bash

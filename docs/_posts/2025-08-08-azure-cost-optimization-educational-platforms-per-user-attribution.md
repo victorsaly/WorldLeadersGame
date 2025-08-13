@@ -89,6 +89,23 @@ Our solution centers around **per-user cost attribution** with **educational eff
 
 Using .NET 8's enhanced record types, we created ultra-fast cost tracking:
 
+<details>
+<summary>� <strong>Real-Time Cost Data Record</strong> - High-performance financial tracking for educational platforms</summary>
+<div class="explanation-content">
+
+**Educational Context**: This C# record demonstrates high-performance cost tracking specifically designed for educational platforms, enabling transparent financial accountability for learning platforms serving 12-year-old students while maintaining GDPR compliance.
+
+**Key Implementation Insights**:
+- **Educational Efficiency Metrics**: EducationalEfficiencyScore tracks learning points achieved per £1 spent, providing concrete ROI measurement for educational investments
+- **Privacy-First Design**: AnonymizedUserId provides cost attribution while protecting student privacy, essential for educational platforms
+- **UK Compliance Integration**: IsUKEducationalCompliant flag ensures cost tracking aligns with educational institution requirements
+- **Immutable Financial Data**: .NET 8 records provide data integrity essential for financial accountability in educational environments
+
+**Value for Developers**: This approach shows how to build transparent, accountable cost tracking systems that serve educational stakeholders while maintaining student privacy and institutional compliance requirements.
+
+</div>
+</details>
+
 ```csharp
 /// <summary>
 /// Real-time cost data with educational context using .NET 8 record performance optimizations
