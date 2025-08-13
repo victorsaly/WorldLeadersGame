@@ -2,6 +2,231 @@
 layout: default
 ---
 
+<!-- Prism.js for syntax highlighting and copy-to-clipboard -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+
+<style>
+/* Custom Prism.js theme for educational content */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #708090;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: #999;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #a67f59;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #07a;
+}
+
+.token.function,
+.token.class-name {
+  color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #e90;
+}
+
+/* Enhanced code block styling */
+pre[class*="language-"] {
+  position: relative;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+}
+
+pre[class*="language-"] code {
+  background: none;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Toolbar styling for educational content */
+.code-toolbar .toolbar {
+  opacity: 1;
+  background: #e9ecef;
+  border-bottom: 1px solid #dee2e6;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.code-toolbar .toolbar .toolbar-item {
+  margin-right: 1rem;
+}
+
+.code-toolbar .toolbar .toolbar-item span {
+  color: #495057;
+  font-weight: 500;
+}
+
+.code-toolbar .toolbar .toolbar-item button {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #374151;
+  padding: 0;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  min-width: 32px;
+  /* height: 32px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.code-toolbar .toolbar .toolbar-item button:hover {
+  background: #374151;
+  border-color: #6b7280;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.code-toolbar .toolbar .toolbar-item button:active {
+  background: #111827;
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Copy icon */
+.code-toolbar .toolbar .toolbar-item button:before {
+  content: "📋";
+  font-size: 14px;
+}
+
+.code-toolbar .toolbar .toolbar-item button.copied:before {
+  content: "✅";
+}
+
+/* Language badge */
+pre[class*="language-"]:before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  background: #28a745;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Specific language colors */
+pre[class*="language-javascript"]:before { background: #f7df1e; color: #000; }
+pre[class*="language-typescript"]:before { background: #3178c6; }
+pre[class*="language-css"]:before { background: #1572b6; }
+pre[class*="language-html"]:before { background: #e34f26; }
+pre[class*="language-json"]:before { background: #292929; }
+pre[class*="language-yaml"]:before { background: #cb171e; }
+pre[class*="language-bash"]:before { background: #4eaa25; }
+pre[class*="language-csharp"]:before { background: #239120; }
+pre[class*="language-sql"]:before { background: #336791; }
+
+/* Line numbers styling */
+.line-numbers .line-numbers-rows {
+  border-right: 1px solid #dee2e6;
+  background: #f1f3f4;
+}
+
+.line-numbers-rows > span:before {
+  color: #6c757d;
+}
+
+/* Copy button success state */
+.code-toolbar .toolbar .toolbar-item button[data-copy-state="copy-success"] {
+  background: #28a745;
+}
+
+.code-toolbar .toolbar .toolbar-item button[data-copy-state="copy-success"]:after {
+  content: " ✓";
+}
+
+/* Inline code styling */
+:not(pre) > code[class*="language-"] {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* Educational code explanation panels */
+.code-explanation {
+  background: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.code-explanation h4 {
+  margin: 0 0 0.5rem 0;
+  color: #1565c0;
+  font-size: 1rem;
+}
+
+.code-explanation p {
+  margin: 0;
+  color: #0d47a1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+</style>
+
 <!-- Mermaid.js support for diagrams -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
 <script>
@@ -55,6 +280,90 @@ layout: default
     mermaid.run();
   });
 </script>
+
+<!-- Initialize Prism.js -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Configure Prism.js plugins
+  if (typeof Prism !== 'undefined') {
+    // Configure normalize whitespace
+    Prism.plugins.NormalizeWhitespace.setDefaults({
+      'remove-trailing': true,
+      'remove-indent': true,
+      'left-trim': true,
+      'right-trim': true,
+      'break-lines': 80,
+      'indent': 2,
+      'remove-initial-line-feed': true,
+      'tabs-to-spaces': 2,
+      'spaces-to-tabs': 0
+    });
+
+    // Add language labels to code blocks
+    document.querySelectorAll('pre[class*="language-"]').forEach(function(pre) {
+      const className = pre.className;
+      const language = className.match(/language-(\w+)/);
+      if (language) {
+        pre.setAttribute('data-language', language[1]);
+        
+        // Add line numbers class if code is longer than 10 lines
+        const code = pre.querySelector('code');
+        if (code && code.textContent.split('\n').length > 10) {
+          pre.classList.add('line-numbers');
+        }
+      }
+    });
+
+    // Re-highlight all code blocks
+    Prism.highlightAll();
+    
+    // Initialize copy to clipboard
+    if (Prism.plugins.toolbar) {
+      Prism.plugins.toolbar.registerButton('copy-to-clipboard', function(env) {
+        var linkCopy = document.createElement('button');
+        linkCopy.textContent = ''; // Remove text, rely on CSS icons
+        linkCopy.className = 'copy-button';
+        linkCopy.setAttribute('aria-label', 'Copy code to clipboard');
+        linkCopy.setAttribute('title', 'Copy code to clipboard');
+        
+        linkCopy.addEventListener('click', function () {
+          navigator.clipboard.writeText(env.code).then(function() {
+            linkCopy.classList.add('copied');
+            linkCopy.setAttribute('aria-label', 'Code copied to clipboard');
+            linkCopy.setAttribute('title', 'Code copied!');
+            
+            setTimeout(function() {
+              linkCopy.classList.remove('copied');
+              linkCopy.setAttribute('aria-label', 'Copy code to clipboard');
+              linkCopy.setAttribute('title', 'Copy code to clipboard');
+            }, 2000);
+          }).catch(function() {
+            // Fallback for older browsers
+            var textArea = document.createElement('textarea');
+            textArea.value = env.code;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            linkCopy.classList.add('copied');
+            linkCopy.setAttribute('aria-label', 'Code copied to clipboard');
+            linkCopy.setAttribute('title', 'Code copied!');
+            setTimeout(function() {
+              linkCopy.classList.remove('copied');
+              linkCopy.setAttribute('aria-label', 'Copy code to clipboard');
+              linkCopy.setAttribute('title', 'Copy code to clipboard');
+            }, 2000);
+          });
+        });
+        
+        return linkCopy;
+      });
+    }
+  }
+});
+</script>
+
 <style>
   .mermaid {
     text-align: center;
