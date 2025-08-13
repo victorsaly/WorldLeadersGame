@@ -129,6 +129,23 @@ public abstract class ApiTestBase : EducationalTestBase, IClassFixture<TestWebAp
     }
 
     /// <summary>
+    /// Validate API response for child safety - allows error responses
+    /// </summary>
+    /// <param name="response">HTTP response to validate</param>
+    /// <param name="endpoint">API endpoint name</param>
+    protected async Task ValidateApiResponseChildSafetyAllowErrors(HttpResponseMessage response, string endpoint)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        
+        if (!string.IsNullOrEmpty(content))
+        {
+            ValidateChildSafeContent(content, $"API Response: {endpoint}");
+        }
+
+        Output.WriteLine($"✅ API response validation passed for endpoint: {endpoint}");
+    }
+
+    /// <summary>
     /// Create test database context
     /// </summary>
     /// <returns>Test database context</returns>
