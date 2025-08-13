@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: page
 title: "All Development Posts"
 subtitle: "Complete AI-Led Game Creation Journey Documentation"
 permalink: /post/

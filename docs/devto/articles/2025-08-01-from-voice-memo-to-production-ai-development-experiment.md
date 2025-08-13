@@ -1,7 +1,7 @@
 ---
-title: From Voice Memo to Production
+title: "From Voice Memo to Production"
 published: false
-description: Everything started with a five-minute voice memo from my son describing his dream educational game. Instead of filing it away as a "someday" project, we decided to attempt something unprecedented: let AI build it with 95% autonomy while we serve as creative directors.
+description: "Everything started with a five-minute voice memo from my son describing his dream educational game. Instead of filing it away as a someday project, we decided to attempt something unprecedented: let AI build it with 95% autonomy while we serve as creative directors."
 tags: ai, education, gamedev, softwaredevelopment
 cover_image: https://docs.worldleadersgame.co.uk/assets/linkedin-images/voice-memo-to-production-linkedin.png
 canonical_url: https://docs.worldleadersgame.co.uk/posts/2025/08/01/from-voice-memo-to-production-ai-development-experiment/
