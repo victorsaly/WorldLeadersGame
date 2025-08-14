@@ -56,71 +56,73 @@ public class EducationalGameServiceTests : ServiceTestBase
     [Fact]
     public async Task DiceService_RollForJob_GeneratesValidEducationalProgression()
     {
-        // Arrange & Act
-        await ExecuteWithDbContextAsync(async context =>
-        {
-            var diceService = GetService<IDiceService>();
-            var testPlayer = context.Players.First();
+        // Arrange
+        var diceService = GetService<IDiceService>();
+        var context = GetService<WorldLeadersDbContext>();
+        
+        // Seed test data in the service provider's context
+        await SeedTestDataAsync(context);
+        
+        var testPlayer = context.Players.First();
 
-            // Perform dice roll for career progression
-            var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
+        // Act - Perform dice roll for career progression
+        var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
 
-            // Assert educational outcomes
-            Assert.NotNull(rollResult);
-            Assert.InRange(rollResult.DiceValue, 1, 6);
-            Assert.True(rollResult.IncomeChange != 0, "Career progression should affect income");
-            Assert.True(rollResult.ReputationChange >= 0, "Reputation should never decrease for positive experience");
-            Assert.True(rollResult.HappinessChange > 0, "Happiness should always increase to encourage learning");
+        // Assert educational outcomes
+        Assert.NotNull(rollResult);
+        Assert.InRange(rollResult.DiceValue, 1, 6);
+        Assert.True(rollResult.IncomeChange != 0, "Career progression should affect income");
+        Assert.True(rollResult.ReputationChange >= 0, "Reputation should never decrease for positive experience");
+        Assert.True(rollResult.HappinessChange > 0, "Happiness should always increase to encourage learning");
 
-            // Validate job progression is educational
-            Assert.NotEqual(testPlayer.CurrentJob, rollResult.NewJob);
-            
-            // Also test ValidateEducationalOutcome with proper types
-            ValidateEducationalOutcome(rollResult.NewJob, "career progression learning");
-            ValidateEducationalOutcome(rollResult.EncouragingMessage, "positive messaging");
-            ValidateEducationalOutcome(rollResult.JobDescription, "career awareness");
+        // Validate job progression is educational
+        Assert.NotEqual(testPlayer.CurrentJob, rollResult.NewJob);
+        
+        // Also test ValidateEducationalOutcome with proper types
+        ValidateEducationalOutcome(rollResult.NewJob, "career progression learning");
+        ValidateEducationalOutcome(rollResult.EncouragingMessage, "positive messaging");
+        ValidateEducationalOutcome(rollResult.JobDescription, "career awareness");
 
-            // Validate encouraging message
-            Assert.NotEmpty(rollResult.EncouragingMessage);
-            ValidateChildSafeContent(rollResult.EncouragingMessage, "Career progression message");
+        // Validate encouraging message
+        Assert.NotEmpty(rollResult.EncouragingMessage);
+        ValidateChildSafeContent(rollResult.EncouragingMessage, "Career progression message");
 
-            // Verify no negative language in dice outcomes
-            var lowerMessage = rollResult.EncouragingMessage.ToLowerInvariant();
-            Assert.DoesNotContain("fail", lowerMessage);
-            Assert.DoesNotContain("bad", lowerMessage);
-            Assert.DoesNotContain("lose", lowerMessage);
+        // Verify no negative language in dice outcomes
+        var lowerMessage = rollResult.EncouragingMessage.ToLowerInvariant();
+        Assert.DoesNotContain("fail", lowerMessage);
+        Assert.DoesNotContain("bad", lowerMessage);
+        Assert.DoesNotContain("lose", lowerMessage);
 
-            Output.WriteLine($"✅ Educational Dice Roll: {testPlayer.CurrentJob} → {rollResult.NewJob}");
-            Output.WriteLine($"   Dice: {rollResult.DiceValue}, Message: {rollResult.EncouragingMessage}");
-            Output.WriteLine($"   Income: {rollResult.IncomeChange:+#;-#;0}, Reputation: {rollResult.ReputationChange:+#;-#;0}, Happiness: {rollResult.HappinessChange:+#;-#;0}");
-        });
+        Output.WriteLine($"✅ Educational Dice Roll: {testPlayer.CurrentJob} → {rollResult.NewJob}");
+        Output.WriteLine($"   Dice: {rollResult.DiceValue}, Message: {rollResult.EncouragingMessage}");
+        Output.WriteLine($"   Income: {rollResult.IncomeChange:+#;-#;0}, Reputation: {rollResult.ReputationChange:+#;-#;0}, Happiness: {rollResult.HappinessChange:+#;-#;0}");
+    }
     }
 
     [Fact]
     public async Task DiceService_ProvidesConsistentEducationalExperience_AcrossMultipleRolls()
     {
-        // Arrange & Act
+        // Arrange
+        var diceService = GetService<IDiceService>();
+        var context = GetService<WorldLeadersDbContext>();
+        await SeedTestDataAsync(context);
+        
         var rollResults = new List<string>();
+        var testPlayer = context.Players.First();
 
-        await ExecuteWithDbContextAsync(async context =>
+        // Act - Perform multiple rolls to test consistency
+        for (int i = 0; i < 5; i++)
         {
-            var diceService = GetService<IDiceService>();
-            var testPlayer = context.Players.First();
+            var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
+            rollResults.Add(rollResult.EncouragingMessage);
 
-            // Perform multiple rolls to test consistency
-            for (int i = 0; i < 5; i++)
-            {
-                var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
-                rollResults.Add(rollResult.EncouragingMessage);
-
-                // Reset player for next test
-                testPlayer.CurrentJob = JobLevel.Farmer;
-                testPlayer.Happiness = 80;
-                testPlayer.Reputation = 25;
-                context.Players.Update(testPlayer);
-                await context.SaveChangesAsync();
-            }
-        });
+            // Reset player for next test
+            testPlayer.CurrentJob = JobLevel.Farmer;
+            testPlayer.Happiness = 80;
+            testPlayer.Reputation = 25;
+            context.Players.Update(testPlayer);
+            await context.SaveChangesAsync();
+        }
 
         // Assert all messages are educational and child-safe
         Assert.All(rollResults, message =>
