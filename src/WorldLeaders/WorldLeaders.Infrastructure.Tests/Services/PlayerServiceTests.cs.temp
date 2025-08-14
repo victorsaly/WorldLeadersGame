@@ -94,7 +94,7 @@ public class PlayerServiceTests : ServiceTestBase
                 MonthlyIncome = 5000,
                 IsAvailable = false,
                 OwnedByPlayerId = testPlayers[1].Id, // Sam Achiever owns Canada
-                OfficialLanguagesJson = """["English", "French"]""",
+                OfficialLanguagesJson = JsonSerializer.Serialize(new[] { "English", "French" }),
                 CreatedAt = DateTime.UtcNow
             },
             new TerritoryEntity
