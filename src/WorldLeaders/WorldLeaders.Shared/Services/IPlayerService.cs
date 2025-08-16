@@ -62,7 +62,13 @@ public record Achievement(
     int PointsReward,
     DateTime? UnlockedAt,
     bool IsUnlocked
-);
+)
+{
+    /// <summary>
+    /// Alias for Id to support test compatibility
+    /// </summary>
+    public string AchievementId => Id;
+};
 
 /// <summary>
 /// Player learning and engagement analytics
@@ -77,4 +83,25 @@ public record PlayerAnalytics(
     DateTime FirstGameDate,
     DateTime LastActiveDate,
     List<string> LearningObjectivesMet
-);
+)
+{
+    /// <summary>
+    /// Total time spent playing the game
+    /// </summary>
+    public TimeSpan TotalPlayTime { get; init; } = TimeSpan.FromMinutes(AverageSessionLength * TotalDiceRolls);
+    
+    /// <summary>
+    /// Number of dice rolls performed
+    /// </summary>
+    public int DiceRollsCount { get; init; } = TotalDiceRolls;
+    
+    /// <summary>
+    /// Number of territories owned
+    /// </summary>
+    public int TerritoriesCount { get; init; } = TerritoriesAcquired;
+    
+    /// <summary>
+    /// Number of achievements earned
+    /// </summary>
+    public int AchievementsCount { get; init; } = LearningObjectivesMet.Count;
+};

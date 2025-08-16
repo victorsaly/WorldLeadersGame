@@ -390,19 +390,53 @@ public class ChildSafetyValidator(
             };
         }
 
-        // Basic inappropriate content detection (simplified)
-        var inappropriatePatterns = new[]
+        // Enhanced inappropriate content detection with pattern matching
+        var inappropriateWords = new[]
         {
             "password", "secret", "private", "personal", "address", "phone",
             "email", "contact", "meet", "alone", "gift", "money"
         };
 
         var lowerContent = content.ToLowerInvariant();
-        var foundInappropriate = inappropriatePatterns.Any(pattern => lowerContent.Contains(pattern));
+        var foundInappropriateWord = inappropriateWords.Any(pattern => lowerContent.Contains(pattern));
+
+        // Enhanced pattern detection for personal information
+        var foundInappropriatePattern = false;
+        var violationReason = "";
+
+        // Detect address patterns (street addresses)
+        if (System.Text.RegularExpressions.Regex.IsMatch(lowerContent, @"\d+\s+([\w\s]+\s+)?(street|st|avenue|ave|road|rd|drive|dr|lane|ln|way|blvd|boulevard)"))
+        {
+            foundInappropriatePattern = true;
+            violationReason = "street address detected";
+        }
+
+        // Detect phone number patterns
+        if (System.Text.RegularExpressions.Regex.IsMatch(lowerContent, @"(\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\d{10})"))
+        {
+            foundInappropriatePattern = true;
+            violationReason = "phone number detected";
+        }
+
+        // Detect email patterns (simple check for @ symbol in email context)
+        if (System.Text.RegularExpressions.Regex.IsMatch(lowerContent, @"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b"))
+        {
+            foundInappropriatePattern = true;
+            violationReason = "email address detected";
+        }
+
+        var foundInappropriate = foundInappropriateWord || foundInappropriatePattern;
 
         if (foundInappropriate)
         {
-            warnings.Add("Content may contain personal information - please review");
+            if (!string.IsNullOrEmpty(violationReason))
+            {
+                warnings.Add($"Content may contain personal information - {violationReason}");
+            }
+            else
+            {
+                warnings.Add("Content may contain personal information - please review");
+            }
         }
 
         // Educational appropriateness check
@@ -424,5 +458,81 @@ public class ChildSafetyValidator(
             ConfidenceScore = foundInappropriate ? 0.3 : 0.8,
             Warnings = warnings
         };
+    }
+
+    /// <summary>
+    /// Validate content for child safety and educational appropriateness (interface compatibility)
+    /// </summary>
+    public async Task<ContentSafetyResult> ValidateContentAsync(string content, string contentType)
+    {
+        try
+        {
+            var validation = await ValidateContentAsync(new ChildSafetyValidationRequest 
+            { 
+                UserId = Guid.Empty, // Anonymous validation
+                Content = content, 
+                ValidationType = contentType 
+            });
+
+            return new ContentSafetyResult(
+                validation.IsApproved,
+                validation.Reason,
+                validation.ConfidenceScore,
+                validation.Warnings
+            );
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error validating content safety");
+            return new ContentSafetyResult(false, "Validation error", 0.0, new List<string> { "Validation failed" });
+        }
+    }
+
+    /// <summary>
+    /// Quick safety check for real-time validation (interface compatibility)
+    /// </summary>
+    public async Task<bool> IsContentSafeForChildrenAsync(string content)
+    {
+        try
+        {
+            var result = await ValidateContentAsync(content, "general");
+            return result.IsApproved;
+        }
+        catch
+        {
+            return false; // Fail safe
+        }
+    }
+
+    /// <summary>
+    /// Validate that user input doesn't contain personal information (interface compatibility)
+    /// </summary>
+    public async Task<bool> ValidateUserInputSafetyAsync(string input)
+    {
+        try
+        {
+            var result = await ValidateContentAsync(input, "userinput");
+            return result.IsApproved;
+        }
+        catch
+        {
+            return false; // Fail safe
+        }
+    }
+
+    /// <summary>
+    /// Check if content is age-appropriate for 12-year-olds (interface compatibility)
+    /// </summary>
+    public async Task<bool> IsAgeAppropriateAsync(string content)
+    {
+        try
+        {
+            var result = await ValidateContentAsync(content, "agechecks");
+            return result.IsApproved;
+        }
+        catch
+        {
+            return false; // Fail safe
+        }
     }
 }

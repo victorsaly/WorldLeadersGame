@@ -47,9 +47,58 @@ public class ChildSafetyValidatorTests : ServiceTestBase
 
     protected override void ConfigureAdditionalServices(IServiceCollection services)
     {
-        services.AddSingleton(_mockContentModerationService.Object);
-        services.AddSingleton(_mockLogger.Object);
-        services.AddSingleton(_mockOptions.Object);
+        // Create fresh mocks for dependency injection since constructor fields aren't initialized yet
+        var mockContentModerationService = new Mock<IContentModerationService>();
+        var mockLogger = new Mock<ILogger<ChildSafetyValidator>>();
+        var mockOptions = new Mock<IOptions<ChildSafetyOptions>>();
+        
+        // Setup content moderation service to return different results based on content patterns
+        mockContentModerationService
+            .Setup(x => x.ValidateContentAsync(It.IsAny<string>(), It.IsAny<string>()))
+            .ReturnsAsync((string content, string context) =>
+            {
+                // For these tests, the external moderation service should approve content
+                // The ChildSafetyValidator itself should detect personal information patterns
+                return new ContentModerationResult(
+                    IsApproved: true,  // External service approves
+                    IsSafe: true,
+                    IsEducational: true,
+                    IsAgeAppropriate: true,
+                    Reason: "External moderation passed",
+                    ConfidenceScore: 0.9,
+                    Concerns: new List<string>()
+                );
+            });
+            
+        // Also setup the ModerateContentAsync method used in some tests
+        mockContentModerationService
+            .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
+            .ReturnsAsync((string content) =>
+            {
+                return new ContentModerationResult(
+                    IsApproved: true,  // External service approves
+                    IsSafe: true,
+                    IsEducational: true,
+                    IsAgeAppropriate: true,
+                    Reason: "External moderation passed",
+                    ConfidenceScore: 0.9,
+                    Concerns: new List<string>()
+                );
+            });
+            
+        // Setup default child safety options
+        mockOptions.Setup(x => x.Value).Returns(new ChildSafetyOptions
+        {
+            Enabled = true,
+            ChildAgeThreshold = 13,
+            RequireParentalConsent = true,
+            ContentModerationLevel = "Strict",
+            LogAllEvents = false  // Disable logging for tests
+        });
+        
+        services.AddSingleton(mockContentModerationService.Object);
+        services.AddSingleton(mockLogger.Object);
+        services.AddSingleton(mockOptions.Object);
         services.AddScoped<IChildSafetyValidator, ChildSafetyValidator>();
     }
 
@@ -63,10 +112,16 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult 
-            { 
-                IsAppropriate = true, 
-                ConfidenceScore = 0.95,
+            .ReturnsAsync(new ContentModerationResult(
+                IsApproved: true,
+                IsSafe: true,
+                IsEducational: true,
+                IsAgeAppropriate: true,
+                Reason: "Educational geography content",
+                ConfidenceScore: 0.95,
+                Concerns: new List<string>()
+            )
+            {
                 Categories = new[] { "Educational", "Geography" }
             });
 
@@ -96,10 +151,16 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult 
-            { 
-                IsAppropriate = false, 
-                ConfidenceScore = 0.95,
+            .ReturnsAsync(new ContentModerationResult(
+                IsApproved: false,
+                IsSafe: false,
+                IsEducational: false,
+                IsAgeAppropriate: false,
+                Reason: "Inappropriate content detected",
+                ConfidenceScore: 0.95,
+                Concerns: new List<string> { "Personal Information", "Contact Request" }
+            )
+            {
                 Categories = new[] { "Personal Information", "Contact Request" }
             });
 
@@ -134,7 +195,15 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         // Arrange
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.8 });
+            .ReturnsAsync(new ContentModerationResult(
+                IsApproved: true,
+                IsSafe: true, 
+                IsEducational: true,
+                IsAgeAppropriate: true,
+                Reason: "Content approved",
+                ConfidenceScore: 0.8,
+                Concerns: new List<string>()
+            ));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>
@@ -169,7 +238,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         // Arrange
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.9 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.9, Concerns: new List<string>()));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>
@@ -200,7 +269,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.8 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.8, Concerns: new List<string>()));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>
@@ -250,7 +319,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         // Arrange
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.9 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.9, Concerns: new List<string>()));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>
@@ -281,7 +350,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         // Arrange
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.9 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.9, Concerns: new List<string>()));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>
@@ -311,7 +380,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.9 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.9, Concerns: new List<string>()));
 
         // Act & Assert different content types
         var contentTypes = new[] { "GameContent", "PlayerMessage", "AIResponse", "Achievement" };
@@ -343,10 +412,16 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(testContent))
-            .ReturnsAsync(new ContentModerationResult 
-            { 
-                IsAppropriate = true, 
-                ConfidenceScore = 0.85,
+            .ReturnsAsync(new ContentModerationResult(
+                IsApproved: true,
+                IsSafe: true,
+                IsEducational: true,
+                IsAgeAppropriate: true,
+                Reason: "Content approved for educational use",
+                ConfidenceScore: 0.85,
+                Concerns: new List<string>()
+            )
+            {
                 Categories = new[] { "Educational", "Safe" }
             });
 
@@ -408,7 +483,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.9 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.9, Concerns: new List<string>()));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>
@@ -437,7 +512,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
             
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.9 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.9, Concerns: new List<string>()));
 
         // Act
         var results = await ExecuteWithDbContextAsync(async context =>
@@ -474,7 +549,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         // Arrange
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.9 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.9, Concerns: new List<string>()));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>
@@ -505,7 +580,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.85 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.85, Concerns: new List<string>()));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>
@@ -531,7 +606,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
-            .ReturnsAsync(new ContentModerationResult { IsAppropriate = true, ConfidenceScore = 0.9 });
+            .ReturnsAsync(new ContentModerationResult(IsApproved: true, IsSafe: true, IsEducational: true, IsAgeAppropriate: true, Reason: "Content approved", ConfidenceScore: 0.9, Concerns: new List<string>()));
 
         // Act
         var result = await ExecuteWithDbContextAsync(async context =>

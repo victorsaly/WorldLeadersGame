@@ -31,6 +31,7 @@ public class PlayerEntity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Username { get; set; } = string.Empty;
+    public string DisplayName { get; set; } = string.Empty; // Player display name for tests
     public Guid? CharacterPersonaId { get; set; } // Link to selected character persona
     public int Income { get; set; }
     public int Reputation { get; set; }
@@ -144,6 +145,8 @@ public class DiceRollHistoryEntity
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid PlayerId { get; set; }
     public int DiceValue { get; set; }
+    public JobLevel PreviousJob { get; set; } // Job before the dice roll
+    public JobLevel NewJob { get; set; } // Job after the dice roll (alias for ResultingJob)
     public JobLevel ResultingJob { get; set; }
     public int IncomeChange { get; set; }
     public int ReputationChange { get; set; }

@@ -15,6 +15,11 @@ public interface IExternalDataService
     Task<CountryInfo?> GetCountryInfoAsync(string countryCode);
     
     /// <summary>
+    /// Get country information (alias for test compatibility)
+    /// </summary>
+    Task<CountryInfo?> GetCountryInformationAsync(string countryCode);
+    
+    /// <summary>
     /// Get multiple countries information efficiently
     /// Educational Objective: Bulk data retrieval for territory management
     /// </summary>

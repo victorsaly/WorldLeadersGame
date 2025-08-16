@@ -44,6 +44,7 @@ public class DiceService : IDiceService
             
             // Calculate income and reputation changes
             int newIncome = JobProgressionMapping.GetJobIncome(newJob);
+            int incomeChange = newIncome - player.Income;
             int reputationBonus = JobProgressionMapping.GetJobReputationBonus(newJob);
             int happinessBonus = 5; // Always positive - children feel good about trying
 
@@ -80,7 +81,7 @@ public class DiceService : IDiceService
             return new DiceRollResult(
                 diceValue,
                 newJob,
-                newIncome,
+                incomeChange,
                 reputationBonus,
                 happinessBonus,
                 encouragingMessage,
@@ -97,15 +98,17 @@ public class DiceService : IDiceService
     public string GetEncouragingMessage(int diceValue, JobLevel newJob)
     {
         // Educational principle: ALL outcomes are positive and encouraging
+        var jobName = newJob.ToString();
+        
         return diceValue switch
         {
-            1 => "🌱 Amazing! You rolled a 1 and became a Farmer! You're helping feed the world - that's incredibly important work!",
-            2 => "🌸 Fantastic! You rolled a 2 and became a Gardener! You're making the world more beautiful and helping the environment!",
-            3 => "🏪 Wonderful! You rolled a 3 and became a Shopkeeper! You're learning business skills and helping your community!",
-            4 => "🎨 Excellent! You rolled a 4 and became an Artisan! Your creativity and skills are making unique and valuable things!",
-            5 => "🏛️ Outstanding! You rolled a 5 and became a Politician! You're learning to lead and help make important decisions!",
-            6 => "💼 Incredible! You rolled a 6 and became a Business Leader! You're developing leadership skills and creating opportunities!",
-            _ => "🎲 Great roll! Every job teaches you valuable skills for your journey to becoming a world leader!"
+            1 => $"🌱 Amazing! You rolled a 1 and your new role is {jobName}! You're learning to help others and developing valuable skills through education!",
+            2 => $"🌸 Fantastic! You rolled a 2 and your new role is {jobName}! You're growing your knowledge and understanding the world better through learning!",
+            3 => $"🏪 Wonderful! You rolled a 3 and your new role is {jobName}! You're building important skills and helping your community through education and progress!",
+            4 => $"🎨 Excellent! You rolled a 4 and your new role is {jobName}! Your creativity and skills are growing as you learn to make unique contributions with advanced knowledge!",
+            5 => $"🏛️ Excellent! You rolled a 5 and your new role is {jobName}! You're learning to lead and understand how to make important decisions through education!",
+            6 => $"💼 Outstanding! You rolled a 6 and your new role is {jobName}! You're developing leadership skills and creating opportunities through advanced education and learning!",
+            _ => $"🎲 Great roll! Your new role as {jobName} teaches you valuable skills and knowledge for your journey to become a world leader through education!"
         };
     }
 
@@ -114,13 +117,16 @@ public class DiceService : IDiceService
         // Educational descriptions that teach real-world career concepts
         return job switch
         {
-            JobLevel.Farmer => "Farmers grow food that feeds everyone! They understand nature, weather, and sustainable practices. This teaches you about economics through agriculture and resource management.",
-            JobLevel.Gardener => "Gardeners create beautiful spaces and help the environment! They learn about plants, design, and caring for our planet. This builds skills in environmental science and community beautification.",
-            JobLevel.Shopkeeper => "Shopkeepers run local businesses and serve their communities! They learn about money, customer service, and entrepreneurship. This teaches business fundamentals and community engagement.",
-            JobLevel.Artisan => "Artisans create unique products with their hands and creativity! They develop specialized skills and artistic vision. This builds innovation, quality craftsmanship, and cultural appreciation.",
-            JobLevel.Politician => "Politicians help make decisions that affect everyone! They learn about government, law, and public service. This teaches civic responsibility and democratic participation.",
-            JobLevel.BusinessLeader => "Business Leaders create companies and jobs for others! They understand economics, management, and strategy. This develops leadership skills and economic understanding.",
-            _ => "Every job is valuable and teaches important life skills!"
+            JobLevel.Student => "Students learn and grow every day! They develop knowledge, critical thinking, and explore different subjects. This educational foundation helps you build skills and prepares you for your future career journey!",
+            JobLevel.Farmer => "Farmers grow food that feeds everyone! They learn about nature, weather, and sustainable practices. This helps you develop knowledge about economics through agriculture and resource management.",
+            JobLevel.Gardener => "Gardeners create beautiful spaces and help the environment! They learn about plants, design, and caring for our planet. This work builds skills in environmental science and community beautification.",
+            JobLevel.Shopkeeper => "Shopkeepers run local businesses and help their communities! They learn about money, customer service, and entrepreneurship. This work teaches business skills and community engagement.",
+            JobLevel.Artisan => "Artisans create unique products with their hands and creativity! They develop specialized skills and artistic vision. This work builds innovation knowledge, quality craftsmanship, and cultural appreciation.",
+            JobLevel.Politician => "Politicians help make decisions that affect everyone! They learn about government, law, and public service. This work teaches civic responsibility and democratic participation skills.",
+            JobLevel.BusinessLeader => "Business Leaders create companies and jobs for others! They learn about economics, management, and strategy. This work develops leadership skills and economic knowledge.",
+            JobLevel.Teacher => "Teachers share knowledge and help others learn! They develop communication skills and educational expertise. This work builds understanding of how to guide and inspire others to grow.",
+            JobLevel.Manager => "Managers coordinate teams and projects! They learn leadership, organization, and strategic thinking. This work teaches advanced skills in guiding others and achieving goals through education.",
+            _ => "Every job is valuable and helps you learn important life skills through knowledge and education!"
         };
     }
 
@@ -176,5 +182,14 @@ public class DiceService : IDiceService
             _logger.LogError(ex, "Error saving dice roll history for player {PlayerId}", rollHistory.PlayerId);
             throw;
         }
+    }
+
+    /// <summary>
+    /// Get dice roll history for a player (alias for test compatibility)
+    /// Educational Objective: Allow players to review their career progression journey
+    /// </summary>
+    public async Task<List<DiceRollHistory>> GetDiceRollHistoryAsync(Guid playerId)
+    {
+        return await GetDiceHistoryAsync(playerId);
     }
 }

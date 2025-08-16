@@ -101,6 +101,14 @@ public class ExternalDataService : IExternalDataService
         }
     }
 
+    /// <summary>
+    /// Get country information (alias for test compatibility)
+    /// </summary>
+    public async Task<CountryInfo?> GetCountryInformationAsync(string countryCode)
+    {
+        return await GetCountryInfoAsync(countryCode);
+    }
+
     public async Task<List<CountryInfo>> GetCountriesInfoAsync(List<string> countryCodes)
     {
         var countries = new List<CountryInfo>();

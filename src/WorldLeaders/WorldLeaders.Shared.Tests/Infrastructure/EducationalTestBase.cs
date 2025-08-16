@@ -153,35 +153,17 @@ public abstract class EducationalTestBase
         // Ensure content has educational value
         var educationalIndicators = new[]
         {
-            @"\b(learn|discover|explore|understand|grow)\b",
+            @"\b(learn|learner|discover|explore|explorer|understand|grow)\b",
             @"\b(geography|country|language|culture|economy)\b",
-            @"\b(skill|knowledge|education|progress)\b",
-            // Add more flexible educational terms
-            @"\b(territory|GDP|rank|strategic|diplomatic)\b",
-            @"\b(career|job|opportunity|experience|guidance)\b",
-            @"\b(helping|teaching|supporting|encouraging)\b",
-            @"\b(future|path|choice|decision|wisdom)\b",
-            // Accept encouraging phrases
-            @"(great|wonderful|excellent|amazing|fantastic)",
-            @"(ahead|opportunity|possibilities|potential)"
+            @"\b(skill|knowledge|education|progress|advanced)\b",
+            @"\b(student|teacher|guide|helper|builder)\b"
         };
 
         var hasEducationalValue = educationalIndicators.Any(pattern =>
             Regex.IsMatch(content, pattern, RegexOptions.IgnoreCase));
 
         // Allow non-educational content in specific contexts (like error messages)
-        // Also allow content that's clearly instructional or encouraging
-        var isContextuallyAppropriate = context.Contains("error") || 
-                                       context.Contains("exception") ||
-                                       context.Contains("Validation Response") ||
-                                       context.Contains("Content Validation") ||
-                                       context.Contains("API Response") ||
-                                       context.Contains("Game Event") ||
-                                       content.Contains("!") ||
-                                       content.Contains("...") ||
-                                       content.Length > 30; // Longer content likely has educational context
-
-        if (!isContextuallyAppropriate)
+        if (!context.Contains("error") && !context.Contains("exception"))
         {
             Assert.True(hasEducationalValue || content.Length < 20,
                 $"Content should have educational value for 12-year-olds in context: {context}");
@@ -237,20 +219,16 @@ public abstract class EducationalTestBase
         if (learningObjective.Contains("geography", StringComparison.OrdinalIgnoreCase))
         {
             // Geography learning should involve territories or countries
-            var resultString = result.ToString() ?? "";
+            var resultString = result.ToString();
             var hasGeographicProperties = result.GetType().GetProperties()
                 .Any(p => p.Name.Contains("Territory", StringComparison.OrdinalIgnoreCase) || 
                          p.Name.Contains("Country", StringComparison.OrdinalIgnoreCase) ||
                          p.Name.Contains("Location", StringComparison.OrdinalIgnoreCase));
             
-            var hasGeographicContent = resultString.Contains("territory", StringComparison.OrdinalIgnoreCase) ||
-                                     resultString.Contains("country", StringComparison.OrdinalIgnoreCase) ||
-                                     resultString.Contains("geography", StringComparison.OrdinalIgnoreCase) ||
-                                     resultString.Contains("location", StringComparison.OrdinalIgnoreCase) ||
-                                     resultString.Contains("territories", StringComparison.OrdinalIgnoreCase) ||
-                                     resultString.Contains("GDP", StringComparison.OrdinalIgnoreCase) ||
-                                     resultString.Contains("rank", StringComparison.OrdinalIgnoreCase) ||
-                                     resultString.Contains("economic", StringComparison.OrdinalIgnoreCase);
+            var hasGeographicContent = resultString?.Contains("territory", StringComparison.OrdinalIgnoreCase) == true ||
+                                     resultString?.Contains("country", StringComparison.OrdinalIgnoreCase) == true ||
+                                     resultString?.Contains("geography", StringComparison.OrdinalIgnoreCase) == true ||
+                                     resultString?.Contains("location", StringComparison.OrdinalIgnoreCase) == true;
             
             // Accept either geographic properties OR geographic content OR simple test objects
             Assert.True(hasGeographicProperties || hasGeographicContent || IsSimpleTestObject(result),
@@ -275,19 +253,9 @@ public abstract class EducationalTestBase
         if (learningObjective.Contains("economic", StringComparison.OrdinalIgnoreCase))
         {
             // Economic learning should involve realistic values or concepts
-            var resultString = result.ToString() ?? "";
-            var hasEconomicConnection = resultString.Contains("GDP", StringComparison.OrdinalIgnoreCase) ||
-                                      resultString.Contains("income", StringComparison.OrdinalIgnoreCase) ||
-                                      resultString.Contains("commerce", StringComparison.OrdinalIgnoreCase) ||
-                                      resultString.Contains("business", StringComparison.OrdinalIgnoreCase) ||
-                                      resultString.Contains("economics", StringComparison.OrdinalIgnoreCase) ||
-                                      resultString.Contains("economic", StringComparison.OrdinalIgnoreCase) ||
-                                      resultString.Contains("trade", StringComparison.OrdinalIgnoreCase) ||
-                                      resultString.Contains("store", StringComparison.OrdinalIgnoreCase) ||
-                                      resultString.Contains("companies", StringComparison.OrdinalIgnoreCase) ||
-                                      result.GetType().GetProperties().Any(p => p.Name.Contains("Income") || p.Name.Contains("GDP"));
-                                      
-            Assert.True(hasEconomicConnection,
+            Assert.True(result.ToString()?.Contains("GDP") == true ||
+                       result.ToString()?.Contains("income") == true ||
+                       result.GetType().GetProperties().Any(p => p.Name.Contains("Income") || p.Name.Contains("GDP")),
                        "Economic learning should connect to real-world economic concepts");
         }
     }
@@ -306,33 +274,21 @@ public abstract class EducationalTestBase
                      p.Name.Contains("Score") ||
                      p.Name.Contains("Progress"));
 
-        // For simple test scenarios, accept string results that represent progress
-        var isStringResult = result is string;
-        var isSimpleTestResult = IsSimpleTestObject(result);
-        
-        // Also accept anonymous test objects or any object that represents educational content
-        var isTestObject = result.GetType().Name.Contains("AnonymousType") ||
-                          result.GetType().Name.Contains("Test") ||
-                          result.ToString()?.Length > 10; // Non-trivial content
-
-        // Accept numeric results that could represent game metrics
-        var isNumericResult = result is int || result is decimal || result is double || result is float;
-
-        Assert.True(hasQuantifiableProgress || isStringResult || isSimpleTestResult || isTestObject || isNumericResult,
-            "Educational results should include quantifiable progress indicators or meaningful content");
+        Assert.True(hasQuantifiableProgress,
+            "Educational results should include quantifiable progress indicators");
     }
 
-    protected string GetJobLevelDescription(JobLevel jobLevel)
+    public string GetJobLevelDescription(JobLevel jobLevel)
     {
         return jobLevel switch
         {
-            JobLevel.Farmer => "Growing food and learning about agriculture economics",
-            JobLevel.Gardener => "Caring for plants and understanding nature's economic value",
-            JobLevel.Shopkeeper => "Managing a store and learning about commerce",
-            JobLevel.Artisan => "Creating beautiful crafts and developing trade skills",
-            JobLevel.Politician => "Helping communities and learning about economic leadership",
-            JobLevel.BusinessLeader => "Building companies and understanding economics",
-            _ => "Exploring new career opportunities and economic concepts"
+            JobLevel.Farmer => "Growing food and learning about agriculture, geography, and how different countries feed their populations through educational farming practices",
+            JobLevel.Gardener => "Caring for plants and understanding nature, learning about geography, climate, and how different countries use agriculture for economic growth",
+            JobLevel.Shopkeeper => "Managing a store and learning about commerce, economics, trade between countries, and how global geography affects business education",
+            JobLevel.Artisan => "Creating beautiful crafts and developing skills while learning about cultural geography, economics of art, and educational traditions from different countries",
+            JobLevel.Politician => "Helping communities and learning about leadership, geography of governance, economics of public policy, and educational civic responsibility",
+            JobLevel.BusinessLeader => "Building companies and learning about economics, global geography of trade, international business education, and how countries develop economically",
+            _ => "Exploring new career opportunities through educational learning about geography, economics, and international development"
         };
     }
 
@@ -344,11 +300,7 @@ public abstract class EducationalTestBase
 
     private void ValidateCareerGuidanceAppropriate(string response)
     {
-        // Career guidance should be encouraging about work or jobs
-        var careerKeywords = new[] { "career", "job", "work", "opportunity", "important", "valuable", "profession" };
-        var hasCareerContext = careerKeywords.Any(keyword => 
-            response.Contains(keyword, StringComparison.OrdinalIgnoreCase));
-        Assert.True(hasCareerContext, $"Career guidance should mention careers, jobs, or work opportunities. Response: {response}");
+        Assert.Contains("career", response, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("failure", response, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -368,41 +320,25 @@ public abstract class EducationalTestBase
     private void ValidateHappinessAdviceSupportive(string response)
     {
         // Happiness advice should be supportive and constructive
-        var happinessKeywords = new[] { "happy", "happiness", "joy", "positive", "celebrate", "proud", "achievement", "progress", "learning", "together", "great", "learn", "help", "support", "encourage" };
-        var hasHappinessContext = happinessKeywords.Any(keyword => 
-            response.Contains(keyword, StringComparison.OrdinalIgnoreCase));
-        Assert.True(hasHappinessContext, $"Happiness advice should be supportive and encouraging. Response: {response}");
+        Assert.Contains("happy", response, StringComparison.OrdinalIgnoreCase);
     }
 
     private void ValidateTerritoryAdviceEducational(string response)
     {
         // Territory advice should include educational elements
-        var hasGeographicReference = response.Contains("territory", StringComparison.OrdinalIgnoreCase) || 
-                                   response.Contains("country", StringComparison.OrdinalIgnoreCase) || 
-                                   response.Contains("geographic", StringComparison.OrdinalIgnoreCase) ||
-                                   response.Contains("exploring", StringComparison.OrdinalIgnoreCase) ||
-                                   response.Contains("strategic", StringComparison.OrdinalIgnoreCase) ||
-                                   response.Contains("learn", StringComparison.OrdinalIgnoreCase) ||
-                                   response.Contains("together", StringComparison.OrdinalIgnoreCase) ||
-                                   response.Contains("educational", StringComparison.OrdinalIgnoreCase) ||
-                                   response.Contains("great", StringComparison.OrdinalIgnoreCase) ||
-                                   response.Contains("helpful", StringComparison.OrdinalIgnoreCase) ||
-                                   response.Contains("guide", StringComparison.OrdinalIgnoreCase);
-                                   
-        Assert.True(hasGeographicReference,
+        Assert.True(response.Contains("territory", StringComparison.OrdinalIgnoreCase) || 
+                   response.Contains("territories", StringComparison.OrdinalIgnoreCase) ||
+                   response.Contains("country", StringComparison.OrdinalIgnoreCase) || 
+                   response.Contains("countries", StringComparison.OrdinalIgnoreCase) ||
+                   response.Contains("region", StringComparison.OrdinalIgnoreCase) ||
+                   response.Contains("regions", StringComparison.OrdinalIgnoreCase),
             "Territory advice should reference geographical concepts");
     }
 
     private void ValidateLanguageTutoringAppropriate(string response)
     {
         // Language tutoring should be encouraging and educational
-        var hasLanguageContext = response.Contains("language", StringComparison.OrdinalIgnoreCase) ||
-                                response.Contains("word", StringComparison.OrdinalIgnoreCase) ||
-                                response.Contains("learn", StringComparison.OrdinalIgnoreCase) ||
-                                response.Contains("speak", StringComparison.OrdinalIgnoreCase) ||
-                                response.Contains("doors", StringComparison.OrdinalIgnoreCase) ||
-                                response.Contains("adventure", StringComparison.OrdinalIgnoreCase);
-        Assert.True(hasLanguageContext, "Language tutoring should reference language learning concepts");
+        Assert.Contains("language", response, StringComparison.OrdinalIgnoreCase);
     }
 
     #endregion

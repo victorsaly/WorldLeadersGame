@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -21,16 +22,14 @@ namespace WorldLeaders.Infrastructure.Tests.Services;
 /// </summary>
 public class PlayerServiceTests : ServiceTestBase
 {
-    private readonly Mock<ILogger<PlayerService>> _mockLogger;
-
     public PlayerServiceTests(ITestOutputHelper output) : base(output)
     {
-        _mockLogger = CreateEducationalMock<ILogger<PlayerService>>();
     }
 
     protected override void ConfigureAdditionalServices(IServiceCollection services)
     {
-        services.AddSingleton(_mockLogger.Object);
+        var mockLogger = CreateEducationalMock<ILogger<PlayerService>>();
+        services.AddSingleton(mockLogger.Object);
         services.AddScoped<IPlayerService, PlayerService>();
     }
 
@@ -88,7 +87,7 @@ public class PlayerServiceTests : ServiceTestBase
                 CountryName = "Canada",
                 CountryCode = "CA",
                 GdpInBillions = 2139.0m,
-                Tier = 1,
+                Tier = (TerritoryTier)1,
                 Cost = 500000,
                 ReputationRequired = 40,
                 MonthlyIncome = 5000,
@@ -103,7 +102,7 @@ public class PlayerServiceTests : ServiceTestBase
                 CountryName = "Japan",
                 CountryCode = "JP",
                 GdpInBillions = 4937.0m,
-                Tier = 2,
+                Tier = (TerritoryTier)2,
                 Cost = 1200000,
                 ReputationRequired = 70,
                 MonthlyIncome = 12000,
@@ -187,7 +186,7 @@ public class PlayerServiceTests : ServiceTestBase
         // Arrange
         var createRequest = new CreatePlayerRequest(
             "new_student_123",
-            "Taylor Learner"
+            Guid.NewGuid()
         );
 
         // Act
@@ -218,7 +217,7 @@ public class PlayerServiceTests : ServiceTestBase
         // Arrange & Act
         var inappropriateRequest = new CreatePlayerRequest(
             "contact_me_123",  // Contains contact-related word
-            "Test Child"
+            Guid.NewGuid()
         );
 
         await ExecuteWithDbContextAsync(async context =>
@@ -231,7 +230,7 @@ public class PlayerServiceTests : ServiceTestBase
                 var result = await service.CreatePlayerAsync(inappropriateRequest);
                 
                 // If it succeeds, validate the result is child-safe
-                ValidateChildSafeContent(result.Username, "Player username");
+                ValidateChildSafeContent(result.Username ?? "", "Player username");
                 ValidateChildSafeContent(result.DisplayName, "Player display name");
             }
             catch (ArgumentException ex)
@@ -484,14 +483,11 @@ public class PlayerServiceTests : ServiceTestBase
             Assert.NotNull(originalPlayer);
             
             // Update player with new values
-            var updatedPlayer = originalPlayer with
-            {
-                DisplayName = "Alex Advanced Explorer",
-                Reputation = 25,
-                Happiness = 90
-            };
+            originalPlayer.DisplayName = "Alex Advanced Explorer";
+            originalPlayer.Reputation = 25;
+            originalPlayer.Happiness = 90;
             
-            return await service.UpdatePlayerAsync(updatedPlayer);
+            return await service.UpdatePlayerAsync(originalPlayer);
         });
 
         // Assert
@@ -519,13 +515,10 @@ public class PlayerServiceTests : ServiceTestBase
             Assert.NotNull(originalPlayer);
             
             // Try to update with out-of-bounds values
-            var invalidPlayer = originalPlayer with
-            {
-                Reputation = 150, // Over 100
-                Happiness = -10   // Below 0
-            };
+            originalPlayer.Reputation = 150; // Over 100
+            originalPlayer.Happiness = -10;  // Below 0
             
-            var result = await service.UpdatePlayerAsync(invalidPlayer);
+            var result = await service.UpdatePlayerAsync(originalPlayer);
             
             // Assert bounds are enforced
             Assert.InRange(result.Reputation, 0, 100);
@@ -648,7 +641,8 @@ public class PlayerServiceTests : ServiceTestBase
             var service = GetService<IPlayerService>();
             
             // Get all players and their data
-            var allPlayerTasks = context.Players.Select(async p => 
+            var players = await context.Players.ToListAsync();
+            var allPlayerTasks = players.Select(async p => 
             {
                 var dashboard = await service.GetPlayerDashboardAsync(p.Id);
                 var achievements = await service.GetPlayerAchievementsAsync(p.Id);
@@ -689,10 +683,10 @@ public class PlayerServiceTests : ServiceTestBase
             
             // Assert no personal information is exposed
             Assert.DoesNotContain("@", player.Username);
-            Assert.DoesNotContain("email", player.Username.ToLowerInvariant());
-            Assert.DoesNotContain("phone", player.Username.ToLowerInvariant());
+            Assert.DoesNotContain("email", player.Username?.ToLowerInvariant() ?? "");
+            Assert.DoesNotContain("phone", player.Username?.ToLowerInvariant() ?? "");
             
-            ValidateChildSafeContent(player.Username, "Player username for COPPA compliance");
+            ValidateChildSafeContent(player.Username ?? "", "Player username for COPPA compliance");
             ValidateChildSafeContent(player.DisplayName, "Player display name for COPPA compliance");
             
             // Validate that only educational data is tracked
