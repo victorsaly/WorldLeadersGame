@@ -57,6 +57,39 @@ public class CloudAIAgentService : IAIAgentService
         }
     }
 
+    public async Task<LanguageChallengeDto> GetLanguageChallengeAsync(string countryCode)
+    {
+        // Return a simple language challenge DTO for educational compliance
+        return await Task.FromResult(new LanguageChallengeDto(
+            LanguageCode: "en",
+            LanguageName: "English",
+            Word: "Hello",
+            Pronunciation: "heh-loh",
+            AudioUrl: "",
+            RequiredAccuracy: 80,
+            SupportsSpeechRecognition: true,
+            CulturalContext: "Learn how to greet people in this country!",
+            Type: ChallengeType.Greeting
+        ));
+    }
+
+    public async Task<CulturalContextDto> GetCulturalContextAsync(string countryCode)
+    {
+        // Return a simple cultural context DTO for educational compliance
+        return await Task.FromResult(new CulturalContextDto(
+            TerritoryId: Guid.NewGuid(),
+            CountryName: countryCode,
+            HistoricalSignificance: "This country has a rich history and unique traditions.",
+            CulturalTraditions: new List<string> { "Traditional dance", "Local cuisine" },
+            FamousLandmarks: new List<string> { "Famous monument", "Historic site" },
+            NotableAchievements: new List<string> { "Scientific discovery", "Cultural festival" },
+            GeographyLesson: "Learn about the geography and climate of this country.",
+            EconomicLesson: "Discover how the country's resources shape its economy.",
+            EducationalQuizQuestions: new List<string> { "What is a famous landmark here?", "Name a local tradition." },
+            ChildFriendlyDescription: "Explore the customs and stories to become a world leader!"
+        ));
+    }
+
     private static bool IsValidEndpoint(string endpoint)
     {
         return Uri.TryCreate(endpoint, UriKind.Absolute, out var uriResult)
@@ -317,7 +350,7 @@ Remember: You're helping a young person learn about the world through an excitin
     /// <summary>
     /// Get agent personality information for UI display
     /// </summary>
-    public async Task<WorldLeaders.Shared.DTOs.AgentPersonalityInfo> GetAgentPersonalityAsync(AgentType agentType)
+    public async Task<AgentPersonalityInfo> GetAgentPersonalityAsync(AgentType agentType)
     {
         var personality = AIAgentConstants.AgentPersonalities[agentType];
         var fallbackResponses = AIAgentConstants.SafeFallbackResponses[agentType];
@@ -325,7 +358,7 @@ Remember: You're helping a young person learn about the world through an excitin
         // Take first 3 fallback responses as examples
         var exampleResponses = fallbackResponses.Take(3).ToList();
 
-        return await Task.FromResult(new WorldLeaders.Shared.DTOs.AgentPersonalityInfo(
+        return await Task.FromResult(new AgentPersonalityInfo(
             AgentType: agentType,
             Name: personality.Name,
             Description: personality.Description,
@@ -444,7 +477,7 @@ Remember: You're helping a young person learn about the world through an excitin
             if (_openAIClient != null && !string.IsNullOrEmpty(_aiOptions.DeploymentName))
             {
                 var prompt = BuildEducationalCodePrompt(code, context, language);
-                
+
                 var chatCompletionsOptions = new ChatCompletionsOptions()
                 {
                     DeploymentName = _aiOptions.DeploymentName,
@@ -595,12 +628,12 @@ Remember: Be encouraging, use simple language, and make it fun!";
     {
         var concepts = new List<string>();
         var lowerText = text.ToLowerInvariant();
-        
+
         if (lowerText.Contains("class")) concepts.Add("classes");
         if (lowerText.Contains("function")) concepts.Add("functions");
         if (lowerText.Contains("if") || lowerText.Contains("condition")) concepts.Add("conditionals");
         if (lowerText.Contains("loop") || lowerText.Contains("repeat")) concepts.Add("loops");
-        
+
         return concepts.Any() ? concepts : new List<string> { "basic-programming" };
     }
 
@@ -623,9 +656,9 @@ Remember: Be encouraging, use simple language, and make it fun!";
         };
 
         var mainConcept = concepts.FirstOrDefault() ?? "programming";
-        var summary = simpleExplanations.GetValueOrDefault(mainConcept, 
+        var summary = simpleExplanations.GetValueOrDefault(mainConcept,
             "This code gives instructions to the computer to make something work! 💻");
-        
+
         return new CodeExplanationResult
         {
             Summary = summary,

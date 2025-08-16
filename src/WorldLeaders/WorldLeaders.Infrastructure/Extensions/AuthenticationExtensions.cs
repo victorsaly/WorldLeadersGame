@@ -308,8 +308,8 @@ public static class AuthenticationExtensions
                 options.IdleTimeout = TimeSpan.FromMinutes(childSafetyOptions.ChildSessionTimeoutMinutes);
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
-                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.Name = "WorldLeaders.Session";
             });
 

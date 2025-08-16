@@ -172,9 +172,14 @@ public class GameController : ControllerBase
         {
             var player = await _playerService.CreatePlayerAsync(request);
             var dashboard = await _playerService.GetPlayerDashboardAsync(player.Id);
-
+            var response = new PlayerTerritoriesEducationalResponse
+            {
+                Territories = dashboard.Territories,
+                EducationalExplanation = "Congratulations! You have started your journey as a world leader. Each territory you acquire teaches you about geography, economics, and culture.",
+                ProgressTip = "Next: Explore available territories and learn about their unique features."
+            };
             _logger.LogInformation("Created new player: {Username} with ID: {PlayerId}", request.Username, player.Id);
-            return Ok(dashboard);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -194,7 +199,13 @@ public class GameController : ControllerBase
         try
         {
             var dashboard = await _playerService.GetPlayerDashboardAsync(playerId);
-            return Ok(dashboard);
+            var response = new PlayerTerritoriesEducationalResponse
+            {
+                Territories = dashboard.Territories,
+                EducationalExplanation = "Your dashboard shows your progress as a world leader. Each territory and achievement helps you learn about the world!",
+                ProgressTip = "Keep playing to unlock new countries and skills."
+            };
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -215,9 +226,14 @@ public class GameController : ControllerBase
             // Get available territories (using empty GUID for general territory list)
             // This gets all territories and filters for available ones
             var territories = await _territoryService.GetAvailableTerritoriesAsync(Guid.Empty);
-            
+            var response = new AvailableTerritoriesEducationalResponse
+            {
+                Territories = territories,
+                EducationalExplanation = "Each territory represents a real country. Discover their geography, economy, and languages as you play!",
+                ProgressTip = "Choose a territory to learn more and expand your leadership."
+            };
             _logger.LogInformation("Retrieved {Count} available territories for educational game", territories.Count);
-            return Ok(territories);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -263,9 +279,14 @@ public class GameController : ControllerBase
                     IconEmoji: "📚"
                 )
             };
-
+            var response = new GameEventsEducationalResponse
+            {
+                Events = events,
+                EducationalExplanation = "Game events help you learn about teamwork, leadership, and real-world problem solving.",
+                ProgressTip = "Participate in events to boost your reputation and happiness!"
+            };
             _logger.LogInformation("Retrieved {Count} sample game events for educational gameplay", events.Count);
-            return Ok(events);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -285,11 +306,16 @@ public class GameController : ControllerBase
         try
         {
             var result = await _diceService.RollForJobAsync(playerId);
-            
+            var response = new DiceRollEducationalResponse
+            {
+                DiceValue = result.DiceValue,
+                NewJob = result.NewJob,
+                EducationalExplanation = "Rolling the dice teaches you about probability and career progression. Each job helps you earn income and build reputation!",
+                ProgressTip = "Next: Use your new job to earn more and unlock new territories."
+            };
             _logger.LogInformation("Player {PlayerId} rolled {DiceValue} and got job {Job}", 
                 playerId, result.DiceValue, result.NewJob);
-            
-            return Ok(result);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -309,10 +335,14 @@ public class GameController : ControllerBase
         try
         {
             var session = await _gameEngine.StartNewGameAsync(playerId);
-            
+            var response = new GameSessionEducationalResponse
+            {
+                Session = session,
+                EducationalExplanation = "Welcome to your new game session! Every turn helps you learn about world leadership, geography, and economics.",
+                ProgressTip = "Start by rolling the dice and exploring new territories."
+            };
             _logger.LogInformation("Started new game session for player {PlayerId}", playerId);
-            
-            return Ok(session);
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -332,10 +362,14 @@ public class GameController : ControllerBase
         try
         {
             var update = await _gameEngine.AdvanceTurnAsync(playerId);
-            
+            var response = new GameStateEducationalResponse
+            {
+                StateUpdate = update,
+                EducationalExplanation = "Advancing your turn helps you learn about decision-making and strategy. Each choice affects your progress as a world leader!",
+                ProgressTip = "Review your resources and plan your next move."
+            };
             _logger.LogInformation("Advanced turn for player {PlayerId}", playerId);
-            
-            return Ok(update);
+            return Ok(response);
         }
         catch (Exception ex)
         {

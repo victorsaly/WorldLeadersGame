@@ -33,14 +33,14 @@
 @code {
     private bool isAuthenticated = false;
     private UserInfoDto? currentUser = null;
-    private System.Threading.Timer? authCheckTimer;
+    private Timer? authCheckTimer;
 
     protected override async Task OnInitializedAsync()
     {
         await CheckAuthenticationStatus();
         
         // Check authentication status every 30 seconds
-        authCheckTimer = new System.Threading.Timer(async _ => await InvokeAsync(CheckAuthenticationStatus), 
+        authCheckTimer = new Timer(async _ => await InvokeAsync(CheckAuthenticationStatus), 
                                                    null, 
                                                    TimeSpan.FromSeconds(30), 
                                                    TimeSpan.FromSeconds(30));

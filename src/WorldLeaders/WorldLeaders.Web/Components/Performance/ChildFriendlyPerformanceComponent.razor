@@ -90,7 +90,7 @@ Safety Requirements: Child-friendly loading indicators with encouraging messages
     private bool IsLoading { get; set; } = true;
     private long ElapsedMs { get; set; } = 0;
     private Stopwatch? _stopwatch;
-    private System.Threading.Timer? _timer;
+    private Timer? _timer;
     
     private PerformanceConfig Config => PerformanceOptions.Value ?? PerformanceConfig.UKEducationalDefaults;
 
@@ -100,7 +100,7 @@ Safety Requirements: Child-friendly loading indicators with encouraging messages
         
         if (ShowTimer)
         {
-            _timer = new System.Threading.Timer(UpdateTimer, null, 100, 100);
+            _timer = new Timer(UpdateTimer, null, 100, 100);
         }
     }
 

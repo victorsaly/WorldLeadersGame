@@ -165,7 +165,7 @@ public class AuthController(
                 return Unauthorized("Invalid user session");
             }
 
-            var sessionTokenClaim = User.FindFirst("jti")?.Value;
+            var sessionTokenClaim = User.FindFirst("SessionToken")?.Value;
             if (string.IsNullOrEmpty(sessionTokenClaim))
             {
                 return Unauthorized("Invalid session token");

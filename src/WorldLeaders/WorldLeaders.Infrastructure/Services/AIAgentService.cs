@@ -11,12 +11,12 @@ namespace WorldLeaders.Infrastructure.Services;
 /// Educational Objective: Provide personalized AI mentors with encouraging, safe personalities
 /// Safety Requirements: Multi-layer content validation, age-appropriate responses, positive messaging
 /// </summary>
-public class AIAgentService : IAIAgentService
+public class AiAgentService : IAIAgentService
 {
     private readonly IContentModerationService _contentModerationService;
     private readonly Random _random;
 
-    public AIAgentService(IContentModerationService contentModerationService)
+    public AiAgentService(IContentModerationService contentModerationService)
     {
         _contentModerationService = contentModerationService;
         _random = new Random();
@@ -43,7 +43,7 @@ public class AIAgentService : IAIAgentService
             var educationalContext = GetEducationalContext(agentType, gameContext);
             
             // Create personality-driven response
-            var response = await GeneratePersonalityResponseAsync(agentType, playerInput, educationalContext, personality);
+            var response = await GeneratePersonalityResponseAsync(agentType, playerInput, personality);
             
             // Validate response safety
             var isValid = await _contentModerationService.ValidateContentAsync(response, educationalContext);
@@ -71,7 +71,7 @@ public class AIAgentService : IAIAgentService
     /// <summary>
     /// Get agent personality information for UI display
     /// </summary>
-    public async Task<WorldLeaders.Shared.DTOs.AgentPersonalityInfo> GetAgentPersonalityAsync(AgentType agentType)
+    public async Task<AgentPersonalityInfo> GetAgentPersonalityAsync(AgentType agentType)
     {
         var personality = AIAgentConstants.AgentPersonalities[agentType];
         var fallbackResponses = AIAgentConstants.SafeFallbackResponses[agentType];
@@ -79,7 +79,7 @@ public class AIAgentService : IAIAgentService
         // Take first 3 fallback responses as examples
         var exampleResponses = fallbackResponses.Take(3).ToList();
 
-        return await Task.FromResult(new WorldLeaders.Shared.DTOs.AgentPersonalityInfo(
+        return await Task.FromResult(new AgentPersonalityInfo(
             AgentType: agentType,
             Name: personality.Name,
             Description: personality.Description,
@@ -121,7 +121,7 @@ public class AIAgentService : IAIAgentService
     /// <summary>
     /// Generate a personality-driven response based on agent type and educational context
     /// </summary>
-    private async Task<string> GeneratePersonalityResponseAsync(AgentType agentType, string playerInput, string educationalContext, AgentPersonality personality)
+    private async Task<string> GeneratePersonalityResponseAsync(AgentType agentType, string playerInput, AgentPersonality personality)
     {
         // Since this is a simplified implementation without external AI services,
         // we'll create structured responses based on personality traits and educational context
@@ -133,11 +133,11 @@ public class AIAgentService : IAIAgentService
         responseBuilder.Add(keyPhrase);
 
         // Add educational context based on agent type
-        var educationalResponse = GenerateEducationalContent(agentType, playerInput, educationalContext);
+        var educationalResponse = GenerateEducationalContent(agentType, playerInput);
         responseBuilder.Add(educationalResponse);
 
         // Add encouraging conclusion
-        var encouragement = GenerateEncouragement(agentType, personality);
+        var encouragement = GenerateEncouragement(agentType);
         responseBuilder.Add(encouragement);
 
         var fullResponse = string.Join(" ", responseBuilder);
@@ -145,10 +145,10 @@ public class AIAgentService : IAIAgentService
         // Ensure response doesn't exceed maximum length with word-boundary-aware truncation
         if (fullResponse.Length > AIAgentConstants.MaxResponseLength)
         {
-            int maxLen = AIAgentConstants.MaxResponseLength - 3; // account for "..."
-            if (maxLen > 0 && fullResponse.Length > maxLen)
+            var maxLen = AIAgentConstants.MaxResponseLength - 3; // account for "..."
+            if (fullResponse.Length > maxLen)
             {
-                int lastSpace = fullResponse.LastIndexOf(' ', maxLen);
+                var lastSpace = fullResponse.LastIndexOf(' ', maxLen);
                 if (lastSpace > 0)
                 {
                     fullResponse = fullResponse.Substring(0, lastSpace) + "...";
@@ -166,7 +166,7 @@ public class AIAgentService : IAIAgentService
     /// <summary>
     /// Generate educational content based on agent type and player input
     /// </summary>
-    private string GenerateEducationalContent(AgentType agentType, string playerInput, string educationalContext)
+    private string GenerateEducationalContent(AgentType agentType, string playerInput)
     {
         var inputLower = playerInput.ToLowerInvariant();
 
@@ -263,7 +263,7 @@ public class AIAgentService : IAIAgentService
     /// <summary>
     /// Generate encouraging conclusion based on agent personality
     /// </summary>
-    private string GenerateEncouragement(AgentType agentType, AgentPersonality personality)
+    private string GenerateEncouragement(AgentType agentType)
     {
         var encouragements = agentType switch
         {
@@ -339,13 +339,13 @@ public class AIAgentService : IAIAgentService
         {
             // For now, return a structured educational explanation
             // In the future, this could integrate with Azure OpenAI for dynamic explanations
-            var analysis = AnalyzeCodeForEducation(code, language);
+            var analysis = AnalyzeCodeForEducation(code);
             
             var result = new CodeExplanationResult
             {
-                Summary = GenerateChildFriendlySummary(analysis, language),
-                Breakdown = GenerateStepByStepBreakdown(code, analysis),
-                EducationalValue = GenerateEducationalValue(analysis),
+                Summary = GenerateChildFriendlySummary(analysis),
+                Breakdown = GenerateStepByStepBreakdown(code),
+                EducationalValue = GenerateEducationalValue(),
                 RealWorldApplication = GenerateRealWorldExample(analysis),
                 NextSteps = GenerateNextSteps(analysis),
                 ComplexityLevel = AssessComplexityForAge(code),
@@ -364,11 +364,10 @@ public class AIAgentService : IAIAgentService
 
     #region Code Analysis Helper Methods
 
-    private CodeAnalysis AnalyzeCodeForEducation(string code, string language)
+    private CodeAnalysis AnalyzeCodeForEducation(string code)
     {
         var concepts = new List<string>();
-        var complexity = "beginner";
-        
+
         // Basic concept detection
         if (code.Contains("class ")) concepts.Add("classes");
         if (code.Contains("function ") || code.Contains("def ") || code.Contains("public ")) concepts.Add("functions");
@@ -380,19 +379,20 @@ public class AIAgentService : IAIAgentService
         
         // Assess complexity
         var lines = code.Split('\n').Length;
-        if (lines > 50 || concepts.Count > 4) complexity = "advanced";
-        else if (lines > 20 || concepts.Count > 2) complexity = "intermediate";
-        
+        if (lines > 50 || concepts.Count > 4)
+        {
+        }
+        else if (lines > 20 || concepts.Count > 2)
+        {
+        }
+
         return new CodeAnalysis
         {
-            Language = language,
-            Concepts = concepts,
-            Complexity = complexity,
-            LineCount = lines
+            Concepts = concepts
         };
     }
 
-    private string GenerateChildFriendlySummary(CodeAnalysis analysis, string language)
+    private string GenerateChildFriendlySummary(CodeAnalysis analysis)
     {
         // Simple, non-technical explanations for 12-year-old blog readers
         var simpleExplanations = new Dictionary<string, string>
@@ -413,15 +413,15 @@ public class AIAgentService : IAIAgentService
             "This code gives instructions to the computer to make something work! 💻");
     }
 
-    private List<CodeLineExplanationResult> GenerateStepByStepBreakdown(string code, CodeAnalysis analysis)
+    private List<CodeLineExplanationResult> GenerateStepByStepBreakdown(string code)
     {
         var lines = code.Split('\n').Where(l => !string.IsNullOrWhiteSpace(l)).Take(5).ToList();
         var breakdown = new List<CodeLineExplanationResult>();
 
-        for (int i = 0; i < lines.Count; i++)
+        for (var i = 0; i < lines.Count; i++)
         {
             var line = lines[i].Trim();
-            string explanation = "This line helps our educational game work! ✨";
+            var explanation = "This line helps our educational game work! ✨";
 
             if (line.Contains("public class"))
                 explanation = "This creates a new part of our game - like making a new type of game piece! 🎲";
@@ -443,7 +443,7 @@ public class AIAgentService : IAIAgentService
         return breakdown;
     }
 
-    private EducationalValueResult GenerateEducationalValue(CodeAnalysis analysis)
+    private EducationalValueResult GenerateEducationalValue()
     {
         return new EducationalValueResult
         {
@@ -564,13 +564,44 @@ public class AIAgentService : IAIAgentService
     // Helper class for code analysis
     private class CodeAnalysis
     {
-        public string Language { get; set; } = string.Empty;
         public List<string> Concepts { get; set; } = new();
-        public string Complexity { get; set; } = string.Empty;
-        public int LineCount { get; set; }
     }
 
     #endregion
 
     #endregion
+
+        // Implement missing IAIAgentService methods
+        public async Task<LanguageChallengeDto> GetLanguageChallengeAsync(string countryCode)
+        {
+            // Return a simple language challenge DTO for educational compliance
+            return await Task.FromResult(new LanguageChallengeDto(
+                LanguageCode: "en",
+                LanguageName: "English",
+                Word: "Hello",
+                Pronunciation: "heh-loh",
+                AudioUrl: "",
+                RequiredAccuracy: 80,
+                SupportsSpeechRecognition: true,
+                CulturalContext: "Learn how to greet people in this country!",
+                Type: ChallengeType.Greeting
+            ));
+        }
+
+        public async Task<CulturalContextDto> GetCulturalContextAsync(string countryCode)
+        {
+            // Return a simple cultural context DTO for educational compliance
+            return await Task.FromResult(new CulturalContextDto(
+                TerritoryId: Guid.NewGuid(),
+                CountryName: countryCode,
+                HistoricalSignificance: "This country has a rich history and unique traditions.",
+                CulturalTraditions: new List<string> { "Traditional dance", "Local cuisine" },
+                FamousLandmarks: new List<string> { "Famous monument", "Historic site" },
+                NotableAchievements: new List<string> { "Scientific discovery", "Cultural festival" },
+                GeographyLesson: "Learn about the geography and climate of this country.",
+                EconomicLesson: "Discover how the country's resources shape its economy.",
+                EducationalQuizQuestions: new List<string> { "What is a famous landmark here?", "Name a local tradition." },
+                ChildFriendlyDescription: "Explore the customs and stories to become a world leader!"
+            ));
+        }
 }

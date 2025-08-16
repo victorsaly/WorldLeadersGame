@@ -94,7 +94,7 @@ public class DiceServiceTests : ServiceTestBase
         
         // Act - Roll dice multiple times to test randomness
         var results = new List<int>();
-        for (int i = 0; i < 50; i++)
+        for (var i = 0; i < 50; i++)
         {
             var rollResult = await service.RollForJobAsync(testPlayer.Id);
             Assert.NotNull(rollResult);
@@ -112,7 +112,7 @@ public class DiceServiceTests : ServiceTestBase
         Assert.True(results.Distinct().Count() >= 4, "Dice should show reasonable randomness over 50 rolls");
         
         // Validate each value appears within reasonable frequency (basic fairness check)
-        for (int value = 1; value <= 6; value++)
+        for (var value = 1; value <= 6; value++)
         {
             var count = results.Count(r => r == value);
             Assert.InRange(count, 2, 20); // Should appear between 2-20 times in 50 rolls
@@ -174,7 +174,7 @@ public class DiceServiceTests : ServiceTestBase
         var service = GetService<IDiceService>();
         var jobLevels = Enum.GetValues<JobLevel>();
 
-        foreach (int diceValue in Enumerable.Range(1, 6))
+        foreach (var diceValue in Enumerable.Range(1, 6))
         {
             foreach (var jobLevel in jobLevels)
             {
@@ -248,7 +248,7 @@ public class DiceServiceTests : ServiceTestBase
         // Arrange & Act
         var mappingCounts = new Dictionary<JobLevel, int>();
         
-        for (int diceValue = 1; diceValue <= 6; diceValue++)
+        for (var diceValue = 1; diceValue <= 6; diceValue++)
         {
             var job = JobProgressionMapping.GetJobFromDiceRoll(diceValue);
             mappingCounts[job] = mappingCounts.GetValueOrDefault(job, 0) + 1;
@@ -295,7 +295,7 @@ public class DiceServiceTests : ServiceTestBase
         Assert.True(sortedByIncome.Last().Income <= 50000, "High-level jobs should have realistic but aspirational income");
         
         // Validate progressive income increases
-        for (int i = 1; i < sortedByIncome.Count; i++)
+        for (var i = 1; i < sortedByIncome.Count; i++)
         {
             var current = sortedByIncome[i];
             var previous = sortedByIncome[i - 1];
@@ -326,7 +326,7 @@ public class DiceServiceTests : ServiceTestBase
             var rollResults = new List<(int DiceValue, JobLevel NewJob)>();
 
             // Act - Perform multiple rolls
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 var rollResult = await service.RollForJobAsync(testPlayer.Id);
                 rollResults.Add((rollResult.DiceValue, rollResult.NewJob));
@@ -381,7 +381,7 @@ public class DiceServiceTests : ServiceTestBase
             Assert.True(history.Count >= 3);
             
             // Validate chronological order (most recent first)
-            for (int i = 1; i < history.Count; i++)
+            for (var i = 1; i < history.Count; i++)
             {
                 Assert.True(history[i - 1].RolledAt >= history[i].RolledAt,
                     "History should be ordered with most recent first");
@@ -519,7 +519,7 @@ public class DiceServiceTests : ServiceTestBase
             var tasks = new List<Task>();
             var results = new List<Exception>();
             
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 tasks.Add(Task.Run(async () =>
                 {
@@ -570,7 +570,7 @@ public class DiceServiceTests : ServiceTestBase
             var testPlayer = context.Players.First(p => p.CurrentJob == JobLevel.Student);
 
             // Test multiple rolls to see variety of outcomes
-            for (int i = 0; i < 10; i++)
+            for (var i = 0; i < 10; i++)
             {
                 var rollResult = await service.RollForJobAsync(testPlayer.Id);
                 allMessages.Add(rollResult.Message);
