@@ -176,15 +176,17 @@ public class GameControllerTests : ApiTestBase
         await ValidateApiResponseChildSafety(response, "Educational Game Events");
 
         var content = await response.Content.ReadAsStringAsync();
-        var events = JsonSerializer.Deserialize<List<GameEventDto>>(content, new JsonSerializerOptions
+        var eventsResponse = JsonSerializer.Deserialize<GameEventsEducationalResponse>(content, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         });
 
-        events.Should().NotBeNull();
-        events!.Should().NotBeEmpty("Game should provide educational events");
+        eventsResponse.Should().NotBeNull();
+        eventsResponse!.Events.Should().NotBeNull().And.NotBeEmpty("Game should provide educational events");
+        ValidateChildSafeContent(eventsResponse.EducationalExplanation, "Educational Explanation");
+        ValidateChildSafeContent(eventsResponse.ProgressTip, "Progress Tip");
         
-        foreach (var gameEvent in events)
+        foreach (var gameEvent in eventsResponse.Events)
         {
             // Educational validation for each event
             ValidateChildSafeContent(gameEvent.Title, "Game Event Title");
@@ -203,8 +205,8 @@ public class GameControllerTests : ApiTestBase
             gameEvent.HappinessEffect.Should().BeGreaterThan(-50, "Happiness should not be severely impacted");
         }
 
-        ValidateEducationalOutcome(events, "Learn through positive, educational game events");
-        Output.WriteLine($"✅ {events.Count} educational game events validated for positive learning");
+        ValidateEducationalOutcome(eventsResponse.Events, "Learn through positive, educational game events");
+        Output.WriteLine($"✅ {eventsResponse.Events.Count} educational game events validated for positive learning");
     }
 
     protected override void ConfigureAdditionalServices(IServiceCollection services)

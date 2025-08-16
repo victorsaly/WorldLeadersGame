@@ -117,12 +117,18 @@ public class APIControllerTests : ApiTestBase
             await ValidateApiResponseChildSafety(response, "Territory Listing");
 
             var content = await response.Content.ReadAsStringAsync();
-            var territories = JsonSerializer.Deserialize<List<TerritoryDto>>(content, new JsonSerializerOptions
+            var territoryResponse = JsonSerializer.Deserialize<AvailableTerritoriesEducationalResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
+            territoryResponse.Should().NotBeNull();
+            territoryResponse!.Territories.Should().NotBeNull().And.NotBeEmpty("Game should provide educational territories");
+            ValidateChildSafeContent(territoryResponse.EducationalExplanation, "Educational Explanation");
+            ValidateChildSafeContent(territoryResponse.ProgressTip, "Progress Tip");
+
             // Educational validation for geography learning
+            var territories = territoryResponse.Territories;
             territories.Should().NotBeNull();
             ValidateEducationalOutcome(territories!, "Learn world geography through territory exploration");
         }
