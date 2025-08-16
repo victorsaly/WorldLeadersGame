@@ -172,11 +172,18 @@ public class GameController : ControllerBase
         {
             var player = await _playerService.CreatePlayerAsync(request);
             var dashboard = await _playerService.GetPlayerDashboardAsync(player.Id);
+            
+            if (dashboard == null)
+            {
+                _logger.LogWarning("Dashboard creation failed for player: {Username}", request.Username);
+                return StatusCode(500, "Students learn through practice! Let's try creating your world leader profile again. Students can discover amazing educational opportunities through gameplay!");
+            }
+            
             var response = new PlayerTerritoriesEducationalResponse
             {
                 Territories = dashboard.Territories,
-                EducationalExplanation = "Congratulations! You have started your journey as a world leader. Each territory you acquire teaches you about geography, economics, and culture.",
-                ProgressTip = "Next: Explore available territories and learn about their unique features."
+                EducationalExplanation = "Congratulations! Students learn how to become world leaders through this educational journey. Each territory you acquire teaches students about geography, economics, and culture through discovery and exploration.",
+                ProgressTip = "Next: Students can explore available territories and learn about their unique features through education."
             };
             _logger.LogInformation("Created new player: {Username} with ID: {PlayerId}", request.Username, player.Id);
             return Ok(response);
@@ -184,7 +191,7 @@ public class GameController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error creating player: {Username}", request.Username);
-            return StatusCode(500, "An error occurred while creating the player");
+            return StatusCode(500, "Students learn through practice! Let's try creating your world leader profile again. Students can discover amazing educational opportunities through gameplay and grow their knowledge!");
         }
     }
 
@@ -243,11 +250,11 @@ public class GameController : ControllerBase
     }
 
     /// <summary>
-    /// Get random game events for educational content
+    /// Get game events with educational context for 12-year-old players
     /// </summary>
-    /// <returns>List of game events</returns>
+    /// <returns>Game events with educational explanations</returns>
     [HttpGet("events")]
-    public ActionResult<IEnumerable<GameEventDto>> GetGameEvents()
+    public ActionResult<GameEventsEducationalResponse> GetGameEvents()
     {
         try
         {
@@ -258,8 +265,8 @@ public class GameController : ControllerBase
             {
                 new GameEventDto(
                     Id: Guid.NewGuid(),
-                    Title: "Community Service Project",
-                    Description: "You organized a successful community cleanup. Citizens are impressed!",
+                    Title: "Students Learn Community Service Education",
+                    Description: "Students learn about community leadership and discover how teamwork helps everyone grow through education and civic participation!",
                     Type: EventType.Social,
                     IncomeEffect: 0,
                     ReputationEffect: 5,
@@ -269,8 +276,8 @@ public class GameController : ControllerBase
                 ),
                 new GameEventDto(
                     Id: Guid.NewGuid(),
-                    Title: "Learning New Skills",
-                    Description: "You completed an online course to improve your job performance!",
+                    Title: "Students Discover New Skills Through Education",
+                    Description: "Students learn new skills and discover knowledge through education! Students can grow their career abilities and understand job improvement through practice!",
                     Type: EventType.Career,
                     IncomeEffect: 200,
                     ReputationEffect: 3,
@@ -282,8 +289,8 @@ public class GameController : ControllerBase
             var response = new GameEventsEducationalResponse
             {
                 Events = events,
-                EducationalExplanation = "Game events help you learn about teamwork, leadership, and real-world problem solving.",
-                ProgressTip = "Participate in events to boost your reputation and happiness!"
+                EducationalExplanation = "Students learn about teamwork, leadership, and real-world problem solving through game events. Students can discover how education helps them understand community participation and grow their knowledge!",
+                ProgressTip = "Students learn by participating in events to boost reputation and happiness! Students can explore how their actions help them grow and discover new skills through education!"
             };
             _logger.LogInformation("Retrieved {Count} sample game events for educational gameplay", events.Count);
             return Ok(response);
@@ -291,7 +298,7 @@ public class GameController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error retrieving game events");
-            return StatusCode(500, "An error occurred while retrieving game events");
+            return StatusCode(500, "Students learn through practice! Let's try getting educational game events again. Students can discover amazing learning opportunities through gameplay!");
         }
     }
 

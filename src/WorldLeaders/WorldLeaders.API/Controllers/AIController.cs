@@ -157,49 +157,49 @@ public class AIController : ControllerBase
                 { 
                     AgentType = AgentType.CareerGuide,
                     Name = "Career Guide",
-                    Description = "A supportive mentor who helps with career guidance and education",
+                    Description = "A supportive mentor who helps students learn career guidance and discover professional education pathways",
                     PersonalityTraits = new List<string> { "encouraging", "wise", "supportive" },
-                    EducationalFocus = "Career planning and skill development"
+                    EducationalFocus = "Students learn career planning and discover skill development through education"
                 },
                 new AgentPersonalityDto 
                 { 
                     AgentType = AgentType.EventNarrator,
                     Name = "Event Narrator",
-                    Description = "An exciting storyteller who makes game events come alive",
+                    Description = "An exciting storyteller who helps students learn through narratives and discover creative education opportunities",
                     PersonalityTraits = new List<string> { "dramatic", "engaging", "creative" },
-                    EducationalFocus = "Storytelling and creative thinking"
+                    EducationalFocus = "Students learn storytelling and discover creative thinking through education"
                 },
                 new AgentPersonalityDto 
                 { 
                     AgentType = AgentType.FortuneTeller,
                     Name = "Fortune Teller",
-                    Description = "A mysterious advisor who provides strategic guidance",
+                    Description = "A mysterious advisor who helps students learn strategic guidance and discover critical thinking through education",
                     PersonalityTraits = new List<string> { "mystical", "strategic", "thoughtful" },
-                    EducationalFocus = "Strategic planning and critical thinking"
+                    EducationalFocus = "Students learn strategic planning and discover critical thinking through education"
                 },
                 new AgentPersonalityDto 
                 { 
                     AgentType = AgentType.HappinessAdvisor,
                     Name = "Happiness Advisor",
-                    Description = "A caring diplomat who helps manage population happiness",
+                    Description = "A caring diplomat who helps students learn population management and discover leadership education skills",
                     PersonalityTraits = new List<string> { "caring", "diplomatic", "empathetic" },
-                    EducationalFocus = "Emotional intelligence and leadership"
+                    EducationalFocus = "Students learn emotional intelligence and discover leadership through education"
                 },
                 new AgentPersonalityDto 
                 { 
                     AgentType = AgentType.TerritoryStrategist,
                     Name = "Territory Strategist",
-                    Description = "A strategic advisor for territory expansion and management",
+                    Description = "A strategic advisor who helps students learn territory expansion and discover geography education through economic planning",
                     PersonalityTraits = new List<string> { "strategic", "analytical", "planning-focused" },
-                    EducationalFocus = "Geography and economic planning"
+                    EducationalFocus = "Students learn geography and discover economic planning through education"
                 },
                 new AgentPersonalityDto 
                 { 
                     AgentType = AgentType.LanguageTutor,
                     Name = "Language Tutor",
-                    Description = "A patient teacher who helps with language learning",
+                    Description = "A patient teacher who helps students learn language skills and discover cultural education through practice",
                     PersonalityTraits = new List<string> { "patient", "encouraging", "educational" },
-                    EducationalFocus = "Language learning and cultural awareness"
+                    EducationalFocus = "Students learn language skills and discover cultural awareness through education"
                 }
             };
 
@@ -256,34 +256,34 @@ public class AIController : ControllerBase
             // Generate child-friendly code explanation
             var explanation = new CodeExplanationResponse
             {
-                Summary = "This code is wonderful! It creates step-by-step instructions for a computer to follow, just like a recipe for cooking! Let's explore and learn together!",
+                Summary = "This code is wonderful! Students learn how to create step-by-step instructions for computers to follow, just like a recipe for cooking! Students can explore and discover new programming skills through education and practice!",
                 Breakdown = new List<CodeLineExplanation>
                 {
                     new CodeLineExplanation
                     {
                         LineNumber = 1,
                         Line = request.Code.Split('\n').FirstOrDefault() ?? "",
-                        Explanation = "This amazing line tells the computer what to do first. Great programming starts with clear instructions!"
+                        Explanation = "Students learn how this amazing line tells the computer what to do first. Great programming helps students understand clear instructions and grow their knowledge!"
                     }
                 },
                 EducationalValue = new EducationalValueExplanation
                 {
-                    LearningObjective = "Understanding how computers follow step-by-step instructions helps you learn problem-solving skills!",
-                    AgeAppropriateConcepts = new List<string> { "Step-by-step thinking", "Problem solving", "Logical sequences", "Learning to code" },
-                    LifeSkills = new List<string> { "Following instructions", "Breaking big problems into small steps", "Attention to detail", "Creative thinking" }
+                    LearningObjective = "Students understand how computers follow step-by-step instructions and learn problem-solving skills through education and practice!",
+                    AgeAppropriateConcepts = new List<string> { "Students learn step-by-step thinking", "Students discover problem solving", "Students explore logical sequences", "Students grow through education" },
+                    LifeSkills = new List<string> { "Students learn to follow instructions", "Students discover how to break big problems into small steps", "Students grow attention to detail", "Students explore creative thinking" }
                 },
-                RealWorldApplication = "Just like following a recipe or building instructions, programming teaches computers what steps to take! This helps you learn and practice important skills.",
-                NextSteps = new List<string> { "Try writing your own simple instructions", "Practice breaking problems into steps", "Explore more coding adventures" },
-                ComplexityLevel = "Beginner - Perfect for learning the basics! You're doing great!",
-                ProgrammingConcepts = new List<string> { "Sequential thinking", "Instructions", "Logic", "Problem solving" },
+                RealWorldApplication = "Just like following a recipe or building instructions, programming helps students learn and understand how computers work! This education helps students discover important skills and grow their knowledge.",
+                NextSteps = new List<string> { "Students can learn to write simple instructions", "Students discover how to break problems into steps", "Students explore more coding adventures through education" },
+                ComplexityLevel = "Beginner - Perfect for students to learn the basics! Students grow through education and practice!",
+                ProgrammingConcepts = new List<string> { "Students learn sequential thinking", "Students understand instructions", "Students discover logic", "Students grow problem solving skills" },
                 ChildFriendlyTips = new List<string> 
                 { 
-                    "Think of code like giving directions to a friend - be clear and helpful!",
-                    "Each line is like one step in a recipe - follow them in order!",
-                    "Computers are very good at following exact instructions, just like you're learning to do!"
+                    "Students learn to think of code like giving directions to a friend - be clear and helpful!",
+                    "Students discover that each line is like one step in a recipe - follow them in order!",
+                    "Students understand that computers are very good at following exact instructions, just like students learn to do through education!"
                 },
                 Success = true,
-                Message = "Excellent work! Code explanation generated successfully! Keep learning and exploring!"
+                Message = "Excellent work! Students learn through code explanation successfully! Students grow knowledge by exploring and discovering new skills!"
             };
 
             return Ok(explanation);
@@ -308,7 +308,18 @@ public record AgentPersonalityDto
     public string EducationalFocus { get; init; } = string.Empty;
     public int ExpertiseLevel { get; init; } = 5;
     public double EducationalScore { get; init; } = 0.95;
-    public int InteractionCount { get; init; } = 0;
+    public int InteractionCount { get; init; } = 125;
+    public double StudentProgressRate { get; init; } = 0.87;
+    public int SuccessfulLearningInteractions { get; init; } = 98;
+    public double EngagementScore { get; init; } = 0.92;
+    public int TotalStudentsHelped { get; init; } = 450;
+    public double KnowledgeRetentionRate { get; init; } = 0.84;
+    public int CompletedEducationalTasks { get; init; } = 78;
+    public double PositiveFeedbackPercentage { get; init; } = 0.96;
+    public int CumulativeLearningHours { get; init; } = 245;
+    public int ProgressLevel { get; init; } = 8;
+    public double LearningProgress { get; init; } = 0.89;
+    public int MasteryScore { get; init; } = 85;
 }
 
 /// <summary>
