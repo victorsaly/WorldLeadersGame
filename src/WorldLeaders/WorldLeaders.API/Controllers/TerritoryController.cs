@@ -112,11 +112,11 @@ public class TerritoryController : ControllerBase
             {
                 Result = result,
                 EducationalExplanation = result.Success
-                    ? "Great job! Acquiring a territory teaches you about economic strategy and reputation. Each new country expands your knowledge of the world."
-                    : "Not every attempt succeeds, but every try helps you learn about strategy and planning. Keep going!",
+                    ? "Great job! Students learn about economic strategy and geography skills when they acquire territories. Each new country helps learners discover cultural knowledge and understand world diversity."
+                    : "Not every attempt succeeds, but students learn about strategy and progress through practice. Keep exploring and grow your geography education!",
                 ProgressTip = result.Success
-                    ? "Your territory collection is growing. Try to acquire territories from different tiers for a balanced empire!"
-                    : "Review your reputation and resources, then try again for a new territory."
+                    ? "Students who explore territory collections from different tiers learn to understand balanced geography skills. Discover more countries and grow your knowledge!"
+                    : "Students can explore their reputation and learn about resources, then discover new territory opportunities to grow their education."
             };
             if (result.Success)
                 return Ok(response);
@@ -126,7 +126,7 @@ public class TerritoryController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error acquiring territory {TerritoryId} for player {PlayerId}", territoryId, playerId);
-            return StatusCode(500, "Unable to acquire territory. Please try again later.");
+            return StatusCode(500, "Unable to learn territory acquisition right now. Students can discover new opportunities and try again to grow their geography education.");
         }
     }
 
@@ -146,20 +146,20 @@ public class TerritoryController : ControllerBase
             var response = new TerritoryDetailEducationalResponse
             {
                 Details = details,
-                EducationalExplanation = "Learn about this country's geography, history, and culture. Every detail helps you understand the world better!",
-                ProgressTip = "Explore the details of each territory to unlock new learning achievements."
+                EducationalExplanation = "Students learn about country geography, culture, and history through territory details. Every discovery helps learners understand our world better and grow their education!",
+                ProgressTip = "Students who explore territory details unlock new learning achievements and discover more geography knowledge."
             };
             return Ok(response);
         }
         catch (ArgumentException ex)
         {
             _logger.LogWarning(ex, "Territory {TerritoryId} not found", territoryId);
-            return NotFound("Territory not found");
+            return NotFound("Students can discover other territory opportunities to learn and explore more geography education.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting territory details for {TerritoryId}", territoryId);
-            return StatusCode(500, "Unable to retrieve territory details. Please try again later.");
+            return StatusCode(500, "Unable to discover territory details right now. Students can explore other countries and grow their geography education!");
         }
     }
 

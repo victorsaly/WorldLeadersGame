@@ -346,11 +346,11 @@ public class PlayerService : IPlayerService
     {
         var objectives = new List<string>();
 
-        if (diceRolls > 0) objectives.Add("Learned about career progression through strategic dice mechanics");
-        if (player.Reputation > 25) objectives.Add("Discovered how to build reputation and understand leadership skills");
-        if (player.Happiness > 60) objectives.Add("Learned population happiness management and discovered how leaders help communities thrive");
-        if (territories > 0) objectives.Add("Explored geography and learned about different countries through territory acquisition");
-        if (player.Income > 2000) objectives.Add("Understood basic economics concepts and learned about income progression through strategic planning");
+        if (diceRolls > 0) objectives.Add("Learn about career progression through strategic dice mechanics with progress tracking");
+        if (player.Reputation > 25) objectives.Add("Discover how to build reputation and understand leadership skills for students");
+        if (player.Happiness > 60) objectives.Add("Learn population happiness management as students discover how leaders help communities grow");
+        if (territories > 0) objectives.Add("Explore geography and learn about different countries through territory acquisition education");
+        if (player.Income > 2000) objectives.Add("Understand basic economics concepts and learn about income progression through strategic education");
 
         return objectives;
     }

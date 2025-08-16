@@ -353,10 +353,49 @@ public class PlayerServiceTests : ServiceTestBase
         Assert.NotEmpty(result.LearningObjectivesMet); // Advanced player should have met some objectives
         
         // Educational objectives should be meaningful for 12-year-olds
-        foreach (var objective in result.LearningObjectivesMet)
+        Output.WriteLine($"🔍 DEBUG: Found {result.LearningObjectivesMet.Count} learning objectives:");
+        for (int i = 0; i < result.LearningObjectivesMet.Count; i++)
         {
-            ValidateChildSafeContent(objective, "Learning objective description");
-            ValidateEducationalOutcome(objective, "specific educational achievement");
+            var objective = result.LearningObjectivesMet[i];
+            Output.WriteLine($"   {i + 1}. '{objective}'");
+        }
+        
+        // Debug: Test regex patterns manually for first objective
+        if (result.LearningObjectivesMet.Count > 0)
+        {
+            var testContent = result.LearningObjectivesMet[0];
+            Output.WriteLine($"🔬 Testing regex patterns for: '{testContent}'");
+            
+            var educationalPatterns = new[]
+            {
+                @"\b(learn|learner|discover|explore|explorer|understand|grow)\b",
+                @"\b(geography|country|language|culture|economy)\b", 
+                @"\b(skill|knowledge|education|progress|advanced)\b",
+                @"\b(student|teacher|guide|helper|builder)\b"
+            };
+            
+            for (int p = 0; p < educationalPatterns.Length; p++)
+            {
+                var matches = System.Text.RegularExpressions.Regex.IsMatch(testContent, educationalPatterns[p], System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                Output.WriteLine($"   Pattern {p + 1}: {educationalPatterns[p]} -> {matches}");
+            }
+        }
+        
+        // Now validate each one
+        for (int i = 0; i < result.LearningObjectivesMet.Count; i++)
+        {
+            var objective = result.LearningObjectivesMet[i];
+            try 
+            {
+                ValidateChildSafeContent(objective, "Learning objective description");
+                ValidateEducationalOutcome(objective, "specific educational achievement");
+                Output.WriteLine($"✅ Objective {i + 1} passed validation");
+            }
+            catch (Exception ex)
+            {
+                Output.WriteLine($"❌ Objective {i + 1} failed validation: {ex.Message}");
+                throw; // Re-throw to fail the test
+            }
         }
 
         Output.WriteLine($"✅ Analytics: {result.DiceRollsCount} rolls, {result.TerritoriesCount} territories, {result.AchievementsCount} achievements");
