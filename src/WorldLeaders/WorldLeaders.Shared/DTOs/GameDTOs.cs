@@ -20,7 +20,75 @@ public record PlayerDashboardDto(
     int TerritoriesOwned,
     GameState CurrentGameState,
     DateTime LastActiveAt
+)
+{
+    /// <summary>
+    /// Player profile information
+    /// </summary>
+    public PlayerProfileDto Player { get; init; } = new(Id, Username, Income, Reputation, Happiness, CurrentJob, TerritoriesOwned, CurrentGameState, LastActiveAt);
+    
+    /// <summary>
+    /// Territories owned by the player
+    /// </summary>
+    public List<TerritoryDto> Territories { get; init; } = new();
+    
+    /// <summary>
+    /// Recent achievements unlocked by the player
+    /// </summary>
+    public List<AchievementDto> RecentAchievements { get; init; } = new();
+    
+    /// <summary>
+    /// Learning progress tracking
+    /// </summary>
+    public LearningProgressDto LearningProgress { get; init; } = new();
+}
+
+/// <summary>
+/// DTO for player profile information within dashboard
+/// </summary>
+public record PlayerProfileDto(
+    Guid Id,
+    string Username,
+    int Income,
+    int Reputation,
+    int Happiness,
+    JobLevel CurrentJob,
+    int TerritoriesOwned,
+    GameState CurrentGameState,
+    DateTime LastActiveAt
+)
+{
+    /// <summary>
+    /// Display name for the player (can be different from username)
+    /// </summary>
+    public string DisplayName { get; init; } = Username;
+}
+
+/// <summary>
+/// DTO for achievement information
+/// </summary>
+public record AchievementDto(
+    string AchievementId,
+    string Title,
+    string Description,
+    string IconEmoji,
+    int PointsReward,
+    DateTime UnlockedAt,
+    bool IsUnlocked
 );
+
+/// <summary>
+/// DTO for learning progress tracking
+/// </summary>
+public record LearningProgressDto(
+    int TotalLearningObjectives = 0,
+    int CompletedObjectives = 0,
+    double ProgressPercentage = 0.0,
+    List<string>? RecentlyLearned = null
+)
+{
+    public List<string> RecentlyLearned { get; init; } = RecentlyLearned ?? new();
+}
 
 /// <summary>
 /// DTO for territory information display
@@ -71,7 +139,18 @@ public record AIAgentResponse(
     string Response,
     bool IsAppropriate,
     DateTime GeneratedAt
-);
+)
+{
+    /// <summary>
+    /// Alias for Response to support test compatibility
+    /// </summary>
+    public string Content => Response;
+    
+    /// <summary>
+    /// Indicates if the response was successfully generated
+    /// </summary>
+    public bool IsGenerated => !string.IsNullOrEmpty(Response);
+};
 
 /// <summary>
 /// DTO for language learning challenges with speech recognition support
@@ -167,7 +246,13 @@ public record AgentPersonalityInfo(
     string EducationalFocus,
     string IconEmoji,
     List<string> ExampleResponses
-);
+)
+{
+    /// <summary>
+    /// Greeting message from the agent
+    /// </summary>
+    public string Greeting => $"Hello! I'm {Name}, ready to help you {EducationalFocus.ToLowerInvariant()}!";
+};
 
 /// <summary>
 /// Result DTO for code explanation generation
@@ -204,3 +289,31 @@ public record EducationalValueResult
     public List<string> AgeAppropriateConcepts { get; init; } = new();
     public List<string> LifeSkills { get; init; } = new();
 }
+
+/// <summary>
+/// Country information for educational territory system
+/// </summary>
+public record CountryInfo(
+    string Name,
+    string Code,
+    string Capital,
+    long Population,
+    string Region,
+    string SubRegion,
+    List<string> Languages,
+    List<string> Currencies,
+    string Flag,
+    List<string> Borders,
+    string Area,
+    List<string> Timezones
+);
+
+/// <summary>
+/// Resource change tracking for educational feedback
+/// </summary>
+public record ResourceChange(
+    int IncomeChange,
+    int ReputationChange,
+    int HappinessChange,
+    string Reason
+);

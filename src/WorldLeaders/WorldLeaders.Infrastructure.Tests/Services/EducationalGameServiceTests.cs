@@ -1,8 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System.Diagnostics;
 using WorldLeaders.Infrastructure.Data;
 using WorldLeaders.Infrastructure.Entities;
 using WorldLeaders.Infrastructure.Services;
@@ -58,74 +56,71 @@ public class EducationalGameServiceTests : ServiceTestBase
     [Fact]
     public async Task DiceService_RollForJob_GeneratesValidEducationalProgression()
     {
-        // Arrange
-        var diceService = GetService<IDiceService>();
-        var context = GetService<WorldLeadersDbContext>();
+        // Arrange & Act
+        await ExecuteWithDbContextAsync(async context =>
+        {
+            var diceService = GetService<IDiceService>();
+            var testPlayer = context.Players.First();
 
-        // Seed test data in the service provider's context
-        await SeedTestDataAsync(context);
+            // Perform dice roll for career progression
+            var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
 
-        var testPlayer = context.Players.First();
+            // Assert educational outcomes
+            Assert.NotNull(rollResult);
+            Assert.InRange(rollResult.DiceValue, 1, 6);
+            Assert.True(rollResult.IncomeChange != 0, "Career progression should affect income");
+            Assert.True(rollResult.ReputationChange >= 0, "Reputation should never decrease for positive experience");
+            Assert.True(rollResult.HappinessChange > 0, "Happiness should always increase to encourage learning");
 
-        // Act - Perform dice roll for career progression
-        var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
+            // Validate job progression is educational
+            Assert.NotEqual(testPlayer.CurrentJob, rollResult.NewJob);
 
-        // Assert educational outcomes
-        Assert.NotNull(rollResult);
-        Assert.InRange(rollResult.DiceValue, 1, 6);
-        Assert.True(rollResult.IncomeChange != 0, "Career progression should affect income");
-        Assert.True(rollResult.ReputationChange >= 0, "Reputation should never decrease for positive experience");
-        Assert.True(rollResult.HappinessChange > 0, "Happiness should always increase to encourage learning");
+            // Also test ValidateEducationalOutcome with proper types
+            ValidateEducationalOutcome(rollResult.NewJob, "career progression learning");
+            ValidateEducationalOutcome(rollResult.EncouragingMessage, "positive messaging");
+            ValidateEducationalOutcome(rollResult.JobDescription, "career awareness");
 
-        // Validate job progression is educational - note that the same job can be rolled again
-        Assert.True(Enum.IsDefined<JobLevel>(rollResult.NewJob), "New job should be a valid career level");
+            // Validate encouraging message
+            Assert.NotEmpty(rollResult.EncouragingMessage);
+            ValidateChildSafeContent(rollResult.EncouragingMessage, "Career progression message");
 
-        // Validate the entire roll result has educational value and progress tracking
-        ValidateEducationalOutcome(rollResult, "career progression and game mechanics learning");
+            // Verify no negative language in dice outcomes
+            var lowerMessage = rollResult.EncouragingMessage.ToLowerInvariant();
+            Assert.DoesNotContain("fail", lowerMessage);
+            Assert.DoesNotContain("bad", lowerMessage);
+            Assert.DoesNotContain("lose", lowerMessage);
 
-        // Validate encouraging message content
-        ValidateChildSafeContent(rollResult.EncouragingMessage, "Career progression message");
-
-        // Validate encouraging message
-        Assert.NotEmpty(rollResult.EncouragingMessage);
-        ValidateChildSafeContent(rollResult.EncouragingMessage, "Career progression message");
-
-        // Verify no negative language in dice outcomes
-        var lowerMessage = rollResult.EncouragingMessage.ToLowerInvariant();
-        Assert.DoesNotContain("fail", lowerMessage);
-        Assert.DoesNotContain("bad", lowerMessage);
-        Assert.DoesNotContain("lose", lowerMessage);
-
-        Output.WriteLine($"✅ Educational Dice Roll: {testPlayer.CurrentJob} → {rollResult.NewJob}");
-        Output.WriteLine($"   Dice: {rollResult.DiceValue}, Message: {rollResult.EncouragingMessage}");
-        Output.WriteLine(
-            $"   Income: {rollResult.IncomeChange:+#;-#;0}, Reputation: {rollResult.ReputationChange:+#;-#;0}, Happiness: {rollResult.HappinessChange:+#;-#;0}");
+            Output.WriteLine($"✅ Educational Dice Roll: {testPlayer.CurrentJob} → {rollResult.NewJob}");
+            Output.WriteLine($"   Dice: {rollResult.DiceValue}, Message: {rollResult.EncouragingMessage}");
+            Output.WriteLine($"   Income: {rollResult.IncomeChange:+#;-#;0}, Reputation: {rollResult.ReputationChange:+#;-#;0}, Happiness: {rollResult.HappinessChange:+#;-#;0}");
+        });
     }
 
     [Fact]
     public async Task DiceService_ProvidesConsistentEducationalExperience_AcrossMultipleRolls()
     {
-        // Arrange
-        var diceService = GetService<IDiceService>();
-        var context = GetService<WorldLeadersDbContext>();
-        await SeedTestDataAsync(context);
-
+        // Arrange & Act
         var rollResults = new List<string>();
-        var testPlayer = context.Players.First();
 
-        // Act - Perform multiple rolls to test consistency
-        for (int i = 0; i < 5; i++)
+        await ExecuteWithDbContextAsync(async context =>
         {
-            var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
-            rollResults.Add(rollResult.EncouragingMessage);
+            var diceService = GetService<IDiceService>();
+            var testPlayer = context.Players.First();
 
-            // Reset player for next test
-            testPlayer.CurrentJob = JobLevel.Farmer;
-            testPlayer.Happiness = 80;
-            testPlayer.Reputation = 25;
-            context.Players.Update(testPlayer);
-            await context.SaveChangesAsync();
-        }
+            // Perform multiple rolls to test consistency
+            for (int i = 0; i < 5; i++)
+            {
+                var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
+                rollResults.Add(rollResult.EncouragingMessage);
+
+                // Reset player for next test
+                testPlayer.CurrentJob = JobLevel.Farmer;
+                testPlayer.Happiness = 80;
+                testPlayer.Reputation = 25;
+                context.Players.Update(testPlayer);
+                await context.SaveChangesAsync();
+            }
+        });
 
         // Assert all messages are educational and child-safe
         Assert.All(rollResults, message =>
@@ -140,10 +135,7 @@ public class EducationalGameServiceTests : ServiceTestBase
                 lowerMessage.Contains("awesome") ||
                 lowerMessage.Contains("fantastic") ||
                 lowerMessage.Contains("excellent") ||
-                lowerMessage.Contains("wonderful") ||
-                lowerMessage.Contains("amazing") ||
-                lowerMessage.Contains("outstanding") ||
-                lowerMessage.Contains("incredible"),
+                lowerMessage.Contains("wonderful"),
                 $"Message should be encouraging: {message}");
         });
 
@@ -205,9 +197,7 @@ public class EducationalGameServiceTests : ServiceTestBase
                     lowerMessage.Contains("fantastic") ||
                     lowerMessage.Contains("excellent") ||
                     lowerMessage.Contains("wonderful") ||
-                    lowerMessage.Contains("amazing") ||
-                    lowerMessage.Contains("outstanding") ||
-                    lowerMessage.Contains("incredible"),
+                    lowerMessage.Contains("amazing"),
                     $"Message must be encouraging for dice {diceValue}, job {jobLevel}: {message}");
 
                 // Should never contain negative words
@@ -231,8 +221,7 @@ public class EducationalGameServiceTests : ServiceTestBase
         // Arrange & Act
         await ExecuteWithDbContextAsync(async context =>
         {
-            var testPlayer = await context.Players.FirstOrDefaultAsync();
-            Assert.NotNull(testPlayer);
+            var testPlayer = context.Players.First();
 
             // Assert player entity maintains educational data integrity
             Assert.True(testPlayer.Income > 0, "Players should always have positive income for motivation");
@@ -260,17 +249,17 @@ public class EducationalGameServiceTests : ServiceTestBase
     public async Task EducationalServices_RespondWithinChildFriendlyTimeframes()
     {
         // Arrange
-        var stopwatch = new Stopwatch();
-        var diceService = GetService<IDiceService>();
-        var context = GetService<WorldLeadersDbContext>();
-
-        // Seed test data in the service provider's context
-        await SeedTestDataAsync(context);
-        var testPlayer = context.Players.First();
+        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
         // Act
-        stopwatch.Start();
-        await diceService.RollForJobAsync(testPlayer.Id);
+        await ExecuteWithDbContextAsync(async context =>
+        {
+            var diceService = GetService<IDiceService>();
+            var testPlayer = context.Players.First();
+
+            await diceService.RollForJobAsync(testPlayer.Id);
+        });
+
         stopwatch.Stop();
 
         // Assert
@@ -310,51 +299,48 @@ public class EducationalGameServiceTests : ServiceTestBase
     [Fact]
     public async Task EducationalGameMechanics_TeachRealWorldConcepts()
     {
-        // Arrange
-        var diceService = GetService<IDiceService>();
-        var context = GetService<WorldLeadersDbContext>();
-
-        // Seed test data in the service provider's context
-        await SeedTestDataAsync(context);
-        var testPlayer = context.Players.First();
-        // Act - Test multiple career progressions
-        var progressions = new List<(JobLevel From, JobLevel To, int Income)>();
-        DiceRollResult? lastRollResult = null;
-
-        for (int i = 0; i < 3; i++)
+        // Arrange & Act
+        await ExecuteWithDbContextAsync(async context =>
         {
-            // Get current state from main context
-            var originalJob = testPlayer.CurrentJob;
-            var originalIncome = testPlayer.Income;
+            var diceService = GetService<IDiceService>();
+            var testPlayer = context.Players.First();
 
-            // Roll for job
-            lastRollResult = await diceService.RollForJobAsync(testPlayer.Id);
+            // Test multiple career progressions
+            var progressions = new List<(JobLevel From, JobLevel To, int Income)>();
 
-            // Refresh player from database to get updated state
-            await context.Entry(testPlayer).ReloadAsync();
-            var newJob = testPlayer.CurrentJob;
-            var newIncome = testPlayer.Income;
+            for (int i = 0; i < 3; i++)
+            {
+                var originalJob = testPlayer.CurrentJob;
+                var originalIncome = testPlayer.Income;
 
-            progressions.Add((originalJob, newJob, newIncome));
+                var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
 
-            Output.WriteLine($"Career progression {i + 1}: {originalJob} → {newJob} (Income: {originalIncome} → {newIncome})");
-        }
+                // Refresh player
+                var updatedPlayer = context.Players.Find(testPlayer.Id);
+                Assert.NotNull(updatedPlayer);
 
-        // Assert educational value
-        Assert.NotNull(lastRollResult);
-        Assert.All(progressions, progression =>
-        {
-            Assert.True(progression.Income > 0, "All jobs should provide positive income for economic education");
+                progressions.Add((originalJob, updatedPlayer.CurrentJob, updatedPlayer.Income));
+
+                // Reset for next test
+                testPlayer.CurrentJob = JobLevel.Farmer;
+                testPlayer.Income = 1000;
+                context.Players.Update(testPlayer);
+                await context.SaveChangesAsync();
+            }
+
+            // Assert educational value
+            Assert.All(progressions, progression =>
+            {
+                Assert.True(progression.Income > 0, "All jobs should provide positive income for economic education");
+                ValidateEducationalOutcome(progression, "career progression and economic understanding");
+            });
+
+            Output.WriteLine("✅ Educational Game Mechanics:");
+            foreach (var (from, to, income) in progressions)
+            {
+                Output.WriteLine($"   {from} → {to} (Income: {income})");
+            }
         });
-
-        // Validate educational outcome using lastRollResult (will have quantifiable properties)
-        ValidateEducationalOutcome(lastRollResult, "career progression and game mechanics learning");
-
-        Output.WriteLine("✅ Educational Game Mechanics:");
-        foreach (var (from, to, income) in progressions)
-        {
-            Output.WriteLine($"   {from} → {to} (Income: {income})");
-        }
     }
 
     #endregion

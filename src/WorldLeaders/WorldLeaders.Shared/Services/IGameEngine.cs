@@ -75,7 +75,13 @@ public record DiceRollResult(
     int HappinessChange,
     string EncouragingMessage,
     string JobDescription
-);
+)
+{
+    /// <summary>
+    /// Alias for EncouragingMessage to support test compatibility
+    /// </summary>
+    public string Message => EncouragingMessage;
+};
 
 /// <summary>
 /// Game completion result
@@ -88,12 +94,3 @@ public record GameResult(
     List<string> Achievements
 );
 
-/// <summary>
-/// Resource change request
-/// </summary>
-public record ResourceChange(
-    int IncomeChange = 0,
-    int ReputationChange = 0,
-    int HappinessChange = 0,
-    string Reason = ""
-);

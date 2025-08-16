@@ -31,6 +31,11 @@ public interface IDiceService
     Task<List<DiceRollHistory>> GetDiceHistoryAsync(Guid playerId);
     
     /// <summary>
+    /// Get dice roll history for statistics tracking (alias for test compatibility)
+    /// </summary>
+    Task<List<DiceRollHistory>> GetDiceRollHistoryAsync(Guid playerId);
+    
+    /// <summary>
     /// Save dice roll result to history
     /// </summary>
     Task SaveDiceRollAsync(DiceRollHistory rollHistory);
@@ -47,7 +52,13 @@ public record DiceRollHistory(
     int IncomeChange,
     DateTime RolledAt,
     string PlayerReaction
-);
+)
+{
+    /// <summary>
+    /// Alias for ResultingJob to support test compatibility
+    /// </summary>
+    public JobLevel NewJob => ResultingJob;
+};
 
 /// <summary>
 /// Job progression mapping for dice results

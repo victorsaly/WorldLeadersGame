@@ -17,10 +17,12 @@ public abstract class ServiceTestBase : EducationalTestBase, IDisposable
 {
     protected readonly Mock<ILogger> MockLogger;
     protected readonly IServiceProvider ServiceProvider;
+    protected readonly string DatabaseName;
 
     protected ServiceTestBase(ITestOutputHelper output) : base(output)
     {
         MockLogger = new Mock<ILogger>();
+        DatabaseName = "TestDatabase_" + GetType().Name + "_" + Guid.NewGuid().ToString("N")[..8];
         
         // Setup test service provider
         var services = new ServiceCollection();
@@ -35,10 +37,10 @@ public abstract class ServiceTestBase : EducationalTestBase, IDisposable
     /// <param name="services">Service collection to configure</param>
     protected virtual void ConfigureServices(IServiceCollection services)
     {
-        // Add in-memory database
+        // Add in-memory database with consistent name
         services.AddDbContext<WorldLeadersDbContext>(options =>
         {
-            options.UseInMemoryDatabase("TestDatabase_" + Guid.NewGuid());
+            options.UseInMemoryDatabase(DatabaseName);
             options.EnableSensitiveDataLogging();
         });
 
@@ -89,7 +91,7 @@ public abstract class ServiceTestBase : EducationalTestBase, IDisposable
     protected WorldLeadersDbContext CreateTestDbContext()
     {
         var options = new DbContextOptionsBuilder<WorldLeadersDbContext>()
-            .UseInMemoryDatabase("TestDatabase_" + Guid.NewGuid())
+            .UseInMemoryDatabase(DatabaseName)
             .EnableSensitiveDataLogging()
             .Options;
 

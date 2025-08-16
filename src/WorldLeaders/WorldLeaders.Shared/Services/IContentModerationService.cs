@@ -14,6 +14,13 @@ public interface IContentModerationService
     /// <param name="context">Additional context for validation</param>
     /// <returns>Content safety validation result</returns>
     Task<ContentModerationResult> ValidateContentAsync(string content, string context = "");
+    
+    /// <summary>
+    /// Moderate content with comprehensive analysis (alias for test compatibility)
+    /// </summary>
+    /// <param name="content">The content to moderate</param>
+    /// <returns>Content moderation result</returns>
+    Task<ContentModerationResult> ModerateContentAsync(string content);
 
     /// <summary>
     /// Quick validation for real-time chat interactions
@@ -21,6 +28,13 @@ public interface IContentModerationService
     /// <param name="content">The content to validate</param>
     /// <returns>True if content is safe for immediate display</returns>
     Task<bool> IsContentSafeAsync(string content);
+    
+    /// <summary>
+    /// Quick appropriateness check for moderation
+    /// </summary>
+    /// <param name="content">The content to check</param>
+    /// <returns>True if content is appropriate</returns>
+    Task<bool> IsContentAppropriateModerationAsync(string content);
 
     /// <summary>
     /// Educational appropriateness validation
@@ -50,7 +64,23 @@ public record ContentModerationResult(
     string Reason,
     double ConfidenceScore,
     List<string> Concerns
-);
+)
+{
+    /// <summary>
+    /// Whether content is appropriate for children (alias for test compatibility)
+    /// </summary>
+    public bool IsAppropriate => IsApproved && IsSafe && IsAgeAppropriate;
+    
+    /// <summary>
+    /// Categories of content validation
+    /// </summary>
+    public string[] Categories { get; init; } = Array.Empty<string>();
+    
+    /// <summary>
+    /// Warnings about the content
+    /// </summary>
+    public List<string> Warnings { get; init; } = new();
+};
 
 /// <summary>
 /// Content validation categories for detailed analysis

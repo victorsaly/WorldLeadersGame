@@ -102,6 +102,12 @@ public class Player
     public string? Username { get; set; }
     
     /// <summary>
+    /// Display name for the player (can be different from username for child safety)
+    /// </summary>
+    [StringLength(50, ErrorMessage = "Display name cannot exceed 50 characters")]
+    public string DisplayName { get; set; } = string.Empty;
+    
+    /// <summary>
     /// Selected character persona ID - replaces username as primary identity
     /// </summary>
     [Required]

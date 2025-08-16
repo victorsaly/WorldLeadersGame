@@ -6,12 +6,15 @@ namespace WorldLeaders.Shared.Enums;
 /// </summary>
 public enum JobLevel
 {
+    Student = 0,        // Entry level for educational progression
     Farmer = 1,
     Gardener = 2,
     Shopkeeper = 3,
     Artisan = 4,
     Politician = 5,
-    BusinessLeader = 6
+    BusinessLeader = 6,
+    Teacher = 7,        // Educational profession
+    Manager = 8         // Leadership progression
 }
 
 /// <summary>

@@ -192,6 +192,23 @@ public class ContentModerationService : IContentModerationService
         return await IsAgeAppropriateAsync(content, "");
     }
 
+    /// <summary>
+    /// Simple content moderation check (interface compatibility)
+    /// </summary>
+    public async Task<ContentModerationResult> ModerateContentAsync(string content)
+    {
+        return await ValidateContentAsync(content);
+    }
+
+    /// <summary>
+    /// Simple appropriateness check (interface compatibility)
+    /// </summary>
+    public async Task<bool> IsContentAppropriateModerationAsync(string content)
+    {
+        var result = await ValidateContentAsync(content);
+        return result.IsApproved;
+    }
+
     #region Private Helper Methods
 
     private bool ContainsInappropriateLanguage(string content)

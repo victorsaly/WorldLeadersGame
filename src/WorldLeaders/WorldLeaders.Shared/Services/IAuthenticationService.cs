@@ -79,55 +79,6 @@ public interface IAuthenticationService
 }
 
 /// <summary>
-/// Child safety validation service for COPPA/GDPR compliance
-/// </summary>
-public interface IChildSafetyValidator
-{
-    /// <summary>
-    /// Validate user registration for child safety compliance
-    /// </summary>
-    /// <param name="request">Registration request</param>
-    /// <returns>Validation result</returns>
-    Task<ChildSafetyValidationResponse> ValidateRegistrationAsync(RegisterUserRequest request);
-
-    /// <summary>
-    /// Validate content for child appropriateness
-    /// </summary>
-    /// <param name="request">Content validation request</param>
-    /// <returns>Validation result</returns>
-    Task<ChildSafetyValidationResponse> ValidateContentAsync(ChildSafetyValidationRequest request);
-
-    /// <summary>
-    /// Check if user requires parental consent
-    /// </summary>
-    /// <param name="dateOfBirth">User's date of birth</param>
-    /// <returns>Whether parental consent is required</returns>
-    bool RequiresParentalConsent(DateTime dateOfBirth);
-
-    /// <summary>
-    /// Validate parental consent token
-    /// </summary>
-    /// <param name="consentToken">Consent token from parental email</param>
-    /// <returns>Whether consent is valid</returns>
-    Task<bool> ValidateParentalConsentAsync(string consentToken);
-
-    /// <summary>
-    /// Generate parental consent request
-    /// </summary>
-    /// <param name="childUserId">Child user ID</param>
-    /// <param name="parentalEmail">Parental email</param>
-    /// <returns>Consent token for email verification</returns>
-    Task<string> GenerateParentalConsentRequestAsync(Guid childUserId, string parentalEmail);
-
-    /// <summary>
-    /// Log safety event for audit trail
-    /// </summary>
-    /// <param name="audit">Safety audit entry</param>
-    /// <returns>Success status</returns>
-    Task<bool> LogSafetyEventAsync(ChildSafetyAudit audit);
-}
-
-/// <summary>
 /// Per-user cost tracking service for Azure services
 /// </summary>
 public interface IPerUserCostTracker
