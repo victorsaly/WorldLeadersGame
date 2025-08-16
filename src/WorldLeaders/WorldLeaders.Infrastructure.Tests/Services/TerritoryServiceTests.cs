@@ -104,58 +104,55 @@ public class TerritoryServiceTests : ServiceTestBase
             Reputation = 50,
             Happiness = 75,
             CreatedAt = DateTime.UtcNow,
-            LastActiveAt = DateTime.UtcNow
-        };
+                LastActiveAt = DateTime.UtcNow,
+            };
 
-        dbContext.Players.Add(testPlayer);
-
-        // Create educational test territories with real-world data
-        var territories = new[]
-        {
-            new TerritoryEntity
+            var territories = new List<TerritoryEntity>
             {
-                Id = Guid.NewGuid(),
-                CountryName = "Canada",
-                CountryCode = "CA",
-                GdpInBillions = 2139.0m,
-                Tier = (TerritoryTier)1,
-                Cost = 500000,
-                ReputationRequired = 40,
-                MonthlyIncome = 5000,
-                IsAvailable = true,
-                OfficialLanguagesJson = """["English", "French"]""",
-                CreatedAt = DateTime.UtcNow
-            },
-            new TerritoryEntity
-            {
-                Id = Guid.NewGuid(),
-                CountryName = "Japan",
-                CountryCode = "JP",
-                GdpInBillions = 4937.0m,
-                Tier = (TerritoryTier)2,
-                Cost = 1200000,
-                ReputationRequired = 70,
-                MonthlyIncome = 12000,
-                IsAvailable = true,
-                OfficialLanguagesJson = """["Japanese"]""",
-                CreatedAt = DateTime.UtcNow
-            },
-            new TerritoryEntity
-            {
-                Id = Guid.NewGuid(),
-                CountryName = "Brazil",
-                CountryCode = "BR",
-                GdpInBillions = 2126.0m,
-                Tier = (TerritoryTier)1,
-                Cost = 480000,
-                ReputationRequired = 35,
-                MonthlyIncome = 4800,
-                IsAvailable = false, // Already owned for testing
-                OwnedByPlayerId = testPlayer.Id,
-                OfficialLanguagesJson = """["Portuguese"]""",
-                CreatedAt = DateTime.UtcNow
-            }
-        };
+                new TerritoryEntity
+                {
+                    Id = Guid.NewGuid(),
+                    CountryName = "Canada",
+                    CountryCode = "CA",
+                    GdpInBillions = 2139.0m,
+                    Tier = (TerritoryTier)1,
+                    Cost = 500000,
+                    ReputationRequired = 40,
+                    MonthlyIncome = 5000,
+                    IsAvailable = true,
+                    OfficialLanguagesJson = """["English", "French"]""",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new TerritoryEntity
+                {
+                    Id = Guid.NewGuid(),
+                    CountryName = "Japan",
+                    CountryCode = "JP",
+                    GdpInBillions = 4937.0m,
+                    Tier = (TerritoryTier)2,
+                    Cost = 1200000,
+                    ReputationRequired = 70,
+                    MonthlyIncome = 12000,
+                    IsAvailable = true,
+                    OfficialLanguagesJson = """["Japanese"]""",
+                    CreatedAt = DateTime.UtcNow
+                },
+                new TerritoryEntity
+                {
+                    Id = Guid.NewGuid(),
+                    CountryName = "Brazil",
+                    CountryCode = "BR",
+                    GdpInBillions = 2126.0m,
+                    Tier = (TerritoryTier)1,
+                    Cost = 480000,
+                    ReputationRequired = 35,
+                    MonthlyIncome = 4800,
+                    IsAvailable = false, // Already owned for testing
+                    OwnedByPlayerId = testPlayer.Id,
+                    OfficialLanguagesJson = """["Portuguese"]""",
+                    CreatedAt = DateTime.UtcNow
+                }
+            };
 
         dbContext.Territories.AddRange(territories);
         await dbContext.SaveChangesAsync();
@@ -397,26 +394,9 @@ public class TerritoryServiceTests : ServiceTestBase
         {
             var service = GetService<ITerritoryService>();
             var canadaTerritory = context.Territories.First(t => t.CountryCode == "CA");
-            
-            // Mock external data service to provide educational information
-            var mockExternalDataService = CreateEducationalMock<IExternalDataService>();
-            mockExternalDataService
-                .Setup(x => x.GetCountryInfoAsync("CA"))
-                .ReturnsAsync(new WorldLeaders.Shared.Services.CountryInfo(
-                    "Canada",
-                    "CA", 
-                    "Ottawa",
-                    38000000,
-                    "Americas",
-                    "Northern America",
-                    new List<string> { "English", "French" },
-                    new List<string> { "CAD" },
-                    "https://flagcdn.com/w320/ca.png",
-                    new List<string> { "UTC-08:00", "UTC-05:00" },
-                    "Flag of Canada",
-                    new List<string> { "USA" }
-                ));
-            
+            canadaTerritory.GdpInBillions = 2140.0m;
+            context.Territories.Update(canadaTerritory);
+            await context.SaveChangesAsync();
             return await service.GetTerritoryDetailsAsync(canadaTerritory.Id);
         });
 
@@ -428,7 +408,7 @@ public class TerritoryServiceTests : ServiceTestBase
         // Validate educational geographical information
         Assert.Equal("Ottawa", result.Capital);
         Assert.True(result.Population > 30000000, "Population should be realistic");
-        Assert.Equal("North America", result.Region);
+    Assert.Equal("North America", result.Region);
         Assert.NotEmpty(result.FlagUrl);
         
         // Validate economic education data

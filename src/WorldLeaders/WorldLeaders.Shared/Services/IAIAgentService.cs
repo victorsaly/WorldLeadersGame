@@ -11,6 +11,20 @@ namespace WorldLeaders.Shared.Services;
 public interface IAIAgentService
 {
     /// <summary>
+    /// Get a language challenge for a specific country
+    /// </summary>
+    /// <param name="countryCode">ISO country code</param>
+    /// <returns>Language challenge DTO</returns>
+    Task<LanguageChallengeDto> GetLanguageChallengeAsync(string countryCode);
+
+    /// <summary>
+    /// Get cultural context for a specific country
+    /// </summary>
+    /// <param name="countryCode">ISO country code</param>
+    /// <returns>Cultural context DTO</returns>
+    Task<CulturalContextDto> GetCulturalContextAsync(string countryCode);
+
+    /// <summary>
     /// Generate a personality-driven response from a specific AI agent
     /// Includes educational content and child safety validation
     /// </summary>

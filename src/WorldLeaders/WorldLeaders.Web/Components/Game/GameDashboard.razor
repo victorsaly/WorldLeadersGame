@@ -578,7 +578,7 @@
         {
             // First, try to load from query parameter
             var uri = Navigation.ToAbsoluteUri(Navigation.Uri);
-            var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+            var query = HttpUtility.ParseQueryString(uri.Query);
             var characterIdParam = query["character"];
             
             if (!string.IsNullOrEmpty(characterIdParam) && Guid.TryParse(characterIdParam, out var characterId))

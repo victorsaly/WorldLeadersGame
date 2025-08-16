@@ -186,7 +186,7 @@ public static class ServiceCollectionExtensions
         else
         {
             // Fall back to local mock service for development
-            services.AddScoped<IAIAgentService, AIAgentService>();
+            services.AddScoped<IAIAgentService, AiAgentService>();
         }
 
         return services;
@@ -445,7 +445,7 @@ public static class ServiceCollectionExtensions
             }
 
             // Create demo user directly in the database for simplicity
-            var demoUser = new WorldLeaders.Shared.Models.ApplicationUser
+            var demoUser = new Shared.Models.ApplicationUser
             {
                 Id = Guid.NewGuid(),
                 UserName = "student123",
@@ -456,7 +456,7 @@ public static class ServiceCollectionExtensions
                 DateOfBirth = DateTime.UtcNow.AddYears(-12), // 12 years old
                 ParentalEmail = "parent@worldleadersgame.co.uk",
                 HasParentalConsent = true,
-                Role = WorldLeaders.Shared.Enums.UserRole.Student,
+                Role = Shared.Enums.UserRole.Student,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 EmailConfirmed = true, // Demo account is pre-confirmed
@@ -466,7 +466,7 @@ public static class ServiceCollectionExtensions
             };
 
             // Set password using ASP.NET Core Identity password hasher
-            var passwordHasher = serviceProvider.GetRequiredService<IPasswordHasher<WorldLeaders.Shared.Models.ApplicationUser>>();
+            var passwordHasher = serviceProvider.GetRequiredService<IPasswordHasher<Shared.Models.ApplicationUser>>();
             demoUser.PasswordHash = passwordHasher.HashPassword(demoUser, "Education123!");
 
             // Add to database

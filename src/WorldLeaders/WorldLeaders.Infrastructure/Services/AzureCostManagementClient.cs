@@ -252,7 +252,7 @@ public class AzureCostManagementClient(
             var forecasts = new List<CostForecastData>();
             var baseDate = DateTime.UtcNow.Date.AddDays(1);
 
-            for (int i = 0; i < forecastDays; i++)
+            for (var i = 0; i < forecastDays; i++)
             {
                 var forecastDate = baseDate.AddDays(i);
                 

@@ -360,7 +360,7 @@
     [Parameter] public Guid PlayerId { get; set; }
     [Parameter] public int PlayerReputation { get; set; }
     [Parameter] public int PlayerIncome { get; set; }
-    [Parameter] public Microsoft.AspNetCore.Components.EventCallback<WorldLeaders.Shared.DTOs.TerritoryDto> OnTerritorySelected { get; set; }
+    [Parameter] public EventCallback<TerritoryDto> OnTerritorySelected { get; set; }
 
     // State
     private bool isLoading = true;

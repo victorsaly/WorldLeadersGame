@@ -37,16 +37,16 @@ public class DiceService : IDiceService
             }
 
             // Roll the dice (1-6)
-            int diceValue = _random.Next(1, 7);
+            var diceValue = _random.Next(1, 7);
             
             // Determine new job based on dice roll
-            JobLevel newJob = JobProgressionMapping.GetJobFromDiceRoll(diceValue);
+            var newJob = JobProgressionMapping.GetJobFromDiceRoll(diceValue);
             
             // Calculate income and reputation changes
-            int newIncome = JobProgressionMapping.GetJobIncome(newJob);
-            int incomeChange = newIncome - player.Income;
-            int reputationBonus = JobProgressionMapping.GetJobReputationBonus(newJob);
-            int happinessBonus = 5; // Always positive - children feel good about trying
+            var newIncome = JobProgressionMapping.GetJobIncome(newJob);
+            var incomeChange = newIncome - player.Income;
+            var reputationBonus = JobProgressionMapping.GetJobReputationBonus(newJob);
+            var happinessBonus = 5; // Always positive - children feel good about trying
 
             // Update player stats
             player.CurrentJob = newJob;
@@ -72,8 +72,8 @@ public class DiceService : IDiceService
             await _context.SaveChangesAsync();
 
             // Create encouraging message and job description
-            string encouragingMessage = GetEncouragingMessage(diceValue, newJob);
-            string jobDescription = GetJobDescription(newJob);
+            var encouragingMessage = GetEncouragingMessage(diceValue, newJob);
+            var jobDescription = GetJobDescription(newJob);
 
             _logger.LogInformation("Player {PlayerId} rolled {DiceValue} and got {Job} with income {Income}", 
                 playerId, diceValue, newJob, newIncome);

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WorldLeaders.Shared.DTOs;
+// using WorldLeaders.Shared.Services; // Duplicate directive removed
 using WorldLeaders.Shared.Enums;
 using WorldLeaders.Shared.Services;
 
@@ -43,7 +44,17 @@ public class TerritoryController : ControllerBase
             var territories = await _territoryService.GetAvailableTerritoriesAsync(playerId);
             _logger.LogInformation("Retrieved {Count} available territories for player {PlayerId}", 
                 territories.Count, playerId);
-            return Ok(territories);
+
+            // Educational explanation for 12-year-olds
+            var explanation = "Explore the world! Each territory represents a real country. Discover new places, learn about their cultures, and see how geography shapes our planet. Every country has its own flag, language, and unique story. Try to collect territories from different continents and learn something new about each one!";
+
+            var response = new AvailableTerritoriesEducationalResponse
+            {
+                Territories = territories,
+                EducationalExplanation = explanation,
+                ProgressTip = $"You have {territories.Count} territories available. Try to collect at least one from each continent!"
+            };
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -64,9 +75,14 @@ public class TerritoryController : ControllerBase
         try
         {
             var territories = await _territoryService.GetPlayerTerritoriesAsync(playerId);
-            _logger.LogInformation("Retrieved {Count} owned territories for player {PlayerId}", 
-                territories.Count, playerId);
-            return Ok(territories);
+            _logger.LogInformation("Retrieved {Count} owned territories for player {PlayerId}", territories.Count, playerId);
+            var response = new PlayerTerritoriesEducationalResponse
+            {
+                Territories = territories,
+                EducationalExplanation = "These are the territories you own! Each country teaches you about its geography, culture, and economy. Try to expand your collection and learn something new from every place.",
+                ProgressTip = $"You currently own {territories.Count} territories. Aim to collect more and explore new continents!"
+            };
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -74,6 +90,10 @@ public class TerritoryController : ControllerBase
             return StatusCode(500, "Unable to retrieve your territories. Please try again later.");
         }
     }
+/// <summary>
+/// Educational response for available territories
+/// </summary>
+
 
     /// <summary>
     /// Attempt to acquire a territory with educational validation
@@ -88,24 +108,24 @@ public class TerritoryController : ControllerBase
         try
         {
             var result = await _territoryService.AcquireTerritoryAsync(playerId, territoryId);
-            
+            var response = new TerritoryAcquisitionEducationalResponse
+            {
+                Result = result,
+                EducationalExplanation = result.Success
+                    ? "Great job! Acquiring a territory teaches you about economic strategy and reputation. Each new country expands your knowledge of the world."
+                    : "Not every attempt succeeds, but every try helps you learn about strategy and planning. Keep going!",
+                ProgressTip = result.Success
+                    ? "Your territory collection is growing. Try to acquire territories from different tiers for a balanced empire!"
+                    : "Review your reputation and resources, then try again for a new territory."
+            };
             if (result.Success)
-            {
-                _logger.LogInformation("Player {PlayerId} successfully acquired territory {TerritoryId}", 
-                    playerId, territoryId);
-                return Ok(result);
-            }
+                return Ok(response);
             else
-            {
-                _logger.LogInformation("Player {PlayerId} failed to acquire territory {TerritoryId}: {Message}", 
-                    playerId, territoryId, result.Message);
-                return BadRequest(result);
-            }
+                return BadRequest(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error acquiring territory {TerritoryId} for player {PlayerId}", 
-                territoryId, playerId);
+            _logger.LogError(ex, "Error acquiring territory {TerritoryId} for player {PlayerId}", territoryId, playerId);
             return StatusCode(500, "Unable to acquire territory. Please try again later.");
         }
     }
@@ -123,7 +143,13 @@ public class TerritoryController : ControllerBase
         {
             var details = await _territoryService.GetTerritoryDetailsAsync(territoryId);
             _logger.LogInformation("Retrieved details for territory {TerritoryId}", territoryId);
-            return Ok(details);
+            var response = new TerritoryDetailEducationalResponse
+            {
+                Details = details,
+                EducationalExplanation = "Learn about this country's geography, history, and culture. Every detail helps you understand the world better!",
+                ProgressTip = "Explore the details of each territory to unlock new learning achievements."
+            };
+            return Ok(response);
         }
         catch (ArgumentException ex)
         {
@@ -150,14 +176,19 @@ public class TerritoryController : ControllerBase
         try
         {
             var territories = await _territoryService.GetTerritoriesByTierAsync(tier, playerId);
-            _logger.LogInformation("Retrieved {Count} territories for tier {Tier} and player {PlayerId}", 
-                territories.Count, tier, playerId);
-            return Ok(territories);
+            _logger.LogInformation("Retrieved {Count} territories for tier {Tier} and player {PlayerId}", territories.Count, tier, playerId);
+            var response = new TerritoriesByTierEducationalResponse
+            {
+                Territories = territories,
+                Tier = tier,
+                EducationalExplanation = "Territory tiers help you learn progressively. Start with small countries and work your way up to major powers!",
+                ProgressTip = $"You have {territories.Count} territories in the {tier} tier. Try to collect all tiers for a complete learning experience!"
+            };
+            return Ok(response);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting territories by tier {Tier} for player {PlayerId}", 
-                tier, playerId);
+            _logger.LogError(ex, "Error getting territories by tier {Tier} for player {PlayerId}", tier, playerId);
             return StatusCode(500, "Unable to retrieve territories. Please try again later.");
         }
     }
@@ -174,9 +205,14 @@ public class TerritoryController : ControllerBase
         try
         {
             var income = await _territoryService.CalculateMonthlyTerritoryIncomeAsync(playerId);
-            _logger.LogInformation("Calculated territory income {Income} for player {PlayerId}", 
-                income, playerId);
-            return Ok(income);
+            _logger.LogInformation("Calculated territory income {Income} for player {PlayerId}", income, playerId);
+            var response = new TerritoryIncomeEducationalResponse
+            {
+                Income = income,
+                EducationalExplanation = "Monthly income from your territories teaches you about passive income and economic growth. Use your earnings to expand your empire!",
+                ProgressTip = $"Your current monthly income is {income}. Try to increase it by acquiring more valuable territories!"
+            };
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -197,9 +233,14 @@ public class TerritoryController : ControllerBase
         try
         {
             var challenges = await _territoryService.GetTerritoryLanguageChallengesAsync(playerId);
-            _logger.LogInformation("Retrieved {Count} language challenges for player {PlayerId}", 
-                challenges.Count, playerId);
-            return Ok(challenges);
+            _logger.LogInformation("Retrieved {Count} language challenges for player {PlayerId}", challenges.Count, playerId);
+            var response = new LanguageChallengesEducationalResponse
+            {
+                Challenges = challenges,
+                EducationalExplanation = "Language challenges help you connect geography with language learning. Practice new words and discover the languages spoken in your territories!",
+                ProgressTip = $"You have {challenges.Count} language challenges. Try to complete them all for a language mastery badge!"
+            };
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -221,7 +262,13 @@ public class TerritoryController : ControllerBase
         {
             var context = await _territoryService.GetTerritoryCulturalContextAsync(territoryId);
             _logger.LogInformation("Retrieved cultural context for territory {TerritoryId}", territoryId);
-            return Ok(context);
+            var response = new CulturalContextEducationalResponse
+            {
+                Context = context,
+                EducationalExplanation = "Cultural context helps you appreciate the history, traditions, and achievements of each country. Explore and celebrate global diversity!",
+                ProgressTip = "Learn about the cultural context of every territory to unlock the World Explorer achievement."
+            };
+            return Ok(response);
         }
         catch (ArgumentException ex)
         {
@@ -248,16 +295,18 @@ public class TerritoryController : ControllerBase
         {
             var playerTerritories = await _territoryService.GetPlayerTerritoriesAsync(playerId);
             var monthlyIncome = await _territoryService.CalculateMonthlyTerritoryIncomeAsync(playerId);
-            
-            var stats = new TerritoryPlayerStats(
-                playerId,
-                playerTerritories.Count,
-                monthlyIncome,
-                playerTerritories.GroupBy(t => t.Tier).ToDictionary(g => g.Key, g => g.Count()),
-                playerTerritories.SelectMany(t => t.OfficialLanguages).Distinct().Count(),
-                playerTerritories.Select(t => GetContinent(t.CountryCode)).Distinct().Count()
-            );
-
+            var continentsRepresented = playerTerritories.Select(t => GetContinent(t.CountryCode)).Distinct().Count();
+            var stats = new PlayerTerritoryStatsEducationalResponse
+            {
+                PlayerId = playerId,
+                TotalTerritories = playerTerritories.Count,
+                MonthlyTerritoryIncome = monthlyIncome,
+                TerritoriesByTier = playerTerritories.GroupBy(t => t.Tier).ToDictionary(g => g.Key, g => g.Count()),
+                LanguagesExplored = playerTerritories.SelectMany(t => t.OfficialLanguages).Distinct().Count(),
+                ContinentsRepresented = continentsRepresented,
+                EducationalExplanation = "Your territory stats show your progress as a world leader! Track your achievements and set new learning goals.",
+                ProgressTip = $"You have explored {playerTerritories.Count} territories, {monthlyIncome} monthly income, and {continentsRepresented} continents. Keep learning and expanding!"
+            };
             _logger.LogInformation("Retrieved territory statistics for player {PlayerId}", playerId);
             return Ok(stats);
         }

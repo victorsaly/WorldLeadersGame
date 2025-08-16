@@ -171,7 +171,7 @@ public class GameEngine : IGameEngine
             }
 
             // Apply monthly income
-            int monthlyIncome = CalculateMonthlyIncome(player);
+            var monthlyIncome = CalculateMonthlyIncome(player);
             player.Income += monthlyIncome;
             player.LastActiveAt = DateTime.UtcNow;
 
@@ -219,7 +219,7 @@ public class GameEngine : IGameEngine
             }
 
             // Validate game state integrity
-            bool isValid = player.Income >= 0 &&
+            var isValid = player.Income >= 0 &&
                           player.Reputation >= 0 && player.Reputation <= 100 &&
                           player.Happiness >= 0 && player.Happiness <= 100;
 
@@ -344,7 +344,7 @@ public class GameEngine : IGameEngine
 
     private int CalculateMonthlyIncome(PlayerEntity player)
     {
-        int baseIncome = JobProgressionMapping.GetJobIncome(player.CurrentJob);
+        var baseIncome = JobProgressionMapping.GetJobIncome(player.CurrentJob);
         
         // Add territory income (if any)
         // This would be calculated from owned territories

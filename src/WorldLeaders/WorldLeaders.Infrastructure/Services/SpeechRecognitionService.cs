@@ -238,7 +238,7 @@ public class SpeechRecognitionService : ISpeechRecognitionService
     }
 
     private async Task<PronunciationAssessmentResult> ProcessPronunciationResult(
-        Microsoft.CognitiveServices.Speech.SpeechRecognitionResult result, string targetText, string languageCode)
+        SpeechRecognitionResult result, string targetText, string languageCode)
     {
         if (result.Reason == ResultReason.RecognizedSpeech)
         {
@@ -281,7 +281,7 @@ public class SpeechRecognitionService : ISpeechRecognitionService
         }
     }
 
-    private GameSpeechRecognitionResult ProcessSpeechRecognitionResult(Microsoft.CognitiveServices.Speech.SpeechRecognitionResult result)
+    private GameSpeechRecognitionResult ProcessSpeechRecognitionResult(SpeechRecognitionResult result)
     {
         return result.Reason switch
         {
@@ -335,16 +335,16 @@ public class SpeechRecognitionService : ISpeechRecognitionService
     {
         var d = new int[s.Length + 1, t.Length + 1];
 
-        for (int i = 0; i <= s.Length; i++)
+        for (var i = 0; i <= s.Length; i++)
             d[i, 0] = i;
-        for (int j = 0; j <= t.Length; j++)
+        for (var j = 0; j <= t.Length; j++)
             d[0, j] = j;
 
-        for (int i = 1; i <= s.Length; i++)
+        for (var i = 1; i <= s.Length; i++)
         {
-            for (int j = 1; j <= t.Length; j++)
+            for (var j = 1; j <= t.Length; j++)
             {
-                int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+                var cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
                 d[i, j] = Math.Min(Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1), d[i - 1, j - 1] + cost);
             }
         }

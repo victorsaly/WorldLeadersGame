@@ -108,7 +108,7 @@ public class EducationalGameServiceTests : ServiceTestBase
             var testPlayer = context.Players.First();
 
             // Perform multiple rolls to test consistency
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 var rollResult = await diceService.RollForJobAsync(testPlayer.Id);
                 rollResults.Add(rollResult.EncouragingMessage);
@@ -180,7 +180,7 @@ public class EducationalGameServiceTests : ServiceTestBase
         var jobLevels = Enum.GetValues<JobLevel>();
 
         // Act & Assert
-        foreach (int diceValue in Enumerable.Range(1, 6))
+        foreach (var diceValue in Enumerable.Range(1, 6))
         {
             foreach (var jobLevel in jobLevels)
             {
@@ -308,7 +308,7 @@ public class EducationalGameServiceTests : ServiceTestBase
             // Test multiple career progressions
             var progressions = new List<(JobLevel From, JobLevel To, int Income)>();
 
-            for (int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var originalJob = testPlayer.CurrentJob;
                 var originalIncome = testPlayer.Income;

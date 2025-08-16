@@ -403,7 +403,7 @@ public class PlayerServiceTests : ServiceTestBase
         // Validate chronological order (most recent first)
         if (result.Count > 1)
         {
-            for (int i = 1; i < result.Count; i++)
+            for (var i = 1; i < result.Count; i++)
             {
                 Assert.True(result[i - 1].UnlockedAt >= result[i].UnlockedAt,
                     "Achievements should be ordered by unlock date (most recent first)");

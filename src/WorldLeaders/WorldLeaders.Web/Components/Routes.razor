@@ -3,12 +3,12 @@
 <CascadingAuthenticationState>
     <Router AppAssembly="typeof(Program).Assembly">
         <Found Context="routeData">
-            <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+            <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
             <FocusOnNavigate RouteData="routeData" Selector="h1" />
         </Found>
         <NotFound>
             <PageTitle>Page Not Found</PageTitle>
-            <LayoutView Layout="typeof(Layout.MainLayout)">
+            <LayoutView Layout="typeof(MainLayout)">
                 <div class="retro-game-container p-6 min-h-screen flex items-center justify-center">
                     <div class="pixel-art-card green-theme p-8 text-center max-w-md">
                         <h1 class="retro-title-compact text-center mb-4">🌍 404 - Page Not Found</h1>

@@ -44,29 +44,31 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var territories = JsonSerializer.Deserialize<List<TerritoryDto>>(content, new JsonSerializerOptions
+            var result = JsonSerializer.Deserialize<AvailableTerritoriesEducationalResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            territories.Should().NotBeNull();
-            
-            foreach (var territory in territories!)
+            result.Should().NotBeNull();
+            result!.EducationalExplanation.Should().NotBeNullOrEmpty();
+            result.Territories.Should().NotBeNull();
+
+            foreach (var territory in result.Territories)
             {
                 // Geography education validation
                 ValidateChildSafeContent(territory.CountryName, "Country Name");
                 territory.CountryCode.Should().NotBeNullOrEmpty("Country codes support geography learning");
                 territory.OfficialLanguages.Should().NotBeEmpty("Languages support cultural learning");
-                
+
                 // Economics education validation
                 territory.GdpInBillions.Should().BeGreaterThan(0, "GDP data should be positive for economic learning");
                 territory.Cost.Should().BeGreaterThan(0, "Territory costs teach economic strategy");
                 territory.ReputationRequired.Should().BeInRange(0, 100, "Reputation requirements should be percentage-based");
                 territory.MonthlyIncome.Should().BeGreaterThan(0, "Monthly income teaches passive income concepts");
-                
+
                 // Educational tier validation
                 Enum.IsDefined(typeof(TerritoryTier), territory.Tier).Should().BeTrue("Territory tiers support progressive learning");
-                
+
                 ValidateEducationalOutcome(territory, "Learn world geography and economics through territory data");
             }
         }
@@ -97,7 +99,7 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var acquisitionResult = JsonSerializer.Deserialize<WorldLeaders.Shared.Services.TerritoryAcquisitionResult>(content, new JsonSerializerOptions
+            var acquisitionResult = JsonSerializer.Deserialize<TerritoryAcquisitionResult>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
@@ -139,7 +141,7 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var territoryDetails = JsonSerializer.Deserialize<WorldLeaders.Shared.Services.TerritoryDetailDto>(content, new JsonSerializerOptions
+            var territoryDetails = JsonSerializer.Deserialize<TerritoryDetailDto>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
@@ -325,7 +327,7 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var culturalContext = JsonSerializer.Deserialize<WorldLeaders.Shared.Services.CulturalContextDto>(content, new JsonSerializerOptions
+            var culturalContext = JsonSerializer.Deserialize<CulturalContextDto>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
@@ -400,7 +402,7 @@ public class TerritoryControllerTests : ApiTestBase
             .ReturnsAsync(CreateSampleEducationalTerritories());
 
         mockTerritoryService.Setup(x => x.AcquireTerritoryAsync(It.IsAny<Guid>(), It.IsAny<Guid>()))
-            .Returns(Task.FromResult(new WorldLeaders.Shared.Services.TerritoryAcquisitionResult(
+            .Returns(Task.FromResult(new TerritoryAcquisitionResult(
                 Success: true,
                 Message: "Congratulations! You've acquired this wonderful territory and learned about its culture!",
                 AcquiredTerritory: CreateSampleEducationalTerritories().First(),
@@ -476,9 +478,9 @@ public class TerritoryControllerTests : ApiTestBase
         };
     }
 
-    private WorldLeaders.Shared.Services.TerritoryDetailDto CreateSampleTerritoryDetails()
+    private TerritoryDetailDto CreateSampleTerritoryDetails()
     {
-        return new WorldLeaders.Shared.Services.TerritoryDetailDto(
+        return new TerritoryDetailDto(
             Id: Guid.NewGuid(),
             CountryName: "United Kingdom",
             CountryCode: "GB",
@@ -531,9 +533,9 @@ public class TerritoryControllerTests : ApiTestBase
         };
     }
 
-    private WorldLeaders.Shared.Services.CulturalContextDto CreateSampleCulturalContext()
+    private CulturalContextDto CreateSampleCulturalContext()
     {
-        return new WorldLeaders.Shared.Services.CulturalContextDto(
+        return new CulturalContextDto(
             TerritoryId: Guid.NewGuid(),
             CountryName: "United Kingdom",
             HistoricalSignificance: "Known for incredible discoveries, beautiful art, and important contributions to science and literature that have helped make the world a better place.",
