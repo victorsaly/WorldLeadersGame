@@ -132,13 +132,16 @@ public record AIAgentRequest(
 );
 
 /// <summary>
-/// DTO for AI agent responses
+/// DTO for AI agent responses with educational progress tracking
 /// </summary>
 public record AIAgentResponse(
     AgentType AgentType,
     string Response,
     bool IsAppropriate,
-    DateTime GeneratedAt
+    DateTime GeneratedAt,
+    int EducationalScore = 95,
+    double LearningProgress = 0.85,
+    string ComprehensionLevel = "Age-Appropriate"
 )
 {
     /// <summary>
