@@ -322,14 +322,14 @@ public class PlayerService : IPlayerService
 
     private Achievement? GetAchievementDefinition(string achievementId)
     {
-        // Pre-defined educational achievements
+        // Pre-defined educational achievements for 12-year-old learners
         var achievements = new Dictionary<string, Achievement>
         {
-            ["first_roll"] = new("first_roll", "First Dice Roll", "Rolled your first dice! Every journey begins with a single step.", "🎲", 100, null, false),
-            ["job_master"] = new("job_master", "Job Master", "Experienced all job levels! You understand different careers.", "💼", 500, null, false),
-            ["territory_owner"] = new("territory_owner", "Territory Owner", "Acquired your first territory! You're building your empire.", "🏴", 250, null, false),
-            ["world_leader"] = new("world_leader", "World Leader", "Achieved high reputation and multiple territories!", "👑", 1000, null, false),
-            ["happy_people"] = new("happy_people", "People's Champion", "Maintained high happiness for your population!", "😊", 300, null, false)
+            ["first_roll"] = new("first_roll", "First Dice Roll", "Rolled your first dice and learned about probability! Every great journey begins with exploring new opportunities.", "🎲", 100, null, false),
+            ["job_master"] = new("job_master", "Job Master", "Experienced all job levels and discovered different careers! You now understand how economies grow through diverse skills.", "💼", 500, null, false),
+            ["territory_owner"] = new("territory_owner", "Territory Owner", "Acquired your first territory and learned about geography! You're exploring how countries develop and expand.", "🏴", 250, null, false),
+            ["world_leader"] = new("world_leader", "World Leader", "Achieved high reputation and learned strategic leadership! You've discovered how to balance economics and diplomacy.", "👑", 1000, null, false),
+            ["happy_people"] = new("happy_people", "People's Champion", "Maintained high happiness and learned about community care! You understand how leaders help their people thrive.", "😊", 300, null, false)
         };
 
         return achievements.TryGetValue(achievementId, out var achievement) ? achievement : null;
@@ -346,11 +346,11 @@ public class PlayerService : IPlayerService
     {
         var objectives = new List<string>();
 
-        if (diceRolls > 0) objectives.Add("Career exploration through dice mechanics");
-        if (player.Reputation > 25) objectives.Add("Understanding reputation building");
-        if (player.Happiness > 60) objectives.Add("Learning population happiness management");
-        if (territories > 0) objectives.Add("Geography learning through territory acquisition");
-        if (player.Income > 2000) objectives.Add("Basic economics through income progression");
+        if (diceRolls > 0) objectives.Add("Learned about career progression through strategic dice mechanics");
+        if (player.Reputation > 25) objectives.Add("Discovered how to build reputation and understand leadership skills");
+        if (player.Happiness > 60) objectives.Add("Learned population happiness management and discovered how leaders help communities thrive");
+        if (territories > 0) objectives.Add("Explored geography and learned about different countries through territory acquisition");
+        if (player.Income > 2000) objectives.Add("Understood basic economics concepts and learned about income progression through strategic planning");
 
         return objectives;
     }

@@ -155,7 +155,7 @@ public class PlayerServiceTests : ServiceTestBase
                 PlayerId = testPlayers[1].Id,
                 AchievementId = "first_territory",
                 Title = "Geography Explorer",
-                Description = "Acquired your first territory!",
+                Description = "Acquired your first territory and learned about geography! You're exploring how countries develop and expand.",
                 IconEmoji = "🌍",
                 PointsReward = 100,
                 UnlockedAt = DateTime.UtcNow.AddDays(-8)
@@ -166,7 +166,7 @@ public class PlayerServiceTests : ServiceTestBase
                 PlayerId = testPlayers[2].Id,
                 AchievementId = "career_advancement",
                 Title = "Career Climber",
-                Description = "Advanced to Manager level!",
+                Description = "Advanced to Manager level and discovered different career paths! You're learning how skills help you grow in your profession.",
                 IconEmoji = "📈",
                 PointsReward = 250,
                 UnlockedAt = DateTime.UtcNow.AddDays(-3)
