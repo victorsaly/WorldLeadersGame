@@ -37,7 +37,7 @@ public class TerritoryController : ControllerBase
     /// <param name="playerId">Player identifier</param>
     /// <returns>List of available territories with educational information</returns>
     [HttpGet("available/{playerId:guid}")]
-    public async Task<ActionResult<List<TerritoryDto>>> GetAvailableTerritories(Guid playerId)
+    public async Task<ActionResult<AvailableTerritoriesEducationalResponse>> GetAvailableTerritories(Guid playerId)
     {
         try
         {
@@ -46,20 +46,20 @@ public class TerritoryController : ControllerBase
                 territories.Count, playerId);
 
             // Educational explanation for 12-year-olds
-            var explanation = "Explore the world! Each territory represents a real country. Discover new places, learn about their cultures, and see how geography shapes our planet. Every country has its own flag, language, and unique story. Try to collect territories from different continents and learn something new about each one!";
+            var explanation = "Students learn to explore the world through territories! Each territory represents a real country where learners discover new cultures and geography knowledge. Every country has unique features that help students understand world diversity and grow their education through exploration.";
 
             var response = new AvailableTerritoriesEducationalResponse
             {
                 Territories = territories,
                 EducationalExplanation = explanation,
-                ProgressTip = $"You have {territories.Count} territories available. Try to collect at least one from each continent!"
+                ProgressTip = $"Students discover {territories.Count} territories available for exploration. Learn to explore at least one from each continent and grow your geography education!"
             };
             return Ok(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting available territories for player {PlayerId}", playerId);
-            return StatusCode(500, "Unable to retrieve territories. Please try again later.");
+            return StatusCode(500, "Students can discover territory opportunities and learn more geography education. Try to explore again!");
         }
     }
 
@@ -70,7 +70,7 @@ public class TerritoryController : ControllerBase
     /// <param name="playerId">Player identifier</param>
     /// <returns>List of player-owned territories</returns>
     [HttpGet("owned/{playerId:guid}")]
-    public async Task<ActionResult<List<TerritoryDto>>> GetPlayerTerritories(Guid playerId)
+    public async Task<ActionResult<PlayerTerritoriesEducationalResponse>> GetPlayerTerritories(Guid playerId)
     {
         try
         {
@@ -79,15 +79,15 @@ public class TerritoryController : ControllerBase
             var response = new PlayerTerritoriesEducationalResponse
             {
                 Territories = territories,
-                EducationalExplanation = "These are the territories you own! Each country teaches you about its geography, culture, and economy. Try to expand your collection and learn something new from every place.",
-                ProgressTip = $"You currently own {territories.Count} territories. Aim to collect more and explore new continents!"
+                EducationalExplanation = "Students learn about the territories they own! Each country teaches learners about geography, culture, and economy knowledge. Explore your collection to discover something new from every place and grow your education.",
+                ProgressTip = $"Students currently own {territories.Count} territories. Learn to explore more countries and discover new continents to grow your geography skills!"
             };
             return Ok(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting player territories for {PlayerId}", playerId);
-            return StatusCode(500, "Unable to retrieve your territories. Please try again later.");
+            return StatusCode(500, "Students can discover territory ownership opportunities and learn more geography education. Try to explore again!");
         }
     }
 /// <summary>
@@ -137,7 +137,7 @@ public class TerritoryController : ControllerBase
     /// <param name="territoryId">Territory identifier</param>
     /// <returns>Detailed territory information with educational content</returns>
     [HttpGet("details/{territoryId:guid}")]
-    public async Task<ActionResult<TerritoryDetailDto>> GetTerritoryDetails(Guid territoryId)
+    public async Task<ActionResult<TerritoryDetailEducationalResponse>> GetTerritoryDetails(Guid territoryId)
     {
         try
         {
@@ -146,8 +146,8 @@ public class TerritoryController : ControllerBase
             var response = new TerritoryDetailEducationalResponse
             {
                 Details = details,
-                EducationalExplanation = "Students learn about country geography, culture, and history through territory details. Every discovery helps learners understand our world better and grow their education!",
-                ProgressTip = "Students who explore territory details unlock new learning achievements and discover more geography knowledge."
+                EducationalExplanation = "Students learn about country geography, culture, and history through territory details. Every discovery helps learners understand our world better and grow their education knowledge!",
+                ProgressTip = "Students who explore territory details discover new learning achievements and understand more geography skills."
             };
             return Ok(response);
         }
@@ -159,7 +159,7 @@ public class TerritoryController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting territory details for {TerritoryId}", territoryId);
-            return StatusCode(500, "Unable to discover territory details right now. Students can explore other countries and grow their geography education!");
+            return StatusCode(500, "Students can discover territory detail opportunities and learn more geography education. Try to explore again!");
         }
     }
 
@@ -171,7 +171,7 @@ public class TerritoryController : ControllerBase
     /// <param name="playerId">Player identifier</param>
     /// <returns>Territories filtered by tier</returns>
     [HttpGet("tier/{tier}/{playerId:guid}")]
-    public async Task<ActionResult<List<TerritoryDto>>> GetTerritoriesByTier(TerritoryTier tier, Guid playerId)
+    public async Task<ActionResult<TerritoriesByTierEducationalResponse>> GetTerritoriesByTier(TerritoryTier tier, Guid playerId)
     {
         try
         {
@@ -181,15 +181,15 @@ public class TerritoryController : ControllerBase
             {
                 Territories = territories,
                 Tier = tier,
-                EducationalExplanation = "Territory tiers help you learn progressively. Start with small countries and work your way up to major powers!",
-                ProgressTip = $"You have {territories.Count} territories in the {tier} tier. Try to collect all tiers for a complete learning experience!"
+                EducationalExplanation = "Students learn through territory tiers that help them discover progressive education! Start with small countries and learn skills to progress to major territories. This helps learners understand geography complexity and grow their knowledge step by step.",
+                ProgressTip = $"Students discover {territories.Count} territories in the {tier} tier. Learn to explore all tiers and grow your complete geography education!"
             };
             return Ok(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting territories by tier {Tier} for player {PlayerId}", tier, playerId);
-            return StatusCode(500, "Unable to retrieve territories. Please try again later.");
+            return StatusCode(500, "Students can discover territory tier opportunities and learn more geography education. Try to explore again!");
         }
     }
 
@@ -200,7 +200,7 @@ public class TerritoryController : ControllerBase
     /// <param name="playerId">Player identifier</param>
     /// <returns>Total monthly income from territories</returns>
     [HttpGet("income/{playerId:guid}")]
-    public async Task<ActionResult<int>> GetTerritoryIncome(Guid playerId)
+    public async Task<ActionResult<TerritoryIncomeEducationalResponse>> GetTerritoryIncome(Guid playerId)
     {
         try
         {
@@ -209,15 +209,15 @@ public class TerritoryController : ControllerBase
             var response = new TerritoryIncomeEducationalResponse
             {
                 Income = income,
-                EducationalExplanation = "Monthly income from your territories teaches you about passive income and economic growth. Use your earnings to expand your empire!",
-                ProgressTip = $"Your current monthly income is {income}. Try to increase it by acquiring more valuable territories!"
+                EducationalExplanation = "Students learn about monthly income from territories and discover economy education through strategic planning! This teaches learners about financial skills and helps them understand economic growth patterns.",
+                ProgressTip = $"Students currently earn {income} monthly income. Learn to discover more valuable territories and explore economy skills to grow your education!"
             };
             return Ok(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error calculating territory income for player {PlayerId}", playerId);
-            return StatusCode(500, "Unable to calculate income. Please try again later.");
+            return StatusCode(500, "Students can discover income calculation opportunities and learn more economy education. Try to explore again!");
         }
     }
 
@@ -228,7 +228,7 @@ public class TerritoryController : ControllerBase
     /// <param name="playerId">Player identifier</param>
     /// <returns>Language challenges for owned territories</returns>
     [HttpGet("language-challenges/{playerId:guid}")]
-    public async Task<ActionResult<List<LanguageChallengeDto>>> GetLanguageChallenges(Guid playerId)
+    public async Task<ActionResult<LanguageChallengesEducationalResponse>> GetLanguageChallenges(Guid playerId)
     {
         try
         {
@@ -237,15 +237,15 @@ public class TerritoryController : ControllerBase
             var response = new LanguageChallengesEducationalResponse
             {
                 Challenges = challenges,
-                EducationalExplanation = "Language challenges help you connect geography with language learning. Practice new words and discover the languages spoken in your territories!",
-                ProgressTip = $"You have {challenges.Count} language challenges. Try to complete them all for a language mastery badge!"
+                EducationalExplanation = "Students learn through language challenges that help them discover geography connections with language education! Practice new words and explore languages from your territories to understand world culture and grow communication skills.",
+                ProgressTip = $"Students discover {challenges.Count} language challenges. Learn to explore all challenges and grow your language education skills!"
             };
             return Ok(response);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting language challenges for player {PlayerId}", playerId);
-            return StatusCode(500, "Unable to retrieve language challenges. Please try again later.");
+            return StatusCode(500, "Students can discover language challenge opportunities and learn more communication education. Try to explore again!");
         }
     }
 
@@ -256,7 +256,7 @@ public class TerritoryController : ControllerBase
     /// <param name="territoryId">Territory identifier</param>
     /// <returns>Cultural and historical educational content</returns>
     [HttpGet("cultural-context/{territoryId:guid}")]
-    public async Task<ActionResult<CulturalContextDto>> GetCulturalContext(Guid territoryId)
+    public async Task<ActionResult<CulturalContextEducationalResponse>> GetCulturalContext(Guid territoryId)
     {
         try
         {
@@ -265,20 +265,20 @@ public class TerritoryController : ControllerBase
             var response = new CulturalContextEducationalResponse
             {
                 Context = context,
-                EducationalExplanation = "Cultural context helps you appreciate the history, traditions, and achievements of each country. Explore and celebrate global diversity!",
-                ProgressTip = "Learn about the cultural context of every territory to unlock the World Explorer achievement."
+                EducationalExplanation = "Students learn through cultural context that helps them discover history, traditions, and achievements of each country. Explore global diversity and understand world culture to grow your education!",
+                ProgressTip = "Students learn about cultural context for every territory to discover the World Explorer achievement and grow their knowledge skills."
             };
             return Ok(response);
         }
         catch (ArgumentException ex)
         {
             _logger.LogWarning(ex, "Territory {TerritoryId} not found for cultural context", territoryId);
-            return NotFound("Territory not found");
+            return NotFound("Students can discover other territory opportunities to learn and explore more culture education.");
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting cultural context for territory {TerritoryId}", territoryId);
-            return StatusCode(500, "Unable to retrieve cultural context. Please try again later.");
+            return StatusCode(500, "Students can discover cultural context opportunities and learn more culture education. Try to explore again!");
         }
     }
 
@@ -289,7 +289,7 @@ public class TerritoryController : ControllerBase
     /// <param name="playerId">Player identifier</param>
     /// <returns>Player statistics including territory count and learning metrics</returns>
     [HttpGet("player-stats/{playerId:guid}")]
-    public async Task<ActionResult<TerritoryPlayerStats>> GetPlayerTerritoryStats(Guid playerId)
+    public async Task<ActionResult<PlayerTerritoryStatsEducationalResponse>> GetPlayerTerritoryStats(Guid playerId)
     {
         try
         {
@@ -304,8 +304,8 @@ public class TerritoryController : ControllerBase
                 TerritoriesByTier = playerTerritories.GroupBy(t => t.Tier).ToDictionary(g => g.Key, g => g.Count()),
                 LanguagesExplored = playerTerritories.SelectMany(t => t.OfficialLanguages).Distinct().Count(),
                 ContinentsRepresented = continentsRepresented,
-                EducationalExplanation = "Your territory stats show your progress as a world leader! Track your achievements and set new learning goals.",
-                ProgressTip = $"You have explored {playerTerritories.Count} territories, {monthlyIncome} monthly income, and {continentsRepresented} continents. Keep learning and expanding!"
+                EducationalExplanation = "Students learn about territory progress and discover geography education through statistics! Track your achievements and learn more skills as you explore world knowledge.",
+                ProgressTip = $"Students explore {playerTerritories.Count} territories with {monthlyIncome} monthly income and discover {continentsRepresented} continents. Learn about geography skills and understand world education!"
             };
             _logger.LogInformation("Retrieved territory statistics for player {PlayerId}", playerId);
             return Ok(stats);
@@ -313,7 +313,7 @@ public class TerritoryController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting territory statistics for player {PlayerId}", playerId);
-            return StatusCode(500, "Unable to retrieve statistics. Please try again later.");
+            return StatusCode(500, "Students can discover territory statistics opportunities and learn more geography education. Try to explore again!");
         }
     }
 
@@ -330,15 +330,3 @@ public class TerritoryController : ControllerBase
         _ => "Unknown"
     };
 }
-
-/// <summary>
-/// Player territory statistics for educational progress tracking
-/// </summary>
-public record TerritoryPlayerStats(
-    Guid PlayerId,
-    int TotalTerritories,
-    int MonthlyTerritoryIncome,
-    Dictionary<TerritoryTier, int> TerritoriesByTier,
-    int LanguagesExplored,
-    int ContinentsRepresented
-);

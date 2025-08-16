@@ -99,21 +99,24 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var acquisitionResult = JsonSerializer.Deserialize<TerritoryAcquisitionResult>(content, new JsonSerializerOptions
+            var acquisitionResponse = JsonSerializer.Deserialize<TerritoryAcquisitionEducationalResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            acquisitionResult.Should().NotBeNull();
-            ValidateChildSafeContent(acquisitionResult!.Message, "Territory Acquisition Message");
+            acquisitionResponse.Should().NotBeNull();
+            acquisitionResponse!.Result.Should().NotBeNull("Students learn territory acquisition results");
+            ValidateChildSafeContent(acquisitionResponse.Result!.Message, "Territory Acquisition Message");
+            ValidateChildSafeContent(acquisitionResponse.EducationalExplanation, "Educational Explanation");
+            ValidateChildSafeContent(acquisitionResponse.ProgressTip, "Progress Tip");
             
-            if (acquisitionResult.Success)
+            if (acquisitionResponse.Result.Success)
             {
-                acquisitionResult.AcquiredTerritory.Should().NotBeNull("Successful acquisition should include territory data");
-                acquisitionResult.EducationalTips.Should().NotBeEmpty("Acquisition should include educational tips");
+                acquisitionResponse.Result.AcquiredTerritory.Should().NotBeNull("Successful acquisition should include territory data");
+                acquisitionResponse.Result.EducationalTips.Should().NotBeEmpty("Acquisition should include educational tips");
             }
             
-            ValidateEducationalOutcome(acquisitionResult, "Learn economic strategy through territory acquisition");
+            ValidateEducationalOutcome(acquisitionResponse, "Learn economic strategy through territory acquisition");
         }
         else
         {
@@ -141,18 +144,22 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var territoryDetails = JsonSerializer.Deserialize<TerritoryDetailDto>(content, new JsonSerializerOptions
+            var territoryDetails = JsonSerializer.Deserialize<TerritoryDetailEducationalResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
             territoryDetails.Should().NotBeNull();
-            ValidateChildSafeContent(territoryDetails!.CountryName, "Territory Country Name");
-            ValidateChildSafeContent(territoryDetails.EducationalFact, "Educational Fact");
+            territoryDetails!.Details.Should().NotBeNull("Territory details should be provided");
+            
+            ValidateChildSafeContent(territoryDetails.Details!.CountryName, "Territory Country Name");
+            ValidateChildSafeContent(territoryDetails.Details.EducationalFact, "Educational Fact");
+            ValidateChildSafeContent(territoryDetails.EducationalExplanation, "Educational Explanation");
+            ValidateChildSafeContent(territoryDetails.ProgressTip, "Progress Tip");
             
             // Validate educational content
-            territoryDetails.GeographicFeatures.Should().NotBeEmpty("Should provide geographic learning");
-            territoryDetails.CulturalHighlights.Should().NotBeEmpty("Should provide cultural learning");
+            territoryDetails.Details.GeographicFeatures.Should().NotBeEmpty("Should provide geographic learning");
+            territoryDetails.Details.CulturalHighlights.Should().NotBeEmpty("Should provide cultural learning");
             
             ValidateEducationalOutcome(territoryDetails, "Learn geography, culture, and languages through territory exploration");
         }
@@ -184,14 +191,17 @@ public class TerritoryControllerTests : ApiTestBase
             
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var territories = JsonSerializer.Deserialize<List<TerritoryDto>>(content, new JsonSerializerOptions
+                var territories = JsonSerializer.Deserialize<TerritoriesByTierEducationalResponse>(content, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
                 territories.Should().NotBeNull();
+                territories!.Territories.Should().NotBeNull("Territories list should be provided");
+                ValidateChildSafeContent(territories.EducationalExplanation, "Educational Explanation");
+                ValidateChildSafeContent(territories.ProgressTip, "Progress Tip");
                 
-                foreach (var territory in territories!)
+                foreach (var territory in territories.Territories)
                 {
                     territory.Tier.Should().Be(tier, $"All territories should match requested tier {tier}");
                     
@@ -242,13 +252,16 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var monthlyIncome = JsonSerializer.Deserialize<int>(content, new JsonSerializerOptions
+            var incomeResponse = JsonSerializer.Deserialize<TerritoryIncomeEducationalResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            monthlyIncome.Should().BeGreaterThanOrEqualTo(0, "Territory income should be non-negative for children");
-            ValidateEducationalOutcome(monthlyIncome, "Learn passive income concepts through territory ownership");
+            incomeResponse.Should().NotBeNull();
+            incomeResponse!.Income.Should().BeGreaterThanOrEqualTo(0, "Territory income should be non-negative for children");
+            ValidateChildSafeContent(incomeResponse.EducationalExplanation, "Educational Explanation");
+            ValidateChildSafeContent(incomeResponse.ProgressTip, "Progress Tip");
+            ValidateEducationalOutcome(incomeResponse, "Learn passive income concepts through territory ownership");
         }
         else
         {
@@ -276,14 +289,15 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var challenges = JsonSerializer.Deserialize<List<LanguageChallengeDto>>(content, new JsonSerializerOptions
+            var challenges = JsonSerializer.Deserialize<LanguageChallengesEducationalResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
             challenges.Should().NotBeNull();
+            challenges!.Challenges.Should().NotBeNull().And.NotBeEmpty("Students discover language challenges for territory learning");
             
-            foreach (var challenge in challenges!)
+            foreach (var challenge in challenges.Challenges)
             {
                 // Language education validation
                 ValidateChildSafeContent(challenge.Word, "Language Word");
@@ -327,22 +341,25 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var culturalContext = JsonSerializer.Deserialize<CulturalContextDto>(content, new JsonSerializerOptions
+            var culturalResponse = JsonSerializer.Deserialize<CulturalContextEducationalResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
 
-            culturalContext.Should().NotBeNull();
-            ValidateChildSafeContent(culturalContext!.CountryName, "Country Name");
-            ValidateChildSafeContent(culturalContext.HistoricalSignificance, "Historical Significance");
-            ValidateChildSafeContent(culturalContext.ChildFriendlyDescription, "Child Friendly Description");
+            culturalResponse.Should().NotBeNull();
+            culturalResponse!.Context.Should().NotBeNull("Students learn cultural context for territory education");
+            ValidateChildSafeContent(culturalResponse.Context!.CountryName, "Country Name");
+            ValidateChildSafeContent(culturalResponse.Context.HistoricalSignificance, "Historical Significance");
+            ValidateChildSafeContent(culturalResponse.Context.ChildFriendlyDescription, "Child Friendly Description");
+            ValidateChildSafeContent(culturalResponse.EducationalExplanation, "Educational Explanation");
+            ValidateChildSafeContent(culturalResponse.ProgressTip, "Progress Tip");
             
             // Cultural sensitivity validation
-            culturalContext.ChildFriendlyDescription.Should().NotContainAny("weird", "strange");
-            culturalContext.HistoricalSignificance.Should().NotContain("war");
-            culturalContext.ChildFriendlyDescription.Should().ContainAny("children", "kids", "young");
+            culturalResponse.Context.ChildFriendlyDescription.Should().NotContainAny("weird", "strange");
+            culturalResponse.Context.HistoricalSignificance.Should().NotContain("war");
+            culturalResponse.Context.ChildFriendlyDescription.Should().ContainAny("children", "kids", "young");
             
-            ValidateEducationalOutcome(culturalContext, "Learn about diverse cultures with respect and appreciation");
+            ValidateEducationalOutcome(culturalResponse.Context, "Learn about diverse cultures with respect and appreciation");
         }
         else
         {
@@ -370,7 +387,7 @@ public class TerritoryControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var stats = JsonSerializer.Deserialize<TerritoryPlayerStats>(content, new JsonSerializerOptions
+            var stats = JsonSerializer.Deserialize<PlayerTerritoryStatsEducationalResponse>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
