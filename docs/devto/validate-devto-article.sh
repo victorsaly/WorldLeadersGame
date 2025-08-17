@@ -170,10 +170,10 @@ echo ""
 log_info "4. Checking format compatibility..."
 
 # Check for Mermaid
-if grep -q "mermaid\|graph TD\|graph LR\|flowchart\|sequenceDiagram\|pie title\|gantt\|classDef\|%%{" "$ARTICLE_FILE"; then
+if grep -q -E '```mermaid|^graph (TD|LR)|^flowchart (TD|LR)|^sequenceDiagram|^pie title|^gantt|classDef|%%\{' "$ARTICLE_FILE"; then
     log_error "Mermaid references found - not supported on dev.to"
     echo "   Found patterns:"
-    grep -n "mermaid\|graph TD\|graph LR\|flowchart\|sequenceDiagram\|pie title\|gantt\|classDef\|%%{" "$ARTICLE_FILE" | head -3
+    grep -n -E '```mermaid|^graph (TD|LR)|^flowchart (TD|LR)|^sequenceDiagram|^pie title|^gantt|classDef|%%\{' "$ARTICLE_FILE" | head -3
     echo "   These must be converted to ASCII diagrams or tables"
 else
     log_success "No Mermaid references found"
@@ -214,7 +214,7 @@ else
 fi
 
 # Check for call-to-action
-if grep -q "Follow me\|Subscribe\|Learn More" "$ARTICLE_FILE"; then
+if grep -q -i "Follow me\|Subscribe\|Learn More\|Share your thoughts\|comments below\|👇\|Join us\|Try it\|Get started" "$ARTICLE_FILE"; then
     log_success "Call-to-action found"
 else
     log_warning "No clear call-to-action found"
