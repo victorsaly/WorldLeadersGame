@@ -44,6 +44,8 @@ This guide covers the complete workflow for publishing Jekyll blog posts to dev.
 cp _posts/YYYY-MM-DD-article-title.md devto/working/
 ```
 
+**Note**: Completed articles should be saved to `devto/articles/` folder for organization and future reference.
+
 ### Step 2: Frontmatter Conversion
 
 **From Jekyll:**
@@ -115,6 +117,25 @@ graph TD
 > **TL;DR**: Brief, engaging summary with key value proposition and main takeaways that encourage continued reading.
 ```
 
+#### Include Real GitHub Examples and Proven Data
+For articles discussing project management, issues, or development processes, include links to actual implementations:
+
+```markdown
+## Real Implementation Examples
+
+**Live GitHub Issues**: [Closed Issues](https://github.com/victorsaly/WorldLeadersGame/issues?q=is%3Aissue%20state%3Aclosed&page=1) - See resolved issues demonstrating the methodology in action
+
+**Project Milestones**: [Active Milestones](https://github.com/victorsaly/WorldLeadersGame/milestones) - Track progress and completion of systematic planning
+
+**Detailed Documentation**: [Complete Issue Analysis](https://docs.worldleadersgame.co.uk/issues/) - In-depth review of generated issues and outcomes
+```
+
+**Benefits of Including Real Examples**:
+- ✅ **Credibility**: Readers can verify claims with actual data
+- ✅ **Learning**: Concrete examples they can study and replicate  
+- ✅ **Transparency**: Open development process builds trust
+- ✅ **Follow-up**: Detailed documentation for deeper learning
+
 #### Add Discussion Questions
 ```markdown
 ## 💭 Discussion Questions
@@ -138,6 +159,13 @@ This post is part of our **[series name]**.
 **📚 Follow the complete journey**: [docs.worldleadersgame.co.uk](https://docs.worldleadersgame.co.uk/)
 **💻 Browse the code**: [GitHub repository](https://github.com/victorsaly/WorldLeadersGame)
 **🤖 Study the methodology**: [Complete instruction system](https://github.com/victorsaly/WorldLeadersGame/tree/main/.github/copilot-instructions)
+
+### Include Proven Data and Real Examples
+For articles about development processes, include links to actual implementations:
+
+**🎯 See it in action**: [Closed GitHub Issues](https://github.com/victorsaly/WorldLeadersGame/issues?q=is%3Aissue%20state%3Aclosed&page=1) - Resolved issues proving the methodology works
+**📊 Track progress**: [Project Milestones](https://github.com/victorsaly/WorldLeadersGame/milestones) - Live project management in action  
+**📖 Deep dive**: [Detailed Issue Analysis](https://docs.worldleadersgame.co.uk/issues/) - Complete documentation and outcomes
 
 **Next week**: [Preview of upcoming content]
 
@@ -190,6 +218,12 @@ with proper syntax highlighting
 ```
 
 ## 🔍 Quality Assurance
+
+### File Organization
+- [ ] **Completed Articles**: Saved to `devto/articles/` folder for reference
+- [ ] **Working Drafts**: Keep in `devto/working/` during development
+- [ ] **Published Articles**: Move to `devto/articles/` after publication
+- [ ] **Proper Naming**: Use consistent `YYYY-MM-DD-title-devto.md` format
 
 ### Content Review
 - [ ] **Readability**: Clear, engaging writing style
@@ -314,6 +348,25 @@ I'm curious about your experience with AI-assisted development:
 4. **For educational/child-focused projects, how do you balance AI efficiency with safety requirements?**
 
 Share your thoughts and experiences in the comments below! 👇
+```
+
+### Including Real Data and Proven Examples
+When writing about development methodologies or project management:
+
+```markdown
+## Real Implementation Proof
+
+**Live Examples**: [Closed GitHub Issues](https://github.com/victorsaly/WorldLeadersGame/issues?q=is%3Aissue%20state%3Aclosed&page=1) - See the methodology working in practice
+
+**Project Progress**: [Milestones](https://github.com/victorsaly/WorldLeadersGame/milestones) - Track actual implementation timelines
+
+**Detailed Analysis**: [Issue Documentation](https://docs.worldleadersgame.co.uk/issues/) - Complete breakdown of generated issues and outcomes
+
+This transparency allows readers to:
+- Verify claims with actual data
+- Study concrete implementation examples  
+- Track progress and results over time
+- Access detailed documentation for replication
 ```
 
 ## 🔄 Continuous Improvement

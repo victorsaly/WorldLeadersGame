@@ -4,7 +4,7 @@ published: false
 description: "Brief, compelling description for dev.to feed (under 160 characters). Focus on value proposition."
 tags: ai, education, gamedev, softwaredevelopment
 cover_image: https://docs.worldleadersgame.co.uk/assets/linkedin-images/article-slug-linkedin.png
-canonical_url: https://docs.worldleadersgame.co.uk/posts/article-slug/
+canonical_url: https://docs.worldleadersgame.co.uk/post/article-slug/
 series: "AI-First Educational Game Development"
 ---
 
@@ -21,7 +21,7 @@ Start with a clear, engaging question or problem statement that hooks the reader
 Content with proper formatting:
 
 - **Bold text** for emphasis
-- *Italic text* for subtle emphasis
+- _Italic text_ for subtle emphasis
 - `Inline code` for technical terms
 
 ```language
@@ -43,6 +43,7 @@ Use ASCII diagrams for compatibility:
 ```
 
 Progress bars work well:
+
 ```
 Architecture Design      ████████████████████ 95% ✅
 Code Generation         ████████████████████ 92% ✅
