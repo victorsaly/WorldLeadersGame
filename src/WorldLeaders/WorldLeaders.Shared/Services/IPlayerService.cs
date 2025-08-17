@@ -28,7 +28,7 @@ public interface IPlayerService
     /// <summary>
     /// Get player dashboard data
     /// </summary>
-    Task<PlayerDashboardDto> GetPlayerDashboardAsync(Guid playerId);
+    Task<PlayerDashboardDto?> GetPlayerDashboardAsync(Guid playerId);
     
     /// <summary>
     /// Update player statistics

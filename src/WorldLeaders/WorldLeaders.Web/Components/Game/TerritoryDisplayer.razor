@@ -385,29 +385,75 @@
         await LoadTerritories();
     }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        // Reload territories when player reputation or income changes
+        // This ensures territories update after dice rolls
+        Logger.LogInformation("OnParametersSetAsync triggered - PlayerId: {PlayerId}, Reputation: {Reputation}, Income: {Income}", 
+            PlayerId, PlayerReputation, PlayerIncome);
+        
+        // Force a reload regardless of parameter changes
+        Logger.LogInformation("Forcing territory reload in OnParametersSetAsync");
+        await LoadTerritories();
+        
+        // Force re-render
+        StateHasChanged();
+        Logger.LogInformation("StateHasChanged called in OnParametersSetAsync");
+    }
+
     private async Task LoadTerritories()
     {
         try
         {
             isLoading = true;
-            Logger.LogInformation("Loading territories for player {PlayerId}", PlayerId);
+            Logger.LogInformation("LoadTerritories started for player {PlayerId}", PlayerId);
+            
+            // Debug: Log the actual player ID being used
+            Logger.LogInformation("DEBUG: PlayerId parameter value: {PlayerId}, IsEmpty: {IsEmpty}", 
+                PlayerId, PlayerId == Guid.Empty);
+            
+            // Force state change to show loading
+            StateHasChanged();
             
             // Load both available and owned territories
+            Logger.LogInformation("Calling TerritoryService.GetAvailableTerritoriesAsync...");
             availableTerritories = await TerritoryService.GetAvailableTerritoriesAsync(PlayerId);
+            Logger.LogInformation("Available territories API call completed, received {Count} territories", availableTerritories.Count);
+            
+            Logger.LogInformation("Calling TerritoryService.GetPlayerTerritoriesAsync...");
             ownedTerritories = await TerritoryService.GetPlayerTerritoriesAsync(PlayerId);
+            Logger.LogInformation("Owned territories API call completed, received {Count} territories", ownedTerritories.Count);
             
             territories = availableTerritories; // For compatibility
             
             Logger.LogInformation("Loaded {AvailableCount} available and {OwnedCount} owned territories", 
                 availableTerritories.Count, ownedTerritories.Count);
+                
+            // Debug: Log if we actually got territories
+            Logger.LogInformation("DEBUG: Available territories count: {Count}, first territory: {FirstTerritory}", 
+                availableTerritories.Count, 
+                availableTerritories.FirstOrDefault()?.CountryName ?? "None");
+            
+            // Debug: Log sample territory data if available
+            if (availableTerritories.Any())
+            {
+                var sample = availableTerritories.First();
+                Logger.LogInformation("Sample territory: {Name}, Cost: {Cost}, RepReq: {Rep}, Available: {Available}", 
+                    sample.CountryName, sample.Cost, sample.ReputationRequired, sample.IsAvailable);
+            }
         }
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error loading territories for player {PlayerId}", PlayerId);
+            
+            // Debug: Add more details about the error
+            Logger.LogError("DEBUG: Exception details - Message: {Message}, Type: {Type}, StackTrace: {StackTrace}", 
+                ex.Message, ex.GetType().Name, ex.StackTrace);
         }
         finally
         {
             isLoading = false;
+            Logger.LogInformation("LoadTerritories completed, isLoading set to false");
         }
     }
 

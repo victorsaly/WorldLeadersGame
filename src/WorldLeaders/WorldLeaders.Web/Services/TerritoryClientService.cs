@@ -54,15 +54,20 @@ public class TerritoryClientService : ITerritoryService
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var territories = JsonSerializer.Deserialize<List<TerritoryDto>>(content, new JsonSerializerOptions
+                _logger.LogInformation("API Response content for available territories: {Content}", content);
+                
+                // The API returns AvailableTerritoriesEducationalResponse, not List<TerritoryDto>
+                var educationalResponse = JsonSerializer.Deserialize<AvailableTerritoriesEducationalResponse>(content, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
                 
+                var territories = educationalResponse?.Territories ?? new List<TerritoryDto>();
+                
                 _logger.LogInformation("Loaded {Count} available territories for player {PlayerId}", 
-                    territories?.Count ?? 0, playerId);
+                    territories.Count, playerId);
                     
-                return territories ?? new List<TerritoryDto>();
+                return territories;
             }
             else
             {
@@ -87,15 +92,20 @@ public class TerritoryClientService : ITerritoryService
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var territories = JsonSerializer.Deserialize<List<TerritoryDto>>(content, new JsonSerializerOptions
+                _logger.LogInformation("API Response content for owned territories: {Content}", content);
+                
+                // The API returns PlayerTerritoriesEducationalResponse, not List<TerritoryDto>
+                var educationalResponse = JsonSerializer.Deserialize<PlayerTerritoriesEducationalResponse>(content, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
                 
+                var territories = educationalResponse?.Territories ?? new List<TerritoryDto>();
+                
                 _logger.LogInformation("Loaded {Count} owned territories for player {PlayerId}", 
-                    territories?.Count ?? 0, playerId);
+                    territories.Count, playerId);
                     
-                return territories ?? new List<TerritoryDto>();
+                return territories;
             }
             else
             {
