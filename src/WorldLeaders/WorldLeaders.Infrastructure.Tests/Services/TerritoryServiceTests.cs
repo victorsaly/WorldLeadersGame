@@ -107,6 +107,12 @@ public class TerritoryServiceTests : ServiceTestBase
                 LastActiveAt = DateTime.UtcNow,
             };
 
+        // Clear any existing territories to avoid conflicts with migration data
+        dbContext.Territories.RemoveRange(dbContext.Territories);
+        
+        // Add the test player to the database
+        dbContext.Players.Add(testPlayer);
+
             var territories = new List<TerritoryEntity>
             {
                 new TerritoryEntity

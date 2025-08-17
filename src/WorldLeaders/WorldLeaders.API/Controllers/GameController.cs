@@ -317,6 +317,11 @@ public class GameController : ControllerBase
             {
                 DiceValue = result.DiceValue,
                 NewJob = result.NewJob,
+                IncomeChange = result.IncomeChange,
+                ReputationChange = result.ReputationChange,
+                HappinessChange = result.HappinessChange,
+                EncouragingMessage = result.EncouragingMessage,
+                JobDescription = result.JobDescription,
                 EducationalExplanation = "Rolling the dice teaches you about probability and career progression. Each job helps you earn income and build reputation!",
                 ProgressTip = "Next: Use your new job to earn more and unlock new territories."
             };
@@ -369,14 +374,8 @@ public class GameController : ControllerBase
         try
         {
             var update = await _gameEngine.AdvanceTurnAsync(playerId);
-            var response = new GameStateEducationalResponse
-            {
-                StateUpdate = update,
-                EducationalExplanation = "Advancing your turn helps you learn about decision-making and strategy. Each choice affects your progress as a world leader!",
-                ProgressTip = "Review your resources and plan your next move."
-            };
             _logger.LogInformation("Advanced turn for player {PlayerId}", playerId);
-            return Ok(response);
+            return Ok(update);
         }
         catch (Exception ex)
         {

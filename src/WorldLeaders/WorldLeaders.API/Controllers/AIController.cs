@@ -159,7 +159,15 @@ public class AIController : ControllerBase
                     Name = "Career Guide",
                     Description = "A supportive mentor who helps students learn career guidance and discover professional education pathways",
                     PersonalityTraits = new List<string> { "encouraging", "wise", "supportive" },
-                    EducationalFocus = "Students learn career planning and discover skill development through education"
+                    EducationalFocus = "Students learn career planning and discover skill development through education",
+                    IconEmoji = "👨‍💼",
+                    ExampleResponses = new List<string> 
+                    { 
+                        "Great job exploring career options! Every profession teaches valuable skills.",
+                        "Learning about different jobs helps you discover what interests you most!",
+                        "Your career journey is exciting - let's explore what makes you passionate about learning!"
+                    },
+                    ComplexityLevel = "beginner"
                 },
                 new AgentPersonalityDto 
                 { 
@@ -167,7 +175,15 @@ public class AIController : ControllerBase
                     Name = "Event Narrator",
                     Description = "An exciting storyteller who helps students learn through narratives and discover creative education opportunities",
                     PersonalityTraits = new List<string> { "dramatic", "engaging", "creative" },
-                    EducationalFocus = "Students learn storytelling and discover creative thinking through education"
+                    EducationalFocus = "Students learn storytelling and discover creative thinking through education",
+                    IconEmoji = "📖",
+                    ExampleResponses = new List<string> 
+                    { 
+                        "What an exciting adventure awaits you! Every story teaches us something new.",
+                        "Wow! Your leadership story is unfolding in amazing ways through learning!",
+                        "Each decision you make creates a wonderful educational journey!"
+                    },
+                    ComplexityLevel = "beginner"
                 },
                 new AgentPersonalityDto 
                 { 
@@ -175,7 +191,15 @@ public class AIController : ControllerBase
                     Name = "Fortune Teller",
                     Description = "A mysterious advisor who helps students learn strategic guidance and discover critical thinking through education",
                     PersonalityTraits = new List<string> { "mystical", "strategic", "thoughtful" },
-                    EducationalFocus = "Students learn strategic planning and discover critical thinking through education"
+                    EducationalFocus = "Students learn strategic planning and discover critical thinking through education",
+                    IconEmoji = "🔮",
+                    ExampleResponses = new List<string> 
+                    { 
+                        "I see great learning potential in your future! Strategic thinking will guide you.",
+                        "The crystal ball shows wonderful educational opportunities ahead!",
+                        "Your path to knowledge is bright - let wisdom guide your choices!"
+                    },
+                    ComplexityLevel = "beginner"
                 },
                 new AgentPersonalityDto 
                 { 
@@ -183,7 +207,15 @@ public class AIController : ControllerBase
                     Name = "Happiness Advisor",
                     Description = "A caring diplomat who helps students learn population management and discover leadership education skills",
                     PersonalityTraits = new List<string> { "caring", "diplomatic", "empathetic" },
-                    EducationalFocus = "Students learn emotional intelligence and discover leadership through education"
+                    EducationalFocus = "Students learn emotional intelligence and discover leadership through education",
+                    IconEmoji = "😊",
+                    ExampleResponses = new List<string> 
+                    { 
+                        "Happiness comes from learning new things and helping others! You're doing great!",
+                        "Your positive attitude makes learning so much more fun and effective!",
+                        "When we approach challenges with joy, we learn and grow even faster!"
+                    },
+                    ComplexityLevel = "beginner"
                 },
                 new AgentPersonalityDto 
                 { 
@@ -191,7 +223,15 @@ public class AIController : ControllerBase
                     Name = "Territory Strategist",
                     Description = "A strategic advisor who helps students learn territory expansion and discover geography education through economic planning",
                     PersonalityTraits = new List<string> { "strategic", "analytical", "planning-focused" },
-                    EducationalFocus = "Students learn geography and discover economic planning through education"
+                    EducationalFocus = "Students learn geography and discover economic planning through education",
+                    IconEmoji = "🗺️",
+                    ExampleResponses = new List<string> 
+                    { 
+                        "Excellent strategic thinking! Geography and economics work together beautifully.",
+                        "Your expansion plans show great understanding of world geography!",
+                        "Strategic planning teaches us how countries develop and grow!"
+                    },
+                    ComplexityLevel = "beginner"
                 },
                 new AgentPersonalityDto 
                 { 
@@ -199,7 +239,15 @@ public class AIController : ControllerBase
                     Name = "Language Tutor",
                     Description = "A patient teacher who helps students learn language skills and discover cultural education through practice",
                     PersonalityTraits = new List<string> { "patient", "encouraging", "educational" },
-                    EducationalFocus = "Students learn language skills and discover cultural awareness through education"
+                    EducationalFocus = "Students learn language skills and discover cultural awareness through education",
+                    IconEmoji = "🗣️",
+                    ExampleResponses = new List<string> 
+                    { 
+                        "Great pronunciation practice! Learning languages opens doors to new cultures!",
+                        "Every language you try teaches you about different countries and people!",
+                        "Language learning is a wonderful adventure - you're doing amazingly well!"
+                    },
+                    ComplexityLevel = "beginner"
                 }
             };
 
@@ -274,7 +322,7 @@ public class AIController : ControllerBase
                 },
                 RealWorldApplication = "Just like following a recipe or building instructions, programming helps students learn and understand how computers work! This education helps students discover important skills and grow their knowledge.",
                 NextSteps = new List<string> { "Students can learn to write simple instructions", "Students discover how to break problems into steps", "Students explore more coding adventures through education" },
-                ComplexityLevel = "Beginner - Perfect for students to learn the basics! Students grow through education and practice!",
+                ComplexityLevel = "beginner",
                 ProgrammingConcepts = new List<string> { "Students learn sequential thinking", "Students understand instructions", "Students discover logic", "Students grow problem solving skills" },
                 ChildFriendlyTips = new List<string> 
                 { 
@@ -306,6 +354,9 @@ public record AgentPersonalityDto
     public string Description { get; init; } = string.Empty;
     public List<string> PersonalityTraits { get; init; } = new();
     public string EducationalFocus { get; init; } = string.Empty;
+    public string IconEmoji { get; init; } = string.Empty;
+    public List<string> ExampleResponses { get; init; } = new();
+    public string ComplexityLevel { get; init; } = string.Empty;
     public int ExpertiseLevel { get; init; } = 5;
     public double EducationalScore { get; init; } = 0.95;
     public int InteractionCount { get; init; } = 125;
