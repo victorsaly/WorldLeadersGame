@@ -331,15 +331,22 @@ public class DiceServiceTests : ServiceTestBase
                 var rollResult = await service.RollForJobAsync(testPlayer.Id);
                 rollResults.Add((rollResult.DiceValue, rollResult.NewJob));
                 
+                // Ensure database changes are saved
+                await context.SaveChangesAsync();
+                
                 // Small delay to ensure different timestamps
                 await Task.Delay(10);
+                
+                // Verify history is being saved progressively
+                var currentHistory = await service.GetDiceRollHistoryAsync(testPlayer.Id);
+                Output.WriteLine($"Roll {i + 1}: History count = {currentHistory.Count}");
             }
 
             var history = await service.GetDiceRollHistoryAsync(testPlayer.Id);
             
             // Assert
             Assert.NotNull(history);
-            Assert.True(history.Count >= 5, "Should save dice roll history for educational tracking");
+            Assert.True(history.Count >= 5, $"Should save dice roll history for educational tracking. Expected >= 5, got {history.Count}");
             
             foreach (var historyItem in history.Take(5))
             {

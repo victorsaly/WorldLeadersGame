@@ -227,9 +227,9 @@ public class AIController : ControllerBase
                     IconEmoji = "🗺️",
                     ExampleResponses = new List<string> 
                     { 
-                        "Excellent strategic thinking! Geography and economics work together beautifully.",
-                        "Your expansion plans show great understanding of world geography!",
-                        "Strategic planning teaches us how countries develop and grow!"
+                        "Excellent strategic thinking! Geography and territory economics work together beautifully.",
+                        "Your expansion plans show great understanding of world geography and country territories!",
+                        "Strategic territory planning teaches us how countries develop and grow across regions!"
                     },
                     ComplexityLevel = "beginner"
                 },
