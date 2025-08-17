@@ -142,9 +142,9 @@ date_match = re.match(r'(\d{4}-\d{2}-\d{2})-(.*)', filename)
 if date_match:
     date_str = date_match.group(1)
     slug = date_match.group(2).replace('.md', '').replace('-dev-to', '')
-    canonical_url = f"https://docs.worldleadersgame.co.uk/posts/{slug}/"
+    canonical_url = f"https://docs.worldleadersgame.co.uk/post/{slug}/"
 else:
-    canonical_url = f"https://docs.worldleadersgame.co.uk/posts/{filename.replace('.md', '')}/"
+    canonical_url = f"https://docs.worldleadersgame.co.uk/post/{filename.replace('.md', '')}/"
 
 # Create dev.to frontmatter
 devto_frontmatter = {
@@ -217,7 +217,7 @@ log_success "Diagram conversion completed"
 log_info "4. Converting internal links to external URLs..."
 
 # Convert Jekyll internal links to external URLs
-sed -i '' "s|](/posts/|](https://${DOMAIN}/posts/|g" "$WORK_FILE"
+sed -i '' "s|](/post/|](https://${DOMAIN}/post/|g" "$WORK_FILE"
 sed -i '' "s|](/journey/|](https://${DOMAIN}/journey/|g" "$WORK_FILE"
 sed -i '' "s|](/technical/|](https://${DOMAIN}/technical/|g" "$WORK_FILE"
 

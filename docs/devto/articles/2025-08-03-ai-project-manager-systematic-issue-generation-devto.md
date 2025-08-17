@@ -4,7 +4,7 @@ published: false
 description: "Watch AI systematically identify project challenges and generate 4 comprehensive GitHub issues with detailed plans - saving hours of manual project management while ensuring nothing gets overlooked."
 tags: ai, projectmanagement, automation, github
 cover_image: https://docs.worldleadersgame.co.uk/assets/linkedin-images/ai-generated-issues-linkedin.png
-canonical_url: https://docs.worldleadersgame.co.uk/posts/2025/08/03/ai-generated-issues-systematic-problem-solving/
+canonical_url: https://docs.worldleadersgame.co.uk/post/2025/08/03/ai-generated-issues-systematic-problem-solving/
 series: "AI-First Educational Game Development"
 ---
 

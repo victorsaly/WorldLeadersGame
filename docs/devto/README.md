@@ -5,6 +5,7 @@ This folder contains the automated system for converting Jekyll blog posts to de
 ## 🎯 Purpose
 
 Transform Jekyll blog posts into dev.to-ready articles with:
+
 - ✅ Proper frontmatter formatting for dev.to
 - ✅ Image URLs pointing to `docs.worldleadersgame.co.uk`
 - ✅ ASCII/Unicode diagrams compatible with dev.to
@@ -54,25 +55,28 @@ devto/
 ## 🔧 Technical Details
 
 ### Image URL Pattern
+
 ```
 Original:  /assets/images/filename.png
 Dev.to:    https://docs.worldleadersgame.co.uk/assets/images/filename.png
 ```
 
 ### Frontmatter Format
+
 ```yaml
 ---
 title: "Article Title"
-published: false              # Set to true when ready to publish
+published: false # Set to true when ready to publish
 description: "Brief description for dev.to feed"
 tags: ai, education, gamedev, softwaredevelopment
 cover_image: https://docs.worldleadersgame.co.uk/assets/images/cover.png
-canonical_url: https://docs.worldleadersgame.co.uk/posts/article-slug/
-series: "Series Name"         # Optional
+canonical_url: https://docs.worldleadersgame.co.uk/post/article-slug/
+series: "Series Name" # Optional
 ---
 ```
 
 ### Diagram Conversion
+
 - **Mermaid** → **ASCII/Unicode** diagrams
 - **Complex flows** → **Step-by-step text**
 - **Charts** → **Progress bars with emojis**

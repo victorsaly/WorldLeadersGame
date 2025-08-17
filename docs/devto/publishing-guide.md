@@ -5,6 +5,7 @@ Complete guide for converting Jekyll blog posts to dev.to format with proper for
 ## 🎯 Overview
 
 This guide covers the complete workflow for publishing Jekyll blog posts to dev.to while maintaining:
+
 - ✅ **Educational quality** and technical accuracy
 - ✅ **Image hosting** on `docs.worldleadersgame.co.uk`
 - ✅ **Dev.to compatibility** with ASCII diagrams
@@ -14,6 +15,7 @@ This guide covers the complete workflow for publishing Jekyll blog posts to dev.
 ## 📋 Pre-Publishing Checklist
 
 ### Content Validation
+
 - [ ] **Educational Value**: Clear learning objectives for readers
 - [ ] **Technical Accuracy**: All code examples tested and functional
 - [ ] **Age-Appropriate**: Content suitable for professional development community
@@ -21,6 +23,7 @@ This guide covers the complete workflow for publishing Jekyll blog posts to dev.
 - [ ] **Complete Article**: Introduction, body, conclusion, and call-to-action
 
 ### Dev.to Technical Requirements
+
 - [ ] **Frontmatter Format**: Proper YAML frontmatter with required fields
 - [ ] **Tag Compliance**: Maximum 4 tags, following dev.to conventions
 - [ ] **Image URLs**: All images hosted on `docs.worldleadersgame.co.uk`
@@ -29,6 +32,7 @@ This guide covers the complete workflow for publishing Jekyll blog posts to dev.
 - [ ] **Markdown Compatibility**: Dev.to markdown syntax compliance
 
 ### Engagement Optimization
+
 - [ ] **Compelling Title**: Clear value proposition under 50 characters
 - [ ] **TL;DR Section**: Engaging summary with key takeaways
 - [ ] **Discussion Questions**: 3-5 questions to encourage comments
@@ -49,6 +53,7 @@ cp _posts/YYYY-MM-DD-article-title.md devto/working/
 ### Step 2: Frontmatter Conversion
 
 **From Jekyll:**
+
 ```yaml
 ---
 layout: post
@@ -61,6 +66,7 @@ author: "Victor Saly"
 ```
 
 **To Dev.to:**
+
 ```yaml
 ---
 title: "Article Title"
@@ -68,7 +74,7 @@ published: false
 description: "Brief, engaging description for dev.to feed (under 160 chars)"
 tags: ai, education, gamedev, softwaredevelopment
 cover_image: https://docs.worldleadersgame.co.uk/assets/linkedin-images/article-cover.png
-canonical_url: https://docs.worldleadersgame.co.uk/posts/article-slug/
+canonical_url: https://docs.worldleadersgame.co.uk/post/article-slug/
 series: "AI-First Educational Game Development"
 ---
 ```
@@ -76,6 +82,7 @@ series: "AI-First Educational Game Development"
 ### Step 3: Image URL Conversion
 
 **Pattern Replacement:**
+
 ```bash
 # Replace relative image URLs
 sed -i 's|/assets/images/|https://docs.worldleadersgame.co.uk/assets/images/|g'
@@ -87,6 +94,7 @@ sed -i 's|![Image](images/|![Image](https://docs.worldleadersgame.co.uk/assets/i
 **Mermaid to ASCII Example:**
 
 **Before (Mermaid):**
+
 ```mermaid
 graph TD
     A[Start] --> B[Process]
@@ -94,6 +102,7 @@ graph TD
 ```
 
 **After (ASCII):**
+
 ```
 ┌─────────┐
 │  Start  │
@@ -113,11 +122,13 @@ graph TD
 ### Step 5: Content Optimization
 
 #### Add TL;DR Section
+
 ```markdown
 > **TL;DR**: Brief, engaging summary with key value proposition and main takeaways that encourage continued reading.
 ```
 
 #### Include Real GitHub Examples and Proven Data
+
 For articles discussing project management, issues, or development processes, include links to actual implementations:
 
 ```markdown
@@ -131,12 +142,14 @@ For articles discussing project management, issues, or development processes, in
 ```
 
 **Benefits of Including Real Examples**:
+
 - ✅ **Credibility**: Readers can verify claims with actual data
-- ✅ **Learning**: Concrete examples they can study and replicate  
+- ✅ **Learning**: Concrete examples they can study and replicate
 - ✅ **Transparency**: Open development process builds trust
 - ✅ **Follow-up**: Detailed documentation for deeper learning
 
 #### Add Discussion Questions
+
 ```markdown
 ## 💭 Discussion Questions
 
@@ -151,6 +164,7 @@ Share your thoughts and experiences in the comments below! 👇
 ```
 
 #### Add Resource Links
+
 ```markdown
 ## 🔗 Want to Learn More?
 
@@ -161,6 +175,7 @@ This post is part of our **[series name]**.
 **🤖 Study the methodology**: [Complete instruction system](https://github.com/victorsaly/WorldLeadersGame/tree/main/.github/copilot-instructions)
 
 ### Include Proven Data and Real Examples
+
 For articles about development processes, include links to actual implementations:
 
 **🎯 See it in action**: [Closed GitHub Issues](https://github.com/victorsaly/WorldLeadersGame/issues?q=is%3Aissue%20state%3Aclosed&page=1) - Resolved issues proving the methodology works
@@ -177,6 +192,7 @@ _Follow me [@victorsaly](https://dev.to/victorsaly) for more insights on [topic 
 ## 🎨 Dev.to Formatting Best Practices
 
 ### Headers and Structure
+
 ```markdown
 # Main Title (H1) - Only one per article
 
@@ -188,16 +204,19 @@ _Follow me [@victorsaly](https://dev.to/victorsaly) for more insights on [topic 
 ```
 
 ### Code Formatting
-```markdown
+
+````markdown
 `Inline code` for short snippets
 
 ```language
 Multi-line code blocks
 with proper syntax highlighting
 ```
+````
 
 > Quote blocks for important insights
-```
+
+````
 
 ### Visual Elements
 ```markdown
@@ -209,9 +228,10 @@ with proper syntax highlighting
 1. Numbered lists for sequences
 
 🎯 Emojis for visual appeal and categorization
-```
+````
 
 ### Links and References
+
 ```markdown
 [Link text](https://full-url.com) - Always use full URLs
 [Internal content](https://docs.worldleadersgame.co.uk/path) - Convert internal links
@@ -220,12 +240,14 @@ with proper syntax highlighting
 ## 🔍 Quality Assurance
 
 ### File Organization
+
 - [ ] **Completed Articles**: Saved to `devto/articles/` folder for reference
 - [ ] **Working Drafts**: Keep in `devto/working/` during development
 - [ ] **Published Articles**: Move to `devto/articles/` after publication
 - [ ] **Proper Naming**: Use consistent `YYYY-MM-DD-title-devto.md` format
 
 ### Content Review
+
 - [ ] **Readability**: Clear, engaging writing style
 - [ ] **Flow**: Logical progression of ideas
 - [ ] **Value**: Actionable insights and takeaways
@@ -233,6 +255,7 @@ with proper syntax highlighting
 - [ ] **Accuracy**: Technical information verified
 
 ### Technical Validation
+
 - [ ] **Markdown Syntax**: Proper formatting throughout
 - [ ] **Link Testing**: All links functional and correct
 - [ ] **Image Loading**: All images accessible and optimized
@@ -240,6 +263,7 @@ with proper syntax highlighting
 - [ ] **Mobile Friendly**: Content readable on mobile devices
 
 ### SEO and Discoverability
+
 - [ ] **Title Optimization**: Clear, searchable title
 - [ ] **Tag Relevance**: Tags match content and dev.to conventions
 - [ ] **Description**: Compelling meta description
@@ -249,6 +273,7 @@ with proper syntax highlighting
 ## 📊 Dev.to Tag Guidelines
 
 ### Recommended Tags
+
 - **ai** - AI and machine learning content
 - **education** - Educational technology and learning
 - **gamedev** - Game development content
@@ -259,6 +284,7 @@ with proper syntax highlighting
 - **webdev** - Web development content
 
 ### Tag Best Practices
+
 - Maximum 4 tags per article
 - Use popular, established tags for discoverability
 - Combine broad and specific tags
@@ -267,30 +293,35 @@ with proper syntax highlighting
 ## 🚀 Publishing Workflow
 
 ### 1. Final Review
+
 ```bash
 # Run validation script
 ./devto/validate-devto-article.sh devto/articles/article-name.md
 ```
 
 ### 2. Test Locally
+
 ```bash
 # Preview in Jekyll (if needed)
 bundle exec jekyll serve --baseurl "" --drafts
 ```
 
 ### 3. Pre-Publish
+
 ```yaml
 # Set in frontmatter
-published: false  # For draft mode
+published: false # For draft mode
 ```
 
 ### 4. Publish
+
 ```yaml
 # Set in frontmatter
-published: true   # When ready to go live
+published: true # When ready to go live
 ```
 
 ### 5. Post-Publish
+
 - [ ] **Share on Social**: Twitter, LinkedIn, etc.
 - [ ] **Monitor Engagement**: Respond to comments
 - [ ] **Track Analytics**: Views, engagement metrics
@@ -299,14 +330,18 @@ published: true   # When ready to go live
 ## 🛠️ Automation Tools
 
 ### convert-to-devto.sh
+
 Automated conversion script handling:
+
 - Frontmatter transformation
 - Image URL conversion
 - Diagram format conversion
 - Content optimization
 
 ### validate-devto-article.sh
+
 Quality assurance script checking:
+
 - Frontmatter compliance
 - Image accessibility
 - Link validation
@@ -315,6 +350,7 @@ Quality assurance script checking:
 ## 📚 Examples and Templates
 
 ### Sample Frontmatter
+
 ```yaml
 ---
 title: "AI-First Development: Achieving 95% Autonomous Code Generation"
@@ -322,12 +358,13 @@ published: false
 description: "Two weeks into our AI-first development experiment, we've discovered the specific methodologies that enable true autonomous software creation."
 tags: ai, education, gamedev, softwaredevelopment
 cover_image: https://docs.worldleadersgame.co.uk/assets/linkedin-images/ai-first-development.png
-canonical_url: https://docs.worldleadersgame.co.uk/posts/ai-first-development-methodology/
+canonical_url: https://docs.worldleadersgame.co.uk/post/ai-first-development-methodology/
 series: "AI-First Educational Game Development"
 ---
 ```
 
 ### Sample Diagram Conversion
+
 ```
 # Progress Bar Visualization
 Architecture Design      ████████████████████ 95% ✅
@@ -337,6 +374,7 @@ Educational Content     ████████████████░░�
 ```
 
 ### Sample Discussion Section
+
 ```markdown
 ## 💭 Discussion Questions
 
@@ -351,6 +389,7 @@ Share your thoughts and experiences in the comments below! 👇
 ```
 
 ### Including Real Data and Proven Examples
+
 When writing about development methodologies or project management:
 
 ```markdown
@@ -363,8 +402,9 @@ When writing about development methodologies or project management:
 **Detailed Analysis**: [Issue Documentation](https://docs.worldleadersgame.co.uk/issues/) - Complete breakdown of generated issues and outcomes
 
 This transparency allows readers to:
+
 - Verify claims with actual data
-- Study concrete implementation examples  
+- Study concrete implementation examples
 - Track progress and results over time
 - Access detailed documentation for replication
 ```
@@ -372,12 +412,14 @@ This transparency allows readers to:
 ## 🔄 Continuous Improvement
 
 ### Performance Tracking
+
 - Monitor article performance metrics
 - Analyze reader engagement patterns
 - Identify successful content formats
 - Optimize based on community feedback
 
 ### Process Refinement
+
 - Update templates based on dev.to changes
 - Improve automation scripts
 - Enhance quality assurance procedures

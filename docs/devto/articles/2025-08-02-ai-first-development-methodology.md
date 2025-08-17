@@ -4,14 +4,13 @@ published: false
 description: "Two weeks into our AI-first development experiment, we've discovered the specific methodologies that enable true autonomous software creation. Here's how we transformed a child's voice memo into production-ready code using structured AI collaboration."
 tags: ai, education, gamedev, softwaredevelopment
 cover_image: https://docs.worldleadersgame.co.uk/assets/linkedin-images/2025-08-02-ai-first-development-methodology-new-paradigm-linkedin.png
-canonical_url: https://docs.worldleadersgame.co.uk/posts/2025/08/02/ai-first-development-methodology-new-paradigm/
+canonical_url: https://docs.worldleadersgame.co.uk/post/2025/08/02/ai-first-development-methodology-new-paradigm/
 series: "AI-First Educational Game Development"
 ---
 
 # AI-First Development: Achieving 95% Autonomous Code Generation
 
-![AI Development Methodology](https://docs.worldleadersgame.co.uk/assets/linkedin-images/2025-08-02-ai-first-development-methodology-new-paradigm-linkedin.png
-)
+![AI Development Methodology](https://docs.worldleadersgame.co.uk/assets/linkedin-images/2025-08-02-ai-first-development-methodology-new-paradigm-linkedin.png)
 
 > **TL;DR**: I experimented with giving GitHub Copilot 95% autonomy in developing an educational game for 12-year-olds. The results challenged everything I thought I knew about AI-human collaboration in software development. Here are the specific methodologies that made it work.
 
@@ -191,7 +190,7 @@ Our next phase tests whether AI autonomy scales with system complexity. Can we m
 
 The early evidence suggests AI autonomy is limited more by instruction quality than technical complexity. The question isn't whether AI can build complex systems—it's whether we can provide sufficiently detailed context and requirements.
 
-##  The Broader Pattern
+## The Broader Pattern
 
 This experiment reveals a broader pattern: AI amplifies human intentions rather than replacing human creativity. The child's creative vision provided direction; AI provided technical execution. The combination produces results neither could achieve independently.
 
