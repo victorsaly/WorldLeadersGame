@@ -455,7 +455,7 @@ public class ChildSafetyValidator(
         {
             IsApproved = !foundInappropriate,
             Reason = foundInappropriate ? "Content may contain inappropriate information" : "Content meets educational standards",
-            ConfidenceScore = foundInappropriate ? 0.3 : 0.8,
+            ConfidenceScore = foundInappropriate ? 0.9 : 0.8, // High confidence when clearly inappropriate
             Warnings = warnings
         };
     }

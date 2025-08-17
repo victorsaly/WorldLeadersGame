@@ -120,7 +120,7 @@ public class TerritoryService : ITerritoryService
                     "Each territory generates monthly income once acquired"
                 };
                 return new TerritoryAcquisitionResult(false, 
-                    $"Not enough money! Need {territory.Cost:C}, have {player.Income:C}", 
+                    $"Keep saving! You need {territory.Cost:C} to acquire {territory.CountryName}. Try earning more income through dice challenges!", 
                     null, null, null, tips);
             }
 

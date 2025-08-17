@@ -61,7 +61,7 @@ public class DiceService : IDiceService
                 PlayerId = playerId,
                 DiceValue = diceValue,
                 ResultingJob = newJob,
-                IncomeChange = newIncome,
+                IncomeChange = incomeChange,
                 ReputationChange = reputationBonus,
                 HappinessChange = happinessBonus,
                 PlayerReaction = "excited", // Default positive reaction

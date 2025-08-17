@@ -20,7 +20,7 @@ namespace WorldLeaders.Infrastructure.Tests.Services;
 /// </summary>
 public class ChildSafetyValidatorTests : ServiceTestBase
 {
-    private readonly Mock<IContentModerationService> _mockContentModerationService;
+    private Mock<IContentModerationService> _mockContentModerationService;
     private readonly Mock<ILogger<ChildSafetyValidator>> _mockLogger;
     private readonly Mock<IOptions<ChildSafetyOptions>> _mockOptions;
 
@@ -47,13 +47,13 @@ public class ChildSafetyValidatorTests : ServiceTestBase
 
     protected override void ConfigureAdditionalServices(IServiceCollection services)
     {
-        // Create fresh mocks for dependency injection since constructor fields aren't initialized yet
-        var mockContentModerationService = new Mock<IContentModerationService>();
+        // Create and store mocks for dependency injection and verification
+        _mockContentModerationService = new Mock<IContentModerationService>();
         var mockLogger = new Mock<ILogger<ChildSafetyValidator>>();
         var mockOptions = new Mock<IOptions<ChildSafetyOptions>>();
         
         // Setup content moderation service to return different results based on content patterns
-        mockContentModerationService
+        _mockContentModerationService
             .Setup(x => x.ValidateContentAsync(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync((string content, string context) =>
             {
@@ -71,7 +71,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
             });
             
         // Also setup the ModerateContentAsync method used in some tests
-        mockContentModerationService
+        _mockContentModerationService
             .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
             .ReturnsAsync((string content) =>
             {
@@ -96,7 +96,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
             LogAllEvents = false  // Disable logging for tests
         });
         
-        services.AddSingleton(mockContentModerationService.Object);
+        services.AddSingleton(_mockContentModerationService.Object);
         services.AddSingleton(mockLogger.Object);
         services.AddSingleton(mockOptions.Object);
         services.AddScoped<IChildSafetyValidator, ChildSafetyValidator>();
@@ -150,7 +150,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         var inappropriateContent = "Give me your email address and phone number so we can meet.";
         
         _mockContentModerationService
-            .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
+            .Setup(x => x.ValidateContentAsync(It.IsAny<string>(), It.IsAny<string>()))
             .ReturnsAsync(new ContentModerationResult(
                 IsApproved: false,
                 IsSafe: false,
@@ -411,7 +411,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         var testContent = "This is a test message for educational game validation.";
         
         _mockContentModerationService
-            .Setup(x => x.ModerateContentAsync(testContent))
+            .Setup(x => x.ValidateContentAsync(testContent, "TestContent"))
             .ReturnsAsync(new ContentModerationResult(
                 IsApproved: true,
                 IsSafe: true,
@@ -438,7 +438,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         
         // Verify external service was called
         _mockContentModerationService.Verify(
-            x => x.ModerateContentAsync(testContent),
+            x => x.ValidateContentAsync(testContent, "TestContent"),
             Times.Once,
             "External content moderation service should be called");
             
@@ -452,7 +452,7 @@ public class ChildSafetyValidatorTests : ServiceTestBase
         var testContent = "Test content for service failure scenario.";
         
         _mockContentModerationService
-            .Setup(x => x.ModerateContentAsync(It.IsAny<string>()))
+            .Setup(x => x.ValidateContentAsync(It.IsAny<string>(), It.IsAny<string>()))
             .ThrowsAsync(new HttpRequestException("Service temporarily unavailable"));
 
         // Act

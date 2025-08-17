@@ -16,6 +16,11 @@ namespace WorldLeaders.Shared.DTOs
     {
         public int DiceValue { get; set; }
         public JobLevel NewJob { get; set; }
+        public int IncomeChange { get; set; }
+        public int ReputationChange { get; set; }
+        public int HappinessChange { get; set; }
+        public string EncouragingMessage { get; set; } = string.Empty;
+        public string JobDescription { get; set; } = string.Empty;
         public string EducationalExplanation { get; set; } = string.Empty;
         public string ProgressTip { get; set; } = string.Empty;
     }

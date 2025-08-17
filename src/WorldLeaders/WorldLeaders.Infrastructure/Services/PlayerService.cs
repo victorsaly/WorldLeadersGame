@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using WorldLeaders.Infrastructure.Data;
 using WorldLeaders.Infrastructure.Entities;
 using WorldLeaders.Shared.DTOs;
@@ -135,7 +136,43 @@ public class PlayerService : IPlayerService
             var territoriesOwned = await _context.Territories
                 .CountAsync(t => t.OwnedByPlayerId == playerId);
 
-            return new PlayerDashboardDto(
+            // Get actual territories owned by the player
+            var territoryEntities = await _context.Territories
+                .Where(t => t.OwnedByPlayerId == playerId)
+                .ToListAsync();
+
+            var territories = territoryEntities.Select(t => new TerritoryDto(
+                t.Id,
+                t.CountryName,
+                t.CountryCode,
+                JsonSerializer.Deserialize<List<string>>(t.OfficialLanguagesJson) ?? new List<string>(),
+                t.GdpInBillions,
+                t.Tier,
+                t.Cost,
+                t.ReputationRequired,
+                t.MonthlyIncome,
+                t.IsAvailable,
+                t.OwnedByPlayerId.HasValue
+            )).ToList();
+
+            // Get recent achievements (last 5)
+            var achievements = await _context.PlayerAchievements
+                .Where(a => a.PlayerId == playerId)
+                .OrderByDescending(a => a.UnlockedAt)
+                .Take(5)
+                .Select(a => new AchievementDto(a.AchievementId, a.Title, a.Description, a.IconEmoji, a.PointsReward, a.UnlockedAt, false))
+                .ToListAsync();
+
+            // Get learning progress
+            var analytics = await GetPlayerAnalyticsAsync(playerId);
+            var learningProgress = new LearningProgressDto(
+                analytics.LearningObjectivesMet.Count,
+                analytics.LearningObjectivesMet.Count,
+                100.0,
+                analytics.LearningObjectivesMet
+            );
+
+            var dashboard = new PlayerDashboardDto(
                 player.Id,
                 player.Username,
                 player.Income,
@@ -145,7 +182,28 @@ public class PlayerService : IPlayerService
                 territoriesOwned,
                 player.CurrentGameState,
                 player.LastActiveAt
-            );
+            )
+            {
+                Player = new PlayerProfileDto(
+                    player.Id,
+                    player.Username,
+                    player.Income,
+                    player.Reputation,
+                    player.Happiness,
+                    player.CurrentJob,
+                    territoriesOwned,
+                    player.CurrentGameState,
+                    player.LastActiveAt
+                )
+                {
+                    DisplayName = player.DisplayName ?? player.Username
+                },
+                Territories = territories,
+                RecentAchievements = achievements,
+                LearningProgress = learningProgress
+            };
+
+            return dashboard;
         }
         catch (Exception ex)
         {
@@ -326,6 +384,7 @@ public class PlayerService : IPlayerService
         var achievements = new Dictionary<string, Achievement>
         {
             ["first_roll"] = new("first_roll", "First Dice Roll", "Rolled your first dice and learned about probability! Every great journey begins with exploring new opportunities.", "🎲", 100, null, false),
+            ["first_dice_roll"] = new("first_dice_roll", "First Dice Roll", "Rolled your first dice and learned about probability! Every great journey begins with exploring new opportunities.", "🎲", 100, null, false),
             ["job_master"] = new("job_master", "Job Master", "Experienced all job levels and discovered different careers! You now understand how economies grow through diverse skills.", "💼", 500, null, false),
             ["territory_owner"] = new("territory_owner", "Territory Owner", "Acquired your first territory and learned about geography! You're exploring how countries develop and expand.", "🏴", 250, null, false),
             ["world_leader"] = new("world_leader", "World Leader", "Achieved high reputation and learned strategic leadership! You've discovered how to balance economics and diplomacy.", "👑", 1000, null, false),
