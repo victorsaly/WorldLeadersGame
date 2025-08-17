@@ -33,7 +33,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
             // Development URLs
-            "https://localhost:7155",          // API default port
+            "https://localhost:7156",          // API default port
             "http://localhost:5203",           // API actual port  
             "https://localhost:7060", 
             "http://localhost:5122",           // Blazor Web app

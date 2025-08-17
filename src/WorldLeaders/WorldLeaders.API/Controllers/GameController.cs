@@ -179,14 +179,8 @@ public class GameController : ControllerBase
                 return StatusCode(500, "Students learn through practice! Let's try creating your world leader profile again. Students can discover amazing educational opportunities through gameplay!");
             }
             
-            var response = new PlayerTerritoriesEducationalResponse
-            {
-                Territories = dashboard.Territories,
-                EducationalExplanation = "Congratulations! Students learn how to become world leaders through this educational journey. Each territory you acquire teaches students about geography, economics, and culture through discovery and exploration.",
-                ProgressTip = "Next: Students can explore available territories and learn about their unique features through education."
-            };
             _logger.LogInformation("Created new player: {Username} with ID: {PlayerId}", request.Username, player.Id);
-            return Ok(response);
+            return Ok(dashboard);
         }
         catch (Exception ex)
         {
@@ -206,13 +200,12 @@ public class GameController : ControllerBase
         try
         {
             var dashboard = await _playerService.GetPlayerDashboardAsync(playerId);
-            var response = new PlayerTerritoriesEducationalResponse
+            if (dashboard == null)
             {
-                Territories = dashboard.Territories,
-                EducationalExplanation = "Your dashboard shows your progress as a world leader. Each territory and achievement helps you learn about the world!",
-                ProgressTip = "Keep playing to unlock new countries and skills."
-            };
-            return Ok(response);
+                return NotFound("Player not found");
+            }
+            
+            return Ok(dashboard);
         }
         catch (Exception ex)
         {

@@ -123,7 +123,7 @@ public class PlayerService : IPlayerService
         }
     }
 
-    public async Task<PlayerDashboardDto> GetPlayerDashboardAsync(Guid playerId)
+    public async Task<PlayerDashboardDto?> GetPlayerDashboardAsync(Guid playerId)
     {
         try
         {
@@ -208,7 +208,7 @@ public class PlayerService : IPlayerService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error getting dashboard for player {PlayerId}", playerId);
-            throw;
+            return null;
         }
     }
 
