@@ -194,21 +194,49 @@ log_success "Image URLs converted"
 # Step 3: Convert Mermaid diagrams to ASCII
 log_info "3. Converting diagrams to ASCII format..."
 
-# This is a complex conversion - for now, we'll flag Mermaid blocks for manual conversion
-if grep -q '```mermaid' "$WORK_FILE"; then
-    log_warning "Mermaid diagrams detected - manual conversion required"
-    log_info "Converting common Mermaid patterns to ASCII..."
+# Check for Mermaid diagrams
+if grep -q '```mermaid\|```.*mermaid\|graph TD\|graph LR\|flowchart\|sequenceDiagram\|pie title\|gantt\|%%{\|classDef' "$WORK_FILE"; then
+    log_warning "Mermaid diagrams detected - CRITICAL CONVERSION REQUIRED"
+    log_info "Dev.to does NOT support Mermaid - all diagrams will appear as broken code blocks"
     
-    # Simple flowchart conversion
+    # Remove mermaid language specification
     sed -i '' 's/```mermaid/```/g' "$WORK_FILE"
     
-    # Add comment for manual review
+    # Add conversion warnings around diagram blocks
     sed -i '' '/^```$/,/^```$/ {
-        /graph\|flowchart/ {
+        /graph\|flowchart\|sequenceDiagram\|pie title\|gantt\|%%{\|classDef/ {
             i\
-<!-- TODO: Convert this Mermaid diagram to ASCII format -->
+<!-- ⚠️ CRITICAL: This Mermaid diagram must be converted to ASCII/table format for dev.to -->
+            a\
+<!-- End Mermaid conversion required -->
         }
     }' "$WORK_FILE"
+    
+    # Count Mermaid instances for user awareness
+    MERMAID_COUNT=$(grep -c 'graph\|flowchart\|sequenceDiagram\|pie title\|gantt\|%%{\|classDef' "$WORK_FILE" || true)
+    log_warning "Found $MERMAID_COUNT Mermaid diagram(s) requiring manual conversion"
+    log_info "Each diagram must be replaced with ASCII art, tables, or text descriptions"
+    log_warning "Found $MERMAID_COUNT Mermaid diagram(s) requiring manual conversion"
+    
+    # Add conversion reminder to end of file
+    cat >> "$WORK_FILE" << 'DIAGRAM_WARNING'
+
+---
+
+## ⚠️ DIAGRAM CONVERSION REQUIRED
+
+**Before publishing to dev.to, convert ALL Mermaid diagrams to:**
+- ASCII art for simple flows
+- Tables for data relationships  
+- Numbered lists for processes
+- Text descriptions for complex diagrams
+
+**Dev.to will display Mermaid as broken code blocks!**
+
+DIAGRAM_WARNING
+
+else
+    log_success "No Mermaid diagrams detected"
 fi
 
 log_success "Diagram conversion completed"
@@ -278,8 +306,9 @@ if ! grep -q "published: false" "$OUTPUT_FILE"; then
 fi
 
 # Check for Mermaid
-if grep -q "mermaid" "$OUTPUT_FILE"; then
-    log_warning "Mermaid references found - manual diagram conversion needed"
+if grep -q "graph\|flowchart\|sequenceDiagram\|pie title\|gantt\|%%" "$OUTPUT_FILE"; then
+    log_warning "Mermaid syntax found - CRITICAL: manual diagram conversion needed"
+    log_warning "Dev.to will display these as broken code blocks!"
     ((ISSUES++))
 fi
 

@@ -170,8 +170,11 @@ echo ""
 log_info "4. Checking format compatibility..."
 
 # Check for Mermaid
-if grep -q "mermaid" "$ARTICLE_FILE"; then
+if grep -q "mermaid\|graph TD\|graph LR\|flowchart\|sequenceDiagram\|pie title\|gantt\|classDef\|%%{" "$ARTICLE_FILE"; then
     log_error "Mermaid references found - not supported on dev.to"
+    echo "   Found patterns:"
+    grep -n "mermaid\|graph TD\|graph LR\|flowchart\|sequenceDiagram\|pie title\|gantt\|classDef\|%%{" "$ARTICLE_FILE" | head -3
+    echo "   These must be converted to ASCII diagrams or tables"
 else
     log_success "No Mermaid references found"
 fi

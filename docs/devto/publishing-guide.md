@@ -31,6 +31,21 @@ This guide covers the complete workflow for publishing Jekyll blog posts to dev.
 - [ ] **Link Validation**: All internal links converted to external URLs
 - [ ] **Markdown Compatibility**: Dev.to markdown syntax compliance
 
+### ⚠️ CRITICAL: Diagram Requirements
+
+**Dev.to DOES NOT support Mermaid diagrams.** All `mermaid` code blocks will display as plain text code, breaking the article layout.
+
+**Required Actions:**
+- ✅ Convert ALL Mermaid diagrams to ASCII format
+- ✅ Use tables for complex data relationships  
+- ✅ Replace complex diagrams with numbered processes
+- ✅ Test diagram rendering in dev.to preview
+
+**Conversion Priority:**
+1. **High Impact**: Main workflow diagrams → ASCII
+2. **Medium Impact**: Data relationships → Tables
+3. **Low Impact**: Complex flows → Numbered lists
+
 ### Engagement Optimization
 
 - [ ] **Compelling Title**: Clear value proposition under 50 characters
@@ -89,12 +104,15 @@ sed -i 's|/assets/images/|https://docs.worldleadersgame.co.uk/assets/images/|g'
 sed -i 's|![Image](images/|![Image](https://docs.worldleadersgame.co.uk/assets/images/|g'
 ```
 
-### Step 4: Diagram Conversion
+### Step 4: Diagram Conversion (CRITICAL)
 
-**Mermaid to ASCII Example:**
+**⚠️ Dev.to DOES NOT support Mermaid diagrams** - All diagrams must be converted to ASCII/Unicode format.
+
+**Common Diagram Types to Convert:**
+
+#### 4.1: Simple Flowcharts
 
 **Before (Mermaid):**
-
 ```mermaid
 graph TD
     A[Start] --> B[Process]
@@ -102,7 +120,6 @@ graph TD
 ```
 
 **After (ASCII):**
-
 ```
 ┌─────────┐
 │  Start  │
@@ -117,6 +134,96 @@ graph TD
 ┌─────────┐
 │   End   │
 └─────────┘
+```
+
+#### 4.2: Complex Workflows
+
+**Before (Mermaid):**
+```mermaid
+graph TD
+    A[Input] --> B{Decision}
+    B -->|Yes| C[Action 1]
+    B -->|No| D[Action 2]
+    C --> E[Output]
+    D --> E
+```
+
+**After (ASCII):**
+```
+┌─────────┐
+│  Input  │
+└────┬────┘
+     │
+     ▼
+    ┌───┐
+    │ ? │ Decision
+    └─┬─┘
+   ┌──┴──┐
+   │ Yes │ No
+   ▼     ▼
+┌────────┐ ┌────────┐
+│Action 1│ │Action 2│
+└───┬────┘ └───┬────┘
+    │          │
+    └────┬─────┘
+         ▼
+    ┌─────────┐
+    │ Output  │
+    └─────────┘
+```
+
+#### 4.3: Sequence Diagrams
+
+**Before (Mermaid):**
+```mermaid
+sequenceDiagram
+    A->>B: Request
+    B->>C: Process
+    C->>B: Response
+    B->>A: Result
+```
+
+**After (ASCII):**
+```
+    A        B        C
+    │        │        │
+    │Request │        │
+    ├────────►        │
+    │        │Process │
+    │        ├────────►
+    │        │Response│
+    │        ◄────────┤
+    │ Result │        │
+    ◄────────┤        │
+    │        │        │
+```
+
+#### 4.4: Table-Based Alternatives
+
+For complex diagrams, consider using tables instead:
+
+```markdown
+| Stage | AI Autonomy | Human Input | Time Saved |
+|-------|-------------|-------------|------------|
+| Issue Creation | 90% | Educational validation | 80% |
+| Code Generation | 95% | Architecture review | 85% |
+| Safety Validation | 85% | Final safety check | 70% |
+```
+
+#### 4.5: Numbered List Process
+
+Complex workflows can be simplified to numbered steps:
+
+```markdown
+## The 7-Step AI Development Process
+
+1. **🎙️ Voice Memo/Idea** → Input educational concept
+2. **🤖 AI Analysis** → Extract requirements and context
+3. **📋 AI Issue Generation** → Create detailed GitHub issues
+4. **👨‍💻 Copilot Agent** → Automated implementation
+5. **🛡️ Safety Pipeline** → Multi-layer content validation
+6. **👨‍🎓 Human Review** → Educational effectiveness validation
+7. **🔄 Learning Loop** → Continuous improvement feedback
 ```
 
 ### Step 5: Content Optimization
