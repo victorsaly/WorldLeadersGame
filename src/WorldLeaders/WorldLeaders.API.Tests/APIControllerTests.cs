@@ -11,6 +11,7 @@ using WorldLeaders.Shared.DTOs;
 using WorldLeaders.Shared.Enums;
 using WorldLeaders.Shared.Services;
 using Xunit.Abstractions;
+using static WorldLeaders.API.Controllers.AIController;
 
 namespace WorldLeaders.API.Tests;
 
@@ -339,7 +340,7 @@ public class APIControllerTests : ApiTestBase
         
         if (response.StatusCode == HttpStatusCode.OK)
         {
-            var personalities = JsonSerializer.Deserialize<List<AgentPersonalityInfo>>(content, new JsonSerializerOptions
+            var personalities = JsonSerializer.Deserialize<List<AgentPersonalityDto>>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
