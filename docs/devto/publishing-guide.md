@@ -2,6 +2,38 @@
 
 Complete guide for converting Jekyll blog posts to dev.to format with proper formatting, image hosting, and deployment validation.
 
+## 📁 File Organization Structure
+
+### **CRITICAL**: Directory Structure for Content Creation
+
+When creating dev.to articles, **ALWAYS** use the correct directory structure:
+
+#### Dev.to Articles
+
+```
+docs/devto/
+├── articles/                             ← FINAL articles go here
+│   ├── 2025-08-27-article-title.md      ← Published articles
+│   └── ...
+├── working/                              ← Draft articles in progress
+├── templates/                            ← Article templates
+└── publishing-guide.md                   ← This guide
+```
+
+#### File Naming Conventions
+
+**Published Articles**: `YYYY-MM-DD-article-title.md` (in `articles/` folder)
+**Draft Articles**: `YYYY-MM-DD-article-title-draft.md` (in `working/` folder)
+
+#### Creation Workflow
+
+1. **Create draft** in `docs/devto/working/`
+2. **Develop content** with proper formatting
+3. **Move to `articles/`** when ready for publication
+4. **Create LinkedIn post** in `docs/linkedin/posts/`
+
+---
+
 ## 🎯 Overview
 
 This guide covers the complete workflow for publishing Jekyll blog posts to dev.to while maintaining:
@@ -36,12 +68,14 @@ This guide covers the complete workflow for publishing Jekyll blog posts to dev.
 **Dev.to DOES NOT support Mermaid diagrams.** All `mermaid` code blocks will display as plain text code, breaking the article layout.
 
 **Required Actions:**
+
 - ✅ Convert ALL Mermaid diagrams to ASCII format
-- ✅ Use tables for complex data relationships  
+- ✅ Use tables for complex data relationships
 - ✅ Replace complex diagrams with numbered processes
 - ✅ Test diagram rendering in dev.to preview
 
 **Conversion Priority:**
+
 1. **High Impact**: Main workflow diagrams → ASCII
 2. **Medium Impact**: Data relationships → Tables
 3. **Low Impact**: Complex flows → Numbered lists
@@ -113,6 +147,7 @@ sed -i 's|![Image](images/|![Image](https://docs.worldleadersgame.co.uk/assets/i
 #### 4.1: Simple Flowcharts
 
 **Before (Mermaid):**
+
 ```mermaid
 graph TD
     A[Start] --> B[Process]
@@ -120,6 +155,7 @@ graph TD
 ```
 
 **After (ASCII):**
+
 ```
 ┌─────────┐
 │  Start  │
@@ -139,6 +175,7 @@ graph TD
 #### 4.2: Complex Workflows
 
 **Before (Mermaid):**
+
 ```mermaid
 graph TD
     A[Input] --> B{Decision}
@@ -149,6 +186,7 @@ graph TD
 ```
 
 **After (ASCII):**
+
 ```
 ┌─────────┐
 │  Input  │
@@ -175,6 +213,7 @@ graph TD
 #### 4.3: Sequence Diagrams
 
 **Before (Mermaid):**
+
 ```mermaid
 sequenceDiagram
     A->>B: Request
@@ -184,6 +223,7 @@ sequenceDiagram
 ```
 
 **After (ASCII):**
+
 ```
     A        B        C
     │        │        │
@@ -203,11 +243,11 @@ sequenceDiagram
 For complex diagrams, consider using tables instead:
 
 ```markdown
-| Stage | AI Autonomy | Human Input | Time Saved |
-|-------|-------------|-------------|------------|
-| Issue Creation | 90% | Educational validation | 80% |
-| Code Generation | 95% | Architecture review | 85% |
-| Safety Validation | 85% | Final safety check | 70% |
+| Stage             | AI Autonomy | Human Input            | Time Saved |
+| ----------------- | ----------- | ---------------------- | ---------- |
+| Issue Creation    | 90%         | Educational validation | 80%        |
+| Code Generation   | 95%         | Architecture review    | 85%        |
+| Safety Validation | 85%         | Final safety check     | 70%        |
 ```
 
 #### 4.5: Numbered List Process

@@ -4,6 +4,42 @@
 
 ---
 
+## 📁 File Organization Structure
+
+### **CRITICAL**: Directory Structure for Content Creation
+
+When creating LinkedIn posts and dev.to articles, **ALWAYS** use the correct directory structure:
+
+#### Dev.to Articles
+
+```
+docs/devto/articles/
+├── 2025-08-27-article-title.md          ← Final articles go here
+└── ...
+```
+
+#### LinkedIn Posts
+
+```
+docs/linkedin/posts/
+├── 2025-08-27-article-title-linkedin-post.md    ← LinkedIn posts go here
+└── ...
+```
+
+#### Working/Draft Files
+
+```
+docs/devto/working/                        ← Draft dev.to articles
+docs/linkedin/templates/                   ← LinkedIn post templates
+```
+
+### File Naming Conventions
+
+**Dev.to Articles**: `YYYY-MM-DD-article-title.md`
+**LinkedIn Posts**: `YYYY-MM-DD-article-title-linkedin-post.md`
+
+---
+
 ## 🎯 LinkedIn Content Strategy
 
 ### The 4-Layer Approach
@@ -343,7 +379,14 @@ Discussion Questions: [from article end]
 - Complexity level and requirements
 - Metrics and outcomes type
 
-### Step 3: Template Selection
+### Step 3: Template Selection & File Creation
+
+**CRITICAL FILE CREATION PROCESS**:
+
+1. **Create dev.to article** in `docs/devto/articles/YYYY-MM-DD-title.md`
+2. **Create LinkedIn post** in `docs/linkedin/posts/YYYY-MM-DD-title-linkedin-post.md`
+3. **Use proper naming convention** for both files
+4. **Cross-reference** article source in LinkedIn frontmatter
 
 **Choose Template Based On**:
 
@@ -367,6 +410,7 @@ Discussion Questions: [from article end]
 
 **LinkedIn Post Checklist**:
 
+- [ ] **File Location**: Created in `docs/linkedin/posts/` directory
 - [ ] **Mobile Readable**: Looks good on phone screen
 - [ ] **Hook Strength**: Compelling first 1-2 lines
 - [ ] **Value Clear**: Obvious benefit for readers
