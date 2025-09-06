@@ -23,24 +23,12 @@
   --chirpy-border: #e9ecef;
   --chirpy-accent: var(--brand-primary);
   
-  /* Light/Dark mode variables */
+  /* Light mode only */
   --bg-color: #ffffff;
   --text-color: #333333;
   --sidebar-bg: var(--chirpy-sidebar);
   --card-bg: var(--chirpy-card);
   --border-color: var(--chirpy-border);
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: #1a1a1a;
-    --text-color: #e1e1e1;
-    --card-bg: #2a2a2a;
-    --border-color: #404040;
-    --chirpy-text: #e1e1e1;
-    --chirpy-text-muted: #9ca3af;
-  }
 }
 
 /* Override minima base styles */

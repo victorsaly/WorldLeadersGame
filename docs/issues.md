@@ -21,7 +21,7 @@ permalink: /issues/
 **AI-Led Excellence**: Building sophisticated educational features with advanced learning adaptation, cultural representation, assessment systems, and production-scale performance optimization.
 
 <div class="issues-grid">
-  {% assign week8_issues = site.issues | where: "week", 8 | sort: "issue_number" %}
+  {% assign week8_issues = site.issues | default: empty | where: "week", 8 | sort: "issue_number" %}
   {% for issue in week8_issues %}
     <div class="issue-card shadcn-card week8-issue">
       <div class="issue-header">
@@ -56,7 +56,7 @@ permalink: /issues/
 **Architectural Excellence**: Implementing cohesive game architecture that enhances educational progression while maintaining system scalability and human-AI collaboration effectiveness.
 
 <div class="issues-grid">
-  {% assign week9_issues = site.issues | where: "week", 9 | sort: "issue_number" %}
+  {% assign week9_issues = site.issues | default: empty | where: "week", 9 | sort: "issue_number" %}
   {% for issue in week9_issues %}
     <div class="issue-card shadcn-card week9-issue">
       <div class="issue-header">
@@ -91,7 +91,7 @@ permalink: /issues/
 **Testing Excellence**: Implementing comprehensive testing strategy with 90%+ code coverage, child safety validation, and educational outcome measurement systems.
 
 <div class="issues-grid">
-  {% assign week7_issues = site.issues | where: "week", 7 | sort: "issue_number" %}
+  {% assign week7_issues = site.issues | default: empty | where: "week", 7 | sort: "issue_number" %}
   {% for issue in week7_issues %}
     <div class="issue-card shadcn-card week7-issue">
       <div class="issue-header">
@@ -134,7 +134,7 @@ permalink: /issues/
 - ✅ **Child Designer Vision**: Successfully implemented 12-year-old creative direction with retro gaming aesthetics
 
 <div class="issues-grid">
-  {% assign week6_issues = site.issues | where: "week", 6 | sort: "issue_number" %}
+  {% assign week6_issues = site.issues | default: empty | where: "week", 6 | sort: "issue_number" %}
   {% for issue in week6_issues %}
     <div class="issue-card shadcn-card week6-issue completed">
       <div class="issue-header">
@@ -167,7 +167,7 @@ permalink: /issues/
 **Completion Date**: August 10, 2025 • **Status**: Successfully implemented production security • **AI Autonomy**: 94% (6% human oversight required)
 
 <div class="issues-grid">
-  {% assign week5_issues = site.issues | where: "week", 5 | sort: "issue_number" %}
+  {% assign week5_issues = site.issues | default: empty | where: "week", 5 | sort: "issue_number" %}
   {% for issue in week5_issues %}
     <div class="issue-card shadcn-card week5-issue completed">
       <div class="issue-header">
@@ -222,7 +222,7 @@ permalink: /issues/
 - **Security**: Production-grade authentication and authorization required
 
 <div class="issues-grid">
-  {% assign week4_issues = site.issues | where: "week", 4 | sort: "issue_number" %}
+  {% assign week4_issues = site.issues | default: empty | where: "week", 4 | sort: "issue_number" %}
   {% for issue in week4_issues %}
     <div class="issue-card shadcn-card completed">
       <div class="issue-header">
@@ -298,7 +298,7 @@ permalink: /issues/
 - **[Issue #24: Copilot Instructions Restructuring & Process Documentation](https://github.com/victorsaly/WorldLeadersGame/issues/24)** - ✅ Complete
 
 <div class="issues-grid">
-  {% assign week3_issues = site.issues | where: "milestone", "Week 3 Preparation" | sort: "title" %}
+  {% assign week3_issues = site.issues | default: empty | where: "milestone", "Week 3 Preparation" | sort: "title" %}
   {% for issue in week3_issues %}
     <div class="issue-card shadcn-card completed">
       <div class="issue-header">

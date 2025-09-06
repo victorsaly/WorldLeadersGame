@@ -22,6 +22,12 @@ kramdown:
     block:
       line_numbers: false
       start_line: 1
+
+# Sass configuration to suppress deprecation warnings
+sass:
+  style: compressed
+  quiet_deps: true
+  
 theme: minima
 plugins:
   - jekyll-feed

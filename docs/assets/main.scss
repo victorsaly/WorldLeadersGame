@@ -42,38 +42,6 @@
   --dark-gray: #202124;                              /* Dark gray for headings */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: oklch(0.141 0.005 285.823);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.21 0.006 285.885);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.21 0.006 285.885);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.92 0.004 286.32);
-    --primary-foreground: oklch(0.21 0.006 285.885);
-    --secondary: oklch(0.274 0.006 286.033);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.274 0.006 286.033);
-    --muted-foreground: oklch(0.705 0.015 286.067);
-    --accent: oklch(0.274 0.006 286.033);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.552 0.016 285.938);
-    
-    /* Adjust educational colors for dark mode */
-    --brand-primary: oklch(0.7 0.2 41.116);
-    --brand-secondary: oklch(0.65 0.15 184.704);
-    --brand-accent: oklch(0.75 0.18 70.08);
-    --educational-green: oklch(0.7 0.2 142.5);
-    --learning-blue: oklch(0.65 0.15 225);
-    --warning: oklch(0.41 0.11 46);
-    --warning-foreground: oklch(0.99 0.02 95);
-  }
-}
-
 /* Global styling with shadcn/ui typography */
 html {
   scroll-behavior: smooth;
@@ -1232,17 +1200,6 @@ code {
 .tag:focus {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
-}
-
-/* Dark mode improvements */
-@media (prefers-color-scheme: dark) {
-  .hero-section {
-    background: linear-gradient(135deg, #000000, #333333);
-  }
-  
-  .educational-highlight {
-    background: linear-gradient(135deg, #000000, #333333);
-  }
 }
 
 /* Navigation cards */

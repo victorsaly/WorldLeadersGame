@@ -315,7 +315,7 @@ pre[class*="language-mermaid"]:before { background: rgba(102, 102, 242, 0.9); }
       // Initialize Mermaid with production-safe configuration and error handling
       mermaid.initialize({
         startOnLoad: false, // We'll control initialization manually
-        theme: 'base',
+  theme: 'base', // force light theme only
         securityLevel: 'loose',
         fontFamily: 'Inter, sans-serif',
         logLevel: 'error', // Reduce console noise
