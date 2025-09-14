@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Development Day - Slide 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            width: 1080px;
+            height: 1080px;
+            background: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px;
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* AIDD.io style background with particles/dots */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25% 25%, #00ffff22 1px, transparent 1px),
+                radial-gradient(circle at 75% 25%, #ff8c0022 1px, transparent 1px),
+                radial-gradient(circle at 25% 75%, #00ff8822 1px, transparent 1px),
+                radial-gradient(circle at 75% 75%, #00ffff22 1px, transparent 1px);
+            background-size: 100px 100px, 150px 150px, 120px 120px, 180px 180px;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .slide-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .custom-logo {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: auto;
+        }
+        
+        .hook {
+            background: linear-gradient(135deg, #00ffff44, #ff8c0044);
+            color: #ffffff;
+            padding: 12px 32px;
+            border-radius: 0;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            align-self: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            border: 2px solid #00ffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .stats {
+            color: #00ff88;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px #00ff8844;
+        }
+        
+        .main-title {
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 0.9;
+            margin-bottom: 30px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+        
+        .main-title .ai {
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff66;
+        }
+        
+        .main-title .driven {
+            color: #ff8c00;
+            text-shadow: 0 0 20px #ff8c0066;
+        }
+        
+        .main-title .development {
+            color: #ffffff;
+        }
+        
+        .title {
+            font-size: 56px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        
+        .title .cyan {
+            color: #00ffff;
+            text-shadow: 0 0 15px #00ffff44;
+        }
+        
+        .title .orange {
+            color: #ff8c00;
+            text-shadow: 0 0 15px #ff8c0044;
+        }
+        
+        .title .green {
+            color: #00ff88;
+            text-shadow: 0 0 15px #00ff8844;
+        }
+        
+        .subtitle {
+            font-size: 26px;
+            font-weight: 500;
+            color: #a1a1aa;
+            margin-bottom: 50px;
+            line-height: 1.4;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .subtitle .cyan {
+            color: #00ffff;
+        }
+        
+        .content-item {
+            font-size: 22px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 0;
+            border-left: 3px solid #00ffff;
+            text-align: left;
+            animation: slideInLeft 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-30px);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .content-text {
+            font-size: 30px;
+            line-height: 1.4;
+            text-align: center;
+            color: #ffffff;
+            font-weight: 500;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .bottom-section {
+            position: absolute;
+            bottom: 40px;
+            left: 80px;
+            right: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand-name {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .swipe-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #00ffff;
+            font-size: 18px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .arrow {
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(5px); }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Slide 1 specific - main hero style */
+        .slide-1 .main-title {
+            margin-bottom: 40px;
+        }
+        
+        /* Content slides - more compact */
+        .content-slides .title {
+            font-size: 48px;
+            margin-bottom: 30px;
+        }
+        
+        .content-slides .content-item:nth-child(odd) {
+            border-left-color: #ff8c00;
+        }
+        
+        .content-slides .content-item:nth-child(even) {
+            border-left-color: #00ff88;
+        }
+        
+        /* Slide 6 - action slide */
+        .slide-6 .content-item {
+            background: linear-gradient(135deg, #00ffff11, #ff8c0011);
+            border-left-width: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-content slide-2 content-slides">
+        <svg width="222" height="100" viewBox="0 0 222 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="custom-logo">
+            <g clip-path="url(#clip0_70_119)">
+                <path d="M210.9 22.2222V11.1111H199.8V0H188.7H11.1V11.1111H0V77.7778H11.1V88.8889H22.2V100H210.9V88.8889H222V22.2222H210.9Z" fill="black"></path>
+                <path d="M77.7 11.1111H66.6V66.6667H77.7V11.1111Z" fill="#FFB428"></path>
+                <path d="M99.9 22.2222H122.1V11.1111H88.8V66.6667H122.1V55.5556H99.9V22.2222Z" fill="#D3FEFF"></path>
+                <path d="M133.2 22.2222H122.1V55.5556H133.2V22.2222Z" fill="#D3FEFF"></path>
+                <path d="M155.4 22.2222H177.6V11.1111H144.3V66.6667H177.6V55.5556H155.4V22.2222Z" fill="#D3FEFF"></path>
+                <path d="M188.7 22.2222H177.6V55.5556H188.7V22.2222Z" fill="#D3FEFF"></path>
+                <path d="M44.4 33.3333H22.2V22.2222H11.1V66.6667H22.2V44.4445H44.4V66.6667H55.5V22.2222H44.4V33.3333Z" fill="#06FBFF"></path>
+                <path d="M44.4 11.1111H22.2V22.2222H44.4V11.1111Z" fill="#06FBFF"></path>
+            </g>
+            <defs>
+                <clipPath id="clip0_70_119">
+                    <rect width="222" height="100" fill="white"></rect>
+                </clipPath>
+            </defs>
+        </svg>
+        
+        <div class="hook">#TechLeaders</div>
+        
+        <h1 class="title">Industry <span class="cyan">Experts</span> <span class="orange">Share</span></h1>
+        
+        <p class="subtitle">Voices from the AI development frontlines</p>
+        
+        <div class="content-item" style="animation-delay: 0.0s">🎯 Debbie O'Brien - Strategic AI Integration</div><div class="content-item" style="animation-delay: 0.15s">⚡ Phil Nash - Workflow Automation</div><div class="content-item" style="animation-delay: 0.3s">🔧 Justin Schroeder - Context Engineering</div><div class="content-item" style="animation-delay: 0.44999999999999996s">🌟 Kent C. Dodds - Team Leadership</div><div class="content-item" style="animation-delay: 0.6s">🚀 Tejas Kumar - Innovation Patterns</div>
+        
+        
+        
+        <div class="bottom-section">
+            <div class="brand-name">AI Development Insights</div>
+            <div class="swipe-indicator">
+                Swipe to learn more <span class="arrow">→</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

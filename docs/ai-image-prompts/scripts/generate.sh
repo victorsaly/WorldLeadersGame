@@ -60,7 +60,7 @@ echo "💰 Estimated cost: ~$0.08"
 echo ""
 
 # Run the Python script
-python3 generate-image.py "$BLOG_POST" "$OUTPUT_PATH"
+/Users/victorsaly/Documents/StormDev/ConquerTheWorldGame/.venv/bin/python generate-image.py "$BLOG_POST" "$OUTPUT_PATH"
 
 if [ $? -eq 0 ]; then
     echo ""

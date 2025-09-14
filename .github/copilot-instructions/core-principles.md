@@ -34,10 +34,11 @@
 2. **Child Safety Validation**: Always include safety checks in AI content
 3. **Educational Documentation**: Document learning objectives for all features
 4. **Professional Quality**: Maintain high standards for educational credibility
+5. **UK English**: Use British spelling (organise/analyse/specialise, not organize/analyze/specialize)
 
 ### Technical Excellence
 1. **LTS-First Development**: Use stable, Long Term Support versions (.NET 8 LTS)
-2. **Performance Optimization**: Target <2 second load times for child engagement
+2. **Performance Optimisation**: Target <2 second load times for child engagement
 3. **Accessibility Compliance**: WCAG 2.1 AA standards for inclusive design
 4. **Mobile-First Approach**: Design for tablets and phones primarily
 

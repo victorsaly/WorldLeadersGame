@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Carousel - Slide 3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .carousel-slide {
+            width: 1080px;
+            height: 1080px;
+            position: relative;
+            border: 4px solid #3B82F6;
+            box-shadow: 8px 8px 0 #000;
+            image-rendering: pixelated;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .slide-header {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .slide-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #3B82F6;
+        }
+
+        .slide-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 24px;
+            line-height: 1.4;
+            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 20px;
+        }
+
+        .slide-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .slide-content {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .main-visual {
+            font-size: 120px;
+            margin: 40px 0;
+            filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.3));
+        }
+
+        .highlight-box {
+            background: white;
+            border: 4px solid #000;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+            min-width: 80%;
+        }
+
+        .highlight-text {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 20px;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            margin: 40px 0;
+        }
+
+        .metric-box {
+            background: white;
+            border: 4px solid #000;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+        }
+
+        .metric-value {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 36px;
+            color: #3B82F6;
+            margin-bottom: 15px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #374151;
+            text-transform: uppercase;
+        }
+
+        .speaker-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            margin: 30px 0;
+        }
+
+        .speaker-card {
+            background: white;
+            border: 3px solid #000;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .speaker-name {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
+            color: #F59E0B;
+            margin-bottom: 10px;
+        }
+
+        .speaker-topic {
+            font-size: 12px;
+            color: #374151;
+            line-height: 1.4;
+        }
+
+        .framework-steps {
+            width: 100%;
+            margin: 30px 0;
+        }
+
+        .framework-step {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 3px solid #000;
+            margin: 20px 0;
+            padding: 25px;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .step-number {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 32px;
+            color: #3B82F6;
+            margin-right: 30px;
+            min-width: 60px;
+        }
+
+        .step-content h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.4;
+        }
+
+        .slide-footer {
+            background: #1f2937;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            border: 2px solid #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="carousel-slide">
+        <div class="slide-number">3/6</div>
+        <div class="slide-header">
+            <h1 class="slide-title">STRATEGIC AI INTEGRATION</h1>
+            <p class="slide-subtitle">Beyond Hype: Real Developer Experience Improvements</p>
+        </div>
+        <div class="slide-content">
+            
+            <div class="main-visual">⚡</div>
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">3x</div>
+                    <div class="metric-label">Faster Debugging</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">60%</div>
+                    <div class="metric-label">Less Boilerplate</div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p class="highlight-text">AI as Collaborative Partner, Not Replacement</p>
+            </div>
+        
+        </div>
+        <div class="slide-footer">Strategic Adoption • Measurable Results</div>
+    </div>
+</body>
+</html>

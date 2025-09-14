@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Carousel - AI-Driven Development Day 2025</title>
+    <style>
+        /* Import retro-style fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: #1a1a1a;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .carousel-slide {
+            width: 1024px;
+            height: 1024px;
+            position: relative;
+            border: 4px solid #333;
+            box-shadow: 8px 8px 0 #000;
+            image-rendering: pixelated;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Slide-specific color schemes */
+        .slide-1 { border-color: #3B82F6; }
+        .slide-2 { border-color: #F59E0B; }
+        .slide-3 { border-color: #3B82F6; }
+        .slide-4 { border-color: #22c55e; }
+        .slide-5 { border-color: #F59E0B; }
+        .slide-6 { border-color: #3B82F6; }
+
+        .slide-header {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .slide-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-color);
+        }
+
+        .slide-1 .slide-header::after { background: #3B82F6; }
+        .slide-2 .slide-header::after { background: #F59E0B; }
+        .slide-3 .slide-header::after { background: #3B82F6; }
+        .slide-4 .slide-header::after { background: #22c55e; }
+        .slide-5 .slide-header::after { background: #F59E0B; }
+        .slide-6 .slide-header::after { background: #3B82F6; }
+
+        .slide-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 24px;
+            line-height: 1.4;
+            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 20px;
+        }
+
+        .slide-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .slide-content {
+            flex: 1;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .main-visual {
+            font-size: 120px;
+            margin: 40px 0;
+            filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.3));
+        }
+
+        .highlight-box {
+            background: white;
+            border: 4px solid #000;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+            border-radius: 0;
+            min-width: 80%;
+        }
+
+        .highlight-text {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 20px;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+            margin: 40px 0;
+        }
+
+        .metric-box {
+            background: white;
+            border: 4px solid #000;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+        }
+
+        .metric-value {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 36px;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .slide-1 .metric-value { color: #3B82F6; }
+        .slide-2 .metric-value { color: #F59E0B; }
+        .slide-3 .metric-value { color: #3B82F6; }
+        .slide-4 .metric-value { color: #22c55e; }
+        .slide-5 .metric-value { color: #F59E0B; }
+        .slide-6 .metric-value { color: #3B82F6; }
+
+        .metric-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #374151;
+            text-transform: uppercase;
+        }
+
+        .speaker-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            margin: 30px 0;
+        }
+
+        .speaker-card {
+            background: white;
+            border: 3px solid #000;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .speaker-name {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
+            color: #F59E0B;
+            margin-bottom: 10px;
+        }
+
+        .speaker-topic {
+            font-size: 12px;
+            color: #374151;
+            line-height: 1.4;
+        }
+
+        .framework-steps {
+            width: 100%;
+            margin: 30px 0;
+        }
+
+        .framework-step {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 3px solid #000;
+            margin: 20px 0;
+            padding: 25px;
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+
+        .step-number {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 32px;
+            color: #3B82F6;
+            margin-right: 30px;
+            min-width: 60px;
+        }
+
+        .step-content h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.4;
+        }
+
+        .slide-footer {
+            background: #1f2937;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .carousel-slide {
+                width: 90vw;
+                height: 90vw;
+                max-width: 800px;
+                max-height: 800px;
+            }
+            
+            .slide-title {
+                font-size: 18px;
+            }
+            
+            .main-visual {
+                font-size: 80px;
+            }
+        }
+
+        /* Print styles for PDF generation */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .carousel-slide {
+                page-break-after: always;
+                margin: 0;
+                box-shadow: none;
+                border: 2px solid #333;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <div class="carousel-slide slide-1">
+        <div class="slide-header">
+            <h1 class="slide-title">AI-DRIVEN DEVELOPMENT DAY 2025</h1>
+            <p class="slide-subtitle">Game-Changing Insights for Modern Developers</p>
+        </div>
+        <div class="slide-content">
+            <div class="main-visual">🚀</div>
+            <div class="highlight-box">
+                <p class="highlight-text">The Future of Development is Here</p>
+            </div>
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">5</div>
+                    <div class="metric-label">Expert Speakers</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">100+</div>
+                    <div class="metric-label">Attendees</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">Conference Insights • September 2025</div>
+    </div>
+
+    <!-- Slide 2: Speakers -->
+    <div class="carousel-slide slide-2">
+        <div class="slide-header">
+            <h1 class="slide-title">EXPERT SPEAKERS</h1>
+            <p class="slide-subtitle">Industry Leaders Sharing Game-Changing Insights</p>
+        </div>
+        <div class="slide-content">
+            <div class="speaker-grid">
+                <div class="speaker-card">
+                    <div class="speaker-name">DEBBIE O'BRIEN</div>
+                    <div class="speaker-topic">Strategic AI Integration & Developer Experience</div>
+                </div>
+                <div class="speaker-card">
+                    <div class="speaker-name">PHIL NASH</div>
+                    <div class="speaker-topic">Testing Revolution with AI-Enhanced Workflows</div>
+                </div>
+                <div class="speaker-card">
+                    <div class="speaker-name">KENT C. DODDS</div>
+                    <div class="speaker-topic">Context Engineering & Productivity Patterns</div>
+                </div>
+                <div class="speaker-card">
+                    <div class="speaker-name">TEJAS KUMAR</div>
+                    <div class="speaker-topic">AI-First Development Methodology</div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p class="highlight-text">Real-World Insights from Production Environments</p>
+            </div>
+        </div>
+        <div class="slide-footer">Expert Knowledge • Proven Strategies</div>
+    </div>
+
+    <!-- Slide 3: Integration -->
+    <div class="carousel-slide slide-3">
+        <div class="slide-header">
+            <h1 class="slide-title">STRATEGIC AI INTEGRATION</h1>
+            <p class="slide-subtitle">Beyond Hype: Real Developer Experience Improvements</p>
+        </div>
+        <div class="slide-content">
+            <div class="main-visual">⚡</div>
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">3x</div>
+                    <div class="metric-label">Faster Debugging</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">60%</div>
+                    <div class="metric-label">Less Boilerplate</div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p class="highlight-text">AI as Collaborative Partner, Not Replacement</p>
+            </div>
+        </div>
+        <div class="slide-footer">Strategic Adoption • Measurable Results</div>
+    </div>
+
+    <!-- Slide 4: Context Engineering -->
+    <div class="carousel-slide slide-4">
+        <div class="slide-header">
+            <h1 class="slide-title">CONTEXT ENGINEERING</h1>
+            <p class="slide-subtitle">The New Discipline Every Developer Needs</p>
+        </div>
+        <div class="slide-content">
+            <div class="main-visual">🎯</div>
+            <div class="highlight-box">
+                <p class="highlight-text">"Context is the new code architecture"</p>
+            </div>
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">5x</div>
+                    <div class="metric-label">Better AI Responses</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">90%</div>
+                    <div class="metric-label">First-Try Success</div>
+                </div>
+            </div>
+        </div>
+        <div class="slide-footer">Context Engineering • Strategic Prompting</div>
+    </div>
+
+    <!-- Slide 5: Reality Check -->
+    <div class="carousel-slide slide-5">
+        <div class="slide-header">
+            <h1 class="slide-title">THE PRODUCTIVITY PARADOX</h1>
+            <p class="slide-subtitle">Reality Check: The Learning Curve is Real</p>
+        </div>
+        <div class="slide-content">
+            <div class="main-visual">📊</div>
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">24%</div>
+                    <div class="metric-label">Expected Faster ⚡</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">19%</div>
+                    <div class="metric-label">Reality: Slower Initially 🐌</div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p class="highlight-text">Strategic Adoption is Key to Success</p>
+            </div>
+        </div>
+        <div class="slide-footer">Honest Assessment • Realistic Expectations</div>
+    </div>
+
+    <!-- Slide 6: Framework -->
+    <div class="carousel-slide slide-6">
+        <div class="slide-header">
+            <h1 class="slide-title">YOUR SUCCESS FRAMEWORK</h1>
+            <p class="slide-subtitle">Actionable Steps for AI-Enhanced Development</p>
+        </div>
+        <div class="slide-content">
+            <div class="framework-steps">
+                <div class="framework-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>🎯 STRATEGIC ADOPTION</h3>
+                        <p>Choose the right tools • Focus on specific tasks</p>
+                    </div>
+                </div>
+                <div class="framework-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>📚 CONTINUOUS LEARNING</h3>
+                        <p>Develop AI literacy • Stay updated on trends</p>
+                    </div>
+                </div>
+                <div class="framework-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>⚡ ITERATIVE IMPROVEMENT</h3>
+                        <p>Refine your approach • Measure and optimize</p>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p class="highlight-text">Start Your AI Journey Today!</p>
+            </div>
+        </div>
+        <div class="slide-footer">Actionable Framework • Proven Results</div>
+    </div>
+
+    <script>
+        // Add some interactive functionality for better user experience
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            
+            slides.forEach((slide, index) => {
+                slide.addEventListener('click', function() {
+                    // Add click-to-focus functionality
+                    slide.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+                
+                // Add slide numbers
+                const slideNumber = document.createElement('div');
+                slideNumber.style.cssText = `
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(0,0,0,0.8);
+                    color: white;
+                    padding: 10px 15px;
+                    font-family: 'Press Start 2P', monospace;
+                    font-size: 12px;
+                    border-radius: 0;
+                    border: 2px solid #fff;
+                `;
+                slideNumber.textContent = `${index + 1}/6`;
+                slide.appendChild(slideNumber);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+
+# LinkedIn Carousel PDF - Manual Combination Instructions
+
+## Option 1: Use Preview (macOS)
+1. Open slide-1.pdf in Preview
+2. View → Thumbnails (⌘⌥2)
+3. Drag slide-2.pdf into the thumbnails area
+4. Repeat for slides 3-6
+5. File → Export as PDF → Save as "ai-development-insights-carousel.pdf"
+
+## Option 2: Use online tool
+1. Go to https://smallpdf.com/merge-pdf
+2. Upload slide-1.pdf through slide-6.pdf in order
+3. Download the merged PDF
+
+## Option 3: Individual upload to LinkedIn
+Upload slides individually to LinkedIn - it will automatically create a carousel!
+
+## Files ready for upload:
+• slide-1.pdf (287.3 KB)
+• slide-2.pdf (363.0 KB)
+• slide-3.pdf (327.3 KB)
+• slide-4.pdf (330.8 KB)
+• slide-5.pdf (320.5 KB)
+• slide-6.pdf (320.4 KB)
