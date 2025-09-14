@@ -101,3 +101,20 @@ exclude:
   - .vscode/
   - start-game.sh
   - README.md
+  - "*.py"
+  - "*.sh"
+  - bin/
+  - ai-image-prompts/
+  - devto/
+  - linkedin/
+  - twitter/
+  - articles/
+  - blog/
+  - temp-validate.sh
+  - simple-test.sh
+  - test-docker.sh
+  - check-explanation-status.sh
+  - update-code-explanations.js
+  - download-carousel-slides.py
+  - regenerate-and-download-carousel.py
+  - "*.log"
